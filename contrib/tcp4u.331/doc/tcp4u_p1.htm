@@ -1,0 +1,241 @@
+<HTML><HEAD>
+<!-- This document was created with h2.pl -->
+<TITLE>Tcp4u - Multi-purpose functions</TITLE></HEAD>
+<BODY BACKGROUND="" BGCOLOR="#FFFFC0" TEXT="#000000">
+<H1>
+Tcp4u - Multi-purpose functions</H1>
+<UL>
+<LI><A HREF="#Mention1">Tcp4uCleanup</A>
+<LI><A HREF="#Mention2">Tcp4uInit</A>
+<LI><A HREF="#Mention3">Tcp4uVer</A>
+<LI><A HREF="#Mention4">TcpGetLocalID</A>
+<LI><A HREF="#Mention5">Tcp4uEnableLog</A>
+</UL>
+<hr size=4>
+ <h1>
+<A NAME="Mention1">Tcp4uCleanup</A></h1>
+ <p><br>
+This function closes opened sockets, frees internal buffers. This function fails only if a blocking call is in progress. In this case, it tries to cancel the blocking call, thus the next Tcp4uCleanup succeeds.<br>
+If Tcp4uInit has not been called, Tcp4uCleanup returns TCP4U_SUCCESS.<br>
+The sample below shows a "simple" way to close a application using a Windows message loop.</p>
+ <pre>
+Syntax:  Tcp4uCleanup ()
+</pre>
+<p><tt>Return:</tt><br>
+</p>
+<TABLE><TR align="left">
+<TD colspan=1 align="left">TCP4U_ERROR <BR></TD>
+<TD colspan=1 align="left">A Blocking call is in progress  <BR></TD></TR><TR align="left">
+<TD colspan=1 align="left">TCP4U_SUCCESS <BR></TD>
+<TD colspan=1 align="left">Cleanup done  <BR></TD></TR></TABLE>
+<pre>
+
+</pre>
+ <pre>
+Example :
+   case WM_TIMER :
+         KillTimer (hWnd, wParam);
+         PostMessage (hWnd, wParam, 0, 0l);
+         break;
+ 
+   case WM_CLOSE : 
+         if (Tcp4uCleanup ()==TCP4U_ERROR) 
+          { SetTimer (hWnd, WM_CLOSE, 500l, 0);
+            return FALSE; } 
+         else 
+          { DestroyWindow (hWnd);
+            PostQuitMessage (); }
+         break;
+</pre>
+  <HR><H1>
+<A NAME="Mention2">Tcp4uInit</A></h1>
+ <p><br>
+This function initializes the internal structures of Tcp4u. The Windows implementation calls WSAStartup which initializes the module Winsock.Dll.<br>
+It must be called by each task which want to use Tcp4u services.<br>
+Note: This call is not necessary in order to use the Unix functions, but required for portability.</p>
+ <pre>
+Syntax:  Tcp4uInit ()
+</pre>
+<p><tt>Return:</tt><br>
+</p>
+<TABLE><TR align="left">
+<TD colspan=1 align="left">TCP4U_ERROR <BR></TD>
+<TD colspan=1 align="left">(Windows only) Tcp4w has not found a correct Winsock.Dll.  <BR></TD></TR><TR align="left">
+<TD colspan=1 align="left">TCP4U_SUCCESS <BR></TD>
+<TD colspan=1 align="left">Task is registered.  <BR></TD></TR></TABLE>
+<pre>
+
+</pre>
+ <pre>
+Example : 
+if (Tcp4uInit ( ) != TCP4U_SUCCESS)  
+        {
+          MessageBox (hWnd, "Init Error", "Sample App", MB_OK);
+          PostMessage (hWnd, WM_CLOSE, 0, 0l);
+        }
+</pre>
+  <HR><H1>
+<A NAME="Mention3">Tcp4uVer</A></h1>
+ <p><br>
+Tcp4w returns the version number of the package as an integer. The low order byte is the release number, the high order byte is the major version number.<br>
+The function copies in the user's buffer a string which contains information on the pacakge (name, version, author, copyright). This string is guaranteed not to exceed 100 characters.</p>
+ <pre>
+Syntax:  Tcp4uVer(LPSTR szVerStr, int nStrSize)
+</pre>
+<p><tt>Arguments:</tt><br>
+</p>
+<TABLE><TR align="left">
+<TD colspan=1 align="left">szVerStr <BR></TD>
+<TD colspan=1 align="left">a buffer which is to receive the version information  <BR></TD></TR><TR align="left">
+<TD colspan=1 align="left">nStrSize <BR></TD>
+<TD colspan=1 align="left">its size  <BR></TD></TR></TABLE><p><br>
+<tt>Return:</tt><br>
+</p>
+<TABLE><TR align="left">
+<TD colspan=1 align="left">int <BR></TD>
+<TD colspan=1 align="left">an integer which contains the version.  <BR></TD></TR></TABLE>
+<pre>
+
+</pre>
+ <pre>
+Example:
+   char szStr[100];
+     Tcp4uVer (szStr, sizeof szStr);
+     Mprintf ("Using %s\n", szStr);
+</pre>
+ <HR><H1>
+<A NAME="Mention4">TcpGetLocalID</A></h1>
+ <p><br>
+This function identifies the local station. <br>
+Note : The DWORD type depends on the platform. For Windows, the predefined DWORD type has been chosen (a 4-bytes integer), for other platforms, this type is defined as a 4 characters structure.</p>
+ <pre>
+Syntax:  TcpGetLocalID (LPSTR szStrName, int uNameSize, DWORD *lpAddress)
+</pre>
+<p><tt>Arguments:</tt><br>
+</p>
+<TABLE><TR align="left">
+<TD colspan=1 align="left">szStrName <BR></TD>
+<TD colspan=1 align="left">A pointer on a string which is to be filled with the name of the station. If the pointer is NULL, the name of the station is not returned.  <BR></TD></TR><TR align="left">
+<TD colspan=1 align="left">uNameSize <BR></TD>
+<TD colspan=1 align="left">The size of the buffer szStrName.  <BR></TD></TR><TR align="left">
+<TD colspan=1 align="left">lpAddress <BR></TD>
+<TD colspan=1 align="left">A pointer on a double word which is to be filled with the IP address of the station. If this pointer is NULL, the IP-Address is not returned.  <BR></TD></TR></TABLE><p><br>
+<tt>Returns:</tt><br>
+</p>
+<TABLE><TR align="left">
+<TD colspan=1 align="left">TCP4U_ERROR <BR></TD>
+<TD colspan=1 align="left">The IP-stack was unable to get the name of the local station.  <BR></TD></TR><TR align="left">
+<TD colspan=1 align="left">TCP4U_OVERFLOW  <BR></TD>
+<TD colspan=1 align="left">The name is longer than the given buffer.  <BR></TD></TR><TR align="left">
+<TD colspan=1 align="left">TCP4U_SUCCESS <BR></TD>
+<TD colspan=1 align="left">The requested data are available.  <BR></TD></TR></TABLE>
+<pre>
+
+</pre>
+ <pre>
+Example:
+char StationName[64];
+DWORD IPAddress;
+unsigned char *cAdd = (char *) &amp;IPAddress;
+   TcpGetLocalID( StationName, sizeof StationName, &amp; IPAddress);
+   printf ("Local Station is %s, Address %u.%u.%u.%u",
+             StationName, cAdd[0], cAdd[1], cAdd[2], cAdd[3]);
+</pre>
+  <HR><H1>
+<A NAME="Mention5">Tcp4uEnableLog</A></h1>
+ <p><br>
+This function causes Tcp4u to log events like errors, socket calls or Tcp4u calls. It can be used to dump the frames sent and received by Tcp4u both in hexadecimal and in ASCII.<br>
+On Windows platforms, the logs are generated using the OutputDebugString call, they can be displayed by external tools like DbWin, Dbmon or DbWin32. On other platforms, the logs are sent on stderr.<br>
+The action depends on the uMask argument which is any combination of the following values :<br>
+</p>
+<TABLE><TR align="left">
+<TD colspan=1 align="left">LOG4U_CALL <BR></TD>
+<TD colspan=1 align="left">0x0001 <BR></TD>
+<TD colspan=1 align="left">log each tcp socket function  <BR></TD></TR><TR align="left">
+<TD colspan=1 align="left">LOG4U_DBCALL <BR></TD>
+<TD colspan=1 align="left">0x0002 <BR></TD>
+<TD colspan=1 align="left">log db socket function  <BR></TD></TR><TR align="left">
+<TD colspan=1 align="left">LOG4U_INTERN <BR></TD>
+<TD colspan=1 align="left">0x0008 <BR></TD>
+<TD colspan=1 align="left">log each application level call  <BR></TD></TR><TR align="left">
+<TD colspan=1 align="left">LOG4U_PROC <BR></TD>
+<TD colspan=1 align="left">0x0010  <BR></TD>
+<TD colspan=1 align="left">log each Tcp4u/Tn4u APIs call  <BR></TD></TR><TR align="left">
+<TD colspan=1 align="left">LOG4U_HIPROC <BR></TD>
+<TD colspan=1 align="left">0x0020 <BR></TD>
+<TD colspan=1 align="left">log each app level call  <BR></TD></TR><TR align="left">
+<TD colspan=1 align="left">LOG4U_EXIT <BR></TD>
+<TD colspan=1 align="left">0x0040 <BR></TD>
+<TD colspan=1 align="left">log each Tcp4u/Tn4u APIs exit  <BR></TD></TR><TR align="left">
+<TD colspan=1 align="left">LOG4U_HIEXIT <BR></TD>
+<TD colspan=1 align="left">0x0080 <BR></TD>
+<TD colspan=1 align="left">log each application level exit  <BR></TD></TR><TR align="left">
+<TD colspan=1 align="left">LOG4U_DUMP <BR></TD>
+<TD colspan=1 align="left">0x4000 <BR></TD>
+<TD colspan=1 align="left">dump received/sent frames in Hexadecimal and ASCII  <BR></TD></TR><TR align="left">
+<TD colspan=1 align="left">LOG4U_ERROR <BR></TD>
+<TD colspan=1 align="left">0x8000 <BR></TD>
+<TD colspan=1 align="left">log errors  <BR></TD></TR><TR align="left">
+<TD colspan=1 align="left">LOG4U_ALL <BR></TD>
+<TD colspan=1 align="left">0xFFFF <BR></TD>
+<TD colspan=1 align="left">get all logs  <BR></TD></TR></TABLE>
+ <pre>
+Syntax:  Tcp4uEnableLog (unsigned uMask)
+</pre>
+<p><tt>Arguments:</tt><br>
+</p>
+<TABLE><TR align="left">
+<TD colspan=1 align="left">uMask <BR></TD>
+<TD colspan=1 align="left">An integer which precize the detail of reports  <BR></TD></TR></TABLE>
+ <pre>
+Exemple:
+    Tcp4uEnableLog (LOG4U_ERROR | LOG4U_DUMP);
+    HttpGetFile (szURL, NULL, "/tmp/file");
+</pre>
+  <pre>
+Output:
+&gt; 47 45 54 20 2F 20 48 54 - 54 50 2F 31 2E 30 0D 0A   GET / HTTP/1.0..
+&gt; 41 63 63 65 70 74 3A 20 - 69 6D 61 67 65 2F 67 69   Accept: image/gi
+&gt; 66 2C 20 69 6D 61 67 65 - 2F 78 2D 78 62 69 74 6D   f, image/x-xbitm
+&gt; 61 70 2C 20 69 6D 61 67 - 65 2F 6A 70 65 67 2C 20   ap, image/jpeg, 
+&gt; 69 6D 61 67 65 2F 70 6A - 70 65 67 2C 20 2A 2F 2A   image/pjpeg, */*
+&gt; 0D 0A                                               ..
+&gt; 55 73 65 72 2D 41 67 65 - 6E 74 3A 20 48 74 74 70   User-Agent: Http
+&gt; 34 75 20 62 79 20 50 68 - 2E 20 4A 6F 75 6E 69 6E   4u by Ph. Jounin
+&gt; 20 61 6E 64 20 4C 2E 20 - 4C 65 20 42 72 61 73 0D    and L. Le Bras.
+&gt; 0A                                                  .
+&gt; 0D 0A                                               ..
+&lt; 48 54 54 50 2F 31 2E 31 - 20 32 30 30 20 4F 4B      HTTP/1.1 200 OK
+&lt; 44 61 74 65 3A 20 54 75 - 65 2C 20 30 39 20 44 65   Date: Tue, 09 De
+&lt; 63 20 31 39 39 37 20 31 - 33 3A 35 34 3A 30 34 20   c 1997 13:54:04 
+&lt; 47 4D 54 0D 0A 53 65 72 - 76 65 72 3A 20 41 70 61   GMT..Server: Apa
+&lt; 63 68 65 2F 31 2E 32 62 - 37 0D 0A 43 6F 6E 6E 65   che/1.2b7..Conne
+&lt; 63 74 69 6F 6E 3A 20 63 - 6C 6F 73 65 0D 0A 43 6F   ction: close..Co
+&lt; 6E 74 65 6E 74 2D 54 79 - 70 65 3A 20 74 65 78 74   ntent-Type: text
+&lt; 2F 68 74 6D 6C 0D 0A 4C - 61 73 74 2D 4D 6F 64 69   /html..Last-Modi
+&lt; 66 69 65 64 3A 20 46 72 - 69 2C 20 31 39 20 53 65   fied: Fri, 19 Se
+&lt; 70 20 31 39 39 37 20 31 - 32 3A 34 37 3A 31 35 20   p 1997 12:47:15 
+&lt; 47 4D 54 0D 0A 45 54 61 - 67 3A 20 22 32 39 37 64   GMT..ETag: "297d
+&lt; 30 2D 38 39 65 2D 33 34 - 32 32 37 34 35 33 22 0D   0-89e-34227453".
+&lt; 0A 43 6F 6E 74 65 6E 74 - 2D 4C 65 6E 67 74 68 3A   .Content-Length:
+&lt; 20 32 32 30 36 0D 0A 41 - 63 63 65 70 74 2D 52 61    2206..Accept-Ra
+&lt; 6E 67 65 73 3A 20 62 79 - 74 65 73 0D 0A 0D 0A      nges: bytes....
+</pre>
+ </body></html>
+<hr size=4>
+<table border=1 CELLPADDING=7 align=center><tr>
+<td><A HREF="tcp4u.htm">Overview</A></td>
+<td><A HREF="tcp4u_p1.htm">Multi purpose func.</A></td>
+<td><A HREF="tcp4u_p2.htm">TCP functions</A></td>
+<td><A HREF="tcp4u_p3.htm">Telnet related func</A></td>
+<td><A HREF="tcp4u_p4.htm">HTTP functions</A></td>
+<td><A HREF="tcp4u_p5.htm">UDP functions</A></td>
+<td><A HREF="tcp4u_p6.htm">SMTP functions</A></td>
+</tr></table>
+<font italic size=2>
+<table border=0><tr>
+<td align=left>Tcp4u version 3.31 by Ph. Jounin and Laurent Le Bras</td>
+<td align=right>Last updated: 10th march 1998</td>
+<tr>
+</table>
+</font>

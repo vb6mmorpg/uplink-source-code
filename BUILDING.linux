@@ -1,0 +1,63 @@
+*** BUILDING UPLINK ***
+
+Contents:
+
+1. Introduction
+2. Contrib
+3. Lib
+4. Source
+
+1. Introduction
+
+Make sure that you are in $UPLINKROOT (the place where you copied all
+the files to, containing the directories contrib, lib, uplink, etc).
+
+Export the following environment variable to make cutting and pasting
+of commands easier:
+
+%  export UPLINKROOT=`pwd`
+
+2. Contrib
+
+-Needs autopackage, http://www.autopackage.org/
+-Needs autoconf, automake, libtool, Debian: autoconf, automake1.9, libtool.
+-Needs x11 headers and extensions, Debian: libx11-dev, libxext-dev.
+-Needs OpenGL headers, Debian: libgl1-mesa-dev, libglu1-mesa-dev.
+-Needs jpeg, Debian: libjpeg62-dev.
+-For SDL and SDL_mixer, if you want to use ALSA sound layer you will make sure 
+ that you have alsa development libraries installed (Debian: used to be 
+ alsa-headers, now libasound2-dev), same for ESD (Debian: libesd0-dev).
+-For loki, libxml (Debian: libxml-dev), gtk 1 (Debian: libgtk1.2-dev), 
+ libglade (Debian: libglade0-dev), ncurses (Debian: libncurses5-dev).
+
+%  cd $UPLINKROOT/contrib
+%  make
+
+3. Lib
+
+%  cd $UPLINKROOT/lib
+%  make
+
+4. Source
+
+%  cd $UPLINKROOT/uplink/src
+%  make
+
+Should produce uplink.full in $UPLINKROOT/uplink/src/ .
+
+-To produce a easy testable version :
+
+%  cd $UPLINKROOT/uplink/src
+%  make dist-full
+
+Should produce uplink.bin.x86 in $UPLINKROOT/uplink/src/dist/full/uplink/lib
+with all needing libs and dat files.
+
+-To produce a redistributable patch :
+
+%  cd $UPLINKROOT/uplink/src
+%  make dist-patch
+
+If you are using ALSA sound layer make sure that no other
+program has the sound device, otherwise Uplink will wait
+(indefinitely) for the sound device to become available.
