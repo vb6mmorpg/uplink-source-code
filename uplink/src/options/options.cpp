@@ -213,7 +213,7 @@ void Options::CreateDefaultOptions ()
 	if ( !GetOption ( "graphics_safemode" ) )			SetOptionValue ( "graphics_safemode", 0, "Enables graphical safemode for troubleshooting", true, true );
 	if ( !GetOption ( "graphics_softwaremouse" ) )		SetOptionValue ( "graphics_softwaremouse", 0, "Render a software mouse.  Use to correct mouse problems.", true, true );
 	if ( !GetOption ( "graphics_fasterbuttonanimations" ) )	SetOptionValue ( "graphics_fasterbuttonanimations", 0, "Increase the speed of button animations.", true, true );
-	if ( !GetOption ( "graphics_defaultworldmap" ) )	SetOptionValue ( "graphics_defaultworldmap", 0, "Create agents with the default world map.", true, true );
+	if ( !GetOption ( "graphics_defaultworldmap" ) )	SetOptionValue ( "graphics_defaultworldmap", 1, "Create agents with the default world map.", true, true );
 
 	Option *optionSoftwareRendering = GetOption ( "graphics_softwarerendering" );
 	if ( !optionSoftwareRendering ) {

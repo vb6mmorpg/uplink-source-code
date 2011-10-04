@@ -62,7 +62,8 @@
 
 //#define	CHEATMODES_ENABLED									// Eg all-links, all-software, password-bypass etc
 #if defined(FULLGAME)
-#define     CODECARD_ENABLED                                    // Do the code card lookup thingy at the start
+// Remove code card check for all builds
+//#define     CODECARD_ENABLED                                    // Do the code card lookup thingy at the start
 #endif
 //#define   DEBUGLOG_ENABLED                                    // Redirect std* to users/debug.log
 
