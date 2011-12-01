@@ -33,7 +33,7 @@ protected:
 
 	void HandleNewMemorySlot ( int index );
 
-	void Defrag::StopDefrag  ( );
+	void StopDefrag  ( );
 
 protected:
 

@@ -18,8 +18,8 @@
 
 #include "world/world.h"
 #include "world/generator/numbergenerator.h"
-#include "world/VLocation.h"
-#include "world/Player.h"
+#include "world/vlocation.h"
+#include "world/player.h"
 
 #include "interface/localinterface/worldmap/worldmap_layout.h"
 
