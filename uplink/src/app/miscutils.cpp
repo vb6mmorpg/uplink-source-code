@@ -464,46 +464,6 @@ unsigned *getRetAddress(unsigned *mBP)
 
 void PrintStackTrace()
 {
-
-	// Get our frame pointer, chain upwards
-	unsigned *framePtr;
-    unsigned *previousFramePtr = NULL;
-
-    
-#ifdef WIN32
-	__asm { 
-		mov [framePtr], ebp
-	}
-#else
-	asm (
-	    "movl %%ebp, %0;"
-	    :"=r"(framePtr)
-	    );
-#endif
-	while(framePtr) {
-		                
-		printf("retAddress = %p\n", getRetAddress(framePtr));
-		framePtr = *(unsigned **)framePtr;
-
-	    // Frame pointer must be aligned on a
-	    // DWORD boundary.  Bail if not so.
-	    if ( (unsigned long) framePtr & 3 )   
-		break;                    
-
-        if ( framePtr <= previousFramePtr )
-            break;
-
-        // Can two DWORDs be read from the supposed frame address?          
-#ifdef WIN32
-        if ( IsBadWritePtr(framePtr, sizeof(PVOID)*2) ||
-             IsBadReadPtr(framePtr, sizeof(PVOID)*2) )
-            break;
-#endif
-
-        previousFramePtr = framePtr;
-    
-    }
-	
-
+// TODO: Make this work in a sane way on all platforms
 }
 
