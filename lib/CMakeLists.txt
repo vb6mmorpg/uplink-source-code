@@ -1,0 +1,7 @@
+add_subdirectory(gucci)
+add_subdirectory(soundgarden)
+add_subdirectory(eclipse)
+add_subdirectory(vanbakel)
+add_subdirectory(bungle)
+add_subdirectory(redshirt)
+add_subdirectory(mmgr)

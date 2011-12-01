@@ -1,0 +1,5 @@
+find_path(FTGL_INCLUDE_DIR FTGL/ftgl.h)
+find_library(FTGL_LIBRARY ftgl)
+
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(FTGL DEFAULT_MSG FTGL_LIBRARY FTGL_INCLUDE_DIR)
