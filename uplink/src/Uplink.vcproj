@@ -112,7 +112,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Performing Custom Build Step"
-				CommandLine="xcopy &quot;$(OutDir)\$(TargetFileName)&quot; &quot;$(OutDir)\$(ConfigurationName)\&quot; /Y /I&#x0D;&#x0A;xcopy &quot;$(OutDir)\$(TargetName).pdb&quot; &quot;$(OutDir)\$(ConfigurationName)\&quot; /Y /I&#x0D;&#x0A;xcopy &quot;$(OutDir)\$(ConfigurationName)\*.exe&quot; &quot;$(ProjectDir)\..\..\Installer\Data\&quot; /Y /I&#x0D;&#x0A;&quot;C:\Program Files\NSIS\makensis.exe&quot; &quot;$(ProjectDir)\..\..\Installer\Uplink-patch.nsi&quot;&#x0D;&#x0A;&quot;C:\Program Files\NSIS\makensis.exe&quot; &quot;$(ProjectDir)\..\..\Installer\Uplink-full.nsi&quot;&#x0D;&#x0A;&quot;C:\Program Files\NSIS\makensis.exe&quot; &quot;$(ProjectDir)\..\..\Installer\Uplink-download.nsi&quot;&#x0D;&#x0A;"
+				CommandLine="xcopy &quot;$(OutDir)\$(TargetFileName)&quot; &quot;$(OutDir)\$(ConfigurationName)\&quot; /Y /I&#x0D;&#x0A;xcopy &quot;$(OutDir)\$(TargetName).pdb&quot; &quot;$(OutDir)\$(ConfigurationName)\&quot; /Y /I&#x0D;&#x0A;xcopy &quot;$(OutDir)\$(ConfigurationName)\*.exe&quot; &quot;$(ProjectDir)\..\..\Installer\Data\&quot; /Y /I&#x0D;&#x0A;&quot;C:\Program Files (x86)\NSIS\makensis.exe&quot; &quot;$(ProjectDir)\..\..\Installer\Uplink-patch.nsi&quot;&#x0D;&#x0A;&quot;C:\Program Files (x86)\NSIS\makensis.exe&quot; &quot;$(ProjectDir)\..\..\Installer\Uplink-full.nsi&quot;&#x0D;&#x0A;&quot;C:\Program Files (x86)\NSIS\makensis.exe&quot; &quot;$(ProjectDir)\..\..\Installer\Uplink-download.nsi&quot;&#x0D;&#x0A;"
 				AdditionalDependencies="$(OutDir)\$(TargetFileName)"
 				Outputs="$(OutDir)\$(ConfigurationName)\$(TargetFileName);$(OutDir)\$(ConfigurationName)\$(TargetName).pdb"
 			/>
@@ -280,7 +280,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Performing Custom Build Step"
-				CommandLine="xcopy &quot;$(OutDir)\$(TargetFileName)&quot; &quot;$(OutDir)\$(ConfigurationName)\&quot; /Y /I&#x0D;&#x0A;xcopy &quot;$(OutDir)\$(TargetName).pdb&quot; &quot;$(OutDir)\$(ConfigurationName)\&quot; /Y /I&#x0D;&#x0A;xcopy &quot;$(OutDir)\$(ConfigurationName)\*.exe&quot; &quot;$(ProjectDir)\..\..\Installer\Data\&quot; /Y /I&#x0D;&#x0A;&quot;C:\Program Files\NSIS\makensis.exe&quot; &quot;$(ProjectDir)\..\..\Installer\Uplink-demo.nsi&quot;&#x0D;&#x0A;"
+				CommandLine="xcopy &quot;$(OutDir)\$(TargetFileName)&quot; &quot;$(OutDir)\$(ConfigurationName)\&quot; /Y /I&#x0D;&#x0A;xcopy &quot;$(OutDir)\$(TargetName).pdb&quot; &quot;$(OutDir)\$(ConfigurationName)\&quot; /Y /I&#x0D;&#x0A;xcopy &quot;$(OutDir)\$(ConfigurationName)\*.exe&quot; &quot;$(ProjectDir)\..\..\Installer\Data\&quot; /Y /I&#x0D;&#x0A;&quot;C:\Program Files (x86)\NSIS\makensis.exe&quot; &quot;$(ProjectDir)\..\..\Installer\Uplink-demo.nsi&quot;&#x0D;&#x0A;"
 				AdditionalDependencies="$(OutDir)\$(TargetFileName)"
 				Outputs="$(OutDir)\$(ConfigurationName)\$(TargetFileName);$(OutDir)\$(ConfigurationName)\$(TargetName).pdb"
 			/>

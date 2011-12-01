@@ -1160,9 +1160,9 @@ void Init_Fonts	()
 	GciEnableTrueTypeSupport ();
 
 	bool success = false;
-	char *dungeonFontFilename = RsArchiveFileOpen ( "fonts/dungeon.ttf" );
+	char *dungeonFontFilename = RsArchiveFileOpen ( "fonts/ubuntu-l.ttf" );
 	if ( !dungeonFontFilename ) {
-		printf ( "Unable to open font : %s\n", "fonts/dungeon.ttf" );
+		printf ( "Unable to open font : %s\n", "fonts/ubuntu-l.ttf" );
 	}
 	else {
 		if ( debugging ) printf ( "Registering fonts..." );

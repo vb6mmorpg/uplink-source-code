@@ -202,7 +202,7 @@ void NearestGatewayScreenInterface::Create ( ComputerScreen *newcs )
 		EclRegisterButtonCallbacks ( "nearestgateway_helptext", textbutton_draw, NULL, NULL, NULL );
 		EclRegisterCaptionChange ( "nearestgateway_helptext", "Uplink Corporation has offices all around the world.\n"
 															  "Please select a nearby location for your Gateway.\n"
-															  "You will dial into this location when you use Uplink.", 2000 );
+															  "You will log into this location when you use Uplink.", 2000 );
 
 	}
 

@@ -436,8 +436,17 @@ void SetColour ( char *colourName )
         return;
 
     }
-
-    ColourOption *col = app->GetOptions ()->GetColour ( colourName );
+	ColourOption *col;
+	if(colourName == "Background")
+		col = new ColourOption(0.94117647058823529411764705882353,
+		0.92156862745098039215686274509804,
+		0.90588235294117647058823529411765);
+	else if(colourName == "MenuText" || colourName == "DefaultText" || colourName == "TitleText")
+		col = new ColourOption(0.0,0.0,0.0);
+	else if(colourName == "DimmedText")
+		col = new ColourOption(0.2, 0.2, 0.2);
+	else
+		col = app->GetOptions ()->GetColour ( colourName );
     UplinkAssert (col);
     glColor3f ( col->r, col->g, col->b );
 

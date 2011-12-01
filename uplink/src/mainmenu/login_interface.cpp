@@ -444,13 +444,11 @@ void LoginInterface::Create ()
 
 		EclRegisterButton ( useridX, SY(200), 240, SY(50), "", "", "texthelp" );
 		EclRegisterButtonCallbacks ( "texthelp", textbutton_draw, NULL, NULL, NULL );
-		EclRegisterCaptionChange ( "texthelp", "If you are registered as an Uplink Agent,\n"
-											   "enter your username and password below.\n"
-											   "Otherwise, click on the New User button." );
+		EclRegisterCaptionChange ( "texthelp", "Welcome to CakeLink, my Uplink mod.\nCreate a new user, or if you have one\nLoad an old user." );
 
 		// List of all existing games
 
-		EclRegisterButton ( SX(35), SY(270), SX(170), SY(20), "Valid User Names", "", "usernames_title" );
+		EclRegisterButton ( SX(35), SY(270), SX(170), SY(20), "Registered Users", "", "usernames_title" );
 		EclRegisterButtonCallbacks ( "usernames_title", LargeTextBoxDraw, NULL, NULL, NULL );
 
 		CreateExistingGames ();

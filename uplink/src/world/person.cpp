@@ -28,6 +28,7 @@
 #include "mmgr.h"
 
 
+
 Person::Person()
 {
 
@@ -399,7 +400,23 @@ void Person::Print ()
 	printf ( "Is Targetable? %d\n", istargetable );
 
 }
-
+/*
+I only want to say
+If there is a way
+Take this cup away from me
+For I don't want to taste its poison
+Feel it burn me,
+I have changed I'm not as sure
+As when we started
+Then I was inspired
+Now I'm sad and tired
+Listen surely I've exceeded
+Expectations
+Tried for three years
+Seems like thirty
+Could you ask as much
+From any other man?
+*/
 void Person::Update ()
 {
 

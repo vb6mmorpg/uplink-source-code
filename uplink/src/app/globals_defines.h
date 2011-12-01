@@ -19,13 +19,13 @@
                                                                  // SELECT ONE OF THESE THREE
 //#define     FULLGAME                                           // The finished, complete game for CD distribution
 //#define     DEMOGAME                                           // Limit rating, stop story progression
-//#define     TESTGAME                                           // An internal build, with disabled start sequence
+#define     TESTGAME                                           // An internal build, with disabled start sequence
 
 #if !defined(FULLGAME) && !defined(DEMOGAME) && !defined(TESTGAME)
 #error "One of FULLGAME DEMOGAME or TESTGAME must be defined"
 #endif
 
-#define     VERSION_NUMBER_INT      "10.0"                       // Only the 2 first digit after the . are effective
+#define     VERSION_NUMBER_INT      "0.10"                       // Only the 2 first digit after the . are effective
 #define     VERSION_NAME_INT        "RELEASE"
 
 #if defined(DEMOGAME)
@@ -37,7 +37,7 @@
 #endif
 
 #define     SAVEFILE_VERSION        "SAV62"                     // Max version is SAVZZ (due to the number of characters to read)
-#define     SAVEFILE_VERSION_MIN    "SAV56"                     // Minimun Savefile version to run Uplink
+#define     SAVEFILE_VERSION_MIN    "SAV56"                     // Minimum Savefile version to run Uplink
 
 // SAVEFILE_VERSION 56 is 1.31 vanilla
 // SAVEFILE_VERSION 57 add world map connection saving, fix to save maxpayment and paymentmethod in mission
@@ -59,7 +59,6 @@
 
 //#define	DOCLABRELEASE									    // This version designed for DOC labs
 //#define	WAREZRELEASE                                        // Purity Control
-
 //#define	CHEATMODES_ENABLED									// Eg all-links, all-software, password-bypass etc
 #if defined(FULLGAME)
 // Remove code card check for all builds
