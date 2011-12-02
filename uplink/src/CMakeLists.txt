@@ -205,7 +205,11 @@ include_directories(${PROJECT_SOURCE_DIR}/contrib/tcp4u.331/Include)
 include_directories(${PROJECT_SOURCE_DIR}/contrib/irclib)
 include_directories(${PROJECT_SOURCE_DIR}/contrib/irclib/linux)
 
-add_definitions(-DFULLGAME)
+if(${UPLINK_BUILD_TYPE} STREQUAL "Demo")
+    add_definitions(-DDEMOGAME=1)
+else()
+    add_definitions(-DFULLGAME=1)
+endif()
 
 add_executable(uplink WIN32 ${UPLINK_SRCS})
 
@@ -228,4 +232,14 @@ target_link_libraries( uplink
     ${SDL_LIBRARY}
     ${SDLMIXER_LIBRARY}
     ${TIFF_LIBRARY}
+)
+
+if(UNIX AND ${CMAKE_SIZEOF_VOID_P} EQUAL 8)
+    set_target_properties(uplink PROPERTIES SUFFIX ".bin.x86_64")
+elseif(UNIX AND ${CMAKE_SIZEOF_VOID_P} EQUAL 4)
+set_target_properties(uplink PROPERTIES SUFFIX ".bin.x86")
+endif()
+
+install(TARGETS uplink
+    RUNTIME DESTINATION .
 )
