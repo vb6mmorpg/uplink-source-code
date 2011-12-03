@@ -23,8 +23,8 @@
 
 	*/
 
-#define		WORLD_START_DATE				0, 0, 0, 24, 2, 2010	
-#define		GAME_START_DATE					0, 0, 0, 24, 3, 2010	// ;)
+#define		WORLD_START_DATE				0, 0, 0, 24, 2, 2025	
+#define		GAME_START_DATE					0, 0, 0, 24, 3, 2025	// ;)
 
 
 #define		COMPANYSIZE_AVERAGE				20

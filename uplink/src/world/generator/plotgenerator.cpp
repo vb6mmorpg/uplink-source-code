@@ -247,7 +247,7 @@ void PlotGenerator::Initialise_Andromeda ()
     ms2->SetMainTitle ( "Andromeda" );
     ms2->SetSubTitle ( "Our people" );
     ms2->SetTextMessage ( "Removed for security purposes\n"
-                          "effective from 12-02-2010" );
+                          "effective from 12-02-2025" );
     ms2->SetButtonMessage ( "." );
     ms2->SetNextPage ( 1 );
     comp->AddComputerScreen ( ms2, 2 );

@@ -99,7 +99,7 @@ void RecordGenerator::GenerateRecord_SocialSecurity ( char *personname, int age 
 	char dob [64];
 	UplinkSnprintf ( dob, sizeof ( dob ), "%d - %d - %d", NumberGenerator::RandomNumber ( 28 ) + 1,
 														   NumberGenerator::RandomNumber ( 12 ) + 1,
-														   2010 - age );
+														   2025 - age );
 
 	char socialsecurity [16];
 	UplinkSnprintf ( socialsecurity, sizeof ( socialsecurity ), "%d", 10000000 + NumberGenerator::RandomNumber ( 99999999 ) );
