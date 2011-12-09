@@ -1,0 +1,1 @@
+the only difference from this branch code and the main trunk is this branch has been upgraded to compile without errors in visual studios 2010 (8 warnings remain but there is no problem compiling) It didn’t take much to get working, however i hope this branch saves somebody a headache.
