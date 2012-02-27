@@ -3,9 +3,13 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 
 #include "app/app.h"
@@ -110,7 +114,7 @@ void LanInterface::LanBackgroundDraw ( Button *button, bool highlighted, bool cl
 	glEnable ( GL_SCISSOR_TEST );
 
     clear_draw ( button->x, button->y, button->width, button->height );
-	glColor3ub ( 81, 138, 215 );
+	glColor4ub ( 81, 138, 215, 255 );
 	border_draw ( button );
 
 
@@ -128,7 +132,7 @@ void LanInterface::LanBackgroundDraw ( Button *button, bool highlighted, bool cl
 
     if ( comp->TYPE != COMPUTER_TYPE_LAN ) {
 
-        glColor3f ( 1.0f, 1.0f, 1.0f );
+        glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
         char message[] = "No Local Area Network (LAN) detected.";
         GciDrawText ( (background->x + background->width / 2) - (GciTextWidth(message) / 2), 
                       background->y + background->height / 2, message );
@@ -156,6 +160,7 @@ void LanInterface::LanBackgroundDraw ( Button *button, bool highlighted, bool cl
 		int height = intObj->height;
     
         glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f ); 
+#ifndef HAVE_GLES
         glLineWidth ( 2 );
 		glLineStipple ( 2, stipplepattern );
 		glEnable ( GL_LINE_STIPPLE );
@@ -169,6 +174,20 @@ void LanInterface::LanBackgroundDraw ( Button *button, bool highlighted, bool cl
 
 		glLineWidth ( 1 );
 		glDisable ( GL_LINE_STIPPLE );
+#else
+	// TODO: dotted lines
+	GLfloat verts[] = {
+		x - 4, y - 4,
+		x + width + 4, y - 4,
+		x + width + 4, y + height + 4,
+		x - 4, y + height + 4
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glDrawArrays(GL_LINE_LOOP, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
 	}
 
@@ -190,6 +209,7 @@ void LanInterface::LanBackgroundDraw ( Button *button, bool highlighted, bool cl
 
 		glColor4f ( 0.7f, 0.7f, 1.0f, 1.0f );
 
+#ifndef HAVE_GLES
 		glBegin ( GL_LINE_LOOP );
 			glVertex2i ( x - 5, y - 5 );
 			glVertex2i ( x + width + 5, y - 5 );
@@ -205,7 +225,25 @@ void LanInterface::LanBackgroundDraw ( Button *button, bool highlighted, bool cl
 		glEnd ();
 
 		glDisable ( GL_LINE_STIPPLE );
+#else
+		GLfloat lines[] = {
+			x - 5, y - 5,
+			x + width + 5, y - 5,
+			x + width + 5, y + height + 5,
+			x - 5, y + height + 5,
 
+			x - 3, y - 3,
+			x + width + 3, y - 3,
+			x + width + 3, y + height + 3,
+			x - 3, y + height + 3
+		};
+
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(2, GL_FLOAT, 0, lines);
+		glDrawArrays(GL_LINE_LOOP, 0, 4);
+		glDrawArrays(GL_LINE_LOOP, 4, 8);
+		glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 	}
 
 	//
@@ -248,12 +286,26 @@ void LanInterface::LanBackgroundDraw ( Button *button, bool highlighted, bool cl
 				if ( link->visible == LANLINKVISIBLE_FROMAWARE ||
 					 link->visible >= LANLINKVISIBLE_AWARE ) {
 
+#ifndef HAVE_GLES
 					glBegin ( GL_QUADS );
 						glVertex2i ( fromX - 2, fromY - 2 );
 						glVertex2i ( fromX + 2, fromY - 2 );
 						glVertex2i ( fromX + 2, fromY + 2 );
 						glVertex2i ( fromX - 2, fromY + 2 );
 					glEnd ();
+#else
+					GLfloat verts[] = {
+						fromX - 2, fromY - 2,
+						fromX + 2, fromY - 2,
+						fromX + 2, fromY + 2,
+						fromX - 2, fromY + 2
+					};
+
+					glEnableClientState(GL_VERTEX_ARRAY);
+					glVertexPointer(2, GL_FLOAT, 0, verts);
+					glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+					glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
 				}
 
@@ -263,12 +315,26 @@ void LanInterface::LanBackgroundDraw ( Button *button, bool highlighted, bool cl
 				if ( link->visible == LANLINKVISIBLE_TOAWARE ||
 					 link->visible >= LANLINKVISIBLE_AWARE ) {
 
+#ifndef HAVE_GLES
 					glBegin ( GL_QUADS );
 						glVertex2i ( toX - 2, toY - 2 );
 						glVertex2i ( toX + 2, toY - 2 );
 						glVertex2i ( toX + 2, toY + 2 );
 						glVertex2i ( toX - 2, toY + 2 );
 					glEnd ();
+#else
+					GLfloat verts[] = {
+						toX - 2, toY - 2,
+						toX + 2, toY - 2,
+						toX + 2, toY + 2,
+						toX - 2, toY + 2
+					};
+
+					glEnableClientState(GL_VERTEX_ARRAY);
+					glVertexPointer(2, GL_FLOAT, 0, verts);
+					glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+					glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
 				}
 
@@ -288,8 +354,12 @@ void LanInterface::LanBackgroundDraw ( Button *button, bool highlighted, bool cl
 					if ( toIndex != -1 && fromIndex != -1 && 
                          ( toIndex == fromIndex - 1 || fromIndex == toIndex - 1 ) ) {
 												
+#ifndef HAVE_GLES
 						glEnable ( GL_LINE_STIPPLE );
                         glLineStipple ( 2, stipplepattern );
+#else
+		// TODO: implement stipple in gles
+#endif
                         
                         glColor4f ( 0.3f, 0.3f, 0.9f, 1.0f );
                         glLineWidth ( 4.0 );
@@ -306,7 +376,11 @@ void LanInterface::LanBackgroundDraw ( Button *button, bool highlighted, bool cl
                         DrawLink ( link, (float) fromX, (float) fromY, (float) toX, (float) toY );
                         
                         glColor4f ( 0.0f, 0.5f, 0.6f, 1.0f );   
+#ifndef HAVE_GLES
 		                glDisable ( GL_LINE_STIPPLE );
+#else
+		// TODO: implement stipple in gles
+#endif
                         glLineWidth ( 1.0 );
 
 					}
@@ -345,6 +419,7 @@ void LanInterface::LanBackgroundDraw ( Button *button, bool highlighted, bool cl
     
             glColor4f ( 0.8f, 0.8f, 0.1f, 1.0f ); 
             glLineWidth ( 1.0 );
+#ifndef HAVE_GLES
             glEnable ( GL_LINE_STIPPLE );
             glLineStipple ( 1, stipplepattern );
 
@@ -354,8 +429,20 @@ void LanInterface::LanBackgroundDraw ( Button *button, bool highlighted, bool cl
 			    glVertex2i ( x + width + 3, y + height + 3 );
 			    glVertex2i ( x - 3, y + height + 3 );
 		    glEnd ();
-
             glDisable ( GL_LINE_STIPPLE );
+#else
+		GLfloat lines[] = {
+			x - 3, y - 3,
+			x - 3, y - 3,
+			x + width + 3, y + height + 3,
+			x - 3, y + height + 3
+		};
+
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(2, GL_FLOAT, 0, lines);
+		glDrawArrays(GL_LINE_LOOP, 0, 4);
+		glDisableClientState(GL_VERTEX_ARRAY);
+#endif
             glLineWidth ( 1.0 );
 
             GciDrawText ( x - 10, y + height + 15, lih->text );
@@ -399,6 +486,7 @@ void LanInterface::LanBackgroundDraw ( Button *button, bool highlighted, bool cl
     
         glColor4f ( 1.0f, 0.0f, 0.0f, 1.0f ); 
         glLineWidth ( 2 );
+#ifndef HAVE_GLES
 		glLineStipple ( 2, stipplepattern );
 		glEnable ( GL_LINE_STIPPLE );
 
@@ -409,8 +497,21 @@ void LanInterface::LanBackgroundDraw ( Button *button, bool highlighted, bool cl
 			glVertex2i ( x - 4, y + height + 4 );
 		glEnd ();
 
-		glLineWidth ( 1 );
 		glDisable ( GL_LINE_STIPPLE );
+#else
+		GLfloat lines[] = {
+			x - 4, y - 4,
+			x + width + 4, y - 4,
+			x + width + 4, y + height + 4,
+			x - 4, y + height + 4
+		};
+
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(2, GL_FLOAT, 0, lines);
+		glDrawArrays(GL_LINE_LOOP, 0, 4);
+		glDisableClientState(GL_VERTEX_ARRAY);
+#endif
+		glLineWidth ( 1 );
 
 	}
 
@@ -423,7 +524,7 @@ void LanInterface::DrawLink ( LanComputerLink *link,
 							float fromX, float fromY,
 							float toX, float toY )
 {
-
+#ifndef HAVE_GLES
     if ( (link->fromY == 1.0 && link->toY == 0.0) ||				  // Bottom to top
 		 (link->fromY == 0.0 && link->toY == 1.0) ) {                 // Top to bottom
 
@@ -492,7 +593,9 @@ void LanInterface::DrawLink ( LanComputerLink *link,
 		glEnd ();
 
 	}
-
+#else
+	// TODO: implement this mess in gles
+#endif
 }
 
 
@@ -540,7 +643,7 @@ void LanInterface::LanSystemDraw ( Button *button, bool highlighted, bool clicke
         case LANSYSTEMVISIBLE_AWARE:
 
             clear_draw ( button->x, button->y, button->width, button->height );
-            glColor3ub ( 187, 207, 247 );
+            glColor4ub ( 187, 207, 247, 255 );
             border_draw ( button );
             break;
 
@@ -843,12 +946,26 @@ void LanInterface::PanelBackgroundDraw ( Button *button, bool highlighted, bool 
 
     glColor4f ( 0.0f, 0.0f, 0.0f, 1.0f );
 
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );		
 		glVertex2i ( button->x, button->y + button->height );
 		glVertex2i ( button->x, button->y );
 		glVertex2i ( button->x + button->width, button->y );
 		glVertex2i ( button->x + button->width, button->y + button->height );
 	glEnd ();
+#else
+	GLfloat verts[] = {
+		button->x, button->y + button->height,
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
 	SetColour ( "PanelBorder" );
 	border_draw ( button );

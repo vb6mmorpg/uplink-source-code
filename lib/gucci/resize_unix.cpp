@@ -5,10 +5,16 @@
 #include <X11/Xutil.h>
 #include <X11/extensions/xf86vmode.h>
 #include <X11/cursorfont.h>
+
+#ifndef HAVE_GLES
 #include <GL/gl.h>
 #include <GL/glut.h>
 #include <GL/glu.h>
 #include <GL/glx.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include <stdlib.h>
 #include <string.h>

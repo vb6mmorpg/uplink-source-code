@@ -4,9 +4,13 @@
 
 #include "stdafx.h"
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include "eclipse.h"
 #include "soundgarden.h"
@@ -615,31 +619,61 @@ void ScriptLibrary::DrawConnection ( Button *button, bool highlighted, bool clic
 //    glEnable ( GL_LINE_STIPPLE );
 
 	if ( button->height == 4 ) {
-
+#ifndef HAVE_GLES
 		// Horizontal button
 		glBegin ( GL_LINES );
 			glVertex2i ( button->x + 1, button->y + 1 );
 			glVertex2i ( button->x + 1 + button->width - 1, button->y + 1 );
 		glEnd ();
+#else
+		GLfloat verts[] = {
+			button->x + 1, button->y + 1,
+			button->x + 1 + button->width - 1, button->y + 1
+		};
 
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(2, GL_FLOAT, 0, verts);
+		glDrawArrays(GL_LINES, 0, 2);
+		glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 	}
 	else if ( button->width == 4 ) {
-		
+#ifndef HAVE_GLES
 		// Vertical button
 		glBegin ( GL_LINES );
 			glVertex2i ( button->x + 1, button->y + 1 );
 			glVertex2i ( button->x + 1, button->y + button->height - 1 );
 		glEnd ();
+#else
+		GLfloat verts[] = {
+			button->x + 1, button->y + 1,
+			button->x + 1, button->y + button->height - 1
+		};
 
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(2, GL_FLOAT, 0, verts);
+		glDrawArrays(GL_LINES, 0, 2);
+		glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 	}
 	else {
-
+#ifndef HAVE_GLES
 		// Diagonal button
 		glBegin ( GL_LINES );
 			glVertex2i ( button->x + 1, button->y + 1 );
 			glVertex2i ( button->x + button->width - 1, button->y + button->height - 1 );
 		glEnd ();
+#else
+		GLfloat verts[] = {
+			button->x + 1, button->y + 1,
+			button->x + button->width - 1, button->y + button->height - 1
+		};
 
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(2, GL_FLOAT, 0, verts);
+		glDrawArrays(GL_LINES, 0, 2);
+		glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 	}
 
 	glLineWidth ( 1.0 );

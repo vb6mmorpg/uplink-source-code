@@ -4,7 +4,11 @@
 
 #include <stdio.h>
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
+#else
+#include <GLES/gl.h>
+#endif
 
 //#define USE_FTGL
 //#define USE_GLTT
@@ -22,11 +26,19 @@
 //#include <FTGLPixmapFont.h>
 #  else
 #include <ftgl/FTFace.h>
+#ifndef HAVE_GLES
 #include <ftgl/FTGLBitmapFont.h>
+#else
+#include <FTGL/ftgles.h>
+#endif
 //#include <ftgl/FTGLPixmapFont.h>
 #  endif
 
+#ifndef HAVE_GLES
 static std::map<int, FTGLBitmapFont *> fonts;
+#else
+static std::map<int, FTGLTextureFont *> fonts;
+#endif
 //static std::map<int, FTGLPixmapFont *> fonts;
 #endif // USE_FTGL
 
@@ -145,10 +157,19 @@ void GciDrawText ( int x, int y, char *text, int STYLE )
         font->output( x, y, text );
 #endif // USE_GLTT
 #ifdef USE_FTGL
+#ifndef HAVE_GLES
 		FTGLBitmapFont *font = fonts[STYLE];
 		//FTGLPixmapFont *font = fonts[STYLE];
         glRasterPos2i(x, y);
 		font->Render(text);
+#else
+	FTGLTextureFont *font = fonts[STYLE];
+
+	font->Render(text, -1, *(new FTPoint(x, y)));
+
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY); 
+        glDisableClientState(GL_COLOR_ARRAY); 
+#endif
 #endif // USE_FTGL
 
         }
@@ -193,10 +214,14 @@ bool GciLoadTrueTypeFont ( int index, char *fontname, char *filename, int size )
         }
 #endif // USE_GLTT
 #ifdef USE_FTGL
-        int pointSize = int (size * 72.0 / 96.0 + 0.5);
+        int pointSize = int (size * 120.0 / 96.0 + 0.5);
         
+#ifndef HAVE_GLES
         FTGLBitmapFont *font = new FTGLBitmapFont(filename);
         //FTGLPixmapFont *font = new FTGLPixmapFont(filename);
+#else
+        FTGLTextureFont *font = new FTGLTextureFont(filename);
+#endif
         if (font->Error() != 0 || !font->FaceSize(pointSize, 96)) {
             delete font;
             return false;
@@ -235,7 +260,11 @@ void GciDeleteAllTrueTypeFonts ()
     for (map<int, GLTTBitmapFont *>::iterator x = fonts.begin(); x != fonts.end(); x++)
         GciDeleteTrueTypeFont(x->first);
 #else
+#ifndef HAVE_GLES
     for (map<int, FTGLBitmapFont *>::iterator x = fonts.begin(); x != fonts.end(); x++)
+#else
+    for (map<int, FTGLTextureFont *>::iterator x = fonts.begin(); x != fonts.end(); x++)
+#endif
     //for (map<int, FTGLPixmapFont *>::iterator x = fonts.begin(); x != fonts.end(); x++)
         GciDeleteTrueTypeFont(x->first);
 #endif

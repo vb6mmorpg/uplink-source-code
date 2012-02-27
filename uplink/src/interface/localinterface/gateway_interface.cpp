@@ -3,9 +3,13 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
 #include <GL/glu.h>
-
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include "eclipse.h"
 #include "soundgarden.h"
@@ -73,7 +77,7 @@ void GatewayInterface::DrawGatewayBackground ( Button *button, bool highlighted,
 //	glEnd ();
 
 	clear_draw ( button->x, button->y, button->width, button->height );	
-	glColor3f ( 1.0f, 1.0f, 1.0f );
+	glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
 	border_draw ( button );
 
 }

@@ -3,9 +3,13 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h> /*_glu_extention_library_*/
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include <string.h>
 #include <stdio.h>
@@ -183,6 +187,7 @@ void DictionaryHacker::DictionaryHackerDraw ( Button *button, bool highlighted, 
 	
 	//textbutton_draw ( button, highlighted, clicked );
 
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );
 
 		glColor3ub ( 0,  14,  59  );			glVertex2i ( button->x, button->y );
@@ -191,6 +196,30 @@ void DictionaryHacker::DictionaryHackerDraw ( Button *button, bool highlighted, 
 		glColor3ub ( 73, 122, 194 );			glVertex2i ( button->x, button->y + button->height );
 
 	glEnd ();
+#else
+	GLfloat verts[] = {
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height,
+		button->x, button->y + button->height
+	};
+	GLubyte colors[] = {
+		0, 14, 59, 255,
+		36, 72, 146, 255,
+		82, 134, 206, 255,
+		73, 122, 194, 255
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glColorPointer(4, GL_UNSIGNED_BYTE, 0, colors);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+#endif
 
 	text_draw ( button, highlighted, clicked );
 

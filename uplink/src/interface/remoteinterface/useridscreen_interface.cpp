@@ -5,9 +5,13 @@
 
 #include <strstream>
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h> /* glu extention library */
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include <string.h>
 
@@ -220,6 +224,7 @@ void UserIDScreenInterface::UserIDButtonDraw ( Button *button, bool highlighted,
 
 	SetColour ( "PasswordBoxBackground" );
 
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );
 
 		glVertex2i ( button->x, button->y );
@@ -239,8 +244,20 @@ void UserIDScreenInterface::UserIDButtonDraw ( Button *button, bool highlighted,
 
 	if ( highlighted || clicked ) border_draw ( button );
 
-    glDisable ( GL_SCISSOR_TEST );
+#else
+	GLfloat verts[] = {
+		button->x, button->y,
+		button->x + button->width - 1, button->y,
+		button->x + button->width - 1, button->y + button->height,
+		button->x, button->y + button->height
+	};
 
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
+    glDisable ( GL_SCISSOR_TEST );
 }
 
 void UserIDScreenInterface::CodeButtonDraw ( Button *button, bool highlighted, bool clicked )
@@ -256,6 +273,7 @@ void UserIDScreenInterface::CodeButtonDraw ( Button *button, bool highlighted, b
 
     SetColour ( "PasswordBoxBackground" );
 
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );
 
 		glVertex2i ( button->x, button->y );
@@ -264,6 +282,19 @@ void UserIDScreenInterface::CodeButtonDraw ( Button *button, bool highlighted, b
 		glVertex2i ( button->x, button->y + button->height );
 
 	glEnd ();
+#else
+	GLfloat verts[] = {
+		button->x, button->y,
+		button->x + button->width - 1, button->y,
+		button->x + button->width - 1, button->y + button->height,
+		button->x, button->y + button->height
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
 	// Print the text
 

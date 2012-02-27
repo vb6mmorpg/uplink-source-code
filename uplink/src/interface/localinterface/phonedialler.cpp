@@ -3,9 +3,13 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h> /*_glu_extention_library_*/
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include <string.h>
 #include <stdio.h>

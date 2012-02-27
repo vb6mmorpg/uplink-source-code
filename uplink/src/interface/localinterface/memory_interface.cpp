@@ -6,9 +6,13 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include <stdio.h>
 
@@ -79,6 +83,7 @@ void MemoryInterface::MemoryBlockDraw ( Button *button, bool highlighted, bool c
 		// Draw a box, colour coded on the data type
 		// Set the colour
 
+#ifndef HAVE_GLES
 		if ( data ) {
 				
 			if ( data->TYPE == DATATYPE_DATA )
@@ -111,7 +116,50 @@ void MemoryInterface::MemoryBlockDraw ( Button *button, bool highlighted, bool c
 			glVertex2i ( button->x + button->width, button->y + button->height );
 			glVertex2i ( button->x + button->width, button->y );			
 		glEnd ();
+#else
+		GLfloat r1, g1, b1, r2, g2, b2;
+		if (data) {
+			if (data->TYPE == DATATYPE_DATA) {
+				r1 = 0.2f; g1 = 0.8f; b1 = 0.2f;
+			} else if (data->TYPE == DATATYPE_PROGRAM) {
+				r1 = 0.8f; g1 = 0.2f; b1 = 0.2f;
+			} else {
+				r1 = 0.4f; g1 = 0.4f; b1 = 0.4f;
+			}
+		} else {
+			r1 = 0.3f; g1 = 0.3f; b1 = 0.5;
+		}
 
+		if (highlighted || (index == specialHighlight)) {
+			r2 = 0.6f; g2 = 0.6f; b2 = 0.8f;
+		} else {
+			r2 = 0.3f; g2 = 0.3f; b2 = 0.8f;
+		}
+
+		GLfloat verts[] = {
+			button->x + 30, button->y,
+			button->x + 30, button->y + button->height,
+			button->x + button->width, button->y + button->height,
+			button->x + button->width, button->y 
+		};
+		
+		GLfloat colors[] = {
+			r1, g1, b1, ALPHA,
+			r1, g1, b1, ALPHA,
+			r2, g2, b2, ALPHA,
+			r2, g2, b2, ALPHA
+		};
+
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_COLOR_ARRAY);
+
+		glVertexPointer(2, GL_FLOAT, 0, verts);
+		glColorPointer(4, GL_FLOAT, 0, colors);
+		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_COLOR_ARRAY);
+#endif
 
 		// Draw a box if this program is highlighted
 
@@ -120,6 +168,7 @@ void MemoryInterface::MemoryBlockDraw ( Button *button, bool highlighted, bool c
 		if ( currentprogramindex != -1 && 
 			 game->GetWorld ()->GetPlayer ()->gateway.databank.GetDataIndex (index) == currentprogramindex ) {
 
+#ifndef HAVE_GLES
 			glBegin ( GL_LINES );
 
 				glVertex2i ( button->x + 30, button->y );
@@ -138,6 +187,43 @@ void MemoryInterface::MemoryBlockDraw ( Button *button, bool highlighted, bool c
 				}
 
 			glEnd ();
+#else
+			GLfloat verts[16] = {
+				button->x + 30, button->y,
+				button->x + 30, button->y + button->height,
+				button->x + button->width - 1, button->y,
+				button->x + button->width - 1, button->y + button->height
+			};
+
+			int pos = 8;
+
+			if (game->GetWorld ()->GetPlayer ()->gateway.databank.GetDataIndex (index-1) != currentprogramindex) {
+				GLfloat extra1[] = {
+					button->x + 30, button->y,
+					button->x + button->width - 1, button->y
+				};
+
+				memcpy(&verts[pos], extra1, sizeof(GLfloat) * 4);
+				pos += 4;
+			}
+
+			if (game->GetWorld ()->GetPlayer ()->gateway.databank.GetDataIndex (index+1) != currentprogramindex) {
+				GLfloat extra2[] = {
+					button->x + 30, button->y + button->height - 1,
+					button->x + button->width - 1, button->y + button->height - 1
+				};
+
+				memcpy(&verts[pos], extra2, sizeof(GLfloat) * 4);
+				pos += 4;
+			}
+
+			glEnableClientState(GL_VERTEX_ARRAY);
+
+			glVertexPointer(2, GL_FLOAT, 0, verts);
+			glDrawArrays(GL_LINES, 0, pos);
+
+			glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
 		}
 

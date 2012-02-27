@@ -3,9 +3,13 @@
 #include <windows.h> 
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include <math.h>
 
@@ -325,12 +329,26 @@ void WorldMapInterface::DrawWorldMapSmall ( Button *button, bool highlighted, bo
         int scaledX = button->x + GetScaledX ( playerX, WORLDMAP_SMALL );
         int scaledY = button->y + GetScaledY ( playerY, WORLDMAP_SMALL );
         
+#ifndef HAVE_GLES
         glBegin ( GL_QUADS );
             glVertex2i ( scaledX - 1, scaledY - 1 );    
             glVertex2i ( scaledX + 2, scaledY - 1 );
             glVertex2i ( scaledX + 2, scaledY + 2 );
             glVertex2i ( scaledX - 1, scaledY + 2 );
         glEnd ();
+#else
+	GLfloat verts[] = {
+		scaledX - 1, scaledY - 1,
+		scaledX + 2, scaledY - 1,
+		scaledX + 2, scaledY + 2,
+		scaledX - 1, scaledY + 2
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
     }
     else {
@@ -341,6 +359,7 @@ void WorldMapInterface::DrawWorldMapSmall ( Button *button, bool highlighted, bo
 
         glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
         glLineWidth ( 2.0 );        
+#ifndef HAVE_GLES
         glLineStipple ( 1, stipplepattern );    
         glEnable ( GL_LINE_STIPPLE );
 
@@ -362,13 +381,69 @@ void WorldMapInterface::DrawWorldMapSmall ( Button *button, bool highlighted, bo
             }
 
         glEnd ();
+#else
+	GLfloat *verts = (GLfloat *)malloc((connection->vlocations.Size() + 1) * 2 * sizeof(GLfloat));
+	GLfloat *colors = (GLfloat *)malloc((connection->vlocations.Size() + 1) * 4 * sizeof(GLfloat));
+	int pos = 0;
+	bool trace = false;
+	for ( int i = 0; i < connection->vlocations.Size (); ++i ) {
+		VLocation *vl = game->GetWorld ()->GetVLocation ( connection->vlocations.GetData (i) );
+		UplinkAssert ( vl );
+
+		int xpos = button->x + GetScaledX ( vl->x, WORLDMAP_SMALL );
+		int ypos = button->y + GetScaledY ( vl->y, WORLDMAP_SMALL );
+
+		verts[pos*2] = xpos;
+		verts[pos*2+1] = ypos;
+		colors[pos*2] = 1.0f;
+		colors[pos*2+3] = 1.0f;
+		if (trace) {
+			colors[pos*2+1] = 0.0f;
+			colors[pos*2+2] = 0.0f;
+		} else {
+			colors[pos*2+1] = 1.0f;
+			colors[pos*2+2] = 1.0f;
+		}
+		pos++;
+
+		if ( connection->TraceInProgress () &&
+				connection->traceprogress == (connection->vlocations.Size () - i - 1) &&
+				game->GetWorld ()->GetPlayer ()->gateway.HasHUDUpgrade (HUDUPGRADE_MAPSHOWSTRACE) ) {
+			verts[pos*2] = xpos;
+			verts[pos*2+1] = ypos;
+			colors[pos*2] = 1.0f;
+			colors[pos*2+1] = 0.0f;
+			colors[pos*2+2] = 0.0f;
+			colors[pos*2+3] = 1.0f;
+			pos++;
+
+			trace = true;
+		}
+
+	}
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glColorPointer(2, GL_FLOAT, 0, colors);
+	
+	glDrawArrays(GL_LINE_STRIP, 0, pos);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+
+	free(verts);
+	free(colors);
+#endif
 
         glLineWidth ( 1.0 );
+#ifndef HAVE_GLES
         glDisable ( GL_LINE_STIPPLE );
+#endif
         glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
 
         // Draw the dots
-
+#ifndef HAVE_GLES
         glBegin ( GL_QUADS );
 
             for ( int di = 0; di < connection->vlocations.Size (); ++di ) {
@@ -391,6 +466,33 @@ void WorldMapInterface::DrawWorldMapSmall ( Button *button, bool highlighted, bo
             }
 
         glEnd ();
+#else
+	glEnableClientState(GL_VERTEX_ARRAY);
+	for ( int di = 0; di < connection->vlocations.Size (); ++di ) {
+
+		VLocation *vl = game->GetWorld ()->GetVLocation ( connection->vlocations.GetData (di) );
+		UplinkAssert ( vl );
+
+		int x = button->x + GetScaledX ( vl->x, WORLDMAP_SMALL );
+		int y = button->y + GetScaledY ( vl->y, WORLDMAP_SMALL );
+
+		GLfloat verts[] = {
+			x - 1, y - 1,
+			x + 2, y - 1,
+			x + 2, y + 2,
+			x - 1, y + 2
+		};
+
+		glVertexPointer(2, GL_FLOAT, 0, verts);
+		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+		if ( connection->traceprogress == (connection->vlocations.Size () - di - 1) &&
+				game->GetWorld ()->GetPlayer ()->gateway.HasHUDUpgrade (HUDUPGRADE_MAPSHOWSTRACE) )
+			glColor4f ( 1.0f, 0.0f, 0.0f, 1.0f );
+
+	}
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
     }
 
@@ -398,6 +500,7 @@ void WorldMapInterface::DrawWorldMapSmall ( Button *button, bool highlighted, bo
     // Draw red circles over computers infected with Revelation
     //
 
+#ifndef HAVE_GLES
     glBegin ( GL_QUADS );
 
         for ( int i = 0; i < game->GetWorld ()->plotgenerator.infected.Size (); ++i ) {
@@ -423,6 +526,36 @@ void WorldMapInterface::DrawWorldMapSmall ( Button *button, bool highlighted, bo
         }
 
     glEnd ();
+#else
+	glEnableClientState(GL_VERTEX_ARRAY);
+	for ( int i = 0; i < game->GetWorld ()->plotgenerator.infected.Size (); ++i ) {
+
+		char *ip = game->GetWorld ()->plotgenerator.infected.GetData (i);
+		UplinkAssert (ip);
+
+		VLocation *vl = game->GetWorld ()->GetVLocation (ip);
+		UplinkAssert (vl);
+
+		int x = button->x + GetScaledX ( vl->x, WORLDMAP_SMALL );
+		int y = button->y + GetScaledY ( vl->y, WORLDMAP_SMALL );
+
+		glColor4f ( revelationColour, 0.0f, 0.0f, 1.0f );
+		GLfloat verts[] = {
+			x - 3, y - 3,
+			x + 4, y - 3,
+			x + 4, y + 4,
+			x - 3, y + 4
+		};
+
+		glVertexPointer(2, GL_FLOAT, 0, verts);
+		glDrawArrays(GL_LINES, 0, 4);
+
+		revelationColour -= 0.09f;
+		if ( revelationColour < 0.0f ) revelationColour = 1.0f;
+
+	}
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
     if ( highlighted || clicked ) {
 
@@ -432,7 +565,7 @@ void WorldMapInterface::DrawWorldMapSmall ( Button *button, bool highlighted, bo
     }
 	else {
 
-		glColor3ub ( 81, 138, 215 );
+		glColor4ub ( 81, 138, 215, 255 );
 		border_draw ( button );
 
 	}
@@ -473,7 +606,9 @@ void WorldMapInterface::DrawWorldMapLarge ( Button *button, bool highlighted, bo
 
     UplinkAssert ( button );
 
+#ifndef HAVE_GLES
 	glPushAttrib ( GL_ALL_ATTRIB_BITS );
+#endif
 
     //
     // Draw the background image
@@ -517,12 +652,39 @@ void WorldMapInterface::DrawWorldMapLarge ( Button *button, bool highlighted, bo
     float windowW = 1.0f / zoom;
     float windowH = 1.0f / zoom;
 
+#ifndef HAVE_GLES
 	glBegin(GL_QUADS);
 		glTexCoord2f(scrollX, 1.0f - scrollY);                       glVertex2i(button->x, button->y);
 		glTexCoord2f(scrollX + windowW, 1.0f - scrollY); 	        glVertex2i(button->x + button->width, button->y);
 		glTexCoord2f(scrollX + windowW, 1.0f - (scrollY + windowH)); glVertex2i(button->x + button->width, button->y + button->height);
 		glTexCoord2f(scrollX, 1.0f - (scrollY + windowH));           glVertex2i(button->x, button->y + button->height);
 	glEnd ();
+#else
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	GLfloat vert2[] = {
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height,
+		button->x, button->y + button->height
+	};
+
+	GLfloat tex[] = {
+		scrollX, 1.0f - scrollY,
+		scrollX + windowW, 1.0f - scrollY,
+		scrollX + windowW, 1.0f - (scrollY + windowH),
+		scrollX, 1.0f - (scrollY + windowH)
+	};
+
+	glVertexPointer(2, GL_FLOAT, 0, vert2);
+	glTexCoordPointer(2, GL_FLOAT, 0, tex);
+
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+#endif
 
     glDisable ( GL_TEXTURE_2D );
 
@@ -530,7 +692,7 @@ void WorldMapInterface::DrawWorldMapLarge ( Button *button, bool highlighted, bo
     // Gimme a border
     //
 
-	glColor3ub ( 81, 138, 215 );
+	glColor4ub ( 81, 138, 215, 255 );
 	border_draw ( button );
 
     //
@@ -553,6 +715,7 @@ void WorldMapInterface::DrawWorldMapLarge ( Button *button, bool highlighted, bo
     // Draw red circles over computers infected with Revelation
     //
 
+#ifndef HAVE_GLES
     glBegin ( GL_QUADS );
 
         for ( int j = 0; j < game->GetWorld ()->plotgenerator.infected.Size (); ++j ) {
@@ -579,6 +742,9 @@ void WorldMapInterface::DrawWorldMapLarge ( Button *button, bool highlighted, bo
         }
 
     glEnd ();
+#else
+	// TODO: implement in gles
+#endif
 
     //
     // Draw connecting lines over the players connection
@@ -589,6 +755,7 @@ void WorldMapInterface::DrawWorldMapLarge ( Button *button, bool highlighted, bo
     glLineWidth ( 2.0 );
     glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
 
+#ifndef HAVE_GLES
     glLineStipple ( 2, stipplepattern );
     glEnable ( GL_LINE_STIPPLE );
 
@@ -616,12 +783,65 @@ void WorldMapInterface::DrawWorldMapLarge ( Button *button, bool highlighted, bo
     glEnd ();
 
 
-	glLineWidth ( 1.0 );
     glDisable ( GL_LINE_STIPPLE );
     glDisable ( GL_SCISSOR_TEST );
 
   	glPopAttrib ();
+#else
+	GLfloat *verts = (GLfloat *)malloc((connection->vlocations.Size() + 1) * 2 * sizeof(GLfloat));
+	GLfloat *colors = (GLfloat *)malloc((connection->vlocations.Size() + 1) * 4 * sizeof(GLfloat));
+	int pos = 0;
+	bool trace = false;
+	for ( int i = 0; i < connection->vlocations.Size (); ++i ) {
+		VLocation *vl = game->GetWorld ()->GetVLocation ( connection->vlocations.GetData (i) );
+		UplinkAssert ( vl );
 
+		int xpos = button->x + GetScaledX ( vl->x, WORLDMAP_LARGE );
+		int ypos = button->y + GetScaledY ( vl->y, WORLDMAP_LARGE );
+
+		verts[pos*2] = xpos;
+		verts[pos*2+1] = ypos;
+		colors[pos*2] = 1.0f;
+		colors[pos*2+3] = 1.0f;
+		if (trace) {
+			colors[pos*2+1] = 0.0f;
+			colors[pos*2+2] = 0.0f;
+		} else {
+			colors[pos*2+1] = 1.0f;
+			colors[pos*2+2] = 1.0f;
+		}
+		pos++;
+
+		if ( connection->TraceInProgress () &&
+				connection->traceprogress == (connection->vlocations.Size () - i - 1) &&
+				game->GetWorld ()->GetPlayer ()->gateway.HasHUDUpgrade (HUDUPGRADE_MAPSHOWSTRACE) ) {
+			verts[pos*2] = xpos;
+			verts[pos*2+1] = ypos;
+			colors[pos*2] = 1.0f;
+			colors[pos*2+1] = 0.0f;
+			colors[pos*2+2] = 0.0f;
+			colors[pos*2+3] = 1.0f;
+			pos++;
+
+			trace = true;
+		}
+
+	}
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glColorPointer(2, GL_FLOAT, 0, colors);
+	
+	glDrawArrays(GL_LINE_STRIP, 0, pos);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+
+	free(verts);
+	free(colors);
+#endif
+	glLineWidth ( 1.0 );
 }
 
 void WorldMapInterface::DrawLocation ( Button *button, bool highlighted, bool clicked )
@@ -664,16 +884,21 @@ void WorldMapInterface::DrawLocation ( Button *button, bool highlighted, bool cl
         int h = button->height + 3;
         
         if ( accesslevel > 1 ) {
+#ifndef HAVE_GLES
             glLineStipple ( 1, stipplepattern );        
             glEnable ( GL_LINE_STIPPLE );
+#else
+	// TODO: implement gles stipple
+#endif
             x -= 1;
             y -= 1;
             w += 2;
             h += 2;
         }
                         
-        glColor3f ( 1.0f, 1.0f, 1.0f );        
+        glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
 
+#ifndef HAVE_GLES
 		glBegin ( GL_LINE_LOOP );
 			glVertex2i ( x, y + h );
 			glVertex2i ( x, y );
@@ -682,6 +907,20 @@ void WorldMapInterface::DrawLocation ( Button *button, bool highlighted, bool cl
 		glEnd ();
 
         glDisable ( GL_LINE_STIPPLE );
+#else
+	// TODO: implement gles stipple
+	GLfloat verts[] = {
+		x, y + h,
+		x, y,
+		x + w, y,
+		x + w, y + h
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glDrawArrays(GL_LINE_LOOP, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
     }
 
@@ -729,6 +968,7 @@ void WorldMapInterface::DrawLocation ( Button *button, bool highlighted, bool cl
 
 		// Draw the box
 
+#ifndef HAVE_GLES
 		glBegin ( GL_QUADS );		
 			glColor3ub ( 8, 20, 0 );		glVertex2i ( x, y + h );
 			glColor3ub ( 8, 20, 124 );		glVertex2i ( x, y );
@@ -744,6 +984,33 @@ void WorldMapInterface::DrawLocation ( Button *button, bool highlighted, bool cl
 			glVertex2i ( x + w, y );
 			glVertex2i ( x + w, y + h );
 		glEnd ();
+#else
+		GLfloat verts[] = {
+			x, y + h,
+			x, y,
+			x + w, y,
+			x + w, y + h
+		};
+
+		GLfloat colors[] = {
+			8, 20, 0, 255,
+			8, 20, 124, 255,
+			8, 20, 0, 255,
+			8, 20, 124, 255
+		};
+
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_COLOR_ARRAY);
+
+		glVertexPointer(2, GL_FLOAT, 0, verts);
+		glColorPointer(4, GL_FLOAT, 0, colors);
+
+		glDisableClientState(GL_COLOR_ARRAY);
+		glColor4ub(81, 138, 215, 255);
+		glDrawArrays(GL_LINE_LOOP, 0, 4);
+
+		glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 		
 
 		// Draw the text
@@ -751,7 +1018,7 @@ void WorldMapInterface::DrawLocation ( Button *button, bool highlighted, bool cl
         char line1 [64], line2 [128];
         UplinkSnprintf ( line1, sizeof ( line1 ), "IP: %s", ip );
         UplinkSnprintf ( line2, sizeof ( line2 ), "Owner: %s", comp->companyname );
-        glColor3f ( 1.0f, 1.0f, 1.0f );
+        glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
 		GciDrawText ( x + 5, y + 10, line1 );
         GciDrawText ( x + 5, y + 20, line2 );
 
@@ -835,13 +1102,26 @@ void WorldMapInterface::ZoomButtonDraw ( Button *button, bool highlighted, bool 
     // 
     // Zoom bar
 
-    glColor3ub ( 81, 138, 215 );
+    glColor4ub ( 81, 138, 215, 255 );
 
+#ifndef HAVE_GLES
     glBegin ( GL_TRIANGLES );
         glVertex2i ( button->x, button->y + 5 );    
         glVertex2i ( button->x + button->width, button->y + 5 );
         glVertex2i ( button->x + button->width, button->y + 10 );
     glEnd ();
+#else
+	GLfloat verts[] = {
+		button->x, button->y + 5,
+		button->x + button->width, button->y + 5,
+		button->x + button->width, button->y + 10
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
     
     WorldMapInterface *thisint = (WorldMapInterface *) &(game->GetInterface ()->GetLocalInterface ()->GetHUD ()->wmi);
     UplinkAssert (thisint);
@@ -849,16 +1129,29 @@ void WorldMapInterface::ZoomButtonDraw ( Button *button, bool highlighted, bool 
     //
     // Slider
     
-    glColor3f ( 0.0f, 0.0f, 0.7f );
+    glColor4f ( 0.0f, 0.0f, 0.7f, 1.0f );
     float sliderX = 2 + (button->width-4) * (thisint->zoom - 1.0f) / (MAXZOOM - 1.0f);
     
+#ifndef HAVE_GLES
     glBegin ( GL_QUADS );
         glVertex2f ( button->x + sliderX - 1, (float) button->y );    
         glVertex2f ( button->x + sliderX + 1, (float) button->y );
         glVertex2f ( button->x + sliderX + 1, (float) ( button->y + button->height ) );
         glVertex2f ( button->x + sliderX - 1, (float) ( button->y + button->height ) );
     glEnd ();
+#else
+	GLfloat vert2[] = {
+		button->x + sliderX - 1, button->y,
+		button->x + sliderX + 1, button->y,
+		button->x + sliderX + 1, (button->y + button->height),
+		button->x + sliderX - 1, (button->y + button->height)
+	};
 
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, vert2);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 }
 
 int WorldMapInterface::GetLargeMapX1()

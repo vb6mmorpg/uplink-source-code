@@ -3,9 +3,13 @@
 
 #include <time.h>
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h> /* glu extention library */
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include <stdio.h>
 
@@ -68,11 +72,14 @@ void clear_draw ( int x, int y, int w, int h )
 
 	if ( !backdrop ) initialise_transparency ();
 
+#ifndef HAVE_GLES
 	glPushAttrib ( GL_ALL_ATTRIB_BITS );
+#endif
 
 	glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
 	glEnable ( GL_TEXTURE_2D );
 
+#error
 	glBindTexture ( GL_TEXTURE_2D, 1 );
 	glTexImage2D ( GL_TEXTURE_2D, 0, GL_RGB, backdrop->Width(), backdrop->Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, backdrop->pixels );
 
@@ -81,6 +88,7 @@ void clear_draw ( int x, int y, int w, int h )
 	float scaleW = (float) w / 640.0;
 	float scaleH = (float) h / 480.0;
 
+#ifndef HAVE_GLES
 	glBegin(GL_QUADS);
 		glTexCoord2f(scaleX, scaleY);						glVertex2f(x, y);
 		glTexCoord2f(scaleX + scaleW, scaleY);				glVertex2f(x + w, y);
@@ -89,11 +97,40 @@ void clear_draw ( int x, int y, int w, int h )
 	glEnd ();
 
 	glPopAttrib ();
+#else
+	GLfloat verts[] = {
+		x, y,
+		x + w, y,
+		x + w, y + h,
+		x, y + h
+	};
+
+	GLfloat tex[] = {
+		scaleX, scaleY,
+		scaleX + scaleW, scaleY,
+		scaleX + scaleW, scaleY + scaleH,
+		scaleX, scaleY + scaleH
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glTexCoordPointer(2, GL_FLOAT, 0, tex);
+	
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+#endif
 
 #else
 
     SetColour ( "Background" );
 
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );
 
 		glVertex2i ( x,		y	  );
@@ -102,6 +139,19 @@ void clear_draw ( int x, int y, int w, int h )
 		glVertex2i ( x,		y + h );
 
 	glEnd ();
+#else
+	GLfloat verts[] = {
+		x, y,
+		x + w, y,
+		x + w, y + h,
+		x, y + h
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
 #endif
 
@@ -119,11 +169,14 @@ void button_draw ( Button *button, bool highlighted, bool clicked )
 
 	if ( !backdrop ) initialise_transparency ();
 
+#ifndef HAVE_GLES
 	glPushAttrib ( GL_ALL_ATTRIB_BITS );
+#endif
 
 	glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
 	glEnable ( GL_TEXTURE_2D );
 
+#error
 	glBindTexture ( GL_TEXTURE_2D, 1 );
 	glTexImage2D ( GL_TEXTURE_2D, 0, GL_RGB, backdrop->Width(), backdrop->Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, backdrop->pixels );
 
@@ -132,6 +185,7 @@ void button_draw ( Button *button, bool highlighted, bool clicked )
 	float scaleW = (float) button->width / 640.0;
 	float scaleH = (float) button->height / 480.0;
 
+#ifndef HAVE_GLES
 	glBegin(GL_QUADS);
 		glTexCoord2f(scaleX, scaleY);						glVertex2f(button->x, button->y);
 		glTexCoord2f(scaleX + scaleW, scaleY);				glVertex2f(button->x + button->width, button->y);
@@ -140,6 +194,34 @@ void button_draw ( Button *button, bool highlighted, bool clicked )
 	glEnd ();
 
 	glPopAttrib ();
+#else
+	GLfloat verts[] = {
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height,
+		button->x, button->y + button->height
+	};
+
+	GLfloat tex[] = {
+		scaleX, scaleY,
+		scaleX + scaleW, scaleY,
+		scaleX + scaleW, scaleY + scaleH,
+		scaleX, scaleY + scaleH
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glTexCoordPointer(2, GL_FLOAT, 0, tex);
+	glVertexPointer(2, GL_FLOAT, 0, verts)
+
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+#endif
 
 	// ============================================================
 
@@ -151,6 +233,7 @@ void button_draw ( Button *button, bool highlighted, bool clicked )
 
 	// Draw the button
 	
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );
 
 		if		( clicked )		SetColour ( "ButtonClickedA" );
@@ -174,6 +257,44 @@ void button_draw ( Button *button, bool highlighted, bool clicked )
 		glVertex2i ( button->x + button->width, button->y + button->height );
 
 	glEnd ();
+#else
+	ColourOption *col1, *col2;
+	if (clicked) {
+		col1 = GetColour("ButtonClickedA");
+		col2 = GetColour("ButtonClickedB");
+	} else if (highlighted) {
+		col1 = GetColour("ButtonHighlightedA");
+		col2 = GetColour("ButtonHighlightedB");
+	} else {
+		col1 = GetColour("ButtonNormalA");
+		col2 = GetColour("ButtonNormalB");
+	}
+
+	GLfloat verts[] = {
+		button->x, button->y + button->height,
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height
+	};
+
+	GLfloat colors[] = {
+                col1->r, col1->g, col1->b, 1.0f,
+                col2->r, col2->g, col2->b, 1.0f,
+                col1->r, col1->g, col1->b, 1.0f,
+                col2->r, col2->g, col2->b, 1.0f
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glColorPointer(4, GL_FLOAT, 0, colors);
+
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+#endif
 	
 #endif
 
@@ -273,13 +394,16 @@ void imagebutton_drawtextured ( Button *button, bool highlighted, bool clicked )
 
 	if ( !backdrop ) initialise_transparency ();
 
+#ifndef HAVE_GLES
 	glPushAttrib ( GL_ALL_ATTRIB_BITS );
+#endif
 
 	glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
 	glEnable ( GL_TEXTURE_2D );
 	glEnable ( GL_BLEND );
 	glBlendFunc ( GL_ONE, GL_ZERO );
 
+#error
 	glBindTexture ( GL_TEXTURE_2D, 1 );
 	glTexImage2D ( GL_TEXTURE_2D, 0, GL_RGB, backdrop->Width(), backdrop->Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, backdrop->pixels );
 
@@ -289,13 +413,39 @@ void imagebutton_drawtextured ( Button *button, bool highlighted, bool clicked )
 	float scaleW = 0.8;
 	float scaleH = 0.5;
 
+#ifndef HAVE_GLES
 	glBegin(GL_QUADS);
 		glTexCoord2f(scaleX, scaleY);						glVertex2f(button->x, button->y);
 		glTexCoord2f(scaleX + scaleW, scaleY);				glVertex2f(button->x + button->width, button->y);
 		glTexCoord2f(scaleX + scaleW, scaleY + scaleH);		glVertex2f(button->x + button->width, button->y + button->height);
 		glTexCoord2f(scaleX, scaleY + scaleH );				glVertex2f(button->x, button->y + button->height);
 	glEnd ();
+#else
+	GLfloat verts[] = {
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height,
+		button->x, button->y + button->height
+	};
 
+	GLfloat tex[] = {
+		scaleX, scaleY,
+		scaleX + scaleW, scaleY,
+		scaleX + scaleW, scaleY + scaleH,
+		scaleX, scaleY + scaleH
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glTexCoordPointer(2, GL_FLOAT, 0, tex);
+
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+#endif
 	// ============================================================
 
 	int screenheight = app->GetOptions ()->GetOptionValue ( "graphics_screenheight" );
@@ -320,11 +470,13 @@ void imagebutton_drawtextured ( Button *button, bool highlighted, bool clicked )
 
 	UplinkAssert ( image );
 	
+#error
 	glBindTexture ( GL_TEXTURE_2D, 1 );
 	glTexImage2D ( GL_TEXTURE_2D, 0, GL_RGBA, image->Width(), image->Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image->pixels );
 
 	// Scale the image to fit the button size
 
+#ifndef HAVE_GLES
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0, 1.0);		glVertex2f(button->x, button->y);
 		glTexCoord2f(1.0, 1.0);		glVertex2f(button->x + button->width, button->y);
@@ -335,11 +487,42 @@ void imagebutton_drawtextured ( Button *button, bool highlighted, bool clicked )
 	glDisable ( GL_SCISSOR_TEST );
 
 	glPopAttrib ();
+#else
+	GLfloat verts[] = {
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height,
+		button->x, button->y + button->height
+	};
+
+	GLfloat tex[] = {
+		0.0f, 1.0f,
+		1.0f, 1.0f,
+		1.0f, 0.0f,
+		0.0f, 0.0f
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glTexCoordPointer(2, GL_FLOAT, 0, tex);
+
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+	glDisable(GL_SCISSOR_TEST);
+#endif
 
 #else
 
 
+#ifndef HAVE_GLES
 	glPushAttrib ( GL_ALL_ATTRIB_BITS );
+#endif
 
 	int screenheight = app->GetOptions ()->GetOptionValue ( "graphics_screenheight" );
 	glScissor ( button->x, screenheight - (button->y + button->height), button->width, button->height );	
@@ -367,11 +550,15 @@ void imagebutton_drawtextured ( Button *button, bool highlighted, bool clicked )
 
 	UplinkAssert ( image );
 	
+#ifndef HAVE_GLES
 	glBindTexture ( GL_TEXTURE_2D, 1 );
 	glTexImage2D ( GL_TEXTURE_2D, 0, GL_RGB, image->Width(), image->Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image->pixels );
-
+#else
+	glBindTexture(GL_TEXTURE_2D, image->texture);
+#endif
 	// Scale the image to fit the button size
 
+#ifndef HAVE_GLES
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f, 1.0f);		glVertex2i(button->x, button->y);
 		glTexCoord2f(1.0f, 1.0f);		glVertex2i(button->x + button->width, button->y);
@@ -382,6 +569,35 @@ void imagebutton_drawtextured ( Button *button, bool highlighted, bool clicked )
 	glDisable ( GL_SCISSOR_TEST );
 
 	glPopAttrib ();
+#else
+	GLfloat verts[] = {
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height,
+		button->x, button->y + button->height
+	};
+
+	GLfloat tex[] = {
+		0.0f, 1.0f,
+		1.0f, 1.0f,
+		1.0f, 0.0f,
+		0.0f, 0.0f
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glTexCoordPointer(2, GL_FLOAT, 0, tex);
+
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glDisable(GL_SCISSOR_TEST);
+	glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+#endif
 
 #endif
 
@@ -389,7 +605,7 @@ void imagebutton_drawtextured ( Button *button, bool highlighted, bool clicked )
 
 void border_draw ( Button *button )
 {
-
+#ifndef HAVE_GLES
 	glBegin ( GL_LINE_LOOP );
 
 		glVertex2i ( button->x,						button->y );
@@ -398,7 +614,19 @@ void border_draw ( Button *button )
 		glVertex2i ( button->x,						button->y + button->height - 1 );
 
 	glEnd ();
+#else
+	GLfloat verts[] = {
+		button->x, button->y,
+		button->x + button->width - 1, button->y,
+		button->x + button->width - 1, button->y + button->height - 1,
+		button->x, button->y + button->height - 1
+	};
 
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glDrawArrays(GL_LINE_LOOP, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 }
 
 LList <char *> *wordwraptext ( const char *string, int linesize ) 
@@ -672,6 +900,7 @@ void textbox_draw ( Button *button, bool highlighted, bool clicked )
 
 	// Draw the background
 
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );
 
 		if		( clicked )		SetColour ( "ButtonClickedA" );
@@ -695,6 +924,44 @@ void textbox_draw ( Button *button, bool highlighted, bool clicked )
 		glVertex2i ( button->x + button->width, button->y + button->height );
 
 	glEnd ();
+#else
+	ColourOption *col1, *col2;
+	if (clicked) {
+		col1 = GetColour("ButtonClickedA");
+		col2 = GetColour("ButtonClickedB");
+	} else if (highlighted) {
+		col1 = GetColour("ButtonHighlightedA");
+		col2 = GetColour("ButtonHighlightedB");
+	} else {
+		col1 = GetColour("ButtonNormalA");
+		col2 = GetColour("ButtonNormalB");
+	}
+
+	GLfloat verts[] = {
+		button->x, button->y + button->height,
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height
+	};
+
+	GLfloat colors[] = {
+		col1->r, col1->g, col1->b, 1.0f,
+		col2->r, col2->g, col2->b, 1.0f,
+		col1->r, col1->g, col1->b, 1.0f,
+		col2->r, col2->g, col2->b, 1.0f
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glColorPointer(4, GL_FLOAT, 0, colors);
+
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+#endif
 
 	// Draw the text
 			
@@ -711,6 +978,7 @@ void textbox_draw ( Button *button, bool highlighted, bool clicked )
 void buttonborder_draw ( Button *button, bool highlighted, bool clicked )
 {
 
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );
 
 		glColor4f ( 0.2f, 0.2f, 0.4f, ALPHA );			glVertex2i ( button->x, button->y );
@@ -719,6 +987,32 @@ void buttonborder_draw ( Button *button, bool highlighted, bool clicked )
 		glColor4f ( 0.3f, 0.3f, 0.5f, ALPHA );			glVertex2i ( button->x, button->y + button->height );
 
 	glEnd ();
+#else
+	GLfloat verts[] = {
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height,
+		button->x, button->y + button->height
+	};
+	
+	GLfloat colors[] = {
+		0.2f, 0.2f, 0.4f, ALPHA,
+		0.3f, 0.3f, 0.5f, ALPHA,
+		0.2f, 0.2f, 0.4f, ALPHA,
+		0.3f, 0.3f, 0.5f, ALPHA
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glColorPointer(4, GL_FLOAT, 0, colors);
+
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+#endif
 
 }
 /*
@@ -790,12 +1084,8 @@ void superhighlight_draw ( Button *button, bool highlighted, bool clicked )
 */
 void superhighlight_draw ( Button *button, bool highlighted, bool clicked )
 {
-
 	UplinkAssert (  button );
-
-	glBegin ( GL_QUADS );
-
-		int border = 3;
+	int border = 3;
 
         float timediff = (float) (superhighlight_flash - EclGetAccurateTime ()) / 1000.0f;
         float fraction;
@@ -805,6 +1095,9 @@ void superhighlight_draw ( Button *button, bool highlighted, bool clicked )
             fraction = 2.0f - timediff;
         else
             fraction = 0.0f;
+
+#ifndef HAVE_GLES
+	glBegin ( GL_QUADS );
 
 		// Top
 		glColor4f ( 0.0f, 0.0f, 0.0f, ALPHA );		                    glVertex2i ( button->x + border, button->y );
@@ -855,10 +1148,107 @@ void superhighlight_draw ( Button *button, bool highlighted, bool clicked )
 		glColor4f ( 0.0f, 0.0f, 0.0f, ALPHA );		                    glVertex2i ( button->x, button->y + button->height - border );
 
 	glEnd ();
+#else
+GLfloat colors[] = {
+	// top
+	0.0f, 0.0f, 0.0f, ALPHA,
+	0.0f, 0.0f, 0.0f, ALPHA,
+	fraction, fraction, fraction/2.0f, ALPHA,
+	fraction, fraction, fraction/2.0f, ALPHA,
+	// right
+	0.0f, 0.0f, 0.0f, ALPHA,
+	0.0f, 0.0f, 0.0f, ALPHA,
+	fraction, fraction, fraction/2.0f, ALPHA,
+	fraction, fraction, fraction/2.0f, ALPHA,
+	// bottom
+	0.0f, 0.0f, 0.0f, ALPHA,
+	0.0f, 0.0f, 0.0f, ALPHA,
+	fraction, fraction, fraction/2.0f, ALPHA,
+	fraction, fraction, fraction/2.0f, ALPHA,
+	// left
+	0.0f, 0.0f, 0.0f, ALPHA,
+	0.0f, 0.0f, 0.0f, ALPHA,
+	fraction, fraction, fraction/2.0f, ALPHA,
+	fraction, fraction, fraction/2.0f, ALPHA,
+	// top left
+	0.0f, 0.0f, 0.0f, ALPHA,
+	0.0f, 0.0f, 0.0f, ALPHA,
+	fraction, fraction, fraction/2.0f, ALPHA,
+	0.0f, 0.0f, 0.0f, ALPHA,
+	// top right
+	fraction, fraction, fraction/2.0f, ALPHA,
+	0.0f, 0.0f, 0.0f, ALPHA,
+	0.0f, 0.0f, 0.0f, ALPHA,
+	0.0f, 0.0f, 0.0f, ALPHA,
+	// bottom right
+	fraction, fraction, fraction/2.0f, ALPHA,
+	0.0f, 0.0f, 0.0f, ALPHA,
+	0.0f, 0.0f, 0.0f, ALPHA,
+	0.0f, 0.0f, 0.0f, ALPHA,
+	// bottom left
+	fraction, fraction, fraction/2.0f, ALPHA,
+	0.0f, 0.0f, 0.0f, ALPHA,
+	0.0f, 0.0f, 0.0f, ALPHA,
+	0.0f, 0.0f, 0.0f, ALPHA
+};
+
+GLfloat verts[] = {
+	// top
+	button->x + border, button->y,
+	button->x + button->width - border, button->y,
+	button->x + button->width - border, button->y + border,
+	button->x + border, button->y + border,
+	// right
+	button->x + button->width, button->y + border,
+	button->x + button->width, button->y + button->height - border,
+	button->x + button->width - border, button->y + button->height - border,
+	button->x + button->width - border, button->y + border,
+	// bottom
+	button->x + border, button->y + button->height,
+	button->x + button->width - border, button->y + button->height,
+	button->x + button->width - border, button->y + button->height - border,
+	button->x + border, button->y + button->height - border,
+	// left
+	button->x, button->y + border,
+	button->x, button->y + button->height - border,
+	button->x + border, button->y + button->height - border,
+	button->x + border, button->y + border,
+	// top left
+	button->x + border/2, button->y + border/2,
+	button->x + border, button->y,
+	button->x + border, button->y + border,
+	button->x, button->y + border,
+	// top right
+	button->x + button->width - border, button->y + border,
+	button->x + button->width - border, button->y,
+	button->x + button->width - border/2, button->y + border/2,
+	button->x + button->width, button->y + border,
+	// bottom right
+	button->x + button->width - border, button->y + button->height - border,
+	button->x + button->width, button->y + button->height - border,
+	button->x + button->width - border/2, button->y + button->height - border/2,
+	button->x + button->width - border, button->y + button->height,
+	// bottom left
+	button->x + border, button->y + button->height - border,
+	button->x + border, button->y + button->height,
+	button->x + border/2, button->y + button->height - border/2,
+	button->x, button->y + button->height - border,
+};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glColorPointer(4, GL_FLOAT, 0, colors);
+
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 32);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+#endif
 
 	if ( EclGetAccurateTime () >= superhighlight_flash )
 		superhighlight_flash = (int) ( EclGetAccurateTime () + 2000 );
-
 }
 
 
@@ -1202,6 +1592,7 @@ void draw_stextbox ( Button *button, bool highlighted, bool clicked )
 
 	// Draw the button
 
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );
 
 		if		( clicked )		SetColour ( "ButtonClickedA" );
@@ -1225,6 +1616,44 @@ void draw_stextbox ( Button *button, bool highlighted, bool clicked )
 		glVertex2i ( button->x + button->width, button->y + button->height );
 
 	glEnd ();
+#else
+	ColourOption *col1, *col2;
+	if (clicked) {
+		col1 = GetColour("ButtonClickedA");
+		col2 = GetColour("ButtonClickedB");
+	} else if (highlighted) {
+		col1 = GetColour("ButtonHighlightedA");
+		col2 = GetColour("ButtonHighlightedB");
+	} else {
+		col1 = GetColour("ButtonNormalA");
+		col2 = GetColour("ButtonNormalB");
+	}
+
+	GLfloat verts[] = {
+		button->x, button->y + button->height,
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height
+	};
+
+	GLfloat colors[] = {
+		col1->r, col1->g, col1->b, 1.0f,
+		col2->r, col2->g, col2->b, 1.0f,
+		col1->r, col1->g, col1->b, 1.0f,
+		col2->r, col2->g, col2->b, 1.0f
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glColorPointer(4, GL_FLOAT, 0, colors);
+
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+#endif
 
 	// Draw a border if highlighted
 
@@ -1266,7 +1695,7 @@ void draw_stextbox ( Button *button, bool highlighted, bool clicked )
 
 void draw_scrollbox  ( Button *button, bool highlighted, bool clicked )
 {
-
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );
 
 		if		( clicked )		SetColour ( "ButtonClickedA" );
@@ -1290,7 +1719,44 @@ void draw_scrollbox  ( Button *button, bool highlighted, bool clicked )
 		glVertex2i ( button->x + button->width, button->y + button->height );
 
 	glEnd ();
+#else
+	ColourOption *col1, *col2;
+	if (clicked) {
+		col1 = GetColour("ButtonClickedA");
+		col2 = GetColour("ButtonClickedB");
+	} else if (highlighted) {
+		col1 = GetColour("ButtonHighlightedA");
+		col2 = GetColour("ButtonHighlightedB");
+	} else {
+		col1 = GetColour("ButtonNormalA");
+		col2 = GetColour("ButtonNormalB");
+	}
 
+	GLfloat verts[] = {
+		button->x, button->y + button->height,
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height
+	};
+
+	GLfloat colors[] = {
+		col1->r, col1->g, col1->b, 1.0f,
+		col2->r, col2->g, col2->b, 1.0f,
+		col1->r, col1->g, col1->b, 1.0f,
+		col2->r, col2->g, col2->b, 1.0f
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glColorPointer(4, GL_FLOAT, 0, colors);
+
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+#endif
 }
 
 void stextbox_scroll ( char *name, int newValue )
@@ -1324,13 +1790,42 @@ void draw_msgboxbackground ( Button *button, bool highlighted, bool clicked )
 
 void draw_msgboxbox ( Button *button, bool highlighted, bool clicked )
 {
-
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );
 		SetColour ( "PanelBackgroundA" );		glVertex2i ( button->x, button->y + button->height );
 		SetColour ( "PanelBackgroundB" );		glVertex2i ( button->x, button->y );
 		SetColour ( "PanelBackgroundA" );		glVertex2i ( button->x + button->width, button->y );
 		SetColour ( "PanelBackgroundB" );		glVertex2i ( button->x + button->width, button->y + button->height );
 	glEnd ();
+#else
+	ColourOption *col1, *col2;
+	col1 = GetColour("PanelBackgroundA");
+	col2 = GetColour("PanelBackgroundB");
+	GLfloat verts[] = {
+		button->x, button->y + button->height,
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height
+	};
+
+	GLfloat colors[] = {
+		col1->r, col1->g, col1->b, 1.0f,
+		col2->r, col2->g, col2->b, 1.0f,
+		col1->r, col1->g, col1->b, 1.0f,
+		col2->r, col2->g, col2->b, 1.0f
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glColorPointer(4, GL_FLOAT, 0, colors);
+
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+#endif
 
 	SetColour ( "PanelBorder" );
 	border_draw ( button );

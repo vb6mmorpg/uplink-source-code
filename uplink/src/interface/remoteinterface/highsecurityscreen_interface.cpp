@@ -3,8 +3,13 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
 #include <GL/glu.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 
 #include <stdio.h>
@@ -54,11 +59,12 @@ void HighSecurityScreenInterface::SystemTitleDraw ( Button *button, bool highlig
 
 	// Draw 2 background lines
 
-	if ( mso->security == 10 )	glColor3f ( 0.2f, 0.2f, 0.7f );
-	else						glColor3f ( 0.0f, 0.0f, 0.3f );
+	if ( mso->security == 10 )	glColor4f ( 0.2f, 0.2f, 0.7f, 1.0f );
+	else						glColor4f ( 0.0f, 0.0f, 0.3f, 1.0f );
 
 	glLineWidth (2);
 
+#ifndef HAVE_GLES
 	glBegin ( GL_LINES );
 		glVertex2i ( button->x, button->y + 10 );
 		glVertex2i ( button->x + button->width, button->y + 10 );
@@ -66,13 +72,26 @@ void HighSecurityScreenInterface::SystemTitleDraw ( Button *button, bool highlig
 		glVertex2i ( button->x, button->y + 15 );
 		glVertex2i ( button->x + button->width, button->y + 15 );
 	glEnd ();
+#else
+	GLfloat lines[] = {
+		button->x, button->y + 10,
+		button->x + button->width, button->y + 10,
+		button->x, button->y + 15,
+		button->x + button->width, button->y + 15
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, lines);
+	glDrawArrays(GL_LINES, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
 	glLineWidth (1);
 
 	// Write the text
 
-	if ( mso->security == 10 )	glColor3f ( 1.0f, 1.0f, 1.0f );
-	else						glColor3f ( 0.5f, 0.5f, 0.5f );
+	if ( mso->security == 10 )	glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
+	else						glColor4f ( 0.5f, 0.5f, 0.5f, 1.0f );
 		
 	GciDrawText ( button->x + 10, button->y + 18, button->caption, HELVETICA_18 );
 

@@ -3,9 +3,13 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 
 #include "app/globals.h"
@@ -52,12 +56,26 @@ void NearestGatewayScreenInterface::DrawLocation ( Button *button, bool highligh
 
     glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
 
+#ifndef HAVE_GLES
     glBegin ( GL_QUADS );
         glVertex2i ( button->x, button->y );
         glVertex2i ( button->x + 7, button->y );
         glVertex2i ( button->x + 7, button->y + 7 );
         glVertex2i ( button->x, button->y +7 );
     glEnd ();
+#else
+	GLfloat verts[] = {
+		button->x, button->y,
+		button->x + 7, button->y,
+		button->x + 7, button->y + 7,
+		button->x, button->y + 7
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
 	// Write some text
 
@@ -88,7 +106,7 @@ void NearestGatewayScreenInterface::DrawMainMap ( Button *button, bool highlight
 
 	imagebutton_drawtextured ( button, highlighted, clicked );
 
-	glColor3ub ( 81, 138, 215 );
+	glColor4ub ( 81, 138, 215, 255 );
 	border_draw ( button );
 
 }

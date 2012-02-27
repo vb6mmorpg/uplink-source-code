@@ -6,9 +6,13 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h> /*_glu_extention_library_*/
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include "eclipse.h"
 #include "gucci.h"
@@ -100,6 +104,7 @@ void ClientCommsInterface::LargeMapDraw ( Button *button, bool highlighted, bool
 
 
     glLineWidth ( 2.0 );
+#ifndef HAVE_GLES
     glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
 
     glLineStipple ( 2, stipplepattern );
@@ -132,6 +137,60 @@ void ClientCommsInterface::LargeMapDraw ( Button *button, bool highlighted, bool
     glEnd ();
 
     glDisable ( GL_LINE_STIPPLE );
+#else
+	GLfloat *verts = (GLfloat *)malloc((connection.Size() + 1) * 2 * sizeof(GLfloat));
+	GLfloat *colors = (GLfloat *)malloc((connection.Size() + 1) * 4 * sizeof(GLfloat));
+	int pos = 0;
+	bool trace = false;
+	for ( int li = 0; li < connection.Size(); ++li ) {
+		char *ip = connection.GetData(li);
+		UplinkAssert (ip);
+		VLocation *vl = locations.GetData (ip);
+
+		if (vl) {
+			int xpos = button->x + vl->x;
+			int ypos = button->y + vl->y;
+
+			verts[pos*2] = xpos;
+			verts[pos*2+1] = ypos;
+			colors[pos*2] = 1.0f;
+			colors[pos*2+3] = 1.0f;
+			if (trace) {
+				colors[pos*2+1] = 0.0f;
+				colors[pos*2+2] = 0.0f;
+			} else {
+				colors[pos*2+1] = 1.0f;
+				colors[pos*2+2] = 1.0f;
+			}
+			pos++;
+
+			if (traceprogress == (locations.Size() - li - 1)) {
+				verts[pos*2] = xpos;
+				verts[pos*2+1] = ypos;
+				colors[pos*2] = 1.0f;
+				colors[pos*2+1] = 0.0f;
+				colors[pos*2+2] = 0.0f;
+				colors[pos*2+3] = 1.0f;
+				pos++;
+
+				trace = true;
+			}
+		}
+	}
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glColorPointer(2, GL_FLOAT, 0, colors);
+
+	glDrawArrays(GL_LINE_STRIP, 0, pos);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+
+	free(verts);
+	free(colors);
+#endif
 
 //     // Draw the dots for each location
 

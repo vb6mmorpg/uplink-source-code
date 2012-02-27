@@ -11,7 +11,19 @@
 #include <iostream>
 
 #include <SDL/SDL.h>
+
+#ifndef HAVE_GLES
 #include <GL/gl.h>
+#else
+#include <GLES/gl.h>
+#include "eglport.h"
+
+#ifdef SDL_OPENGL
+#undef SDL_OPENGL
+#endif
+#define SDL_OPENGL 0
+#endif
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -77,9 +89,9 @@ char *GciInitGraphicsLibrary ( int graphics_flags )
   if ( debugging ) printf ( "Initialising SDL..." );
   //if ((SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER)==-1)) { 
 #ifdef _DEBUG
-  if ((SDL_Init(SDL_INIT_VIDEO|SDL_INIT_NOPARACHUTE)==-1)) { 
+  if ((SDL_Init(SDL_INIT_VIDEO|SDL_INIT_NOPARACHUTE)==-1)) {
 #else
-  if ((SDL_Init(SDL_INIT_VIDEO)==-1)) { 
+  if ((SDL_Init(SDL_INIT_VIDEO)==-1)) {
 #endif
     //printf("Could not initialize SDL: %s.\n", SDL_GetError());
     //exit(-1);
@@ -97,6 +109,9 @@ char *GciInitGraphicsLibrary ( int graphics_flags )
 	return errorMessage;
   }
   if ( debugging ) printf ( "done\n ");
+#ifdef HAVE_GLES
+  if (!EGL_Open()) exit(1);
+#endif
 
   _GciIsInitGraphicsLibrary = true;
   return NULL;
@@ -108,6 +123,7 @@ char *GciInitGraphics( const char *caption, int graphics_flags, int screenWidth,
   bool debugging = (graphics_flags & GCI_DEBUGSTART) != 0;
   bool runFullScreen = (graphics_flags & GCI_FULLSCREEN) != 0;
 
+#ifndef HAVE_GLES
   int sdlFlags = 0;
   if (graphics_flags & GCI_DOUBLE) {
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
@@ -171,9 +187,17 @@ char *GciInitGraphics( const char *caption, int graphics_flags, int screenWidth,
 
     screenDepth = closestbpp;
   }
+#endif
 
   if ( debugging ) printf ( "SDL is now opening a %dx%d window in %d depth ...", screenWidth, screenHeight, screenDepth );
+#ifndef PANDORA
   screen = SDL_SetVideoMode(screenWidth, screenHeight, screenDepth, sdlFlags | SDL_OPENGL);
+#else
+  screen = SDL_SetVideoMode(800, 480, 0, SDL_SWSURFACE | SDL_FULLSCREEN);
+#endif
+#ifdef HAVE_GLES
+  EGL_Init();
+#endif
   if (screen == NULL) {
     //printf("Could not initialize SDL Video: %s.\n", SDL_GetError());
     //exit(-1);
@@ -268,7 +292,11 @@ bool GciLayerDamaged()
 
 void GciSwapBuffers()
 {
+#ifndef HAVE_GLES
   SDL_GL_SwapBuffers();
+#else
+  EGL_SwapBuffers();
+#endif
   displayDamaged = false;
 }
 
@@ -431,13 +459,16 @@ void GciMainLoop()
 void GciRestoreScreenSize()
 {
   if ( _GciIsInitGraphicsLibrary && SDL_WasInit(SDL_INIT_VIDEO) ) {
+#ifndef HAVE_GLES
     // A try to remove some exit crashes
     int value = 0;
     if ( SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER,&value) == 0 )
 		if ( value != 0 )
-			SDL_GL_SwapBuffers();
-
-    SDL_QuitSubSystem(SDL_INIT_VIDEO);
+			GciSwapBuffers();
+#else
+    EGL_Destroy();
+#endif
+    SDL_Quit();
   }
   _GciIsInitGraphicsLibrary = false;
   finished = true;
@@ -546,7 +577,11 @@ GciScreenModeList *GciListScreenModes() {
 
 	SDL_Rect **modes;
 	/* Get available fullscreen/hardware modes */
+#ifndef HAVE_GLES
 	modes = SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWSURFACE|SDL_OPENGL);
+#else
+	modes = SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_SWSURFACE);
+#endif
 
 	/* Check is there are any modes available
 	   and try non-hardware modes if not. */

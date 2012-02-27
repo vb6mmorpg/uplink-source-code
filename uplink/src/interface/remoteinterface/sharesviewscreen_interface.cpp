@@ -3,9 +3,13 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include "app/app.h"
 #include "app/globals.h"
@@ -70,6 +74,7 @@ void SharesViewScreenInterface::DrawPriceGraph ( Button *button, bool highlighte
 
 		glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
 
+#ifndef HAVE_GLES
 		glBegin ( GL_LINES );
 			
 			glVertex2d ( button->x + 25, button->y + button->height - 40 );						// vertical
@@ -79,6 +84,21 @@ void SharesViewScreenInterface::DrawPriceGraph ( Button *button, bool highlighte
 			glVertex2d ( button->x + 190, button->y + button->height - 40 );					// time
 				
 		glEnd ();
+#else
+		GLfloat verts[] = {
+			button->x + 25, button->y + button->height - 40,
+			button->x + 25, button->y + button->height - 190,
+			button->x + 25, button->y + button->height - 40,
+			button->x + 190, button->y + button->height - 40
+		};
+
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_COLOR_ARRAY);
+
+		glVertexPointer(2, GL_FLOAT, 0, verts);
+		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+		glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
 		GciDrawText ( 37, button->y + button->height - 40, "0" );
 		GciDrawText ( 32, button->y + button->height - 190, "150" );
@@ -92,6 +112,7 @@ void SharesViewScreenInterface::DrawPriceGraph ( Button *button, bool highlighte
 		glColor4f ( 0.2f, 0.2f, 1.0f, 1.0f );
 		glLineWidth ( 2 );
 
+#ifndef HAVE_GLES
 		glBegin ( GL_LINE_STRIP );
 
 		for ( int it = 0; it < 12; ++it ) {
@@ -108,6 +129,9 @@ void SharesViewScreenInterface::DrawPriceGraph ( Button *button, bool highlighte
 		}
 
 		glEnd ();
+#else
+		// TOOD: impelment gles
+#endif
 		glLineWidth ( 1 );
 
 	}

@@ -7,9 +7,14 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
+#include <GL/glu.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
-#include <GL/glu.h> /*_glu_extention_library_*/
 
 #include "eclipse.h"
 #include "gucci.h" 
@@ -95,6 +100,7 @@ void TraceTracker::TraceDraw ( Button *button, bool highlighted, bool clicked )
 	glScissor ( button->x, screenheight - (button->y + button->height), button->width, button->height );	
 	glEnable ( GL_SCISSOR_TEST );
 	
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );
 
 		glColor4f ( brightness, brightness, 0.7f, 0.5f );
@@ -110,6 +116,31 @@ void TraceTracker::TraceDraw ( Button *button, bool highlighted, bool clicked )
 		glVertex2i ( button->x + button->width, button->y + button->height );
 
 	glEnd ();
+#else
+	GLfloat verts[] = {
+		button->x, button->y + button->height,
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height
+	};
+	GLfloat colors[] = {
+		brightness, brightness, 0.7f, 0.5f,
+		brightness, brightness, 0.4f, 0.5f,
+		brightness, brightness, 0.7f, 0.5f,
+		brightness, brightness, 0.4f, 0.5f,
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glColorPointer(4, GL_FLOAT, 0, colors);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+#endif
+
 
 	//
     // Draw the text

@@ -3,9 +3,14 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
+
 
 
 #include "eclipse.h"
@@ -40,27 +45,42 @@ void MotionSensor::SensorDraw ( Button *button, bool highlighted, bool clicked )
 	//
 
 	if ( numpeople == 0 )
-		glColor3f ( 0.2f, 0.2f, 0.2f );
+		glColor4f ( 0.2f, 0.2f, 0.2f, 1.0f );
 
 	else if ( numpeople == 1 ) 
-		glColor3f ( 0.9f, 0.9f, 0.2f );
+		glColor4f ( 0.9f, 0.9f, 0.2f, 1.0f );
 
 	else if ( numpeople >= 2 ) 
-		glColor3f ( 1.0f, 0.3f, 0.3f );
+		glColor4f ( 1.0f, 0.3f, 0.3f, 1.0f );
 
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );
 		glVertex2d ( button->x, button->y );
 		glVertex2d ( button->x + button->width, button->y );
 		glVertex2d ( button->x + button->width, button->y + button->height );
 		glVertex2d ( button->x, button->y + button->height );
 	glEnd ();
+#else
+	GLfloat verts[] = {
+		button->x, button->y,
+		button->x, button->width, button->y,
+		button->x + button->width, button->y + button->height,
+		button->x, button->y + button->height
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
+
 
 	// 
 	// Border if mouse over
 	//
 
 	if ( highlighted || clicked ) {
-		glColor3d ( 1.0, 1.0, 1.0 );
+		glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
 		border_draw ( button );
 	}
 

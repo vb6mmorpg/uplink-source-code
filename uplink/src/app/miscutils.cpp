@@ -13,9 +13,15 @@
 #include <dirent.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h> /* glu extention library */
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#include <execinfo.h>
+#endif
+
 
 #include "redshirt.h"
 
@@ -424,25 +430,26 @@ DArray <char *> *ListSubdirs ( char *directory )
 
 }
 
-void SetColour ( char *colourName )
-{
+ColourOption *GetColour(char *colourName) {
+	if ( !app ||
+			!app->GetOptions () ||
+			!app->GetOptions()->GetColour( colourName ) ) {
 
-    if ( !app || 
-         !app->GetOptions () || 
-         !app->GetOptions()->GetColour( colourName ) ) {
+		printf ( "GetColour WARNING : Failed to find colour %s\n", colourName );
+		return new ColourOption(0.0f, 0.0f, 0.0f);
 
-        printf ( "SetColour WARNING : Failed to find colour %s\n", colourName );
-        glColor3f ( 0.0f, 0.0f, 0.0f );
-        return;
+	}
 
-    }
-
-    ColourOption *col = app->GetOptions ()->GetColour ( colourName );
-    UplinkAssert (col);
-    glColor3f ( col->r, col->g, col->b );
-
+	ColourOption *col = app->GetOptions ()->GetColour ( colourName );
+	UplinkAssert (col);
+	return col;
 }
 
+void SetColour ( char *colourName )
+{
+	ColourOption *col = GetColour(colourName);
+	glColor4f ( col->r, col->g, col->b, 1.0f );
+}
 
 unsigned *getRetAddress(unsigned *mBP)
 {
@@ -464,6 +471,14 @@ unsigned *getRetAddress(unsigned *mBP)
 
 void PrintStackTrace()
 {
+#ifdef HAVE_GLES
+	void *array[10];
+	size_t size;
+	size = backtrace(array, 10);
+
+	backtrace_symbols_fd(array, size, 2);
+	return;
+#endif
 
 	// Get our frame pointer, chain upwards
 	unsigned *framePtr;

@@ -57,6 +57,7 @@ public:
 
 local vector <dirtyrect> dirtyrectangles;
 local LList <char *> editablebuttons;						// List of editable buttons
+local bool temp_caption = false;
 
 // Default button callbacks
 
@@ -667,13 +668,19 @@ void EclHighlightButton ( char *name )
 
 //	if ( !currenthighlight || strcmp ( currenthighlight, name ) != 0 ) {
 	if ( !EclIsHighlighted ( name ) ) {
+		Button *button = EclGetButton( name );
+		if ( button && button->caption && strcmp( button->caption, "Fill this in" ) == 0 ) {
+			button->SetCaption("");
+			temp_caption = true;
+		} else {
+			temp_caption = false;
+		}
 	
 		EclUnHighlightButton ();
                 delete [] currenthighlight;
 		currenthighlight = new char [strlen (name) + 1];
 		strcpy ( currenthighlight, name );
 		EclDirtyButton ( name );
-
 	}
 
 }
@@ -712,7 +719,15 @@ void EclUnHighlightButton ()
 {
 
 	Button *button = EclGetButton ( currenthighlight );
-	if ( button ) EclDirtyButton ( button->name );
+	if ( button ) {
+		if ( temp_caption && EclIsButtonEditable( button->name ) ) {
+			temp_caption = false;
+			if ( *button->caption == '\0' ) {
+				button->SetCaption( "Fill this in" );
+			}
+		}
+		EclDirtyButton ( button->name );
+	}
 
         delete [] currenthighlight;
 	currenthighlight = NULL;

@@ -4,9 +4,13 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h> /*_glu_extention_library_*/
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 
 #include "eclipse.h"
@@ -37,6 +41,7 @@
 void GatewayNuke::TitleDraw ( Button *button, bool highlighted, bool clicked )
 {
 
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );
 
 		glColor4f ( 0.2f, 0.2f, 0.4f, ALPHA );			glVertex2i ( button->x, button->y );
@@ -45,6 +50,32 @@ void GatewayNuke::TitleDraw ( Button *button, bool highlighted, bool clicked )
 		glColor4f ( 0.3f, 0.3f, 0.5f, ALPHA );			glVertex2i ( button->x, button->y + button->height );
 
 	glEnd ();
+#else
+	GLfloat verts[] = {
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height,
+		button->x, button->y + button->height
+	};
+
+	GLfloat colors[] = {
+		0.2f, 0.2f, 0.4f, ALPHA,
+		0.3f, 0.3f, 0.5f, ALPHA,
+		0.2f, 0.2f, 0.4f, ALPHA,
+		0.3f, 0.3f, 0.5f, ALPHA
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glColorPointer(4, GL_FLOAT, 0, colors);
+
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+#endif
 
 	text_draw ( button, highlighted, clicked );
 

@@ -3,9 +3,13 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include "soundgarden.h"
 #include "redshirt.h"
@@ -58,12 +62,26 @@ void NuclearWarScreenInterface::DrawLocation ( Button *button, bool highlighted,
 
     glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
 
+#ifndef HAVE_GLES
     glBegin ( GL_QUADS );
         glVertex2i ( button->x, button->y );
         glVertex2i ( button->x + 7, button->y );
         glVertex2i ( button->x + 7, button->y + 7 );
         glVertex2i ( button->x, button->y +7 );
     glEnd ();
+#else
+	GLfloat verts[] = {
+		button->x, button->y,
+		button->x + 7, button->y,
+		button->x + 7, button->y + 7,
+		button->x, button->y + 7
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
 	// Write some text
 
@@ -94,7 +112,7 @@ void NuclearWarScreenInterface::DrawMainMap ( Button *button, bool highlighted, 
 
     imagebutton_drawtextured ( button, highlighted, clicked );
 
-	glColor3ub ( 81, 138, 215 );
+	glColor4ub ( 81, 138, 215, 255 );
 	border_draw ( button );
     
     NuclearWarScreenInterface *nwsi = (NuclearWarScreenInterface *) game->GetInterface ()->GetRemoteInterface ()->GetInterfaceScreen();
@@ -124,12 +142,24 @@ void NuclearWarScreenInterface::DrawMainMap ( Button *button, bool highlighted, 
             int sY = (int) ( nuke->sy + ((nuke->y + button->y) - nuke->sy) * d );
 
             float col = 1.0f - d;            
-            glColor3f ( col, 0.0, 0.0 );
+            glColor4f ( col, 0.0, 0.0, 1.0f );
 
+#ifndef HAVE_GLES
             glBegin ( GL_LINE_LOOP );
                 glVertex2i ( sX, sY );
                 glVertex2i ( dX, dY );
             glEnd ();
+#else
+		GLfloat verts[] = {
+			sX, sY,
+			dX, dY
+		};
+
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(2, GL_FLOAT, 0, verts);
+		glDrawArrays(GL_LINE_LOOP, 0, 2);
+		glDisableClientState(GL_VERTEX_ARRAY);
+#endif
                     
             //
             // Draw the explosion
@@ -142,16 +172,30 @@ void NuclearWarScreenInterface::DrawMainMap ( Button *button, bool highlighted, 
             int height = (int) ( 50 - (50 * d) );
 
             if ( timediff < 3200 )
-                glColor3f ( 1.0f, 0.8f, 0.0f );
+                glColor4f ( 1.0f, 0.8f, 0.0f, 1.0f );
             else
-                glColor3f ( col, 0.0, 0.0 );
+                glColor4f ( col, 0.0, 0.0, 1.0f );
 
+#ifndef HAVE_GLES
             glBegin ( GL_QUADS );
                 glVertex2i ( centreX, centreY - height/2 );
                 glVertex2i ( centreX + width/2, centreY );
                 glVertex2i ( centreX, centreY + height/2 );
                 glVertex2i ( centreX - width/2, centreY );
             glEnd ();
+#else
+		GLfloat vert2[] = {
+			centreX, centreY - height/2,
+			centreX + width/2, centreY,
+			centreX, centreY + height/2,
+			centreX - width/2, centreY
+		};
+
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(2, GL_FLOAT, 0, vert2);
+		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+		glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
             if ( !nuke->sound ) {
                 char explosion [128];
@@ -168,11 +212,25 @@ void NuclearWarScreenInterface::DrawMainMap ( Button *button, bool highlighted, 
             int dY = (int) ( nuke->sy + ((nuke->y + button->y) - nuke->sy) * d );
 
             float col = (float) (timediff) / 3000.0f;
-            glColor3f ( col, col, col );
+            glColor4f ( col, col, col, 1.0f );
+#ifndef HAVE_GLES
             glBegin ( GL_LINE_LOOP );
                 glVertex2i ( nuke->sx, nuke->sy );
                 glVertex2i ( dX, dY );
             glEnd ();
+#else
+	GLfloat verts[] = {
+		nuke->sx, nuke->sy,
+		dX, dY
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glDrawArrays(GL_LINE_LOOP, 0, 2);
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
         }
                   

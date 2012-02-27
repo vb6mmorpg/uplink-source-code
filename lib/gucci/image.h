@@ -11,6 +11,9 @@
 #endif
 */
 
+#ifdef HAVE_GLES
+#include <GLES/gl.h>
+#endif
 
 class Image  
 {
@@ -26,11 +29,18 @@ protected:
 public:
 	
 	unsigned char *pixels;	
+#ifdef HAVE_GLES
+	GLuint texture;
+	float wscale;
+	float hscale;
+#endif
 
 	Image();
 	Image( const Image& img );
 
 	virtual ~Image();
+	void GenTexture();
+	void UpdateTexture();
 
 	void LoadRAW ( char *filename, int sizex, int sizey );
 	void LoadTIF ( char *filename );

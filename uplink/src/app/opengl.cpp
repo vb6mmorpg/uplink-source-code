@@ -8,9 +8,15 @@
 
 #include "stdafx.h"
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+
+#define glOrtho glOrthof
+#endif
 
 #include "tosser.h"
 #include "eclipse.h"
@@ -230,12 +236,14 @@ local void init(void)
         glDisable(GL_ALPHA_TEST);        
         glDisable(GL_FOG);        
 		glDisable(GL_LIGHTING);
-        glDisable(GL_LOGIC_OP);        
 		glDisable(GL_STENCIL_TEST);
-        glDisable(GL_TEXTURE_1D);      
 		glDisable(GL_TEXTURE_2D);
 		glDisable(GL_BLEND);
 		
+#ifndef HAVE_GLES
+        glDisable(GL_LOGIC_OP);        
+        glDisable(GL_TEXTURE_1D);      
+
         glPixelTransferi(GL_MAP_COLOR, GL_FALSE);
         glPixelTransferi(GL_RED_SCALE, 1);
         glPixelTransferi(GL_RED_BIAS, 0);
@@ -245,6 +253,7 @@ local void init(void)
         glPixelTransferi(GL_BLUE_BIAS, 0);
         glPixelTransferi(GL_ALPHA_SCALE, 1);
         glPixelTransferi(GL_ALPHA_BIAS, 0);
+#endif
 
 	GLuint texName;
 	glGenTextures( 1, &texName );
@@ -255,7 +264,9 @@ local void init(void)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
+#ifndef HAVE_GLES
 	glHint ( GL_POLYGON_SMOOTH_HINT, GL_NICEST );
+#endif
 	glHint ( GL_LINE_SMOOTH_HINT,	 GL_NICEST );
 	glHint ( GL_POINT_SMOOTH_HINT,	 GL_NICEST );
 
@@ -333,15 +344,22 @@ void display(void)
 		//int inter1, inter2;
 		//inter1 = (int) ( EclGetAccurateTime () * 100 );
 
+		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix ();
 		glLoadIdentity ();
 		glMatrixMode ( GL_PROJECTION );
 		glPushMatrix ();
 		glLoadIdentity ();
+#ifndef HAVE_GLES
 		glPushAttrib ( GL_ALL_ATTRIB_BITS );
+#endif
         
+#ifndef PANDORA
 		glOrtho ( 0.0, app->GetOptions ()->GetOptionValue ( "graphics_screenwidth" ), 
 					   app->GetOptions ()->GetOptionValue ( "graphics_screenheight" ), 0.0, -1.0, 1.0 );
+#else
+		glOrthof(0.0, 800, 480, 0.0, -1.0, 1.0);
+#endif
 
 		glTranslatef ( 0.375f, 0.375f, 0.0f );
 
@@ -351,7 +369,9 @@ void display(void)
         
 		EclDrawAllButtons ();
 
+#ifndef HAVE_GLES
 		glPopAttrib ();
+#endif
 		glPopMatrix ();
 		glMatrixMode ( GL_MODELVIEW );
 		glPopMatrix ();
@@ -605,9 +625,10 @@ local void mousedraw ( Button *button, bool highlighted, bool clicked )
 
 	glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
 
+	glLineWidth(1.0);
+#ifndef HAVE_GLES
 	glBegin ( GL_LINES );
 
-		glLineWidth ( 1.0 );
 		glVertex2i ( button->x, button->y );
 		glVertex2i ( button->x + button->width - 1, button->y + button->height - 1 );
 		
@@ -617,9 +638,20 @@ local void mousedraw ( Button *button, bool highlighted, bool clicked )
 		glVertex2i ( button->x, button->y );
 		glVertex2i ( button->x, (int) ( button->y + button->height/1.5 ) );
 	glEnd ();
-
-	glLineWidth ( 1.0 );
-
+#else
+	GLfloat lines[] = {
+		button->x, button->y,
+		button->x + button->width - 1, button->y + button->height - 1,
+		button->x, button->y,
+		button->x + button->width/1.5, button->y,
+		button->x + button->width/1.5, button->y,
+		button->x, button->y + button->height/1.5
+	};
+	glVertexPointer(2, GL_FLOAT, 0, lines);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glDrawArrays(GL_LINES, 0, 6);
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 }
 
 void passivemouse ( int x, int y )

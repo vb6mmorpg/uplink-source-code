@@ -3,9 +3,13 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include "eclipse.h"
 #include "gucci.h"
@@ -215,26 +219,63 @@ void LogScreenInterface::LogDraw ( Button *button, bool highlighted, bool clicke
 
 		AccessLog *log = logbank->logs.GetData (logindex);
 
+		GLubyte b1, b2;
 		if ( logindex % 2 == 0 ) {
 
+#ifndef HAVE_GLES
 			glBegin ( GL_QUADS );
 				glColor3ub ( 8, 20, 80 );		glVertex2i ( button->x, button->y );
 				glColor3ub ( 8, 20, 0 );		glVertex2i ( button->x + button->width, button->y );
 				glColor3ub ( 8, 20, 80 );		glVertex2i ( button->x + button->width, button->y + button->height );
 				glColor3ub ( 8, 20, 0 );		glVertex2i ( button->x, button->y + button->height );
 			glEnd ();
+#else
+			b1 = 80;
+			b2 = 0;
+#endif
 
 		}
 		else {
 
+#ifndef HAVE_GLES
 			glBegin ( GL_QUADS );
 				glColor3ub ( 8, 20, 0 );		glVertex2i ( button->x, button->y );
 				glColor3ub ( 8, 20, 80 );		glVertex2i ( button->x + button->width, button->y );
 				glColor3ub ( 8, 20, 0 );		glVertex2i ( button->x + button->width, button->y + button->height );
 				glColor3ub ( 8, 20, 80 );		glVertex2i ( button->x, button->y + button->height );
 			glEnd ();
-
+#else
+			b1 = 0;
+			b2 = 80;
+#endif
 		}
+
+#ifdef HAVE_GLES
+		GLfloat verts[] = {
+			button->x, button->y + button->height,
+			button->x, button->y,
+			button->x + button->width, button->y,
+			button->x + button->width, button->y + button->height
+		};
+
+		GLfloat colors[] = {
+			8, 20, b1, 255,
+			8, 20, b2, 255,
+			8, 20, b1, 255,
+			8, 20, b2, 255
+		};
+
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_COLOR_ARRAY);
+
+		glVertexPointer(2, GL_FLOAT, 0, verts);
+		glColorPointer(4, GL_UNSIGNED_BYTE, 0, colors);
+
+		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_COLOR_ARRAY);
+#endif
 
 		glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
 		GciDrawText ( button->x + 10, button->y + 10, log->date.GetShortString () );

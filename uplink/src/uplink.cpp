@@ -40,9 +40,13 @@
 #include <signal.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 
 #include "eclipse.h"
@@ -397,7 +401,11 @@ void RunUplink ( int argc, char **argv )
 #ifdef WIN32
 		Init_App      ( argv[0] );
 #else
+#ifndef PANDORA
 		Init_App      ( br_find_exe(NULL) );
+#else
+		Init_App      ( "/mnt/utmp/uplink/uplink" );
+#endif
 #endif
 		Init_Options  ( argc, argv );
 
@@ -516,10 +524,10 @@ void Init_App ( char *argv0 )
 	}
 #endif
 
-    FILE *stdoutfile = freopen ( debugpath, "a", stdout );
+    FILE *stdoutfile = stdout;// freopen ( debugpath, "a", stdout );
     if ( !stdoutfile ) printf ( "WARNING : Failed to open %s for writing stdout\n", debugpath );
 
-    FILE *stderrfile = freopen ( debugpath, "a", stderr );
+    FILE *stderrfile = stderr;//freopen ( debugpath, "a", stderr );
     if ( !stderrfile ) printf ( "WARNING : Failed to open %s for writing stderr\n", debugpath );
 
     // Print some basic info to the file

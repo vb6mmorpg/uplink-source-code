@@ -3,8 +3,13 @@
 #include "windows.h"
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
 #include <GL/glu.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 
 #include "gucci.h"
@@ -85,12 +90,26 @@ void CypherScreenInterface::DrawCypher ( Button *button, bool highlighted, bool 
 				int cubeW = (button->width / CYPHER_WIDTH) + 1;
 				int cubeH = (button->height / CYPHER_HEIGHT) + 1;
 
+#ifndef HAVE_GLES
 				glBegin ( GL_QUADS );
 					glVertex2i ( xpos, ypos - 10 );
 					glVertex2i ( xpos + cubeW, ypos - 10 );
 					glVertex2i ( xpos + cubeW, ypos + cubeH - 10 );
 					glVertex2i ( xpos, ypos + cubeH - 10 );
 				glEnd ();
+#else
+				GLfloat verts[] = {
+					xpos, ypos - 10,
+					xpos + cubeW, ypos - 10,
+					xpos + cubeW, ypos + cubeH - 10,
+					xpos, ypos + cubeH - 10
+				};
+
+				glEnableClientState(GL_VERTEX_ARRAY);
+				glVertexPointer(2, GL_FLOAT, 0, verts);
+				glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+				glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
 				glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
 

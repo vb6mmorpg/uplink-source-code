@@ -1,0 +1,11 @@
+additional requirements to build for OpenGL ES:
+
+OpenGL ES headers (GLES/gl.h in include path)
+http://code.google.com/p/glues/ (requires include file as GLES/glues.h in include path)
+https://github.com/cdave1/ftgles (kinda in lib/gucci/ftgl - you might just need to build it there)
+
+compile options:
+the GLES routines are triggered by defining HAVE_GLES in your CFLAGS/CXXFLAGS
+if compiling for the Pandora, define PANDORA
+otherwise search the source for the PANDORA ifdefs and adjust for your platform
+

@@ -10,6 +10,7 @@
 #define _included_miscutils_h
 
 #include "tosser.h"
+#include "options/options.h"
 
 char *LowerCaseString       ( const char *thestring );
 char *StripCarriageReturns  ( const char *thestring );               // Replaces first cr with \x0
@@ -26,6 +27,7 @@ bool RemoveFile             ( const char *filename );
 DArray <char *> *ListDirectory  ( char *directory, char *filter );
 DArray <char *> *ListSubdirs ( char *directory );
 
+ColourOption *GetColour     ( char *colourName );
 void SetColour              ( char *colourName );                    // calls glColour3f
 
 void PrintStackTrace();

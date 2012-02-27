@@ -6,9 +6,13 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h> /* glu extention library */
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include "eclipse.h"
 

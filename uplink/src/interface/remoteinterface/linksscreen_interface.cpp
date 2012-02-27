@@ -3,9 +3,13 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include "eclipse.h"
 #include "gucci.h"
@@ -169,26 +173,64 @@ void LinksScreenInterface::LinkDraw ( Button *button, bool highlighted, bool cli
 
 	if ( link ) {
 
+		ColourOption *col1, *col2;
 		if ( linkindex % 2 == 0 ) {
 
+#ifndef HAVE_GLES
 			glBegin ( GL_QUADS );
 				SetColour ( "DarkPanelB" );   glVertex2i ( button->x, button->y );
 				SetColour ( "DarkPanelA" );   glVertex2i ( button->x + button->width, button->y );
 				SetColour ( "DarkPanelB" );   glVertex2i ( button->x + button->width, button->y + button->height );
 				SetColour ( "DarkPanelA" );   glVertex2i ( button->x, button->y + button->height );
 			glEnd ();
+#else
+			col1 = GetColour("DarkPanelA");
+			col2 = GetColour("DarkPanelB");
+#endif
 
 		}
 		else {
 
+#ifndef HAVE_GLES
 			glBegin ( GL_QUADS );
 				SetColour ( "DarkPanelA" );   glVertex2i ( button->x, button->y );
 				SetColour ( "DarkPanelB" );   glVertex2i ( button->x + button->width, button->y );
 				SetColour ( "DarkPanelA" );   glVertex2i ( button->x + button->width, button->y + button->height );
 				SetColour ( "DarkPanelB" );   glVertex2i ( button->x, button->y + button->height );
 			glEnd ();
+#else
+			col1 = GetColour("DarkPanelB");
+			col2 = GetColour("DarkPanelA");
+#endif
 
 		}
+
+#ifdef HAVE_GLES
+		GLfloat verts[] = {
+			button->x, button->y + button->height,
+			button->x, button->y,
+			button->x + button->width, button->y,
+			button->x + button->width, button->y + button->height
+		};
+
+		GLfloat colors[] = {
+			col1->r, col1->g, col1->b, 1.0f,
+			col2->r, col2->g, col2->b, 1.0f,
+			col1->r, col1->g, col1->b, 1.0f,
+			col2->r, col2->g, col2->b, 1.0f
+		};
+
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_COLOR_ARRAY);
+
+		glVertexPointer(2, GL_FLOAT, 0, verts);
+		glColorPointer(4, GL_FLOAT, 0, colors);
+
+		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_COLOR_ARRAY);
+#endif
 
 		SetColour ( "DefaultText" );
 
@@ -480,7 +522,7 @@ void LinksScreenInterface::FilterDraw ( Button *button, bool highlighted, bool c
 
 	textbutton_draw ( button, highlighted, clicked );
 
-	glColor3f ( 1.0f, 1.0f, 1.0f );
+	glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
 	border_draw ( button );
 
 }

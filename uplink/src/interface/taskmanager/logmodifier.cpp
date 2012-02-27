@@ -4,9 +4,14 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
+#include <GL/glu.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
-#include <GL/glu.h> /*_glu_extention_library_*/
 
 
 #include "vanbakel.h"
@@ -70,14 +75,41 @@ void LogModifier::BorderClick ( Button *button )
 void LogModifier::BackgroundDraw ( Button *button, bool highlighted, bool clicked )
 {
 
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );
 		glColor3ub ( 8, 20, 124 );		glVertex2i ( button->x - 1, button->y );
 		glColor3ub ( 8, 20, 0 );		glVertex2i ( button->x + button->width, button->y );
 		glColor3ub ( 8, 20, 124 );		glVertex2i ( button->x + button->width, button->y + button->height );
 		glColor3ub ( 8, 20, 0 );		glVertex2i ( button->x, button->y + button->height );
 	glEnd ();
+#else
+        GLfloat verts[] = {
+                button->x, button->y + button->height,
+                button->x, button->y,
+                button->x + button->width, button->y,
+                button->x + button->width, button->y + button->height
+        };
 
-	glColor3ub ( 81, 138, 215 );
+        GLubyte colors[] = {
+                8, 20, 0, 255,
+                8, 20, 124, 255,
+                8, 20, 0, 255,
+                8, 20, 124
+        };
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glColorPointer(4, GL_UNSIGNED_BYTE, 0, colors);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+#endif
+
+
+	glColor4ub ( 81, 138, 215, 255 );
 	border_draw ( button );
 	
 }
@@ -174,6 +206,7 @@ void LogModifier::ChangeLogType ( int pid )
 void LogModifier::BorderDraw ( Button *button, bool highlighted, bool clicked )
 {
 
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );
 
 		if      ( clicked )		glColor4f ( 0.5f, 0.5f, 0.6f, ALPHA );
@@ -197,6 +230,45 @@ void LogModifier::BorderDraw ( Button *button, bool highlighted, bool clicked )
 		glVertex2i ( button->x, button->y + button->height );
 
 	glEnd ();
+#else
+	GLfloat r1, g1, b1, r2, g2, b2;
+	if (clicked) {
+		r1 = g1 = 0.5f; b1 = 0.6f;
+		r2 = g2 = 0.7f; b2 = 0.6f;
+	} else if (highlighted) {
+		r1 = g1 = 0.2f; b1 = 0.5f;
+		r2 = g2 = 0.5f; b2 = 0.6f;
+	} else {
+		r1 = g1 = 0.2f; b1 = 0.4f;
+		r2 = g2 = 0.3f; b2 = 0.5f;
+	}
+
+	GLfloat verts[] = {
+		button->x, button->y + button->height,
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height
+	};
+
+	GLfloat colors[] = {
+		r1, g1, b1, ALPHA,
+		r1, g1, b1, ALPHA,
+		r2, g2, b2, ALPHA,
+		r2, g2, b2, ALPHA
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glColorPointer(4, GL_FLOAT, 0, colors);
+
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+#endif
+
 
 	if ( highlighted || clicked ) {
 
@@ -215,21 +287,27 @@ void LogModifier::ProgressDraw ( Button *button, bool highlighted, bool clicked 
 	float scale = (float) button->width / 100.0f;
 	if ( highlighted ) scale *= 2;
 
+	glColor4f ( 0.0f, 1.5f - scale, scale, 0.6f );
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );
-
-		glColor4f ( 0.0f, 1.5f - scale, scale, 0.6f );
 		glVertex3i ( button->x, button->y, 0 );
-
-		glColor4f ( 0.0f, 1.5f - scale, scale, 0.6f );
 		glVertex3i ( button->x + button->width, button->y, 0 );
-
-		glColor4f ( 0.0f, 1.5f - scale, scale, 0.6f );
 		glVertex3i ( button->x + button->width, button->y + button->height, 0 );
-
-		glColor4f ( 0.0f, 1.5f - scale, scale, 0.6f );
 		glVertex3i ( button->x, button->y + button->height, 0 );
-
 	glEnd ();
+#else
+	GLfloat verts[] = {
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height,
+		button->x, button->y + button->height
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
 	int xpos = button->x + 5;
 	int ypos = (button->y + button->height / 2) + 3;

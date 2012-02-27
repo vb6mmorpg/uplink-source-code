@@ -1,9 +1,13 @@
 
 #include "stdafx.h"
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 
 #include <stdio.h>
@@ -94,12 +98,43 @@ void ScrollBox::DrawScrollBar ( Button *button, bool highlighted, bool clicked )
     //
     // Draw the background
 
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );		
 		SetColour ( "PanelBackgroundA" );       glVertex2i ( button->x, button->y + button->height );
 		SetColour ( "PanelBackgroundB" );       glVertex2i ( button->x, button->y );
 		SetColour ( "PanelBackgroundA" );       glVertex2i ( button->x + button->width, button->y );
 		SetColour ( "PanelBackgroundB" );       glVertex2i ( button->x + button->width, button->y + button->height );
 	glEnd ();
+#else
+	ColourOption *col1, *col2;
+	col1 = GetColour("PanelBackgroundA");
+	col2 = GetColour("PanelBackgroundB");
+
+	GLfloat verts[] = {
+		button->x, button->y + button->height,
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height
+	};
+
+	GLfloat colors[] = {
+		col1->r, col1->g, col1->b, 1.0f,
+		col2->r, col2->g, col2->b, 1.0f,
+		col1->r, col1->g, col1->b, 1.0f,
+		col2->r, col2->g, col2->b, 1.0f
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glColorPointer(4, GL_FLOAT, 0, colors);
+
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+#endif
 
     //
     // Draw the selecter, when the crowd say bo
@@ -117,12 +152,43 @@ void ScrollBox::DrawScrollBar ( Button *button, bool highlighted, bool clicked )
         int h = (int) ( ((float) thisBox->windowSize / (float) thisBox->numItems) * (thisBox->h - 30) );
         if ( h > button->height ) h = button->height;
 
+#ifndef HAVE_GLES
 	    glBegin ( GL_QUADS );
 		    SetColour ( "ButtonNormalA" );          glVertex2i ( x, y + h );
 		    SetColour ( "ButtonNormalB" );          glVertex2i ( x, y );
 		    SetColour ( "ButtonNormalA" );          glVertex2i ( x + w, y );
             SetColour ( "ButtonNormalB" );          glVertex2i ( x + w, y + h );
 	    glEnd ();
+#else
+	    ColourOption *col1, *col2;
+	    col1 = GetColour("ButtonNormalA");
+	    col2 = GetColour("ButtonNormalB");
+
+	    GLfloat verts[] = {
+		x, y + h,
+		x, y,
+		x + w, y,
+		x + w, y + h
+	    };
+
+	    GLfloat colors[] = {
+		    col1->r, col1->g, col1->b, 1.0f,
+		    col2->r, col2->g, col2->b, 1.0f,
+		    col1->r, col1->g, col1->b, 1.0f,
+		    col2->r, col2->g, col2->b, 1.0f
+	    };
+
+	    glEnableClientState(GL_VERTEX_ARRAY);
+	    glEnableClientState(GL_COLOR_ARRAY);
+
+	    glVertexPointer(2, GL_FLOAT, 0, verts);
+	    glColorPointer(4, GL_FLOAT, 0, colors);
+
+	    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	    glDisableClientState(GL_VERTEX_ARRAY);
+	    glDisableClientState(GL_COLOR_ARRAY);
+#endif
 
     }
 

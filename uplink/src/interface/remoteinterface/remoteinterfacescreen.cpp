@@ -6,7 +6,11 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
+#else
+#include <GLES/gl.h>
+#endif
 
 #include "gucci.h"
 

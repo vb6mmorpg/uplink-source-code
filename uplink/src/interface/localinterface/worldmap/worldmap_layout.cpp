@@ -2,8 +2,13 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
 #include <GL/glu.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include <math.h>
 #include <stdio.h>
@@ -147,12 +152,26 @@ void WorldMapInterfaceObject::Draw ( int xOffset, int yOffset, float zoom )
  
             if ( xPos >= 0 && yPos >= 0 ) {
             
+#ifndef HAVE_GLES
                 glBegin ( GL_QUADS );
                     glVertex2i ( xPos, yPos );
                     glVertex2i ( xPos + 7, yPos );
                     glVertex2i ( xPos + 7, yPos + 7 );
                     glVertex2i ( xPos, yPos + 7 );
                 glEnd ();
+#else
+		GLfloat verts[] = {
+			xPos, yPos,
+			xPos + 7, yPos,
+			xPos + 7, yPos + 7,
+			xPos, yPos + 7
+		};
+
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glVertexPointer(2, GL_FLOAT, 0, verts);
+		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+		glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
             }
 

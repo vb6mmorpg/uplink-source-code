@@ -3,9 +3,13 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h> /* glu extention library */
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include <string.h>
 
@@ -106,6 +110,7 @@ void PasswordScreenInterface::CodeButtonDraw ( Button *button, bool highlighted,
 
 	SetColour ( "PasswordBoxBackground" );
 	
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );
 
 		glVertex2i ( button->x, button->y );
@@ -114,6 +119,19 @@ void PasswordScreenInterface::CodeButtonDraw ( Button *button, bool highlighted,
 		glVertex2i ( button->x, button->y + button->height );
 
 	glEnd ();
+#else
+	GLfloat verts[] = {
+		button->x, button->y,
+		button->x + button->width - 1, button->y,
+		button->x + button->width - 1, button->y + button->height,
+		button->x, button->y + button->height
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
 	// Print the text
 
@@ -132,6 +150,7 @@ void PasswordScreenInterface::CodeButtonDraw ( Button *button, bool highlighted,
 
 	if ( highlighted || clicked ) {
 
+#ifndef HAVE_GLES
 		glBegin ( GL_LINE_LOOP );
 
 			glVertex2i ( button->x, button->y );
@@ -140,7 +159,12 @@ void PasswordScreenInterface::CodeButtonDraw ( Button *button, bool highlighted,
 			glVertex2i ( button->x, button->y + button->height );
 
 		glEnd ();
+#else
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glDrawArrays(GL_LINE_LOOP, 0, 4);
+		glDisableClientState(GL_VERTEX_ARRAY);
 
+#endif
 	}
 
 }

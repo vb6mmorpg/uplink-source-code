@@ -1,5 +1,5 @@
 GLUT_OBJECTS = gucci_glut.o resize_unix.o
-SDL_OBJECTS = gucci_sdl.o
+SDL_OBJECTS = gucci_sdl.o eglport.o
 
 OBJECTS = gucci.o image.o $(SDL_OBJECTS)
 

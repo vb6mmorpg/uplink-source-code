@@ -1,4 +1,6 @@
 // Image.cpp: implementation of the Image class.
+
+
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -10,8 +12,13 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
 #include <GL/glu.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include "tiff.h"
 #include "tiffio.h"
@@ -19,6 +26,24 @@
 #include "image.h"
 
 #include "mmgr.h"
+
+int pow2(int n) {
+	int x = 1;
+
+	while(x < n) {
+		x <<= 1;
+	}
+
+	return x;
+}
+
+void etest(int pos) {
+	return;
+	int err = glGetError();
+	if (err) {
+		printf("GL error @%d: %d\n", pos, err);
+	}
+}
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -29,12 +54,17 @@ Image::Image()
 
 	pixels = NULL;
 	rgb_pixels = NULL;
-
+#ifdef HAVE_GLES
+	texture = 0;
+	hscale = 1.0f;
+	wscale = 1.0f;
+	glGenTextures(1, &texture);
+	// printf("Created: %d\n", texture);
+#endif
 }
 
 Image::Image( const Image& img )
 {
-
 	width = img.width;
 	height = img.height;
 	alpha = img.alpha;
@@ -51,6 +81,9 @@ Image::Image( const Image& img )
 		memcpy ( rgb_pixels, img.rgb_pixels, width * height * 3 );
 	}
 
+#ifdef HAVE_GLES
+	GenTexture();
+#endif
 }
 
 Image::~Image()
@@ -60,12 +93,46 @@ Image::~Image()
 		delete [] pixels;
 	if ( rgb_pixels )
 		delete [] rgb_pixels;
-
+#ifdef HAVE_GLES
+	if ( texture ) {
+		// printf("Deleting: %d\n", texture);
+		glDeleteTextures(1, &texture);
+	}
+#endif
 }
+
+#ifdef HAVE_GLES
+void Image::GenTexture() {
+	wscale = (float)width / (float)pow2(width);
+	hscale = (float)height / (float)pow2(height);
+
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	etest(1);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pow2(width), pow2(height), 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	etest(2);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	etest(3);
+	//printf("Gen texture: (%d x %d) (%d, %d) (%.02f, %.02f)\n", width, height, pow2(width), pow2(height), wscale, hscale);
+	UpdateTexture();
+}
+
+void Image::UpdateTexture() {
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	etest(4);
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+	etest(5);
+	//printf("Update texture: (%d x %d) (%d, %d)\n", width, height, pow2(width), pow2(height));
+	glDisable(GL_TEXTURE_2D);
+}
+#endif
 
 void Image::LoadRAW ( char *filename, int sizex, int sizey )
 {
-
 	width = sizex;
 	height = sizey;
 
@@ -104,6 +171,9 @@ void Image::LoadRAW ( char *filename, int sizex, int sizey )
 
 	fclose ( file );
 
+#ifdef HAVE_GLES
+	GenTexture();
+#endif
 }
 
 void Image::LoadTIF ( char *filename )
@@ -144,6 +214,9 @@ void Image::LoadTIF ( char *filename )
     TIFFRGBAImageEnd(&img);
 	TIFFClose ( tif );
 
+#ifdef HAVE_GLES
+	GenTexture();
+#endif
 }
 
 void Image::SetAlpha ( float newalpha )
@@ -160,6 +233,9 @@ void Image::SetAlpha ( float newalpha )
 
 	}
 
+#ifdef HAVE_GLES
+	UpdateTexture();
+#endif
 }
 
 void Image::SetAlphaBorderRec ( int x, int y, unsigned char a, unsigned char r, unsigned char g, unsigned char b )
@@ -176,6 +252,9 @@ void Image::SetAlphaBorderRec ( int x, int y, unsigned char a, unsigned char r, 
 		}
 	}
 
+#ifdef HAVE_GLES
+	UpdateTexture();
+#endif
 }
 
 void Image::SetAlphaBorder ( float newalpha, float testred, float testgreen, float testblue )
@@ -200,6 +279,9 @@ void Image::SetAlphaBorder ( float newalpha, float testred, float testgreen, flo
 
 	}
 
+#ifdef HAVE_GLES
+	UpdateTexture();
+#endif
 }
 
 float Image::GetAlpha ()
@@ -225,7 +307,6 @@ int Image::Height ()
 
 void Image::FlipAroundH ()
 {
-
 	if ( pixels ) {
 
 		unsigned char *newpixels = new unsigned char [width * height * 4];
@@ -249,10 +330,18 @@ void Image::FlipAroundH ()
 
 	}
 
+#ifdef HAVE_GLES
+	UpdateTexture();
+#endif
 }
 
 void Image::Scale ( int newwidth, int newheight )
 {
+#ifdef HAVE_GLES
+	width = newwidth;
+	height = newheight;
+	return;
+#endif
 
 	if ( pixels ) {
 
@@ -308,7 +397,7 @@ void Image::ScaleToOpenGL ()
 
 void Image::Draw ( int x, int y )
 {
-
+#ifndef HAVE_GLES
 	if ( pixels ) {
 
 		glPushAttrib ( GL_ALL_ATTRIB_BITS );
@@ -318,7 +407,48 @@ void Image::Draw ( int x, int y )
 		glDrawPixels ( width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels );
 
 		glPopAttrib ();
+#else
+	if (texture) {
+		GLfloat verts[] = {
+			x, y + height,
+			x + width, y + height,
+			x + width, y,
+			x, y
+		};
 
+		GLfloat tex[] = {
+			0.0f, 0.0f,
+			wscale, 0.0f,
+			wscale, hscale,
+			0.0f, hscale
+		};
+
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		etest(6);
+
+		glDisableClientState(GL_COLOR_ARRAY);
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		etest(7);
+
+		glVertexPointer(2, GL_FLOAT, 0, verts);
+		glTexCoordPointer(2, GL_FLOAT, 0, tex);
+		etest(8);
+
+		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+		etest(9);
+
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glDisable(GL_TEXTURE_2D);
+		etest(10);
+/*
+		GLenum err = glGetError();
+		if (err)
+			printf("GL error: %d\n", err);
+*/
+#endif
 	}
 
 }
@@ -345,18 +475,56 @@ unsigned char *Image::GetRGBPixels()
 
 void Image::DrawBlend ( int x, int y )
 {
-
 	if ( pixels ) {
-
+#ifndef HAVE_GLES
 		glPushAttrib ( GL_ALL_ATTRIB_BITS );
 
 		glBlendFunc ( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-		glEnable ( GL_BLEND );
 
 		glRasterPos2i ( x, y + height );
 		glDrawPixels ( width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels );
 
 		glPopAttrib ();
+#else
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		Draw(x, y);
+		glDisable(GL_BLEND);
+		return;
+		GLfloat verts[] = {
+			x, y,
+			x + width, y,
+			x + width, y + height,
+			x, y + height
+		};
+
+		GLfloat tex[] = {
+			0, 0,
+			width, 0,
+			width, height,
+			0, height
+		};
+
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+		glVertexPointer(2, GL_FLOAT, 0, verts);
+		glTexCoordPointer(2, GL_FLOAT, 0, tex);
+
+		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+		GLenum err = glGetError();
+		if (err)
+			printf("GL error: %d\n", err);
+#endif
 
 	}
 

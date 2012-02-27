@@ -3,9 +3,13 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include "eclipse.h"
 #include "gucci.h"
@@ -91,6 +95,7 @@ void SharesListScreenInterface::ShareDraw ( Button *button, bool highlighted, bo
 		Company *company = game->GetWorld ()->GetCompany ( companyname );
 		UplinkAssert (company);
 
+#ifndef HAVE_GLES
 		if ( shareindex % 2 == 0 ) {
 
 			glBegin ( GL_QUADS );
@@ -111,6 +116,37 @@ void SharesListScreenInterface::ShareDraw ( Button *button, bool highlighted, bo
 			glEnd ();
 
 		}
+#else
+		GLfloat verts[] = {
+			button->x, button->y,
+			button->x + button->width, button->y,
+			button->x + button->width, button->y + button->height,
+			button->x, button->y + button->height
+		};
+
+		GLubyte colors[] = {
+			8, 20, 80, 255,
+			8, 20, 0, 255,
+			8, 20, 80, 255,
+			8, 20, 0, 255,
+			8, 20, 80, 255
+		};
+
+		glVertexPointer(2, GL_FLOAT, 0, verts);
+
+		if (shareindex % 2 == 0) {
+			glColorPointer(4, GL_UNSIGNED_BYTE, 0, colors);
+		} else {
+			glColorPointer(4, GL_UNSIGNED_BYTE, 0, colors+4);
+		}
+
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_COLOR_ARRAY);
+		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_COLOR_ARRAY);
+#endif
 
 		glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
 
@@ -196,7 +232,7 @@ void SharesListScreenInterface::FilterDraw ( Button *button, bool highlighted, b
 
 	textbutton_draw ( button, highlighted, clicked );
 
-	glColor3f ( 1.0f, 1.0f, 1.0f );
+	glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
 	border_draw ( button );
 
 }

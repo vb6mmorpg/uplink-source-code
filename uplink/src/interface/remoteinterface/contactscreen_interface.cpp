@@ -5,9 +5,13 @@
 
 #include <strstream>
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h> /* glu extention library */
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include "game/game.h"
 
@@ -56,7 +60,7 @@ ContactScreenInterface::~ContactScreenInterface ()
 void ContactScreenInterface::BorderDraw ( Button *button, bool highlighted, bool clicked )
 {
 
-	glColor3f ( 1.0f, 1.0f, 1.0f );
+	glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
 	border_draw ( button );
 
 }
@@ -64,7 +68,7 @@ void ContactScreenInterface::BorderDraw ( Button *button, bool highlighted, bool
 void ContactScreenInterface::MessageDraw ( Button *button, bool highlighted, bool clicked )
 {
 
-	glColor3f ( 0.7f, 0.7f, 0.7f );
+	glColor4f ( 0.7f, 0.7f, 0.7f, 1.0f );
 	clear_draw ( button->x, button->y, button->width, button->height );
 	text_draw ( button, highlighted, clicked );
 

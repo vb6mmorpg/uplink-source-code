@@ -3,9 +3,13 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 
 #include "app/app.h"
@@ -59,12 +63,41 @@ void RankingScreenInterface::ActiveAgentDraw ( Button *button, bool highlighted,
 void RankingScreenInterface::PlayerDraw ( Button *button, bool highlighted, bool clicked )
 {
 		
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );
 		SetColour ( "PanelBackgroundA" );   glVertex2i ( button->x - 1, button->y );
 		SetColour ( "PanelBackgroundB" );   glVertex2i ( button->x + button->width, button->y );
 		SetColour ( "PanelBackgroundA" );   glVertex2i ( button->x + button->width, button->y + button->height );
 		SetColour ( "PanelBackgroundB" );   glVertex2i ( button->x, button->y + button->height );
 	glEnd ();
+#else
+        ColourOption *col1, *col2;
+        col1 = GetColour("PanelBackgroundA");
+        col2 = GetColour("PanelBackgroundB");
+        GLfloat verts[] = {
+                button->x - 1, button->y,
+                button->x + button->width, button->y,
+                button->x + button->width, button->y + button->height,
+                button->x, button->y + button->height
+        };
+        GLfloat colors[] = {
+                col1->r, col1->g, col1->b, 1.0f,
+                col2->r, col2->g, col2->b, 1.0f,
+                col1->r, col1->g, col1->b, 1.0f,
+                col2->r, col2->g, col2->b, 1.0f
+        };
+
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_COLOR_ARRAY);
+
+        glVertexPointer(2, GL_FLOAT, 0, verts);
+        glColorPointer(4, GL_FLOAT, 0, colors);
+
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+        glDisableClientState(GL_VERTEX_ARRAY);
+        glDisableClientState(GL_COLOR_ARRAY);
+#endif
 
 	SetColour ( "PanelBorder" );
 	border_draw ( button );

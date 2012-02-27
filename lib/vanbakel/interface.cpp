@@ -9,8 +9,13 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
 #include <GL/glu.h> /* GLU extention library */
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include <stdio.h>
 #include <assert.h>
@@ -36,6 +41,7 @@ void Svb_button_draw ( Button *button, bool highlighted, bool clicked )
 	int xpos = button->x + 2;
 	int ypos = (button->y + button->height / 2) + 1;
 		
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );
 
 		if ( clicked ) glColor4f ( 0.5f, 0.5f, 1.0f, 0.6f );
@@ -59,6 +65,46 @@ void Svb_button_draw ( Button *button, bool highlighted, bool clicked )
 		glVertex3i ( button->x, button->y + button->height, 0 );
 
 	glEnd ();
+#else
+	GLfloat verts[] = {
+		button->x, button->y, 0,
+		button->x + button->width, button->y, 0,
+		button->x + button->width, button->y + button->height, 0,
+		button->x, button->y + button->height, 0
+	};
+
+	GLfloat r1, g1, b1, r2, g2, b2;
+	if (clicked) {
+		r1 = g1 = 0.5f;
+		r2 = g2 = 0.7f;
+		b1 = b2 = 1.0f;
+	} else if (highlighted) {
+		r1 = g1 = 0.2f;
+		r2 = g2 = 0.5f;
+		b1 = 0.9f; b2 = 1.0f;
+	} else {
+		r1 = g1 = r2 = g2 = 0.0f;
+		b1 = 0.4f; b2 = 0.7f;
+	}
+
+	GLfloat colors[] = {
+		r1, g1, b1, 0.6f,
+		r2, g2, b2, 0.6f,
+		r1, g1, b1, 0.6f,
+		r2, g2, b2, 0.6f
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glVertexPointer(3, GL_FLOAT, 0, verts);
+	glColorPointer(4, GL_FLOAT, 0, colors);
+
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+#endif
 
 	glColor4f ( 1.0f, 1.0f, 1.0f, 0.8f );
     GciDrawText ( xpos, ypos, button->caption, HELVETICA_10 );
@@ -73,11 +119,25 @@ void Svb_textbutton_draw ( Button *button, bool highlighted, bool clicked )
 	// Clear the background
 	
 	glColor4f ( 0.0f, 0.0f, 0.0f, 1.0f );
+#ifndef HAVE_GLES
 		glVertex2i ( button->x,	button->y);
 		glVertex2i ( button->x + button->width, button->y );
 		glVertex2i ( button->x + button->width, button->y + button->height );
 		glVertex2i ( button->x, button->y + button->height );
 	glEnd ();
+#else
+	GLfloat verts[] = {
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height,
+		button->x, button->y + button->height
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
 	// Draw the text
 
@@ -100,6 +160,7 @@ void Svb_column_draw ( Button *button, bool highlighted, bool clicked )
 	float scale = button->width / 50.0f;
 	if ( highlighted ) scale *= 2;
 
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );
 
 		glColor4f ( 0.0f, 2.0f - scale, scale, 0.6f );
@@ -115,6 +176,32 @@ void Svb_column_draw ( Button *button, bool highlighted, bool clicked )
 		glVertex3i ( button->x, button->y + button->height, 0 );
 
 	glEnd ();
+#else
+	GLfloat verts[] = {
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height,
+		button->x, button->y + button->height
+	};
+
+	GLfloat colors[] = {
+		0.0f, 2.0f - scale, scale, 0.6f,
+		0.0f, 2.0f - scale, scale, 0.6f,
+		0.0f, 2.0f - scale, scale, 0.6f,
+		0.0f, 2.0f - scale, scale, 0.6f
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glColorPointer(4, GL_FLOAT, 0, colors);
+
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+#endif
 
 	glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
     GciDrawText ( xpos, ypos, button->caption, HELVETICA_10 );

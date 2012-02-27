@@ -4,9 +4,13 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h> /*_glu_extention_library_*/
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include "vanbakel.h"
 
@@ -31,6 +35,7 @@
 void FirewallDisable::BorderDraw ( Button *button, bool highlighted, bool clicked )
 {
 
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );
 
 		if      ( clicked )		glColor4f ( 0.5f, 0.5f, 0.6f, ALPHA );
@@ -54,6 +59,44 @@ void FirewallDisable::BorderDraw ( Button *button, bool highlighted, bool clicke
 		glVertex2i ( button->x, button->y + button->height );
 
 	glEnd ();
+#else
+	GLfloat r1, g1, b1, r2, g2, b2;
+	if (clicked) {
+		r1 = g1 = 0.5f; b1 = 0.6f;
+		r2 = g2 = 0.7f; b2 = 0.6f;
+	} else if (highlighted) {
+		r1 = g1 = 0.2f; b1 = 0.5f;
+		r2 = g2 = 0.5f; b2 = 0.6f;
+	} else {
+		r1 = g1 = 0.2f; b1 = 0.4f;
+		r2 = g2 = 0.3f; b2 = 0.5f;
+	}
+
+	GLfloat verts[] = {
+		button->x, button->y + button->height,
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height
+	};
+
+	GLfloat colors[] = {
+		r1, g1, b1, ALPHA,
+		r1, g1, b1, ALPHA,
+		r2, g2, b2, ALPHA,
+		r2, g2, b2, ALPHA
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glColorPointer(4, GL_FLOAT, 0, colors);
+
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+#endif
 
 	if ( highlighted || clicked ) {
 
@@ -72,21 +115,27 @@ void FirewallDisable::ProgressDraw ( Button *button, bool highlighted, bool clic
 	float scale = (float) button->width / 100.0f;
 	if ( highlighted ) scale *= 2;
 
+	glColor4f ( 0.0f, 1.5f - scale, scale, 0.6f );
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );
-
-		glColor4f ( 0.0f, 1.5f - scale, scale, 0.6f );
 		glVertex3i ( button->x, button->y, 0 );
-
-		glColor4f ( 0.0f, 1.5f - scale, scale, 0.6f );
 		glVertex3i ( button->x + button->width, button->y, 0 );
-
-		glColor4f ( 0.0f, 1.5f - scale, scale, 0.6f );
 		glVertex3i ( button->x + button->width, button->y + button->height, 0 );
-
-		glColor4f ( 0.0f, 1.5f - scale, scale, 0.6f );
 		glVertex3i ( button->x, button->y + button->height, 0 );
-
 	glEnd ();
+#else
+	GLfloat verts[] = {
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height,
+		button->x, button->y + button->height
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
 	int xpos = button->x + 5;
 	int ypos = (button->y + button->height / 2) + 3;

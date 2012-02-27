@@ -3,8 +3,13 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
 #include <GL/glu.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 
 #include <stdio.h>
@@ -100,6 +105,7 @@ void VoiceAnalysisScreenInterface::DrawAnalysis ( Button *button, bool highlight
 
 	clear_draw ( button->x, button->y, button->width, button->height );
 
+#ifndef HAVE_GLES
 	glBegin ( GL_LINE_STRIP );
 
 	for ( int i = 0; i < VOICE_NUMSAMPLES; ++i ) {
@@ -114,6 +120,33 @@ void VoiceAnalysisScreenInterface::DrawAnalysis ( Button *button, bool highlight
 	}
 
 	glEnd ();
+#else
+	GLfloat verts[VOICE_NUMSAMPLES * 2];
+	GLfloat colors[VOICE_NUMSAMPLES * 4];
+
+	for ( int i = 0; i < VOICE_NUMSAMPLES; ++i ) {
+		int x = button->x + i * (button->width/VOICE_NUMSAMPLES);
+		int y = (button->y + button->height) - thisint->sample [i];
+		float c = (float) thisint->sample[i] / 40.0f;
+
+		verts[i*2] = x;
+		verts[i*2+1] = y;
+		colors[i*2] = 0.1f;
+		colors[i*2+1] = 0.1f;
+		colors[i*2+2] = c;
+		colors[i*2+3] = 1.0f;
+	}
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glColorPointer(4, GL_FLOAT, 0, colors);
+	glDrawArrays(GL_LINE_STRIP, 0, VOICE_NUMSAMPLES);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+#endif
 
 	glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
 	border_draw ( button );
@@ -123,14 +156,40 @@ void VoiceAnalysisScreenInterface::DrawAnalysis ( Button *button, bool highlight
 void VoiceAnalysisScreenInterface::DrawBackground ( Button *button, bool highlighted, bool clicked )
 {
 
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );		
 		glColor3ub ( 8, 20, 0 );		glVertex2i ( button->x, button->y + button->height );
 		glColor3ub ( 8, 20, 124 );		glVertex2i ( button->x, button->y );
 		glColor3ub ( 8, 20, 0 );		glVertex2i ( button->x + button->width, button->y );
 		glColor3ub ( 8, 20, 124 );		glVertex2i ( button->x + button->width, button->y + button->height );
 	glEnd ();
+#else
+	GLfloat verts[] = {
+		button->x, button->y + button->height,
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height
+	};
 
-	glColor3ub ( 81, 138, 215 );
+	GLubyte colors[] = {
+		8, 20, 0, 255,
+		8, 20, 124, 255,
+		8, 20, 0, 255,
+		8, 20, 124, 255
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glColorPointer(4, GL_UNSIGNED_BYTE, 0, colors);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
+
+	glColor4ub ( 81, 138, 215, 255 );
 	border_draw ( button );
 	
 }

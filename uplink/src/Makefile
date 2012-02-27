@@ -46,7 +46,6 @@ LIBS = \
 	-ltcp4ux \
 	-lirclib \
 	-lunrar \
-	-lGL -lGLU \
 	-lSDL -lSDL_mixer \
 	-lftgl \
 	-lfreetype \
@@ -55,6 +54,12 @@ LIBS = \
 	-lz 
 #	-lgltt \
 #	-lttf \
+
+# GL
+# LIBS += -lGL -lGLU
+
+# GL ES
+LIBS += -lGLES_CM -lGLUES_CM -lX11 -lEGL
 
 CXX = apg++
 CC = apgcc

@@ -5,9 +5,13 @@
 
 #include <strstream>
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h> /* glu extention library */
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include "game/game.h"
 #include "game/data/data.h"
@@ -58,7 +62,7 @@ bool ConsoleScreenInterface::IsVisibleInterface ()
 void ConsoleScreenInterface::BorderDraw ( Button *button, bool highlighted, bool clicked )
 {
 
-	glColor3f ( 1.0f, 1.0f, 1.0f );
+	glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
 	border_draw ( button );
 
 }
@@ -68,7 +72,7 @@ void ConsoleScreenInterface::MessageDraw ( Button *button, bool highlighted, boo
 
 	clear_draw ( button->x, button->y, button->width, button->height );
 
-	glColor3f ( 0.6f, 1.0f, 0.6f );
+	glColor4f ( 0.6f, 1.0f, 0.6f, 1.0f );
 	text_draw ( button, highlighted, clicked );
 
 }

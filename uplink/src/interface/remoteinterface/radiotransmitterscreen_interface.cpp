@@ -3,9 +3,13 @@
 #include <windows.h>
 #endif
 
+#ifndef HAVE_GLES
 #include <GL/gl.h>
-
 #include <GL/glu.h>
+#else
+#include <GLES/gl.h>
+#include <GLES/glues.h>
+#endif
 
 #include "app/app.h"
 #include "app/globals.h"
@@ -37,14 +41,28 @@ int RadioTransmitterScreenInterface::frequencyMhz = 0;
 void RadioTransmitterScreenInterface::BackgroundDraw ( Button *button, bool highlighted, bool clicked )
 {
 
-    glColor3f ( 0.0f, 0.0f, 0.0f );
+    glColor4f ( 0.0f, 0.0f, 0.0f, 1.0f );
 
+#ifndef HAVE_GLES
 	glBegin ( GL_QUADS );		
 		glVertex2i ( button->x, button->y + button->height );
 		glVertex2i ( button->x, button->y );
 		glVertex2i ( button->x + button->width, button->y );
 		glVertex2i ( button->x + button->width, button->y + button->height );
 	glEnd ();
+#else
+	GLfloat verts[] = {
+		button->x, button->y + button->height,
+		button->x, button->y,
+		button->x + button->width, button->y,
+		button->x + button->width, button->y + button->height
+	};
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+#endif
 
 	SetColour ( "PanelBorder" );
 	border_draw ( button );
