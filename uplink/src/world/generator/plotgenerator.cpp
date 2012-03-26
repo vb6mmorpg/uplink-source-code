@@ -1,6 +1,8 @@
 
 #include <strstream>
 
+#include <string>
+
 #include "app/app.h"
 #include "app/globals.h"
 #include "app/serialise.h"
@@ -74,11 +76,11 @@ char *MISSION_DESCRIPTION [] = {
                                     "Help us track down some people we wish to speak with",
                                     "wargames", "12", "13", "14", "15"
 							    };
-
+string tmprank;
 
 PlotGenerator::PlotGenerator ()
 {
-
+	
 	act = 0;
 	scene = 0;
 
@@ -1289,7 +1291,7 @@ void PlotGenerator::Run_Act1Scene3 ()
 
 void PlotGenerator::Run_Act1Scene4 ()
 {
-
+	
 	if ( UplinkIncompatibleSaveGameAssert ( strcmp ( act1scene4agent, " " ) != 0, __FILE__, __LINE__ ) )
 		return;
 	Agent *agent = (Agent *) game->GetWorld ()->GetPerson ( act1scene4agent );
@@ -1300,17 +1302,26 @@ void PlotGenerator::Run_Act1Scene4 ()
 		return;
 	Agent *scene3guy = (Agent *) game->GetWorld ()->GetPerson ( act1scene3agent );
 	if ( UplinkIncompatibleSaveGameAssert (scene3guy, __FILE__, __LINE__) )
-		return;
-
+		//return;
+		
 	version_revelation = 0.7f;
 
 	//
 	// Create the news story
 	//
 
+	//Check if player has overtaken Top agent in ranking and adjust News Report as needed.
+	
+	if (game->GetWorld ()->GetPlayer ()->rating.uplinkrating > agent->rating.uplinkrating)
+	{ 
+		tmprank = "2";
+	}else{
+		tmprank = "1";
+	};
+
 	std::ostrstream details;
 	details << "In a suprising development in the mystery of Andromeda Research Corporation (ARC), "
-			   "the number one rated Uplink Agent has come forward and tried to re-assure the community.\n\n"
+			   "the number " << tmprank << " rated Uplink Agent has come forward and tried to re-assure the community.\n\n"
 			   "This comes two days after Agent " << scene3guy->handle << " publicly expressed concern "
 			   "that ARC were hiring agents to work on some kind of weapon.\n\n"
 			   "The Agent, known amoungst the hacker community as " << agent->handle << ", says in his statement "
@@ -1327,7 +1338,7 @@ void PlotGenerator::Run_Act1Scene4 ()
 
 
 	News *news = new News ();
-	news->SetHeadline ( "Top Uplink Agent re-assures community" );
+	news->SetHeadline ("High level Uplink Agent re-assures community" );
 	news->SetDetails ( details.str () );
 
 	details.rdbuf()->freeze( 0 );
@@ -1424,16 +1435,17 @@ void PlotGenerator::Run_Act1Scene5 ()
 	ds->AddWidget ( "cancel2", WIDGET_SCRIPTBUTTON, 280, 235, 50, 14, "Cancel", "Click to stop this mail from being sent", 61, -1, NULL, NULL );
 	ds->AddWidget ( "mailtext", WIDGET_TEXTBOX, 30, 270, 400, 100, "", "" );
 
-	agent->SetStatus ( PERSON_STATUS_DEAD );
-
+	//Check status of agent and adjust message as needed based on circumstances.
+	// then Generate applicaable news story
 	//
-	// Generate the news story
-	//
+	int tmpstatus = agent->GetStatus();
 
 	std::ostrstream details;
-	details << "Agent " << agent->handle << " has been found dead in his house after an apparent suicide.\n"
-			   "Preliminary forensic analysis suggests he overdosed on sleeping pills.\n\n"
-			   "He was at the top of the Agent leaderboard and made the news recently after commenting on the "
+	if (tmpstatus == PERSON_STATUS_INJAIL)
+	{
+	details << "Agent " << agent->handle << " has been found dead in his cell after an apparent suicide.\n"
+			   "A Preliminary investigation suggests he hung himself while in police custody.\n\n"
+			   "He was number " << tmprank <<  " on the Agent leaderboard before his arrest and made the news recently after commenting on the "
 			   "actions of Andromeda Research Corporation (ARC).  He had been working for them on their latest "
 			   "product which is currently shrowded in mystery.  This latest development will no doubt add to "
 			   "the mystery surrounding the project.\n\n"
@@ -1441,9 +1453,22 @@ void PlotGenerator::Run_Act1Scene5 ()
 			   "was a lead player in the project.  For something like this happen is a tradgedy of the greatest order.  "
 			   "Our thoughts go out to this mans family and friends.'"
 			   << '\x0';
-
+	}else{
+	details << "Agent " << agent->handle << " has been found dead in his house after an apparent suicide.\n"
+			   "Preliminary forensic analysis suggests he overdosed on sleeping pills.\n\n"
+			   "He was number " << tmprank << " on the Agent leaderboard and made the news recently after commenting on the "
+			   "actions of Andromeda Research Corporation (ARC).  He had been working for them on their latest "
+			   "product which is currently shrowded in mystery.  This latest development will no doubt add to "
+			   "the mystery surrounding the project.\n\n"
+			   "ARC released a statement earlier today, stating 'He was the best programmer we had ever seen and "
+			   "was a lead player in the project.  For something like this happen is a tradgedy of the greatest order.  "
+			   "Our thoughts go out to this mans family and friends.'"
+			   << '\x0';
+	}
+	agent->SetStatus ( PERSON_STATUS_DEAD );
+	
 	News *news = new News ();
-	news->SetHeadline ( "Top agent working for ARC found dead" );
+	news->SetHeadline ( "High ranking agent working for ARC found dead" );
 	news->SetDetails ( details.str () );
 
 	details.rdbuf()->freeze( 0 );

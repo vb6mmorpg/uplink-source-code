@@ -31,7 +31,11 @@ public:
 	static void EventQueueClick		( Button *button );
     static void RevelationClick     ( Button *button );
 	static void ShowLANClick		( Button *button );
-
+	static void Scene1Click			( Button *button );
+	static void Scene2Click			( Button *button );
+	static void Scene3Click			( Button *button );
+	static void Scene4Click			( Button *button );
+	static void Scene5Click			( Button *button );
 public:
 
 	void Create ();

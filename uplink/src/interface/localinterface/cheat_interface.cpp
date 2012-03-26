@@ -92,6 +92,31 @@ void CheatInterface::EventQueueClick ( Button *button )
 #endif
 }
 
+void CheatInterface::Scene1Click( Button *button)
+{
+	game->GetWorld ()->plotgenerator.Run_Scene(1,1);
+}
+
+void CheatInterface::Scene2Click( Button *button)
+{
+	game->GetWorld ()->plotgenerator.Run_Scene(1,2);
+}
+
+void CheatInterface::Scene3Click( Button *button)
+{
+	game->GetWorld ()->plotgenerator.Run_Scene(1,3);
+}
+
+void CheatInterface::Scene4Click( Button *button)
+{
+	game->GetWorld ()->plotgenerator.Run_Scene(1,4);
+}
+
+void CheatInterface::Scene5Click( Button *button)
+{
+	game->GetWorld ()->plotgenerator.Run_Scene(1,5);
+}
+
 void CheatInterface::RevelationClick ( Button *button )
 {
 #ifdef TESTGAME
@@ -250,6 +275,23 @@ void CheatInterface::Create ()
 		EclRegisterButton ( screenw - panelwidth, paneltop + 270, panelwidth - 7, 15, "Show Local Area Network", "cheat_showlan" );
 		EclRegisterButtonCallback ( "cheat_showlan", ShowLANClick );
 
+		//Check Plot
+		
+		EclRegisterButton ( screenw - panelwidth, paneltop + 290, panelwidth - 7, 15, "Scene 1", "cheat_Scene1" );
+		EclRegisterButtonCallback ( "cheat_Scene1", Scene1Click );
+
+		EclRegisterButton ( screenw - panelwidth, paneltop + 310, panelwidth - 7, 15, "Scene 2", "cheat_Scene2" );
+		EclRegisterButtonCallback ( "cheat_Scene2", Scene2Click );
+
+		EclRegisterButton ( screenw - panelwidth, paneltop + 330, panelwidth - 7, 15, "Scene 3", "cheat_Scene3" );
+		EclRegisterButtonCallback ( "cheat_Scene3", Scene3Click );
+
+		EclRegisterButton ( screenw - panelwidth, paneltop + 350, panelwidth - 7, 15, "Scene 4", "cheat_Scene4" );
+		EclRegisterButtonCallback ( "cheat_Scene4", Scene4Click );
+
+		EclRegisterButton ( screenw - panelwidth, paneltop + 350, panelwidth - 7, 15, "Scene 5", "cheat_Scene5" );
+		EclRegisterButtonCallback ( "cheat_Scene5", Scene5Click );
+
 	}
 
 }
@@ -275,7 +317,11 @@ void CheatInterface::Remove ()
 		EclRemoveButton ( "cheat_eventqueue" );
         EclRemoveButton ( "cheat_revelation" );
 		EclRemoveButton ( "cheat_showlan" );
-
+		EclRemoveButton ( "cheat_Scene1" );
+		EclRemoveButton ( "cheat_Scene2" );
+		EclRemoveButton ( "cheat_Scene3" );
+		EclRemoveButton ( "cheat_Scene4" );
+		EclRemoveButton ( "cheat_Scene5" );
 	}
 
 }
