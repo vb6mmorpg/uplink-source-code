@@ -1,0 +1,746 @@
+
+
+===============================================
+NEW GAME     10:33, 24/3/2012
+===============================================
+Version : 10.0
+RELEASE
+INTERNAL
+Win32 Build
+Version 10.0 (RELEASE)
+Compiled on Mar 24 2012 at 10:25:50
+
+Loading uplink options from C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+=====DEBUGGING INFORMATION ENABLED=====
+Initialising Steam...Could not initialize Steam: Function not found.
+Loading application data
+Successfully loaded data archive data.dat
+Successfully loaded data archive graphics.dat
+Successfully loaded data archive loading.dat
+Successfully loaded data archive sounds.dat
+Successfully loaded data archive music.dat
+Successfully loaded data archive fonts.dat
+Successfully loaded data archive patch.dat
+Successfully loaded data archive patch2.dat
+Successfully loaded data archive patch3.dat
+Finished loading application data
+Init_Game called...creating game object
+Finished with Init_Game
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Initialising SDL...done
+ SDL is now opening a 1600x900 window in 32 depth ...done
+ SDL is now changing the window caption and diverse settings ...done
+ Initialising OpenGL...
+Finished initialising OpenGL.
+Now registering callback functions...done
+ Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Init_Fonts called...setting up system fonts
+Registering fonts...done
+ Loading system fonts into memory...
+done
+Unregistering fonts...done
+ Finished with Init_Fonts
+ Init_Sound called...setting up sound system
+Compiled with SDL_mixer version: 1.2.7
+Running with SDL_mixer version: 1.2.7
+Finished with Init_Sound
+Init_Music called...loading modules
+Finished with Init_Music
+Creating main menu.
+====== END OF DEBUGGING INFORMATION ====
+Loading profile from C:\Uplink Dev CD\uplink\src\..\bin\users/.usr...failed
+App::LoadGame, Failed to load user profile
+Loading profile from C:\Uplink Dev CD\uplink\src\..\bin\users/Movian.usr...failed
+App::LoadGame, Failed to load user profile
+Loading LAN from data/lans/sample.txt...done
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+
+===============================================
+NEW GAME     10:51, 24/3/2012
+===============================================
+Version : 10.0
+RELEASE
+Win32 Build
+Version 10.0 (RELEASE)
+Compiled on Mar 24 2012 at 10:50:46
+
+Loading uplink options from C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+=====DEBUGGING INFORMATION ENABLED=====
+Initialising Steam...Could not initialize Steam: Function not found.
+Loading application data
+Successfully loaded data archive data.dat
+Successfully loaded data archive graphics.dat
+Successfully loaded data archive loading.dat
+Successfully loaded data archive sounds.dat
+Successfully loaded data archive music.dat
+Successfully loaded data archive fonts.dat
+Successfully loaded data archive patch.dat
+Successfully loaded data archive patch2.dat
+Successfully loaded data archive patch3.dat
+Finished loading application data
+Init_Game called...creating game object
+Finished with Init_Game
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Initialising SDL...done
+ SDL is now opening a 1600x900 window in 32 depth ...done
+ SDL is now changing the window caption and diverse settings ...done
+ Initialising OpenGL...
+Finished initialising OpenGL.
+Now registering callback functions...done
+ Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Init_Fonts called...setting up system fonts
+Registering fonts...done
+ Loading system fonts into memory...
+done
+Unregistering fonts...done
+ Finished with Init_Fonts
+ Init_Sound called...setting up sound system
+Compiled with SDL_mixer version: 1.2.7
+Running with SDL_mixer version: 1.2.7
+Finished with Init_Sound
+Init_Music called...loading modules
+Finished with Init_Music
+Creating main menu.
+====== END OF DEBUGGING INFORMATION ====
+Loading LAN from data/lans/sample.txt...done
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Movian.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Movian.usr...success
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+
+===============================================
+NEW GAME     10:54, 24/3/2012
+===============================================
+Version : 10.0
+RELEASE
+Win32 Build
+Version 10.0 (RELEASE)
+Compiled on Mar 24 2012 at 10:50:46
+
+Loading uplink options from C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+=====DEBUGGING INFORMATION ENABLED=====
+Initialising Steam...Could not initialize Steam: Function not found.
+Loading application data
+Successfully loaded data archive data.dat
+Successfully loaded data archive graphics.dat
+Successfully loaded data archive loading.dat
+Successfully loaded data archive sounds.dat
+Successfully loaded data archive music.dat
+Successfully loaded data archive fonts.dat
+Successfully loaded data archive patch.dat
+Successfully loaded data archive patch2.dat
+Successfully loaded data archive patch3.dat
+Finished loading application data
+Init_Game called...creating game object
+Finished with Init_Game
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Initialising SDL...done
+ SDL is now opening a 1600x900 window in 32 depth ...done
+ SDL is now changing the window caption and diverse settings ...done
+ Initialising OpenGL...
+Finished initialising OpenGL.
+Now registering callback functions...done
+ Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Init_Fonts called...setting up system fonts
+Registering fonts...done
+ Loading system fonts into memory...
+done
+Unregistering fonts...done
+ Finished with Init_Fonts
+ Init_Sound called...setting up sound system
+Compiled with SDL_mixer version: 1.2.7
+Running with SDL_mixer version: 1.2.7
+Finished with Init_Sound
+Init_Music called...loading modules
+Finished with Init_Music
+Creating main menu.
+====== END OF DEBUGGING INFORMATION ====
+Loading profile from C:\Uplink Dev CD\uplink\src\..\bin\users/Movian.usr...success
+Loading LAN from data/lans/sample.txt...[Already Loaded]
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Movian.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Movian.usr...success
+
+An Uplink Assertion Failure has occured in the plot
+===================================================
+ Location  : world\generator\plotgenerator.cpp, line 1293
+
+
+An Uplink Assertion Failure has occured in the plot
+===================================================
+ Location  : world\generator\plotgenerator.cpp, line 1293
+
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Movian.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Movian.usr...success
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+
+===============================================
+NEW GAME     10:57, 24/3/2012
+===============================================
+Version : 10.0
+RELEASE
+INTERNAL
+Win32 Build
+Version 10.0 (RELEASE)
+Compiled on Mar 24 2012 at 10:57:18
+
+Loading uplink options from C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+=====DEBUGGING INFORMATION ENABLED=====
+Initialising Steam...Could not initialize Steam: Function not found.
+Loading application data
+Successfully loaded data archive data.dat
+Successfully loaded data archive graphics.dat
+Successfully loaded data archive loading.dat
+Successfully loaded data archive sounds.dat
+Successfully loaded data archive music.dat
+Successfully loaded data archive fonts.dat
+Successfully loaded data archive patch.dat
+Successfully loaded data archive patch2.dat
+Successfully loaded data archive patch3.dat
+Finished loading application data
+Init_Game called...creating game object
+Finished with Init_Game
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Initialising SDL...done
+ SDL is now opening a 1600x900 window in 32 depth ...done
+ SDL is now changing the window caption and diverse settings ...done
+ Initialising OpenGL...
+Finished initialising OpenGL.
+Now registering callback functions...done
+ Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Init_Fonts called...setting up system fonts
+Registering fonts...done
+ Loading system fonts into memory...
+done
+Unregistering fonts...done
+ Finished with Init_Fonts
+ Init_Sound called...setting up sound system
+Compiled with SDL_mixer version: 1.2.7
+Running with SDL_mixer version: 1.2.7
+Finished with Init_Sound
+Init_Music called...loading modules
+Finished with Init_Music
+Creating main menu.
+====== END OF DEBUGGING INFORMATION ====
+Loading LAN from data/lans/sample.txt...done
+
+An Uplink Assertion Failure has occured in the plot
+===================================================
+ Location  : world\generator\plotgenerator.cpp, line 1293
+
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+
+===============================================
+NEW GAME     11:1, 24/3/2012
+===============================================
+Version : 10.0
+RELEASE
+INTERNAL
+Win32 Build
+Version 10.0 (RELEASE)
+Compiled on Mar 24 2012 at 10:57:18
+
+Loading uplink options from C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+=====DEBUGGING INFORMATION ENABLED=====
+Initialising Steam...Could not initialize Steam: Function not found.
+Loading application data
+Successfully loaded data archive data.dat
+Successfully loaded data archive graphics.dat
+Successfully loaded data archive loading.dat
+Successfully loaded data archive sounds.dat
+Successfully loaded data archive music.dat
+Successfully loaded data archive fonts.dat
+Successfully loaded data archive patch.dat
+Successfully loaded data archive patch2.dat
+Successfully loaded data archive patch3.dat
+Finished loading application data
+Init_Game called...creating game object
+Finished with Init_Game
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Initialising SDL...done
+ SDL is now opening a 1600x900 window in 32 depth ...done
+ SDL is now changing the window caption and diverse settings ...done
+ Initialising OpenGL...
+Finished initialising OpenGL.
+Now registering callback functions...done
+ Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Init_Fonts called...setting up system fonts
+Registering fonts...done
+ Loading system fonts into memory...
+done
+Unregistering fonts...done
+ Finished with Init_Fonts
+ Init_Sound called...setting up sound system
+Compiled with SDL_mixer version: 1.2.7
+Running with SDL_mixer version: 1.2.7
+Finished with Init_Sound
+Init_Music called...loading modules
+Finished with Init_Music
+Creating main menu.
+====== END OF DEBUGGING INFORMATION ====
+Loading profile from C:\Uplink Dev CD\uplink\src\..\bin\users/Movian.usr...success
+Loading LAN from data/lans/sample.txt...[Already Loaded]
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Movian.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Movian.usr...success
+
+
+===============================================
+NEW GAME     11:3, 24/3/2012
+===============================================
+Version : 10.0
+RELEASE
+INTERNAL
+Win32 Build
+Version 10.0 (RELEASE)
+Compiled on Mar 24 2012 at 10:57:18
+
+Loading uplink options from C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+=====DEBUGGING INFORMATION ENABLED=====
+Initialising Steam...Could not initialize Steam: Function not found.
+Loading application data
+Successfully loaded data archive data.dat
+Successfully loaded data archive graphics.dat
+Successfully loaded data archive loading.dat
+Successfully loaded data archive sounds.dat
+Successfully loaded data archive music.dat
+Successfully loaded data archive fonts.dat
+Successfully loaded data archive patch.dat
+Successfully loaded data archive patch2.dat
+Successfully loaded data archive patch3.dat
+Finished loading application data
+Init_Game called...creating game object
+Finished with Init_Game
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Initialising SDL...done
+ SDL is now opening a 1600x900 window in 32 depth ...done
+ SDL is now changing the window caption and diverse settings ...done
+ Initialising OpenGL...
+Finished initialising OpenGL.
+Now registering callback functions...done
+ Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Init_Fonts called...setting up system fonts
+Registering fonts...done
+ Loading system fonts into memory...
+done
+Unregistering fonts...done
+ Finished with Init_Fonts
+ Init_Sound called...setting up sound system
+Compiled with SDL_mixer version: 1.2.7
+Running with SDL_mixer version: 1.2.7
+Finished with Init_Sound
+Init_Music called...loading modules
+Finished with Init_Music
+Creating main menu.
+====== END OF DEBUGGING INFORMATION ====
+Loading LAN from data/lans/sample.txt...done
+RemoteInterface warning : Trying to run a screen on a different computer ('Uplink Public Access Server', 234.773.0.666) then the one currently connected to ('Gateway', 127.0.0.1).
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.usr...success
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.usr...success
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+
+===============================================
+NEW GAME     11:9, 24/3/2012
+===============================================
+Version : 10.0
+RELEASE
+INTERNAL
+Win32 Build
+Version 10.0 (RELEASE)
+Compiled on Mar 24 2012 at 10:57:18
+
+Loading uplink options from C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+=====DEBUGGING INFORMATION ENABLED=====
+Initialising Steam...Could not initialize Steam: Function not found.
+Loading application data
+Successfully loaded data archive data.dat
+Successfully loaded data archive graphics.dat
+Successfully loaded data archive loading.dat
+Successfully loaded data archive sounds.dat
+Successfully loaded data archive music.dat
+Successfully loaded data archive fonts.dat
+Successfully loaded data archive patch.dat
+Successfully loaded data archive patch2.dat
+Successfully loaded data archive patch3.dat
+Finished loading application data
+Init_Game called...creating game object
+Finished with Init_Game
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Initialising SDL...done
+ SDL is now opening a 1600x900 window in 32 depth ...done
+ SDL is now changing the window caption and diverse settings ...done
+ Initialising OpenGL...
+Finished initialising OpenGL.
+Now registering callback functions...done
+ Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Init_Fonts called...setting up system fonts
+Registering fonts...done
+ Loading system fonts into memory...
+done
+Unregistering fonts...done
+ Finished with Init_Fonts
+ Init_Sound called...setting up sound system
+Compiled with SDL_mixer version: 1.2.7
+Running with SDL_mixer version: 1.2.7
+Finished with Init_Sound
+Init_Music called...loading modules
+Finished with Init_Music
+Creating main menu.
+====== END OF DEBUGGING INFORMATION ====
+Loading profile from C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.usr...success
+Loading LAN from data/lans/sample.txt...[Already Loaded]
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.usr...success
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.usr...success
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.usr...success
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+
+===============================================
+NEW GAME     16:22, 24/3/2012
+===============================================
+Version : 10.0
+RELEASE
+INTERNAL
+Win32 Build
+Version 10.0 (RELEASE)
+Compiled on Mar 24 2012 at 10:57:18
+
+Loading uplink options from C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+=====DEBUGGING INFORMATION ENABLED=====
+Initialising Steam...Could not initialize Steam: Function not found.
+Loading application data
+Successfully loaded data archive data.dat
+Successfully loaded data archive graphics.dat
+Successfully loaded data archive loading.dat
+Successfully loaded data archive sounds.dat
+Successfully loaded data archive music.dat
+Successfully loaded data archive fonts.dat
+Successfully loaded data archive patch.dat
+Successfully loaded data archive patch2.dat
+Successfully loaded data archive patch3.dat
+Finished loading application data
+Init_Game called...creating game object
+Finished with Init_Game
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Initialising SDL...done
+ SDL is now opening a 1600x900 window in 32 depth ...done
+ SDL is now changing the window caption and diverse settings ...done
+ Initialising OpenGL...
+Finished initialising OpenGL.
+Now registering callback functions...done
+ Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Init_Fonts called...setting up system fonts
+Registering fonts...done
+ Loading system fonts into memory...
+done
+Unregistering fonts...done
+ Finished with Init_Fonts
+ Init_Sound called...setting up sound system
+Compiled with SDL_mixer version: 1.2.7
+Running with SDL_mixer version: 1.2.7
+Finished with Init_Sound
+Init_Music called...loading modules
+Finished with Init_Music
+Creating main menu.
+====== END OF DEBUGGING INFORMATION ====
+Loading profile from C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.usr...success
+Loading LAN from data/lans/sample.txt...[Already Loaded]
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.usr...success
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.usr...success
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.usr...success
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+
+===============================================
+NEW GAME     16:36, 24/3/2012
+===============================================
+Version : 10.0
+RELEASE
+INTERNAL
+Win32 Build
+Version 10.0 (RELEASE)
+Compiled on Mar 24 2012 at 10:57:18
+
+Loading uplink options from C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+=====DEBUGGING INFORMATION ENABLED=====
+Initialising Steam...Could not initialize Steam: Function not found.
+Loading application data
+Successfully loaded data archive data.dat
+Successfully loaded data archive graphics.dat
+Successfully loaded data archive loading.dat
+Successfully loaded data archive sounds.dat
+Successfully loaded data archive music.dat
+Successfully loaded data archive fonts.dat
+Successfully loaded data archive patch.dat
+Successfully loaded data archive patch2.dat
+Successfully loaded data archive patch3.dat
+Finished loading application data
+Init_Game called...creating game object
+Finished with Init_Game
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Initialising SDL...done
+ SDL is now opening a 1600x900 window in 32 depth ...done
+ SDL is now changing the window caption and diverse settings ...done
+ Initialising OpenGL...
+Finished initialising OpenGL.
+Now registering callback functions...done
+ Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Init_Fonts called...setting up system fonts
+Registering fonts...done
+ Loading system fonts into memory...
+done
+Unregistering fonts...done
+ Finished with Init_Fonts
+ Init_Sound called...setting up sound system
+Compiled with SDL_mixer version: 1.2.7
+Running with SDL_mixer version: 1.2.7
+Finished with Init_Sound
+Init_Music called...loading modules
+Finished with Init_Music
+Creating main menu.
+====== END OF DEBUGGING INFORMATION ====
+Loading profile from C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.usr...success
+Loading LAN from data/lans/sample.txt...[Already Loaded]
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.usr...success
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.usr...success
+Loading profile from C:\Uplink Dev CD\uplink\src\..\bin\users/Movian.usr...success
+Loading LAN from data/lans/sample.txt...[Already Loaded]
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Movian.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Movian.usr...success
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Movian.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Movian.usr...success
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+
+===============================================
+NEW GAME     16:51, 24/3/2012
+===============================================
+Version : 10.0
+RELEASE
+INTERNAL
+Win32 Build
+Version 10.0 (RELEASE)
+Compiled on Mar 24 2012 at 10:57:18
+
+Loading uplink options from C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+=====DEBUGGING INFORMATION ENABLED=====
+Initialising Steam...Could not initialize Steam: Function not found.
+Loading application data
+Successfully loaded data archive data.dat
+Successfully loaded data archive graphics.dat
+Successfully loaded data archive loading.dat
+Successfully loaded data archive sounds.dat
+Successfully loaded data archive music.dat
+Successfully loaded data archive fonts.dat
+Successfully loaded data archive patch.dat
+Successfully loaded data archive patch2.dat
+Successfully loaded data archive patch3.dat
+Finished loading application data
+Init_Game called...creating game object
+Finished with Init_Game
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Initialising SDL...done
+ SDL is now opening a 1600x900 window in 32 depth ...done
+ SDL is now changing the window caption and diverse settings ...done
+ Initialising OpenGL...
+Finished initialising OpenGL.
+Now registering callback functions...done
+ Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Init_Fonts called...setting up system fonts
+Registering fonts...done
+ Loading system fonts into memory...
+done
+Unregistering fonts...done
+ Finished with Init_Fonts
+ Init_Sound called...setting up sound system
+Compiled with SDL_mixer version: 1.2.7
+Running with SDL_mixer version: 1.2.7
+Finished with Init_Sound
+Init_Music called...loading modules
+Finished with Init_Music
+Creating main menu.
+====== END OF DEBUGGING INFORMATION ====
+Loading profile from C:\Uplink Dev CD\uplink\src\..\bin\users/Movian.usr...success
+Loading LAN from data/lans/sample.txt...[Already Loaded]
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Movian.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Movian.usr...success
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Movian.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Movian.usr...success
+Loading profile from C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.usr...success
+Loading LAN from data/lans/sample.txt...[Already Loaded]
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.usr...success
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+
+===============================================
+NEW GAME     16:55, 24/3/2012
+===============================================
+Version : 10.0
+RELEASE
+INTERNAL
+Win32 Build
+Version 10.0 (RELEASE)
+Compiled on Mar 24 2012 at 10:57:18
+
+Loading uplink options from C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+=====DEBUGGING INFORMATION ENABLED=====
+Initialising Steam...Could not initialize Steam: Function not found.
+Loading application data
+Successfully loaded data archive data.dat
+Successfully loaded data archive graphics.dat
+Successfully loaded data archive loading.dat
+Successfully loaded data archive sounds.dat
+Successfully loaded data archive music.dat
+Successfully loaded data archive fonts.dat
+Successfully loaded data archive patch.dat
+Successfully loaded data archive patch2.dat
+Successfully loaded data archive patch3.dat
+Finished loading application data
+Init_Game called...creating game object
+Finished with Init_Game
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Initialising SDL...done
+ SDL is now opening a 1600x900 window in 32 depth ...done
+ SDL is now changing the window caption and diverse settings ...done
+ Initialising OpenGL...
+Finished initialising OpenGL.
+Now registering callback functions...done
+ Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Init_Fonts called...setting up system fonts
+Registering fonts...done
+ Loading system fonts into memory...
+done
+Unregistering fonts...done
+ Finished with Init_Fonts
+ Init_Sound called...setting up sound system
+Compiled with SDL_mixer version: 1.2.7
+Running with SDL_mixer version: 1.2.7
+Finished with Init_Sound
+Init_Music called...loading modules
+Finished with Init_Music
+Creating main menu.
+====== END OF DEBUGGING INFORMATION ====
+Using gathered resolutions.
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+
+===============================================
+NEW GAME     16:56, 24/3/2012
+===============================================
+Version : 10.0
+RELEASE
+INTERNAL
+Win32 Build
+Version 10.0 (RELEASE)
+Compiled on Mar 24 2012 at 10:57:18
+
+Loading uplink options from C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+=====DEBUGGING INFORMATION ENABLED=====
+Initialising Steam...Could not initialize Steam: Function not found.
+Loading application data
+Successfully loaded data archive data.dat
+Successfully loaded data archive graphics.dat
+Successfully loaded data archive loading.dat
+Successfully loaded data archive sounds.dat
+Successfully loaded data archive music.dat
+Successfully loaded data archive fonts.dat
+Successfully loaded data archive patch.dat
+Successfully loaded data archive patch2.dat
+Successfully loaded data archive patch3.dat
+Finished loading application data
+Init_Game called...creating game object
+Finished with Init_Game
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Initialising SDL...done
+ SDL is now opening a 1280x800 window in 32 depth ...done
+ SDL is now changing the window caption and diverse settings ...done
+ Initialising OpenGL...
+Finished initialising OpenGL.
+Now registering callback functions...done
+ Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Init_Fonts called...setting up system fonts
+Registering fonts...done
+ Loading system fonts into memory...
+done
+Unregistering fonts...done
+ Finished with Init_Fonts
+ Init_Sound called...setting up sound system
+Compiled with SDL_mixer version: 1.2.7
+Running with SDL_mixer version: 1.2.7
+Finished with Init_Sound
+Init_Music called...loading modules
+Finished with Init_Music
+Creating main menu.
+====== END OF DEBUGGING INFORMATION ====
+Loading profile from C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.usr...success
+Loading LAN from data/lans/sample.txt...[Already Loaded]
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.usr...success
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.usr...success
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.usr...success
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+
+===============================================
+NEW GAME     16:58, 24/3/2012
+===============================================
+Version : 10.0
+RELEASE
+INTERNAL
+Win32 Build
+Version 10.0 (RELEASE)
+Compiled on Mar 24 2012 at 10:57:18
+
+Loading uplink options from C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+
+=====DEBUGGING INFORMATION ENABLED=====
+Initialising Steam...Could not initialize Steam: Function not found.
+Loading application data
+Successfully loaded data archive data.dat
+Successfully loaded data archive graphics.dat
+Successfully loaded data archive loading.dat
+Successfully loaded data archive sounds.dat
+Successfully loaded data archive music.dat
+Successfully loaded data archive fonts.dat
+Successfully loaded data archive patch.dat
+Successfully loaded data archive patch2.dat
+Successfully loaded data archive patch3.dat
+Finished loading application data
+Init_Game called...creating game object
+Finished with Init_Game
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Initialising SDL...done
+ SDL is now opening a 1280x800 window in 32 depth ...done
+ SDL is now changing the window caption and diverse settings ...done
+ Initialising OpenGL...
+Finished initialising OpenGL.
+Now registering callback functions...done
+ Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success
+Init_Fonts called...setting up system fonts
+Registering fonts...done
+ Loading system fonts into memory...
+done
+Unregistering fonts...done
+ Finished with Init_Fonts
+ Init_Sound called...setting up sound system
+Compiled with SDL_mixer version: 1.2.7
+Running with SDL_mixer version: 1.2.7
+Finished with Init_Sound
+Init_Music called...loading modules
+Finished with Init_Music
+Creating main menu.
+====== END OF DEBUGGING INFORMATION ====
+Loading profile from C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.usr...success
+Loading LAN from data/lans/sample.txt...[Already Loaded]
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.usr...success
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Blarg.usr...success
+Loading LAN from data/lans/sample.txt...done
+RemoteInterface warning : Trying to run a screen on a different computer ('Uplink Public Access Server', 234.773.0.666) then the one currently connected to ('Gateway', 127.0.0.1).
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Movsasd.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Movsasd.usr...success
+Saving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Movsasd.tmp...success. Moving profile to C:\Uplink Dev CD\uplink\src\..\bin\users/Movsasd.usr...success
+Saving uplink options to C:\Uplink Dev CD\uplink\src\..\bin\users/options...success

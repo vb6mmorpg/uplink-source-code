@@ -1,0 +1,25 @@
+﻿Build started 3/24/2012 10:17:09 AM.
+     1>Project "C:\Uplink Dev CD\lib\vanbakel\Vanbakel.vcxproj" on node 5 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Unoptimised\Vanbakel.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\eclipse /I..\tosser /I..\gucci /I..\common /I..\mmgr /Zi /nologo /W3 /WX- /Od /Oy- /D USE_SDL /D WIN32 /D _CRT_SECURE_NO_DEPRECATE /Gm- /EHsc /MT /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Unoptimised\\" /Fd"Unoptimised\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt interface.cpp task.cpp taskwrapper.cpp vanbakel.cpp
+         interface.cpp
+         task.cpp
+         taskwrapper.cpp
+         vanbakel.cpp
+         Generating Code...
+       Lib:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"..\bin\Vanbakel.lib" /NOLOGO Unoptimised\interface.obj
+         Unoptimised\task.obj
+         Unoptimised\taskwrapper.obj
+         Unoptimised\vanbakel.obj
+         Vanbakel.vcxproj -> C:\Uplink Dev CD\lib\vanbakel\..\bin\Vanbakel.lib
+       FinalizeBuildStatus:
+         Deleting file "Unoptimised\Vanbakel.unsuccessfulbuild".
+         Touching "Unoptimised\Vanbakel.lastbuildstate".
+     1>Done Building Project "C:\Uplink Dev CD\lib\vanbakel\Vanbakel.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.13

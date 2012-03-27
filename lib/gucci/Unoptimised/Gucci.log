@@ -1,0 +1,29 @@
+﻿Build started 3/24/2012 10:17:09 AM.
+     1>Project "C:\Uplink Dev CD\lib\gucci\Gucci.vcxproj" on node 6 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Unoptimised\Gucci.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\tosser /I..\common /I"..\..\contrib\gltt-2.5" /I"..\..\contrib\tiff-3.7.2\libtiff" /I"..\..\contrib\glut-3.7.6-bin" /I"..\..\contrib\SDL-1.2.11\include" /I..\mmgr /Zi /nologo /W3 /WX- /Od /Oy- /D USE_SDL /D WIN32 /D _CRT_SECURE_NO_DEPRECATE /D USE_GLTT /Gm- /EHsc /MT /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Unoptimised\\" /Fd"Unoptimised\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt gucci.cpp gucci_glut.cpp gucci_sdl.cpp image.cpp resize_unix.cpp resize_win32.cpp
+         gucci.cpp
+         gucci_glut.cpp
+         gucci_sdl.cpp
+         image.cpp
+         resize_unix.cpp
+         resize_win32.cpp
+         Generating Code...
+       Lib:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"..\bin\Gucci.lib" /NOLOGO Unoptimised\gucci.obj
+         Unoptimised\gucci_glut.obj
+         Unoptimised\gucci_sdl.obj
+         Unoptimised\image.obj
+         Unoptimised\resize_unix.obj
+         Unoptimised\resize_win32.obj
+         Gucci.vcxproj -> C:\Uplink Dev CD\lib\gucci\..\bin\Gucci.lib
+       FinalizeBuildStatus:
+         Deleting file "Unoptimised\Gucci.unsuccessfulbuild".
+         Touching "Unoptimised\Gucci.lastbuildstate".
+     1>Done Building Project "C:\Uplink Dev CD\lib\gucci\Gucci.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.86

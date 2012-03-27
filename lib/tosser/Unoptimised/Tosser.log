@@ -1,0 +1,25 @@
+﻿Build started 3/24/2012 10:17:08 AM.
+     1>Project "C:\Uplink Dev CD\lib\tosser\Tosser.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Unoptimised\Tosser.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\common /I..\mmgr /Zi /nologo /W3 /WX- /Od /Oy- /D USE_SDL /D WIN32 /D _CRT_SECURE_NO_DEPRECATE /Gm- /EHsc /MT /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Unoptimised\\" /Fd"Unoptimised\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt btree.cpp darray.cpp llist.cpp
+         btree.cpp
+         darray.cpp
+         llist.cpp
+         Generating Code...
+       Lib:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"Unoptimised\Tosser.lib" /NOLOGO Unoptimised\btree.obj
+         Unoptimised\darray.obj
+         Unoptimised\llist.obj
+     1>darray.obj : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
+     1>btree.obj : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
+         Tosser.vcxproj -> C:\Uplink Dev CD\lib\tosser\Unoptimised\Tosser.lib
+       FinalizeBuildStatus:
+         Deleting file "Unoptimised\Tosser.unsuccessfulbuild".
+         Touching "Unoptimised\Tosser.lastbuildstate".
+     1>Done Building Project "C:\Uplink Dev CD\lib\tosser\Tosser.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.46

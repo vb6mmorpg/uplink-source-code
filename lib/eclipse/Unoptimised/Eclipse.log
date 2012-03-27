@@ -1,0 +1,23 @@
+﻿Build started 3/24/2012 10:17:08 AM.
+     1>Project "C:\Uplink Dev CD\lib\eclipse\Eclipse.vcxproj" on node 3 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Unoptimised\Eclipse.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\gucci /I..\tosser /I..\common /I..\mmgr /Zi /nologo /W3 /WX- /Od /Oy- /D USE_SDL /D WIN32 /D _CRT_SECURE_NO_DEPRECATE /Gm- /EHsc /MT /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Unoptimised\\" /Fd"Unoptimised\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt animation.cpp button.cpp eclipse.cpp
+         animation.cpp
+         button.cpp
+         eclipse.cpp
+         Generating Code...
+       Lib:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"..\bin\Eclipse.lib" /NOLOGO Unoptimised\animation.obj
+         Unoptimised\button.obj
+         Unoptimised\eclipse.obj
+         Eclipse.vcxproj -> C:\Uplink Dev CD\lib\eclipse\..\bin\Eclipse.lib
+       FinalizeBuildStatus:
+         Deleting file "Unoptimised\Eclipse.unsuccessfulbuild".
+         Touching "Unoptimised\Eclipse.lastbuildstate".
+     1>Done Building Project "C:\Uplink Dev CD\lib\eclipse\Eclipse.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:03.82

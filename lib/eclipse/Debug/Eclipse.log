@@ -1,0 +1,23 @@
+﻿Build started 3/24/2012 10:12:11 AM.
+     1>Project "C:\Uplink Dev CD\lib\eclipse\Eclipse.vcxproj" on node 3 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\Eclipse.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\mmgr /I..\gucci /I..\tosser /I..\common /ZI /nologo /W3 /WX- /Od /Oy- /D USE_SDL /D WIN32 /D _CRT_SECURE_NO_DEPRECATE /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /wd4996 /analyze- /errorReport:prompt animation.cpp button.cpp eclipse.cpp
+         eclipse.cpp
+         button.cpp
+         animation.cpp
+         Generating Code...
+       Lib:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"..\bin\Eclipse.lib" /NOLOGO Debug\animation.obj
+         Debug\button.obj
+         Debug\eclipse.obj
+         Eclipse.vcxproj -> C:\Uplink Dev CD\lib\eclipse\..\bin\Eclipse.lib
+       FinalizeBuildStatus:
+         Deleting file "Debug\Eclipse.unsuccessfulbuild".
+         Touching "Debug\Eclipse.lastbuildstate".
+     1>Done Building Project "C:\Uplink Dev CD\lib\eclipse\Eclipse.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.72

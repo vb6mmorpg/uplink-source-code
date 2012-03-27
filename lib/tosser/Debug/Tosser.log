@@ -1,0 +1,25 @@
+﻿Build started 3/24/2012 10:12:11 AM.
+     1>Project "C:\Uplink Dev CD\lib\tosser\Tosser.vcxproj" on node 6 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\Tosser.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\mmgr /I..\common /ZI /nologo /W3 /WX- /Od /Oy- /D USE_SDL /D WIN32 /D _CRT_SECURE_NO_DEPRECATE /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt btree.cpp darray.cpp llist.cpp
+         llist.cpp
+         darray.cpp
+         btree.cpp
+         Generating Code...
+       Lib:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"Debug\Tosser.lib" /NOLOGO Debug\btree.obj
+         Debug\darray.obj
+         Debug\llist.obj
+     1>darray.obj : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
+     1>btree.obj : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
+         Tosser.vcxproj -> C:\Uplink Dev CD\lib\tosser\Debug\Tosser.lib
+       FinalizeBuildStatus:
+         Deleting file "Debug\Tosser.unsuccessfulbuild".
+         Touching "Debug\Tosser.lastbuildstate".
+     1>Done Building Project "C:\Uplink Dev CD\lib\tosser\Tosser.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.72

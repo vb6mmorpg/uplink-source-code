@@ -1,0 +1,451 @@
+﻿Build started 3/24/2012 10:14:46 AM.
+     1>Project "C:\Uplink Dev CD\uplink\src\Uplink.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Touching "Debug\Uplink.unsuccessfulbuild".
+       ClCompile:
+         All outputs are up-to-date.
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I. /I..\..\lib\mmgr /I..\..\lib\tosser /I..\..\lib\eclipse /I..\..\lib\bungle /I..\..\lib\gucci /I..\..\lib\redshirt /I..\..\lib\soundgarden /I..\..\lib\vanbakel /I..\..\lib\common /I..\..\contrib\tcp4u.331\include /I..\..\contrib\irclib /I..\..\contrib\XCrashReport /I"..\..\contrib\SDL-1.2.11\include" /ZI /nologo /W3 /WX- /Od /Oy- /D USE_SDL /D WIN32 /D _CRT_SECURE_NO_DEPRECATE /D FULLGAME /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /wd4996 /wd4800 /analyze- /errorReport:prompt app\app.cpp app\miscutils.cpp app\opengl.cpp app\opengl_interface.cpp app\serialise.cpp app\uplinkobject.cpp game\data\data.cpp game\game.cpp game\gameobituary.cpp game\scriptlibrary.cpp interface\interface.cpp interface\interfacescreen.cpp interface\localinterface\analyser_interface.cpp interface\localinterface\cheat_interface.cpp interface\localinterface\email_interface.cpp interface\localinterface\evtqueue_interface.cpp interface\localinterface\finance_interface.cpp interface\localinterface\gateway_interface.cpp interface\localinterface\hud_interface.cpp interface\localinterface\hw_interface.cpp interface\localinterface\irc_interface.cpp interface\localinterface\keyboardinterface.cpp interface\localinterface\lan_interface.cpp interface\localinterface\localinterface.cpp interface\localinterface\localinterfacescreen.cpp interface\localinterface\memory_interface.cpp interface\localinterface\mission_interface.cpp interface\localinterface\phonedialler.cpp interface\localinterface\sendmail_interface.cpp interface\localinterface\status_interface.cpp interface\localinterface\sw_interface.cpp interface\localinterface\worldmap\worldmap_interface.cpp interface\localinterface\worldmap\worldmap_layout.cpp interface\remoteinterface\academicscreen_interface.cpp interface\remoteinterface\accountscreen_interface.cpp interface\remoteinterface\bbsscreen_interface.cpp interface\remoteinterface\changegatewayscreen_interface.cpp interface\remoteinterface\codecardscreen_interface.cpp interface\remoteinterface\companyinfoscreen_interface.cpp interface\remoteinterface\consolescreen_interface.cpp interface\remoteinterface\contactscreen_interface.cpp interface\remoteinterface\criminalscreen_interface.cpp interface\remoteinterface\cypherscreen_interface.cpp interface\remoteinterface\dialogscreen_interface.cpp interface\remoteinterface\disconnectedscreen_interface.cpp interface\remoteinterface\faithscreen_interface.cpp interface\remoteinterface\fileserverscreen_interface.cpp interface\remoteinterface\highsecurityscreen_interface.cpp interface\remoteinterface\hwsalesscreen_interface.cpp interface\remoteinterface\linksscreen_interface.cpp interface\remoteinterface\loansscreen_interface.cpp interface\remoteinterface\logscreen_interface.cpp interface\remoteinterface\menuscreen_interface.cpp interface\remoteinterface\messagescreen_interface.cpp interface\remoteinterface\nearestgatewayscreen_interface.cpp interface\remoteinterface\newsscreen_interface.cpp interface\remoteinterface\nuclearwarscreen_interface.cpp interface\remoteinterface\passwordscreen_interface.cpp interface\remoteinterface\protovisionscreen_interface.cpp interface\remoteinterface\radiotransmitterscreen_interface.cpp interface\remoteinterface\rankingscreen_interface.cpp interface\remoteinterface\recordscreen_interface.cpp interface\remoteinterface\remoteinterface.cpp interface\remoteinterface\remoteinterfacescreen.cpp interface\remoteinterface\securityscreen_interface.cpp interface\remoteinterface\shareslistscreen_interface.cpp interface\remoteinterface\sharesviewscreen_interface.cpp interface\remoteinterface\socialsecurityscreen_interface.cpp interface\remoteinterface\swsalesscreen_interface.cpp interface\remoteinterface\useridscreen_interface.cpp interface\remoteinterface\voiceanalysisscreen_interface.cpp interface\remoteinterface\voicephonescreen_interface.cpp interface\scrollbox.cpp interface\taskmanager\decrypter.cpp interface\taskmanager\decypher.cpp interface\taskmanager\defrag.cpp interface\taskmanager\dictionaryhacker.cpp interface\taskmanager\faith.cpp interface\taskmanager\filecopier.cpp interface\taskmanager\filedeleter.cpp interface\taskmanager\firewalldisable.cpp interface\taskmanager\gatewaynuke.cpp interface\taskmanager\iplookup.cpp interface\taskmanager\ipprobe.cpp interface\taskmanager\lanforce.cpp interface\taskmanager\lanprobe.cpp interface\taskmanager\lanscan.cpp interface\taskmanager\lanspoof.cpp interface\taskmanager\logdeleter.cpp interface\taskmanager\logmodifier.cpp interface\taskmanager\logundeleter.cpp interface\taskmanager\motionsensor.cpp interface\taskmanager\passwordbreaker.cpp interface\taskmanager\proxydisable.cpp interface\taskmanager\revelation.cpp interface\taskmanager\revelationtracker.cpp interface\taskmanager\securitybypass.cpp interface\taskmanager\taskmanager.cpp interface\taskmanager\tracetracker.cpp interface\taskmanager\tutorial.cpp interface\taskmanager\uplinkagentlist.cpp interface\taskmanager\voiceanalyser.cpp mainmenu\closing_interface.cpp mainmenu\connectionlost_interface.cpp mainmenu\demogameover_interface.cpp mainmenu\disavowed_interface.cpp mainmenu\firsttimeloading_interface.cpp mainmenu\genericoptions_interface.cpp mainmenu\graphicoptions_interface.cpp mainmenu\loading_interface.cpp mainmenu\login_interface.cpp mainmenu\mainmenu.cpp mainmenu\mainmenuscreen.cpp mainmenu\networkoptions_interface.cpp mainmenu\obituary_interface.cpp mainmenu\options_interface.cpp mainmenu\revelationlost_interface.cpp mainmenu\revelationwon_interface.cpp mainmenu\theme_interface.cpp mainmenu\theteam_interface.cpp mainmenu\warezgameover_interface.cpp network\clientconnection.cpp network\interfaces\clientcommsinterface.cpp network\interfaces\clientstatusinterface.cpp network\network.cpp network\networkclient.cpp network\networkserver.cpp options\options.cpp uplink.cpp view\view.cpp world\agent.cpp world\company\company.cpp world\company\companyuplink.cpp world\company\mission.cpp world\company\news.cpp world\company\sale.cpp world\computer\bankaccount.cpp world\computer\bankcomputer.cpp world\computer\computer.cpp world\computer\computerscreen\computerscreen.cpp world\computer\computerscreen\dialogscreen.cpp world\computer\computerscreen\disconnectedscreen.cpp world\computer\computerscreen\logscreen.cpp world\computer\computerscreen\menuscreen.cpp world\computer\computerscreen\messagescreen.cpp world\computer\computerscreen\passwordscreen.cpp world\computer\databank.cpp world\computer\gateway.cpp world\computer\gatewaydef.cpp world\computer\lancomputer.cpp world\computer\lanmonitor.cpp world\computer\logbank.cpp world\computer\recordbank.cpp world\computer\securitymonitor.cpp world\connection.cpp world\date.cpp world\generator\consequencegenerator.cpp world\generator\demoplotgenerator.cpp world\generator\langenerator.cpp world\generator\missiongenerator.cpp world\generator\namegenerator.cpp world\generator\newsgenerator.cpp world\generator\plotgenerator.cpp world\generator\recordgenerator.cpp world\generator\worldgenerator.cpp world\message.cpp world\person.cpp world\player.cpp world\rating.cpp world\scheduler\arrestevent.cpp world\scheduler\attemptmissionevent.cpp world\scheduler\bankrobberyevent.cpp world\scheduler\changegatewayevent.cpp world\scheduler\eventscheduler.cpp world\scheduler\installhardwareevent.cpp world\scheduler\notificationevent.cpp world\scheduler\runplotsceneevent.cpp world\scheduler\seizegatewayevent.cpp world\scheduler\shotbyfedsevent.cpp world\scheduler\uplinkevent.cpp world\scheduler\warningevent.cpp world\vlocation.cpp world\world.cpp
+         worldmap_interface.cpp
+         Generating Code...
+         Compiling...
+         world.cpp
+         vlocation.cpp
+         warningevent.cpp
+         uplinkevent.cpp
+         shotbyfedsevent.cpp
+         seizegatewayevent.cpp
+         runplotsceneevent.cpp
+         notificationevent.cpp
+         installhardwareevent.cpp
+         eventscheduler.cpp
+         changegatewayevent.cpp
+         bankrobberyevent.cpp
+         attemptmissionevent.cpp
+         arrestevent.cpp
+         rating.cpp
+         player.cpp
+         person.cpp
+         message.cpp
+         worldgenerator.cpp
+         recordgenerator.cpp
+         Generating Code...
+         Compiling...
+         plotgenerator.cpp
+         newsgenerator.cpp
+         namegenerator.cpp
+         missiongenerator.cpp
+         langenerator.cpp
+         demoplotgenerator.cpp
+         consequencegenerator.cpp
+         date.cpp
+         connection.cpp
+         securitymonitor.cpp
+         recordbank.cpp
+         logbank.cpp
+         lanmonitor.cpp
+         lancomputer.cpp
+         gatewaydef.cpp
+         gateway.cpp
+         databank.cpp
+         passwordscreen.cpp
+         messagescreen.cpp
+         menuscreen.cpp
+         Generating Code...
+         Compiling...
+         logscreen.cpp
+         disconnectedscreen.cpp
+         dialogscreen.cpp
+         computerscreen.cpp
+         computer.cpp
+         bankcomputer.cpp
+         bankaccount.cpp
+         sale.cpp
+         news.cpp
+         mission.cpp
+         companyuplink.cpp
+         company.cpp
+         agent.cpp
+         view.cpp
+         uplink.cpp
+         options.cpp
+         networkserver.cpp
+         networkclient.cpp
+         network.cpp
+         clientstatusinterface.cpp
+         Generating Code...
+         Compiling...
+         clientcommsinterface.cpp
+         clientconnection.cpp
+         warezgameover_interface.cpp
+         theteam_interface.cpp
+         theme_interface.cpp
+         revelationwon_interface.cpp
+         revelationlost_interface.cpp
+         options_interface.cpp
+         obituary_interface.cpp
+         networkoptions_interface.cpp
+         mainmenuscreen.cpp
+         mainmenu.cpp
+         login_interface.cpp
+         loading_interface.cpp
+         graphicoptions_interface.cpp
+         genericoptions_interface.cpp
+         firsttimeloading_interface.cpp
+         disavowed_interface.cpp
+         demogameover_interface.cpp
+         connectionlost_interface.cpp
+         Generating Code...
+         Compiling...
+         closing_interface.cpp
+         voiceanalyser.cpp
+         uplinkagentlist.cpp
+         tutorial.cpp
+         tracetracker.cpp
+         taskmanager.cpp
+         securitybypass.cpp
+         revelationtracker.cpp
+         revelation.cpp
+         proxydisable.cpp
+         passwordbreaker.cpp
+         motionsensor.cpp
+         logundeleter.cpp
+         logmodifier.cpp
+         logdeleter.cpp
+         lanspoof.cpp
+         lanscan.cpp
+         lanprobe.cpp
+         lanforce.cpp
+         ipprobe.cpp
+         Generating Code...
+         Compiling...
+         iplookup.cpp
+         gatewaynuke.cpp
+         firewalldisable.cpp
+         filedeleter.cpp
+         filecopier.cpp
+         faith.cpp
+         dictionaryhacker.cpp
+         defrag.cpp
+         decypher.cpp
+         decrypter.cpp
+         scrollbox.cpp
+         voicephonescreen_interface.cpp
+         voiceanalysisscreen_interface.cpp
+         useridscreen_interface.cpp
+         swsalesscreen_interface.cpp
+         socialsecurityscreen_interface.cpp
+         sharesviewscreen_interface.cpp
+         shareslistscreen_interface.cpp
+         securityscreen_interface.cpp
+         remoteinterfacescreen.cpp
+         Generating Code...
+         Compiling...
+         remoteinterface.cpp
+         recordscreen_interface.cpp
+         rankingscreen_interface.cpp
+         radiotransmitterscreen_interface.cpp
+         protovisionscreen_interface.cpp
+         passwordscreen_interface.cpp
+         nuclearwarscreen_interface.cpp
+         newsscreen_interface.cpp
+         nearestgatewayscreen_interface.cpp
+         messagescreen_interface.cpp
+         menuscreen_interface.cpp
+         logscreen_interface.cpp
+         loansscreen_interface.cpp
+         linksscreen_interface.cpp
+         hwsalesscreen_interface.cpp
+         highsecurityscreen_interface.cpp
+         fileserverscreen_interface.cpp
+         faithscreen_interface.cpp
+         disconnectedscreen_interface.cpp
+         dialogscreen_interface.cpp
+         Generating Code...
+         Compiling...
+         cypherscreen_interface.cpp
+         criminalscreen_interface.cpp
+         contactscreen_interface.cpp
+         consolescreen_interface.cpp
+         companyinfoscreen_interface.cpp
+         codecardscreen_interface.cpp
+         changegatewayscreen_interface.cpp
+         bbsscreen_interface.cpp
+         accountscreen_interface.cpp
+         academicscreen_interface.cpp
+         worldmap_layout.cpp
+         sw_interface.cpp
+         status_interface.cpp
+         sendmail_interface.cpp
+         phonedialler.cpp
+         mission_interface.cpp
+         memory_interface.cpp
+         localinterfacescreen.cpp
+         localinterface.cpp
+         lan_interface.cpp
+         Generating Code...
+         Compiling...
+         keyboardinterface.cpp
+         irc_interface.cpp
+         hw_interface.cpp
+         hud_interface.cpp
+         gateway_interface.cpp
+         finance_interface.cpp
+         evtqueue_interface.cpp
+         email_interface.cpp
+         cheat_interface.cpp
+         analyser_interface.cpp
+         interfacescreen.cpp
+         interface.cpp
+         scriptlibrary.cpp
+         gameobituary.cpp
+         game.cpp
+         data.cpp
+         uplinkobject.cpp
+         serialise.cpp
+         opengl_interface.cpp
+         opengl.cpp
+         Generating Code...
+         Compiling...
+         miscutils.cpp
+         app.cpp
+         Generating Code...
+         All outputs are up-to-date.
+       ResourceCompile:
+         All outputs are up-to-date.
+       ManifestResourceCompile:
+         All outputs are up-to-date.
+       Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"..\bin\Uplink.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\..\lib\bin /LIBPATH:..\..\contrib\bin /LIBPATH:..\..\contrib\tcp4u.331\tcp4w32 /LIBPATH:"..\..\contrib\tiff-3.7.2\libtiff" /LIBPATH:"..\..\contrib\gltt-2.5" /LIBPATH:"..\..\contrib\freetype-1.3.1" /LIBPATH:"..\..\contrib\SDL-1.2.11_dev\VisualC\SDL\Release" /LIBPATH:"..\..\contrib\SDL_mixer-1.2.7_patched\VisualC\Release" bungle.lib eclipse.lib gucci.lib redshirt.lib soundgarden.lib vanbakel.lib irclib.lib sdl.lib SDL_mixer.lib tcp4w32.lib libtiff.lib gltt.lib freetype.lib dbghelp.lib opengl32.lib glu32.lib winmm.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB:libcd.lib /NODEFAULTLIB:libc.lib /MANIFEST /ManifestFile:"Debug\Uplink.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Uplink Dev CD\uplink\bin\Uplink.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\bin\Uplink.lib" /MACHINE:X86 Debug\resources.res
+         Debug\Uplink.exe.embed.manifest.res
+         Debug\academicscreen_interface.obj
+         Debug\accountscreen_interface.obj
+         Debug\agent.obj
+         Debug\analyser_interface.obj
+         Debug\app.obj
+         Debug\arrestevent.obj
+         Debug\attemptmissionevent.obj
+         Debug\bankaccount.obj
+         Debug\bankcomputer.obj
+         Debug\bankrobberyevent.obj
+         Debug\bbsscreen.obj
+         Debug\bbsscreen_interface.obj
+         Debug\binreloc.obj
+         Debug\changegatewayevent.obj
+         Debug\changegatewayscreen_interface.obj
+         Debug\cheat_interface.obj
+         Debug\clientcommsinterface.obj
+         Debug\clientconnection.obj
+         Debug\clientstatusinterface.obj
+         Debug\closing_interface.obj
+         Debug\codecardscreen_interface.obj
+         Debug\company.obj
+         Debug\companyinfoscreen_interface.obj
+         Debug\companyuplink.obj
+         Debug\computer.obj
+         Debug\computerscreen.obj
+         Debug\connection.obj
+         Debug\connectionlost_interface.obj
+         Debug\consequencegenerator.obj
+         Debug\consolescreen_interface.obj
+         Debug\contactscreen_interface.obj
+         Debug\criminalscreen_interface.obj
+         Debug\cypherscreen.obj
+         Debug\cypherscreen_interface.obj
+         Debug\data.obj
+         Debug\databank.obj
+         Debug\date.obj
+         Debug\decode.obj
+         Debug\decrypter.obj
+         Debug\decypher.obj
+         Debug\defrag.obj
+         Debug\demogameover_interface.obj
+         Debug\demoplotgenerator.obj
+         Debug\dialogscreen.obj
+         Debug\dialogscreen_interface.obj
+         Debug\dictionaryhacker.obj
+         Debug\disavowed_interface.obj
+         Debug\disconnectedscreen.obj
+         Debug\disconnectedscreen_interface.obj
+         Debug\dos2unix.obj
+         Debug\email_interface.obj
+         Debug\eventscheduler.obj
+         Debug\evtqueue_interface.obj
+         Debug\ExceptionHandler.obj
+         Debug\faith.obj
+         Debug\faithscreen_interface.obj
+         Debug\filecopier.obj
+         Debug\filedeleter.obj
+         Debug\fileserverscreen_interface.obj
+         Debug\finance_interface.obj
+         Debug\firewalldisable.obj
+         Debug\firsttimeloading_interface.obj
+         Debug\fps.obj
+         Debug\game.obj
+         Debug\gameobituary.obj
+         Debug\gateway.obj
+         Debug\gateway_interface.obj
+         Debug\gatewaydef.obj
+         Debug\gatewaynuke.obj
+         Debug\genericoptions_interface.obj
+         Debug\genericscreen.obj
+         Debug\GetWinVer.obj
+         Debug\graphicoptions_interface.obj
+         Debug\highsecurityscreen.obj
+         Debug\highsecurityscreen_interface.obj
+         Debug\hud_interface.obj
+         Debug\hw_interface.obj
+         Debug\hwsalesscreen_interface.obj
+         Debug\installhardwareevent.obj
+         Debug\interface.obj
+         Debug\interfacescreen.obj
+         Debug\iplookup.obj
+         Debug\ipprobe.obj
+         Debug\irc_interface.obj
+         Debug\keyboardinterface.obj
+         Debug\lan_interface.obj
+         Debug\lancomputer.obj
+         Debug\lanforce.obj
+         Debug\langenerator.obj
+         Debug\lanmonitor.obj
+         Debug\lanprobe.obj
+         Debug\lanscan.obj
+         Debug\lanspoof.obj
+         Debug\linksscreen.obj
+         Debug\linksscreen_interface.obj
+         Debug\loading_interface.obj
+         Debug\loansscreen_interface.obj
+         Debug\localinterface.obj
+         Debug\localinterfacescreen.obj
+         Debug\logbank.obj
+         Debug\logdeleter.obj
+         Debug\login_interface.obj
+         Debug\logmodifier.obj
+         Debug\logscreen.obj
+         Debug\logscreen_interface.obj
+         Debug\logundeleter.obj
+         Debug\mainmenu.obj
+         Debug\mainmenuscreen.obj
+         Debug\memory_interface.obj
+         Debug\menuscreen.obj
+         Debug\menuscreen_interface.obj
+         Debug\message.obj
+         Debug\messagescreen.obj
+         Debug\messagescreen_interface.obj
+         Debug\MiniVersion.obj
+         Debug\miscutils.obj
+         Debug\mission.obj
+         Debug\mission_interface.obj
+         Debug\missiongenerator.obj
+         Debug\motionsensor.obj
+         Debug\namegenerator.obj
+         Debug\nearestgatewayscreen_interface.obj
+         Debug\network.obj
+         Debug\networkclient.obj
+         Debug\networkoptions_interface.obj
+         Debug\networkscreen.obj
+         Debug\networkserver.obj
+         Debug\news.obj
+         Debug\newsgenerator.obj
+         Debug\newsscreen_interface.obj
+         Debug\notificationevent.obj
+         Debug\nuclearwarscreen_interface.obj
+         Debug\numbergenerator.obj
+         Debug\obituary_interface.obj
+         Debug\opengl.obj
+         Debug\opengl_interface.obj
+         Debug\options.obj
+         Debug\options_interface.obj
+         Debug\passwordbreaker.obj
+         Debug\passwordscreen.obj
+         Debug\passwordscreen_interface.obj
+         Debug\person.obj
+         Debug\phonedialler.obj
+         Debug\player.obj
+         Debug\plotgenerator.obj
+         Debug\probability.obj
+         Debug\protovisionscreen_interface.obj
+         Debug\proxydisable.obj
+         Debug\radiotransmitterscreen_interface.obj
+         Debug\rankingscreen_interface.obj
+         Debug\rating.obj
+         Debug\recordbank.obj
+         Debug\recordgenerator.obj
+         Debug\recordscreen_interface.obj
+         Debug\remoteinterface.obj
+         Debug\remoteinterfacescreen.obj
+         Debug\resizex.obj
+         Debug\revelation.obj
+         Debug\revelationlost_interface.obj
+         Debug\revelationtracker.obj
+         Debug\revelationwon_interface.obj
+         Debug\runplotsceneevent.obj
+         Debug\sale.obj
+         Debug\scriptlibrary.obj
+         Debug\scrollbox.obj
+         Debug\security.obj
+         Debug\securitybypass.obj
+         Debug\securitymonitor.obj
+         Debug\securityscreen_interface.obj
+         Debug\securitysystem.obj
+         Debug\seizegatewayevent.obj
+         Debug\sendmail_interface.obj
+         Debug\serialise.obj
+         Debug\shareslistscreen.obj
+         Debug\shareslistscreen_interface.obj
+         Debug\sharesviewscreen_interface.obj
+         Debug\shotbyfedsevent.obj
+         Debug\socialsecurityscreen_interface.obj
+         Debug\status_interface.obj
+         Debug\stdafx.obj
+         Debug\sw_interface.obj
+         Debug\swsalesscreen_interface.obj
+         Debug\taskmanager.obj
+         Debug\template_interface.obj
+         Debug\theme_interface.obj
+         Debug\theteam_interface.obj
+         Debug\tracetracker.obj
+         Debug\tutorial.obj
+         Debug\uplink.obj
+         Debug\uplinkagentlist.obj
+         Debug\uplinkevent.obj
+         Debug\uplinkobject.obj
+         Debug\uplinktask.obj
+         Debug\useridscreen.obj
+         Debug\useridscreen_interface.obj
+         Debug\version.obj
+         Debug\view.obj
+         Debug\vlocation.obj
+         Debug\voiceanalyser.obj
+         Debug\voiceanalysisscreen_interface.obj
+         Debug\voicephonescreen_interface.obj
+         Debug\warezgameover_interface.obj
+         Debug\warningevent.obj
+         Debug\world.obj
+         Debug\worldgenerator.obj
+         Debug\worldmap_interface.obj
+         Debug\worldmap_layout.obj
+         "C:\Uplink Dev CD\contrib\bin\IRCLib.lib"
+         "C:\Uplink Dev CD\lib\bin\Bungle.lib"
+         "C:\Uplink Dev CD\lib\bin\Eclipse.lib"
+         "C:\Uplink Dev CD\lib\bin\Gucci.lib"
+         "C:\Uplink Dev CD\lib\bin\mmgr.lib"
+         "C:\Uplink Dev CD\lib\bin\Redshirt.lib"
+         "C:\Uplink Dev CD\lib\bin\Soundgarden.lib"
+         "C:\Uplink Dev CD\lib\tosser\Debug\Tosser.lib"
+         "C:\Uplink Dev CD\lib\bin\Vanbakel.lib"
+     1>LIBCMT.lib(invarg.obj) : error LNK2005: __initp_misc_invarg already defined in LIBCMTD.lib(invarg.obj)
+     1>LIBCMT.lib(invarg.obj) : error LNK2005: __call_reportfault already defined in LIBCMTD.lib(invarg.obj)
+     1>LIBCMT.lib(invarg.obj) : error LNK2005: __set_invalid_parameter_handler already defined in LIBCMTD.lib(invarg.obj)
+     1>LIBCMT.lib(invarg.obj) : error LNK2005: __get_invalid_parameter_handler already defined in LIBCMTD.lib(invarg.obj)
+     1>LIBCMT.lib(invarg.obj) : error LNK2005: __invoke_watson already defined in LIBCMTD.lib(invarg.obj)
+     1>LIBCMT.lib(invarg.obj) : error LNK2005: "void __cdecl _invoke_watson(unsigned short const *,unsigned short const *,unsigned short const *,unsigned int,unsigned int)" (?_invoke_watson@@YAXPBG00II@Z) already defined in LIBCMTD.lib(invarg.obj)
+     1>LIBCMT.lib(invarg.obj) : error LNK2005: __invalid_parameter already defined in LIBCMTD.lib(invarg.obj)
+     1>LIBCMT.lib(invarg.obj) : error LNK2005: "void __cdecl _invalid_parameter(unsigned short const *,unsigned short const *,unsigned short const *,unsigned int,unsigned int)" (?_invalid_parameter@@YAXPBG00II@Z) already defined in LIBCMTD.lib(invarg.obj)
+     1>LIBCMT.lib(invarg.obj) : error LNK2005: ___pInvalidArgHandler already defined in LIBCMTD.lib(invarg.obj)
+     1>LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
+     1>..\bin\Uplink.exe : fatal error LNK1169: one or more multiply defined symbols found
+     1>Done Building Project "C:\Uplink Dev CD\uplink\src\Uplink.vcxproj" (build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:01:54.80

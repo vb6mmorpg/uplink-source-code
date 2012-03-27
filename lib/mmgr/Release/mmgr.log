@@ -1,0 +1,18 @@
+﻿Build started 3/24/2012 10:17:08 AM.
+     1>Project "C:\Uplink Dev CD\lib\mmgr\mmgr.vcxproj" on node 4 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Release\mmgr.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oy- /D WIN32 /D NDEBUG /D _WINDOWS /Gm- /EHsc /MT /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /wd4996 /analyze- /errorReport:prompt mmgr.cpp
+         mmgr.cpp
+       Lib:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"..\bin\mmgr.lib" /NOLOGO Release\mmgr.obj
+         mmgr.vcxproj -> C:\Uplink Dev CD\lib\mmgr\..\bin\mmgr.lib
+       FinalizeBuildStatus:
+         Deleting file "Release\mmgr.unsuccessfulbuild".
+         Touching "Release\mmgr.lastbuildstate".
+     1>Done Building Project "C:\Uplink Dev CD\lib\mmgr\mmgr.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.41

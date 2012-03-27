@@ -1,0 +1,18 @@
+﻿Build started 3/24/2012 10:17:09 AM.
+     1>Project "C:\Uplink Dev CD\lib\bungle\Bungle.vcxproj" on node 6 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Unoptimised\Bungle.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\tosser /I..\common /I..\mmgr /Zi /nologo /W3 /WX- /Od /Oy- /D USE_SDL /D WIN32 /D _CRT_SECURE_NO_DEPRECATE /Gm- /EHsc /MT /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Unoptimised\\" /Fd"Unoptimised\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt bungle.cpp
+         bungle.cpp
+       Lib:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"..\bin\Bungle.lib" /NOLOGO Unoptimised\bungle.obj
+         Bungle.vcxproj -> C:\Uplink Dev CD\lib\bungle\..\bin\Bungle.lib
+       FinalizeBuildStatus:
+         Deleting file "Unoptimised\Bungle.unsuccessfulbuild".
+         Touching "Unoptimised\Bungle.lastbuildstate".
+     1>Done Building Project "C:\Uplink Dev CD\lib\bungle\Bungle.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.92

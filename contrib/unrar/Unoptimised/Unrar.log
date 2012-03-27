@@ -1,0 +1,110 @@
+﻿Build started 3/24/2012 10:17:08 AM.
+     1>Project "C:\Uplink Dev CD\contrib\unrar\Unrar.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Unoptimised\Unrar.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Ilib /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D NDEBUG /D _LIB /D _VC80_UPGRADE=0x0600 /D _MBCS /GF- /Gm- /EHsc /MT /GS /Gy- /fp:precise /Zc:wchar_t /Zc:forScope /Fo".\Release/" /Fd".\Release/vc100.pdb" /Gd /TP /wd4996 /wd4018 /wd4146 /wd4244 /analyze- /errorReport:prompt archive.cpp arcread.cpp cmddata.cpp consio.cpp crc.cpp crypt.cpp encname.cpp errhnd.cpp extinfo.cpp extract.cpp filcreat.cpp file.cpp filefn.cpp filestr.cpp find.cpp getbits.cpp global.cpp int64.cpp isnt.cpp list.cpp match.cpp options.cpp pathfn.cpp rarbloat.cpp rarresource.cpp rarvm.cpp rarvmtbl.cpp rawread.cpp rdwrfn.cpp recvol.cpp rijndael.cpp rs.cpp savepos.cpp scantree.cpp sha1.cpp strfn.cpp strlist.cpp system.cpp timefn.cpp ulinks.cpp unicode.cpp unpack.cpp unrar.cpp volume.cpp
+         archive.cpp
+         arcread.cpp
+         cmddata.cpp
+         consio.cpp
+         crc.cpp
+         crypt.cpp
+         encname.cpp
+         errhnd.cpp
+         extinfo.cpp
+         extract.cpp
+         filcreat.cpp
+         file.cpp
+         filefn.cpp
+         filestr.cpp
+         find.cpp
+         getbits.cpp
+         global.cpp
+         int64.cpp
+         isnt.cpp
+         list.cpp
+         Generating Code...
+         Compiling...
+         match.cpp
+         options.cpp
+         pathfn.cpp
+         rarbloat.cpp
+         rarresource.cpp
+         rarvm.cpp
+         rarvmtbl.cpp
+         rawread.cpp
+         rdwrfn.cpp
+         recvol.cpp
+         rijndael.cpp
+         rs.cpp
+         savepos.cpp
+         scantree.cpp
+         sha1.cpp
+         strfn.cpp
+         strlist.cpp
+         system.cpp
+         timefn.cpp
+         ulinks.cpp
+         Generating Code...
+         Compiling...
+         unicode.cpp
+         unpack.cpp
+         unrar.cpp
+         volume.cpp
+         Generating Code...
+       Lib:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"..\bin\unrar.lib" /NOLOGO .\Release/archive.obj
+         .\Release/arcread.obj
+         .\Release/cmddata.obj
+         .\Release/consio.obj
+         .\Release/crc.obj
+         .\Release/crypt.obj
+         .\Release/encname.obj
+         .\Release/errhnd.obj
+         .\Release/extinfo.obj
+         .\Release/extract.obj
+         .\Release/filcreat.obj
+         .\Release/file.obj
+         .\Release/filefn.obj
+         .\Release/filestr.obj
+         .\Release/find.obj
+         .\Release/getbits.obj
+         .\Release/global.obj
+         .\Release/int64.obj
+         .\Release/isnt.obj
+         .\Release/list.obj
+         .\Release/match.obj
+         .\Release/options.obj
+         .\Release/pathfn.obj
+         .\Release/rarbloat.obj
+         .\Release/rarresource.obj
+         .\Release/rarvm.obj
+         .\Release/rarvmtbl.obj
+         .\Release/rawread.obj
+         .\Release/rdwrfn.obj
+         .\Release/recvol.obj
+         .\Release/rijndael.obj
+         .\Release/rs.obj
+         .\Release/savepos.obj
+         .\Release/scantree.obj
+         .\Release/sha1.obj
+         .\Release/strfn.obj
+         .\Release/strlist.obj
+         .\Release/system.obj
+         .\Release/timefn.obj
+         .\Release/ulinks.obj
+         .\Release/unicode.obj
+         .\Release/unpack.obj
+         .\Release/unrar.obj
+         .\Release/volume.obj
+     1>rarvmtbl.obj : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
+         Unrar.vcxproj -> C:\Uplink Dev CD\contrib\unrar\..\bin\Unrar.lib
+       FinalizeBuildStatus:
+         Deleting file "Unoptimised\Unrar.unsuccessfulbuild".
+         Touching "Unoptimised\Unrar.lastbuildstate".
+     1>Done Building Project "C:\Uplink Dev CD\contrib\unrar\Unrar.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:10.20

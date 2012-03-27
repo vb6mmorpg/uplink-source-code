@@ -81,6 +81,7 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='DemoDebug|Win32'">$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='DemoDebug|Win32'">true</LinkIncremental>
     <EmbedManifest Condition="'$(Configuration)|$(Platform)'=='DemoDebug|Win32'">true</EmbedManifest>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Unoptimised|Win32'">C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include\mfc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <CustomBuildStep>

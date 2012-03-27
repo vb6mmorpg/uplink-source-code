@@ -1,0 +1,22 @@
+﻿Build started 3/24/2012 10:17:18 AM.
+     1>Project "C:\Uplink Dev CD\lib\redshirt\Redshirt.vcxproj" on node 5 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Unoptimised\Redshirt.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\bungle /I..\tosser /I..\mmgr /I..\..\contrib /Zi /nologo /W3 /WX- /Od /Oy- /D USE_SDL /D WIN32 /D _CRT_SECURE_NO_DEPRECATE /Gm- /EHsc /MT /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Unoptimised\\" /Fd"Unoptimised\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt hash.cpp redshirt.cpp
+         hash.cpp
+         redshirt.cpp
+         Generating Code...
+       Lib:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"..\bin\Redshirt.lib" unrar.lib /LIBPATH:..\..\contrib\bin /NOLOGO Unoptimised\hash.obj
+         Unoptimised\redshirt.obj
+     1>unrar.lib(rarvmtbl.obj) : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
+         Redshirt.vcxproj -> C:\Uplink Dev CD\lib\redshirt\..\bin\Redshirt.lib
+       FinalizeBuildStatus:
+         Deleting file "Unoptimised\Redshirt.unsuccessfulbuild".
+         Touching "Unoptimised\Redshirt.lastbuildstate".
+     1>Done Building Project "C:\Uplink Dev CD\lib\redshirt\Redshirt.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.67

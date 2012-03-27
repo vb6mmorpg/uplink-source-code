@@ -1,0 +1,18 @@
+﻿Build started 3/24/2012 10:12:12 AM.
+     1>Project "C:\Uplink Dev CD\lib\bungle\Bungle.vcxproj" on node 6 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\Bungle.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\mmgr /I..\tosser /I..\common /ZI /nologo /W3 /WX- /Od /Oy- /D USE_SDL /D WIN32 /D _CRT_SECURE_NO_DEPRECATE /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /wd4996 /analyze- /errorReport:prompt bungle.cpp
+         bungle.cpp
+       Lib:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"..\bin\Bungle.lib" /NOLOGO Debug\bungle.obj
+         Bungle.vcxproj -> C:\Uplink Dev CD\lib\bungle\..\bin\Bungle.lib
+       FinalizeBuildStatus:
+         Deleting file "Debug\Bungle.unsuccessfulbuild".
+         Touching "Debug\Bungle.lastbuildstate".
+     1>Done Building Project "C:\Uplink Dev CD\lib\bungle\Bungle.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.93
