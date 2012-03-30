@@ -32,6 +32,7 @@
 
 #include "world/world.h"
 #include "world/player.h"
+#include "world/agent.h"
 #include "world/computer/computer.h"
 #include "world/computer/logbank.h"
 #include "world/computer/recordbank.h"
@@ -300,11 +301,180 @@ void UserIDScreenInterface::CodeButtonClick ( Button *button )
 
 }
 
+void UserIDScreenInterface::DeleteCodeClick ( Button *button )
+{
+
+	UplinkAssert ( button );
+
+	RemoteInterfaceScreen *ris = game->GetInterface ()->GetRemoteInterface ()->GetInterfaceScreen ();
+	UplinkAssert (ris);
+	UserIDScreenInterface *uid = (UserIDScreenInterface *) ris;
+	Computer *comp = uid->GetComputerScreen ()->GetComputer ();
+	UplinkAssert (comp);
+
+	int currentcode = 0;
+	sscanf ( button->name, "useridscreen_deletecode %d", &currentcode );
+
+	char name [64];
+	UplinkSnprintf ( name, sizeof ( name ), "useridscreen_code %d", currentcode );
+
+	Button *buttonCode = EclGetButton ( name );
+
+	if ( buttonCode ) {
+
+		bool firstime = true;
+
+		BTree <char *> *treeCode = NULL;
+
+		do {
+
+			if ( firstime ) {
+				firstime = false;
+				treeCode = game->GetWorld ()->GetPlayer ()->codes.LookupTree ( comp->ip );
+			} else if ( treeCode ){
+				if ( treeCode->Left () )
+					treeCode = treeCode->Left ()->LookupTree ( comp->ip );
+				else
+					treeCode = NULL;
+			}
+
+			if ( treeCode ) {
+
+				char *code = treeCode->data;
+
+				if ( !code )
+					continue;
+
+				if ( strcmp( code, buttonCode->caption ) != 0 )
+					continue;
+
+				// Parse the access code for this IP
+
+				char username [256];
+				char password [256];
+				if ( !Agent::ParseAccessCode ( code, username, sizeof ( username ), password, sizeof ( password ) ) ||
+					 !comp->recordbank.GetRecordFromNamePassword ( username, password ) ) {
+					
+					// This code is obsolete, remove it
+
+					game->GetWorld ()->GetPlayer ()->codes.RemoveData ( comp->ip, code );
+					delete [] code;
+
+				}
+				
+				break;
+
+			}
+
+		} while ( treeCode );
+
+	}
+
+	// The code may be deleted, not obsolete anymore, not found
+	// Create Known Access Codes anew
+
+	uid->RemoveKnownAccessCodes();
+	uid->CreateKnownAccessCodes();
+
+}
+
 bool UserIDScreenInterface::ReturnKeyPressed ()
 {
 
 	ProceedClick ( NULL );
 	return true;
+
+}
+
+void UserIDScreenInterface::CreateKnownAccessCodes ()
+{
+
+	// Create the box that will show the currently known codes for this screen
+
+	UplinkAssert ( cs->GetComputer () );
+
+	if ( game->GetWorld ()->GetPlayer ()->codes.LookupTree ( cs->GetComputer ()->ip ) ) {
+
+		DArray <char *> *codes = game->GetWorld ()->GetPlayer ()->codes.ConvertToDArray ();
+		DArray <char *> *ips   = game->GetWorld ()->GetPlayer ()->codes.ConvertIndexToDArray ();
+
+		EclRegisterButton ( 200, 310, 250, 15, "Known Access Codes", "", "useridscreen_codestitle" );
+		EclRegisterButtonCallbacks ( "useridscreen_codestitle", textbutton_draw, NULL, NULL, NULL );
+
+		int currentcode = 0;
+
+		Image *iclose_tif = get_assignbitmap ( "close.tif" );
+		Image *iclose_h_tif = get_assignbitmap ( "close_h.tif" );
+		Image *iclose_c_tif = get_assignbitmap ( "close_c.tif" );
+
+		for ( int i = 0; i < codes->Size (); ++i ) {
+			if ( codes->ValidIndex (i) && ips->ValidIndex (i) ) {
+				if ( strcmp ( ips->GetData (i), cs->GetComputer ()->ip ) == 0 ) {
+
+					char name [64];
+					UplinkSnprintf ( name, sizeof ( name ), "useridscreen_code %d", currentcode );
+					EclRegisterButton ( 200, 330 + currentcode*15, 230, 15, codes->GetData (i), "Use this code", name );
+					EclRegisterButtonCallbacks ( name, textbutton_draw, AccessCodeClick, button_click, button_highlight );
+
+					// Give the player the option to delete obsolete codes
+					// Only obsolete codes, less chance to break the game (codes are used in Agent::HasAccount)
+
+					char username [256];
+					char password [256];
+					if ( !Agent::ParseAccessCode ( codes->GetData (i), username, sizeof ( username ), password, sizeof ( password ) ) ||
+					     !cs->GetComputer ()->recordbank.GetRecordFromNamePassword ( username, password ) ) {
+
+						UplinkSnprintf ( name, sizeof ( name ), "useridscreen_deletecode %d", currentcode );
+						EclRegisterButton ( 200 + 230 + 2, 330 + currentcode*15, 13, 13, "", "Delete this obsolete code", name );
+						button_assignbitmaps ( name, iclose_tif, iclose_h_tif, iclose_c_tif );
+						EclRegisterButtonCallbacks ( name, imagebutton_draw, DeleteCodeClick, button_click, button_highlight );
+
+					}
+
+					++currentcode;
+
+				}
+			}
+		}
+
+		if ( iclose_tif )
+			delete iclose_tif;
+		if ( iclose_h_tif )
+			delete iclose_h_tif;
+		if ( iclose_c_tif )
+			delete iclose_c_tif;
+
+		delete codes;
+		delete ips;
+
+	}
+
+}
+
+void UserIDScreenInterface::RemoveKnownAccessCodes ()
+{
+
+	if ( EclGetButton ( "useridscreen_codestitle" ) ) {
+		EclRemoveButton ( "useridscreen_codestitle" );
+	}
+
+	int currentcode = 0;
+	char name [64];
+	char name2 [64];
+	UplinkSnprintf ( name, sizeof ( name ), "useridscreen_code %d", currentcode );
+	UplinkSnprintf ( name2, sizeof ( name2 ), "useridscreen_deletecode %d", currentcode );
+
+	while ( EclGetButton ( name ) ) {
+
+		EclRemoveButton ( name );
+		if ( EclGetButton ( name2 ) ) {
+			EclRemoveButton ( name2 );
+		}
+		++currentcode;
+		UplinkSnprintf ( name, sizeof ( name ), "useridscreen_code %d", currentcode );
+		UplinkSnprintf ( name2, sizeof ( name2 ), "useridscreen_deletecode %d", currentcode );
+
+	}
 
 }
 
@@ -341,38 +511,7 @@ void UserIDScreenInterface::Create ( ComputerScreen *newcs )
 		EclMakeButtonEditable ( "useridscreen_name" );
 		EclMakeButtonEditable ( "useridscreen_code" );
 
-		// Create the box that will show the currently known codes for this screen
-
-		UplinkAssert ( cs->GetComputer () );
-
-		if ( game->GetWorld ()->GetPlayer ()->codes.LookupTree ( cs->GetComputer ()->ip ) ) {
-
-			DArray <char *> *codes = game->GetWorld ()->GetPlayer ()->codes.ConvertToDArray ();
-			DArray <char *> *ips   = game->GetWorld ()->GetPlayer ()->codes.ConvertIndexToDArray ();
-
-			EclRegisterButton ( 200, 310, 250, 15, "Known Access Codes", "", "useridscreen_codestitle" );
-			EclRegisterButtonCallbacks ( "useridscreen_codestitle", textbutton_draw, NULL, NULL, NULL );
-
-			int currentcode = 0;
-
-			for ( int i = 0; i < codes->Size (); ++i ) {
-				if ( codes->ValidIndex (i) && ips->ValidIndex (i) ) {
-					if ( strcmp ( ips->GetData (i), cs->GetComputer ()->ip ) == 0 ) {
-
-						char name [64];
-						UplinkSnprintf ( name, sizeof ( name ), "useridscreen_code %d", currentcode );
-						EclRegisterButton ( 200, 330 + currentcode*15, 250, 15, codes->GetData (i), "Use this code", name );
-						EclRegisterButtonCallbacks ( name, textbutton_draw, AccessCodeClick, button_click, button_highlight );
-						++currentcode;
-
-					}
-				}
-			}
-
-			delete codes;
-			delete ips;
-
-		}
+		CreateKnownAccessCodes();
 
 #ifdef CHEATMODES_ENABLED
 		// Create a symbol for quick entry into this screen
@@ -399,19 +538,7 @@ void UserIDScreenInterface::Remove ()
 		EclRemoveButton ( "useridscreen_message" );
 		EclRemoveButton ( "useridscreen_proceed" );
 
-		EclRemoveButton ( "useridscreen_codestitle" );
-
-		int currentcode = 0;
-		char name [64];
-		UplinkSnprintf ( name, sizeof ( name ), "useridscreen_code %d", currentcode );
-
-		while ( EclGetButton ( name ) ) {
-
-			EclRemoveButton ( name );
-			++currentcode;
-			UplinkSnprintf ( name, sizeof ( name ), "useridscreen_code %d", currentcode );
-
-		}
+		RemoveKnownAccessCodes ();
 
 #ifdef CHEATMODES_ENABLED
 		EclRemoveButton ( "useridscreen_bypass" );

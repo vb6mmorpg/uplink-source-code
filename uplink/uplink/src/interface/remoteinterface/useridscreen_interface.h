@@ -29,6 +29,11 @@ protected:
 	static void BypassClick ( Button *button );
 	static void ProceedClick ( Button *button );
 
+	static void DeleteCodeClick ( Button *button );
+
+	void CreateKnownAccessCodes ();
+	void RemoveKnownAccessCodes ();
+
 public:
 
 	bool ReturnKeyPressed ();
