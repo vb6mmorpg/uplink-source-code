@@ -1224,7 +1224,7 @@ Mission *MissionGenerator::Generate_ChangeData ( Company *employer )
 
 	// Decide which type of changedata mission to make this
 
-	int missiontype = NumberGenerator::RandomNumber ( 3 );
+	int missiontype = NumberGenerator::RandomNumber ( 4 );
 
 	Mission *mission = NULL;
 
@@ -1232,6 +1232,7 @@ Mission *MissionGenerator::Generate_ChangeData ( Company *employer )
 		case 0	:		mission = Generate_ChangeData_AcademicRecord ( employer );		break;
 		case 1  :		mission = Generate_ChangeData_SocialSecurity ( employer );		break;
 		case 2  :		mission = Generate_ChangeData_CriminalRecord ( employer );		break;
+		case 3  :		mission = Generate_ChangeData_DNSRecord		 ( employer );		break;
 	}
 
 	return mission;
@@ -1873,6 +1874,253 @@ Mission *MissionGenerator::Generate_ChangeData_CriminalRecord ( Company *employe
 	fulldetails.rdbuf()->freeze( 0 );
 	//delete [] details.str ();
 	//delete [] fulldetails.str ();
+
+	CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
+	UplinkAssert ( cu );
+	cu->CreateMission ( mission );
+
+	return mission;
+
+}
+
+Mission *MissionGenerator::Generate_ChangeData_DNSRecord ( Company *employer )
+{
+ 
+	UplinkAssert ( employer );
+	
+	int difficulty = NumberGenerator::RandomNormalNumber ( MINDIFFICULTY_MISSION_CHANGEDATA_DNS, DIFFICULTY_MISSION_VARIANCE );
+	if ( difficulty < MINDIFFICULTY_MISSION_CHANGEDATA_DNS ) difficulty = MINDIFFICULTY_MISSION_CHANGEDATA_DNS;
+
+	Computer *nic = game->GetWorld ()->GetComputer ("InterNIC");
+	UplinkAssert(nic);
+
+	Computer *target = WorldGenerator::GetRandomComputer(COMPUTER_TYPE_NAMESERVER);
+	UplinkAssert (target);
+
+	Computer *ns = game->GetWorld ()->GetComputer ( NameGenerator::GenerateNameServerName ( employer->name ) );
+	UplinkAssert (ns);
+
+	if ( ns == target ) return NULL;
+
+	//
+	// Set up the basic variables of the mission
+	//
+
+	int payment			= NumberGenerator::RandomNormalNumber ( difficulty * PAYMENT_MISSION_CHANGEDATA_DNS,
+																difficulty * PAYMENT_MISSION_CHANGEDATA_DNS 
+																		   * PAYMENT_MISSION_VARIANCE );
+
+	int minrating		= difficulty;
+	int acceptrating	= minrating + NumberGenerator::RandomNumber ( 2 );
+
+	if ( minrating > 10 ) minrating = 10;
+	if ( acceptrating > 10 ) acceptrating = 10;
+
+	payment = int ( payment / 100 ) * 100;				// Rounds payment to the nearest 100
+
+	
+	char pname [SIZE_PERSON_NAME];					// Person to send completion email to
+	UplinkSnprintf ( pname, sizeof(pname), "internal@%s.net", employer->name );	
+
+	char description [SIZE_MISSION_DESCRIPTION];
+	std::ostrstream details;
+	std::ostrstream fulldetails;
+
+	details << "Payment for this job is " << payment << " credits.\n"			
+			<< "This job has been assigned an Uplink difficulty of " << difficulty << ".\n"
+			<< "An UplinkRating of " << Rating::GetUplinkRatingString ( acceptrating ) << " or above will be sufficient for automatic acceptance.\n\n"
+			<< '\x0';
+
+	fulldetails << "Gain access to " << target->name << ":\n"							
+				<< "TARGET COMPUTER DATA :\n" 
+				<< "   LOCATION: " << target->name << "\n"
+				<< "   IP      : Unknown\n"
+				<< "\n\n";
+
+	char completionA [SIZE_VLOCATION_IP];			// IP
+	char completionB [SIZE_PERSON_NAME];			// Target IP
+	char completionC [64];							// Field to be changed
+	char completionD [64];							// Word that must appear in the field
+	char completionE [64];							// Word that must appear in the field
+
+    char whysomuchmoney [256];
+
+	int missiontype = NumberGenerator::RandomNumber ( 5 ) + 1;
+	
+		/* =========================================================================
+			type 1		:		Change Admin Contact
+			type 2		:		Chnage Tech Contact
+			type 3		:		Change Owner
+			type 4		:		Change Primary Nameserver
+			type 5		:		Change Secondary Nameserver
+		   ========================================================================= */
+	Mission *mission = new Mission ();
+
+	if ( missiontype == 1 ) {
+
+		char q1[128];
+		UplinkSnprintf(q1,sizeof(q1),"Admin ! %s",employer->boss);
+
+		Record *record = target->recordbank.GetRandomRecord ( q1 );
+		if ( !record ) return NULL;
+
+		char *personname = record->GetField ( "IP" );
+		UplinkAssert (personname);
+
+		VLocation *vl = game->GetWorld ()->GetVLocation(personname);
+		UplinkAssert (vl);
+				
+		fulldetails	<< "Access the DNS record for the following IP and change the "					
+					<< "administrative contact.\n"
+					<< "   IP : " << personname << "\n"
+					<< "   New Contact : " << employer->boss << "\n";
+		strcpy ( completionB, personname );
+		strcpy ( completionC, "Admin" );
+		strcpy ( completionD, employer->boss );
+		strcpy ( completionE, employer->boss );
+	}
+	else if ( missiontype == 2 ) {
+
+		char q1[128];
+		UplinkSnprintf(q1,sizeof(q1),"Tech ! %s",employer->administrator);
+
+		Record *record = target->recordbank.GetRandomRecord ( q1 );
+		if ( !record ) return NULL;
+
+		char *personname = record->GetField ( "IP" );
+		UplinkAssert (personname);
+
+		VLocation *vl = game->GetWorld ()->GetVLocation(personname);
+		UplinkAssert (vl);
+				
+		fulldetails	<< "Access the DNS record for the following IP and change the "					
+					<< "technical contact.\n"
+					<< "   IP : " << personname << "\n"
+					<< "   New Contact : " << employer->administrator << "\n";
+		strcpy ( completionB, personname );
+		strcpy ( completionC, "Tech" );
+		strcpy ( completionD, employer->administrator );
+		strcpy ( completionE, employer->administrator );
+	}	
+	else if ( missiontype == 3 ) {
+
+		char q1[128];
+		UplinkSnprintf(q1,sizeof(q1),"Owner ! %s",employer->name);
+
+		Record *record = target->recordbank.GetRandomRecord ( q1 );
+		if ( !record ) return NULL;
+
+		char *personname = record->GetField ( "IP" );
+		UplinkAssert (personname);
+
+		VLocation *vl = game->GetWorld ()->GetVLocation(personname);
+		UplinkAssert (vl);
+				
+		fulldetails	<< "Access the DNS record for the following IP and change the "					
+					<< "registered owner.\n"
+					<< "   IP : " << personname << "\n"
+					<< "   New Owner : " << employer->name << "\n";
+		strcpy ( completionB, personname );
+		strcpy ( completionC, "Owner" );
+		strcpy ( completionD, employer->name );
+		strcpy ( completionE, employer->name );
+	}
+	else if ( missiontype == 4 ) {
+
+		char q1[128];
+		UplinkSnprintf(q1,sizeof(q1),"NS1 ! %s",ns->ip);
+
+		Record *record = target->recordbank.GetRandomRecord ( q1 );
+		if ( !record ) return NULL;
+
+		char *personname = record->GetField ( "IP" );
+		UplinkAssert (personname);
+
+		VLocation *vl = game->GetWorld ()->GetVLocation(personname);
+		UplinkAssert (vl);
+				
+		fulldetails	<< "Access the DNS record for the following IP and change the "					
+					<< "primary nameserver.\n"
+					<< "   IP : " << personname << "\n"
+					<< "   New Nameserver : " << ns->ip << "\n";
+		strcpy ( completionB, personname );
+		strcpy ( completionC, "NS1" );
+		strcpy ( completionD, ns->ip );
+		strcpy ( completionE, ns->ip );
+	}
+	else if ( missiontype == 5 ) {
+
+		char q1[128];
+		UplinkSnprintf(q1,sizeof(q1),"NS2 ! %s",ns->ip);
+
+		Record *record = target->recordbank.GetRandomRecord ( q1 );
+		if ( !record ) return NULL;
+
+		char *personname = record->GetField ( "IP" );
+		UplinkAssert (personname);
+
+		VLocation *vl = game->GetWorld ()->GetVLocation(personname);
+		UplinkAssert (vl);
+				
+		fulldetails	<< "Access the DNS record for the following IP and change the "					
+					<< "secondary nameserver.\n"
+					<< "   IP : " << personname << "\n"
+					<< "   New Nameserver : " << ns->ip << "\n";
+		strcpy ( completionB, personname );
+		strcpy ( completionC, "NS2" );
+		strcpy ( completionD, ns->ip );
+		strcpy ( completionE, ns->ip );
+	}
+	else {
+
+		UplinkAbort ( "Unrecognised mission type" );
+
+	}
+
+
+	//
+	// Generate the remaining fields of the mission
+	//
+
+	strcpy ( completionA, target->ip );
+
+	fulldetails	<< "\n\nSend a notice of completion to\n"
+				<< pname << "\n"
+				<< "\n"
+				<< "END"
+				<< '\x0';
+
+//	char whoisthetarget [128];
+//	sprintf ( whoisthetarget,  );
+	
+	Date postdate;
+	postdate.SetDate ( &(game->GetWorld ()->date) );
+	postdate.AdvanceHour ( NumberGenerator::RandomNumber ( 96 ) * -1 );
+	postdate.AdvanceMinute ( NumberGenerator::RandomNumber ( 60 ) * -1 );
+
+	//
+	// Insert the mission
+	//
+
+	mission->SetTYPE		 ( MISSION_CHANGEDATADNS );
+	mission->SetCompletion   ( completionA, completionB, completionC, completionD, completionE );
+	mission->SetEmployer     ( employer->name );
+	mission->SetContact      ( pname );
+	mission->SetPayment      ( payment, payment * 1.1 );
+	mission->SetDifficulty   ( difficulty );
+	mission->SetMinRating    ( minrating );
+	mission->SetAcceptRating ( acceptrating );
+	mission->SetDescription  ( "Change the DNS record for a server" );
+	mission->SetDetails		 ( details.str () );
+	mission->SetFullDetails  ( fulldetails.str () );
+	mission->SetWhoIsTheTarget ( target->name );
+	mission->SetWhySoMuchMoney ( "It is important for our future plans." );
+	mission->SetHowSecure ( "You are likely to encounter proxies and elliptic curve cyphers." );
+	if ( !game->IsRunning () )	mission->SetCreateDate   ( &postdate );
+	mission->GiveLink ( nic->ip );
+
+	delete [] details.str ();
+	delete [] fulldetails.str ();
 
 	CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
 	UplinkAssert ( cu );
@@ -2837,6 +3085,7 @@ bool MissionGenerator::IsMissionComplete ( Mission *mission, Person *person, Mes
 		case MISSION_REMOVECOMPUTER:		return IsMissionComplete_RemoveComputer ( mission, person, message );		break;
 		case MISSION_REMOVEUSER:			return IsMissionComplete_RemoveUser		( mission, person, message );		break;
 		case MISSION_PAYFINE:				return IsMissionComplete_PayFine		( mission, person, message );		break;
+		case MISSION_CHANGEDATADNS:			return IsMissionComplete_ChangeDNS		( mission, person, message );		break;
 
         case MISSION_SPECIAL:               return IsMissionComplete_Special        ( mission, person, message );       break;
 
@@ -4097,3 +4346,52 @@ void MissionGenerator::MissionFailed ( Mission *mission, Person *person, char *r
 
 }
 
+bool MissionGenerator::IsMissionComplete_ChangeDNS	( Mission *mission, Person *person, Message *message )
+{
+
+	UplinkAssert (mission);
+
+	char *ip			= mission->completionA;
+	char *personname	= mission->completionB;
+	char *fieldname		= mission->completionC;
+	char *string1		= mission->completionD ? LowerCaseString ( mission->completionD ) : NULL;		
+	char *string2		= mission->completionE ? LowerCaseString ( mission->completionE ) : NULL;
+
+
+	VLocation *vl = game->GetWorld ()->GetVLocation (ip);
+	UplinkAssert (vl);
+	Computer *comp = vl->GetComputer ();
+	UplinkAssert (comp);
+	
+	char q1[128];
+	UplinkSnprintf(q1, sizeof(q1), "IP = %s",personname);
+	Record *rec = comp->recordbank.GetRecord ( q1 );
+
+	if ( rec ) {
+
+		// This is the record that should have been jimmied
+		
+		char *fieldvalue = rec->GetField (fieldname) ? LowerCaseString ( rec->GetField (fieldname) ) : NULL;
+
+		if ( fieldvalue && strstr ( fieldvalue, string1 ) && strstr ( fieldvalue, string2 ) ) {
+
+			// Mission Accomplished
+			MissionCompleted ( mission, person, message );
+			return true;
+
+		}
+		else {
+
+			MissionNotCompleted ( mission, person, message, "You haven't changed the data yet" );
+			return false;
+
+		}
+
+	}
+	
+	// Oh dear.  The record hasn't been found, but it should be there
+	
+	UplinkAbort ( "MissionGenerator::IsMissionComplete_ChangeDNS - could not find record" );
+	return false;				// Keeps the compiler happy
+	
+}

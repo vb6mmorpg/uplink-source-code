@@ -13,6 +13,8 @@
 #ifndef _included_company_h
 #define _included_company_h
 
+class Sale;
+
 // ============================================================================
 
 #include "tosser.h"
@@ -88,5 +90,37 @@ public:
 
 };
 
+class CompanySales : public Company  
+{
+
+public:
+
+	LList <Sale *>	  hw_sales;				// Hardware
+	LList <Sale *>	  sw_sales;				// Software
+
+	int salesmask;
+
+public:
+
+	CompanySales();
+	virtual ~CompanySales();
+
+	void CreateHWSale ( Sale *newsale );
+	void CreateSWSale ( Sale *newsale );
+
+	Sale	  *GetSWSale   ( int index );
+	Sale	  *GetHWSale   ( int index );
+
+	// Common functions
+
+	bool Load  ( FILE *file );
+	void Save  ( FILE *file );
+	void Print ();
+	void Update ();
+	
+	char *GetID ();
+	int   GetOBJECTID ();
+
+};
 
 #endif 

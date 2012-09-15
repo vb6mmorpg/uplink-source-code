@@ -82,7 +82,14 @@ void MemoryInterface::MemoryBlockDraw ( Button *button, bool highlighted, bool c
 		if ( data ) {
 				
 			if ( data->TYPE == DATATYPE_DATA )
-				glColor4f ( 0.2f, 0.8f, 0.2f, ALPHA );
+			{
+				if ( data->encrypted )
+					glColor4f ( 0.8f, 0.8f, 0.2f, ALPHA );
+				else if ( data->compressed )
+					glColor4f ( 0.3f, 0.7f, 0.3f, ALPHA );
+				else
+					glColor4f ( 0.2f, 0.8f, 0.2f, ALPHA );
+			}
 
 			else if ( data->TYPE == DATATYPE_PROGRAM )
 				glColor4f ( 0.8f, 0.2f, 0.2f, ALPHA );
@@ -153,6 +160,18 @@ void MemoryInterface::MemoryBlockDraw ( Button *button, bool highlighted, bool c
 					char version [5];
 					UplinkSnprintf ( version, sizeof ( version ), "v%1.1f", data->version );
 					GciDrawText ( button->x + button->width - 23, button->y + 8, version );
+				}
+				else if ( data->TYPE = DATATYPE_DATA ) {
+					if ( data->encrypted ) {
+						char version [5];
+						UplinkSnprintf ( version, sizeof ( version ), "e%d.0", data->encrypted );
+						GciDrawText ( button->x + button->width - 23, button->y + 8, version );
+					}
+					else if ( data->compressed ) {
+						char version [5];
+						UplinkSnprintf ( version, sizeof ( version ), "c%d.0", data->compressed );
+						GciDrawText ( button->x + button->width - 23, button->y + 8, version );
+					}
 				}
 
 		}

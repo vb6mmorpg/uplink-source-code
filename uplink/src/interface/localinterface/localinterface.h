@@ -39,6 +39,7 @@ class HUDInterface;
 #define	 SCREEN_GATEWAY     15
 #define  SCREEN_IRC			16
 #define  SCREEN_LAN         17
+#define  SCREEN_KEYMAPPER   18
 
 // ============================================================================
 

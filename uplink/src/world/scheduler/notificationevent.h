@@ -32,6 +32,7 @@
 #define NOTIFICATIONEVENT_TYPE_BUYAGENTLIST                 12
 #define NOTIFICATIONEVENT_TYPE_AGENTSONLISTDIE              13
 #define NOTIFICATIONEVENT_TYPE_WAREZGAMEOVER                14
+#define NOTIFICATIONEVENT_TYPE_SPAM							15
 
 
 // ============================================================================
@@ -60,6 +61,7 @@ protected:
     void BuyAgentList ();
     void AgentsOnListDie ();
     void WarezGameOver ();
+    void SendSpam ();
 
 public:
 

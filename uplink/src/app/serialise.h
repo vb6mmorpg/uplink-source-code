@@ -105,6 +105,7 @@ UplinkObject *CreateUplinkObject ( int OBJECTID );
 #define OID_DISCONNECTEDSCREEN  44
 
 #define OID_COMPANY				50
+#define OID_COMPANYSALES		51
 #define OID_COMPANYUPLINK		52
 #define OID_MISSION				56
 #define OID_SALE				57

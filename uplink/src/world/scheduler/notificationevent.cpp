@@ -26,6 +26,7 @@
 #include "world/generator/missiongenerator.h"
 #include "world/generator/numbergenerator.h"
 #include "world/generator/worldgenerator.h"
+#include "world/generator/spamgenerator.h"
 
 #include "mmgr.h"
 
@@ -67,6 +68,7 @@ void NotificationEvent::Run ()
         case NOTIFICATIONEVENT_TYPE_BUYAGENTLIST:               BuyAgentList ();                        break;
         case NOTIFICATIONEVENT_TYPE_AGENTSONLISTDIE:            AgentsOnListDie ();                     break;
         case NOTIFICATIONEVENT_TYPE_WAREZGAMEOVER:              WarezGameOver ();                       break;
+        case NOTIFICATIONEVENT_TYPE_SPAM:						SendSpam ();							break;
 
 		case NOTIFICATIONEVENT_TYPE_NONE:
 			UplinkWarning ( "Notification event type not specified" );
@@ -100,6 +102,7 @@ char *NotificationEvent::GetShortString ()
         case NOTIFICATIONEVENT_TYPE_BUYAGENTLIST:               shortstring << "Buy Agent List";                break;
         case NOTIFICATIONEVENT_TYPE_AGENTSONLISTDIE:            shortstring << "Agents on list die";            break;
         case NOTIFICATIONEVENT_TYPE_WAREZGAMEOVER:              shortstring << "Warez Game Over";               break;
+        case NOTIFICATIONEVENT_TYPE_SPAM:						shortstring << "Send Spam";						break;
 
 
 		case NOTIFICATIONEVENT_TYPE_NONE:
@@ -669,6 +672,30 @@ void NotificationEvent::WarezGameOver ()
 
 }
 
+void NotificationEvent::SendSpam ()
+{
+    
+	Date *gamestart = new Date();
+	gamestart->SetDate(GAME_START_DATE);
+
+	if ( game->GetWorld ()->date.After(gamestart) )
+	{
+		SpamGenerator::GenerateSpam( game->GetWorld ()->GetPlayer () );
+	}
+	// Schedule Another
+
+	Date duedate;
+	duedate.SetDate ( &(game->GetWorld ()->date) );
+	duedate.AdvanceHour(NumberGenerator::RandomNumber(6) + 6); // Every 6 - 12 hours;
+
+	NotificationEvent *ne = new NotificationEvent ();
+	ne->SetRunDate ( &duedate );
+	ne->SetTYPE ( NOTIFICATIONEVENT_TYPE_SPAM );
+	game->GetWorld ()->scheduler.ScheduleEvent ( ne );
+
+
+}
+
 void NotificationEvent::ScheduleStartingEvents ()
 {
 
@@ -723,6 +750,14 @@ void NotificationEvent::ScheduleStartingEvents ()
 	interestonloans->SetTYPE ( NOTIFICATIONEVENT_TYPE_ADDINTERESTONLOANS );
 	interestonloans->SetRunDate ( &(game->GetWorld ()->date) );
 	game->GetWorld ()->scheduler.ScheduleEvent ( interestonloans );
+
+	NotificationEvent *spam = new NotificationEvent ();
+	spam->SetTYPE ( NOTIFICATIONEVENT_TYPE_SPAM );
+	Date duedate2;
+	duedate2.SetDate ( &(game->GetWorld ()->date) );
+	duedate2.AdvanceHour( NumberGenerator::RandomNumber(6) + 6);
+	spam->SetRunDate ( &duedate2 );
+	game->GetWorld ()->scheduler.ScheduleEvent ( spam );
 
 #ifdef DEMOGAME
 

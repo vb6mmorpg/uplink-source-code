@@ -135,7 +135,7 @@ void ClientConnection::Handle_ClientCommsInterface ()
 
 	    std::ostrstream msgstream;
 
-	    VLocation *vl = game->GetWorld ()->GetVLocation ( IP_LOCALHOST );
+	    VLocation *vl = game->GetWorld ()->GetVLocation ( game->GetWorld ()->GetPlayer ()->localhost );
 	    UplinkAssert (vl);
 	    msgstream << "CLIENTCOMMS-IPNAME " << vl->ip
 		      << " " << vl->x << " " << vl->y << " " << vl->computer;

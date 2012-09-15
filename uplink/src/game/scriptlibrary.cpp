@@ -35,6 +35,7 @@
 #include "interface/remoteinterface/academicscreen_interface.h"
 #include "interface/remoteinterface/socialsecurityscreen_interface.h"
 #include "interface/remoteinterface/radiotransmitterscreen_interface.h"
+#include "interface/remoteinterface/nameserverscreen_interface.h"
 
 #include "world/world.h"
 #include "world/player.h"
@@ -80,6 +81,7 @@ void ScriptLibrary::RunScript ( int scriptindex )
 		case 15			:			Script15 ();		break;
 		case 16			:			Script16 ();		break;
 		case 17			:			Script17 ();		break;
+		case 18			:			Script18 ();		break;
 
 		case 30			:			Script30 ();		break;
 		case 31			:			Script31 ();		break;
@@ -100,6 +102,7 @@ void ScriptLibrary::RunScript ( int scriptindex )
 
         case 50			:			Script50 ();		break;
 		case 51			:			Script51 ();		break;
+		case 52			:			Script52 ();		break;
 
 		case 60			:			Script60 ();		break;
 		case 61			:			Script61 ();		break;
@@ -517,6 +520,39 @@ void ScriptLibrary::Script17 ()
 
 }
 
+void ScriptLibrary::Script18 ()
+{
+
+	/*
+		PURPOSE : To search for a DNS Record and display it on 
+		a DNS record screen.
+
+		OCCURS : The player is logged onto a nameserver
+		and clicks on SEARCH
+
+		*/
+
+	// Get the search string
+
+	char name [SIZE_COMPUTER_NAME];
+	Button *button = EclGetButton ( "name 0 0" );
+	UplinkAssert ( button );
+	strncpy ( name, button->caption, sizeof ( name ) );
+	name [ sizeof ( name ) - 1 ] = '\0';
+
+	// Run the DNS Record Screen
+
+	game->GetInterface ()->GetRemoteInterface ()->RunScreen ( 6, game->GetInterface ()->GetRemoteInterface ()->GetComputerScreen ()->GetComputer () );
+	
+	// Start the search going
+
+	NameServerScreenInterface *nsi = (NameServerScreenInterface *) game->GetInterface ()->GetRemoteInterface ()->GetInterfaceScreen ();
+	UplinkAssert ( nsi );
+	UplinkAssert ( nsi->ScreenID () == SCREEN_NAMESERVERSCREEN );
+	nsi->SetSearchName ( name );
+
+}
+
 void ScriptLibrary::Script30 ()
 {
 
@@ -931,7 +967,7 @@ void ScriptLibrary::Script35 ()
 		// Third time through - connect to gateway
 
 	    PhoneDialler *pd = new PhoneDialler ();
-		pd->DialNumber ( 400, 170, IP_LOCALHOST, 2 );    
+		pd->DialNumber ( 400, 170, game->GetWorld ()->GetPlayer ()->localhost, 2 );    
 
 		// See the next step in script 93
 
@@ -1450,8 +1486,8 @@ void ScriptLibrary::Script50 ()
 
     // Recreate some of the missing interface
 
-	EclRegisterButton ( 490, 320, 100, 100, " ", " ", "start_target" );
-	button_assignbitmap ( "start_target", "start/publicaccessserver.tif" );
+	//EclRegisterButton ( 490, 320, 100, 100, " ", " ", "start_target" );
+	//button_assignbitmap ( "start_target", "start/publicaccessserver.tif" );
 	
 }
 
@@ -1478,6 +1514,26 @@ void ScriptLibrary::Script51 ()
 	app->GetMainMenu ()->RunScreen ( MAINMENU_LOGIN );
 	
 
+}
+
+void ScriptLibrary::Script52 ()
+{
+
+	/*
+
+		PURPOSE : To bill the player because he blew his last Gateway up, 
+		and now wants another
+
+		OCCURS : After Gateway Nuke, log in again, select "Yes" to hire new gateway
+
+		*/
+
+	game->GetWorld ()->GetPlayer ()->ChangeBalance ( (int)( (float)COST_UPLINK_NEWGATEWAY * -0.5f), "Uplink Corporation : Connection change" );
+    // Recreate some of the missing interface
+
+	//EclRegisterButton ( 490, 320, 100, 100, " ", " ", "start_target" );
+	//button_assignbitmap ( "start_target", "start/publicaccessserver.tif" );
+	
 }
 
 void ScriptLibrary::Script60 ()

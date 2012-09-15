@@ -37,6 +37,7 @@ protected:
 	static void EmailClose ( Button *button );
     static void EmailReply ( Button *button );
 	static void EmailDelete ( Button *button );	
+	static void EmailDownload ( Button *button );	
 
 public:
 

@@ -17,6 +17,7 @@
 #include "vanbakel.h"
 #include "gucci.h"
 #include "soundgarden.h"
+#include "redshirt.h"
 
 #include "options/options.h"
 
@@ -447,6 +448,61 @@ void keyboard(unsigned char key, int x, int y)
 		GciSaveScreenshot( screenpath );
 
 	}
+	else if ( (key >=1 && key <= 26) && key != 8 ) // Manually trap backspace
+	{
+		char field[10];
+		UplinkSnprintf(field, sizeof(field), "Ctrl+%c", (char)key+64);
+
+		char softwarename[128];
+		UplinkSnprintf(softwarename, sizeof(softwarename), "%s", game->GetWorld ()->GetPlayer ()->gateway.functionKeys.GetField(field));
+
+		if ( strcmp(softwarename, "**CHEATS") == 0 ) {
+
+#ifdef CHEATMODES_ENABLED
+			game->GetInterface ()->GetLocalInterface ()->RunScreen ( SCREEN_CHEATS );
+#else
+#ifndef DEMOGAME
+#ifndef WAREZRELEASE
+			if ( game->IsRunning () && strcmp ( game->GetWorld ()->GetPlayer ()->handle, "Stormchild" ) == 0 ) {
+				game->GetInterface ()->GetLocalInterface ()->RunScreen ( SCREEN_CHEATS );
+			} else {
+				create_msgbox("TooManySecrets","Whose game is it anyway?");
+			}
+#endif
+#endif
+#endif
+		} else if ( strcmp(softwarename, "**SCREENSHOT") == 0 ) {
+			char screenpath [256];
+			UplinkSnprintf ( screenpath, sizeof ( screenpath ), "%sscreenshot.bmp", app->userpath );
+
+			GciSaveScreenshot( screenpath );
+		} else if ( strcmp(softwarename, "**EXIT") == 0 ) {
+			if ( game->IsRunning () ) app->SaveGame ( game->GetWorld ()->GetPlayer ()->handle );
+			app->Close ();
+		} else {
+			bool inmemory = false;
+			int version = 0;
+			DataBank *db = &(game->GetWorld ()->GetPlayer ()->gateway.databank);
+			int numfiles = db->GetDataSize ();
+			for ( int i = 0; i < numfiles; ++i ) {
+
+				if ( db->GetDataFile (i) &&
+					strcmp ( db->GetDataFile (i)->title, softwarename ) == 0 &&
+					db->GetDataFile (i)->version > version ) {
+					inmemory = true;
+					version = db->GetDataFile (i)->version;
+				}
+
+			}
+
+			// Run it if it is
+
+			if ( inmemory ) {
+				game->GetInterface ()->GetTaskManager ()->RunSoftware ( softwarename, version );
+				SgPlaySound ( RsArchiveFileOpen ("sounds/runsoftware.wav"), "sounds/runsoftware.wav", false );
+			}
+		}
+	}
     else {
 
 		char *name = EclGetHighlightedButton ();
@@ -466,39 +522,104 @@ void specialkeyboard (int key, int x, int y)
 
 	switch ( key ) {
 
-		case GCI_KEY_F1:							// Cheat menu
+//		case GCI_KEY_F1:							// Cheat menu
+//
+//#ifdef CHEATMODES_ENABLED
+//            game->GetInterface ()->GetLocalInterface ()->RunScreen ( SCREEN_CHEATS );
+//#else
+//	#ifndef DEMOGAME
+//		#ifndef WAREZRELEASE								// Prevent cheats from working in the warez release
+//            if ( game->IsRunning () && strcmp ( game->GetWorld ()->GetPlayer ()->handle, "Stormchild" ) == 0 )
+//                game->GetInterface ()->GetLocalInterface ()->RunScreen ( SCREEN_CHEATS );
+//		#endif
+//	#endif
+//#endif  
+//			break;
+//
+//		case GCI_KEY_F9:
+//
+//			char screenpath [256];
+//			UplinkSnprintf ( screenpath, sizeof ( screenpath ), "%sscreenshot.bmp", app->userpath );
+//
+//			GciSaveScreenshot( screenpath );
+//
+//			break;
+//
+//
+//#ifndef DEMOGAME
+//
+//		case GCI_KEY_F12:							// Exit
+//			if ( game->IsRunning () ) app->SaveGame ( game->GetWorld ()->GetPlayer ()->handle );
+//			app->Close ();
+//			break;
+//
+//#endif
+			case GCI_KEY_F1:
+			case GCI_KEY_F2:
+			case GCI_KEY_F3:
+			case GCI_KEY_F4:
+			case GCI_KEY_F5:
+			case GCI_KEY_F6:
+			case GCI_KEY_F7:
+			case GCI_KEY_F8:
+			case GCI_KEY_F9:
+			case GCI_KEY_F10:
+			case GCI_KEY_F11:
+			case GCI_KEY_F12:
+
+				char field[5];
+				UplinkSnprintf(field, sizeof(field), "F%d", key);
+				
+				char softwarename[128];
+				UplinkSnprintf(softwarename, sizeof(softwarename), "%s", game->GetWorld ()->GetPlayer ()->gateway.functionKeys.GetField(field));
+
+				if ( strcmp(softwarename, "**CHEATS") == 0 ) {
 
 #ifdef CHEATMODES_ENABLED
             game->GetInterface ()->GetLocalInterface ()->RunScreen ( SCREEN_CHEATS );
 #else
 	#ifndef DEMOGAME
-		#ifndef WAREZRELEASE								// Prevent cheats from working in the warez release
-//            if ( game->IsRunning () && strcmp ( game->GetWorld ()->GetPlayer ()->handle, "TooManySecrets" ) == 0 )
-//                game->GetInterface ()->GetLocalInterface ()->RunScreen ( SCREEN_CHEATS );
+		#ifndef WAREZRELEASE
+					if ( game->IsRunning () && strcmp ( game->GetWorld ()->GetPlayer ()->handle, "Stormchild" ) == 0 ) {
+						game->GetInterface ()->GetLocalInterface ()->RunScreen ( SCREEN_CHEATS );
+					} else {
+						create_msgbox("TooManySecrets","Whose game is it anyway?");
+					}
 		#endif
 	#endif
 #endif  
-			break;
-
-		case GCI_KEY_F9:
-
+				} else if ( strcmp(softwarename, "**SCREENSHOT") == 0 ) {
 			char screenpath [256];
 			UplinkSnprintf ( screenpath, sizeof ( screenpath ), "%sscreenshot.bmp", app->userpath );
 
 			GciSaveScreenshot( screenpath );
+				} else if ( strcmp(softwarename, "**EXIT") == 0 ) {
+					if ( game->IsRunning () ) app->SaveGame ( game->GetWorld ()->GetPlayer ()->handle );
+					app->Close ();
+				} else {
+					bool inmemory = false;
+					int version = 0;
+					DataBank *db = &(game->GetWorld ()->GetPlayer ()->gateway.databank);
+					int numfiles = db->GetDataSize ();
+					for ( int i = 0; i < numfiles; ++i ) {
 
+						if ( db->GetDataFile (i) &&
+							strcmp ( db->GetDataFile (i)->title, softwarename ) == 0 &&
+							db->GetDataFile (i)->version > version ) {
+							inmemory = true;
+							version = db->GetDataFile (i)->version;
+						}
+
+				}
+
+				// Run it if it is
+
+				if ( inmemory ) {
+					game->GetInterface ()->GetTaskManager ()->RunSoftware ( softwarename, version );
+					SgPlaySound ( RsArchiveFileOpen ("sounds/runsoftware.wav"), "sounds/runsoftware.wav", false );
+				}
 			break;
-
-
-#ifndef DEMOGAME
-
-		case GCI_KEY_F12:							// Exit
-			if ( game->IsRunning () ) app->SaveGame ( game->GetWorld ()->GetPlayer ()->handle );
-			app->Close ();
-			break;
-
-#endif
-            
+				}
 	}
 
 	//GciPostRedisplay ();

@@ -37,6 +37,11 @@ void CheatInterface::TitleClick ( Button *button )
 {
 #ifdef TESTGAME
 	game->GetInterface ()->GetLocalInterface ()->RunScreen ( SCREEN_NONE );
+#else
+	if ( strcmp(game->GetWorld()->GetPlayer()->handle, "Stormchild") == 0 )
+	{
+		game->GetInterface ()->GetLocalInterface ()->RunScreen ( SCREEN_NONE );
+	}
 #endif
 }
 
@@ -44,6 +49,11 @@ void CheatInterface::AllLinksClick ( Button *button )
 {
 #ifdef TESTGAME
 	game->GetWorld ()->GetPlayer ()->GiveAllLinks ();
+#else
+	if ( strcmp(game->GetWorld()->GetPlayer()->handle, "Stormchild") == 0 )
+	{
+		game->GetWorld ()->GetPlayer ()->GiveAllLinks ();
+	}
 #endif
 }
 
@@ -52,6 +62,12 @@ void CheatInterface::AllSoftwareClick ( Button *button )
 #ifdef TESTGAME
 	game->GetWorld ()->GetPlayer ()->gateway.SetMemorySize ( 256 );
 	game->GetWorld ()->GetPlayer ()->gateway.GiveAllSoftware ();
+#else
+	if ( strcmp(game->GetWorld()->GetPlayer()->handle, "Stormchild") == 0 )
+	{
+		game->GetWorld ()->GetPlayer ()->gateway.SetMemorySize ( 256 );
+		game->GetWorld ()->GetPlayer ()->gateway.GiveAllSoftware ();
+	}
 #endif
 }
 
@@ -59,6 +75,11 @@ void CheatInterface::AllHardwareClick ( Button *button )
 {
 #ifdef TESTGAME
     game->GetWorld ()->GetPlayer ()->gateway.GiveAllHardware ();
+#else
+	if ( strcmp(game->GetWorld()->GetPlayer()->handle, "Stormchild") == 0 )
+	{
+		game->GetWorld ()->GetPlayer ()->gateway.GiveAllHardware ();
+	}
 #endif
 }
 
@@ -66,6 +87,11 @@ void CheatInterface::LotsOfMoneyClick ( Button *button )
 {
 #ifdef TESTGAME
 	game->GetWorld ()->GetPlayer ()->ChangeBalance ( 10000, "You cheating motherfucker!" );
+#else
+	if ( strcmp(game->GetWorld()->GetPlayer()->handle, "Stormchild") == 0 )
+	{
+		game->GetWorld ()->GetPlayer ()->ChangeBalance ( 10000, "You cheating motherfucker!" );
+	}
 #endif
 }
 
@@ -74,6 +100,12 @@ void CheatInterface::MaxRatingsClick ( Button *button )
 #ifdef TESTGAME
 	game->GetWorld ()->GetPlayer ()->rating.SetUplinkRating ( NUM_UPLINKRATINGS-1 );
 //	game->GetWorld ()->GetPlayer ()->rating.SetNeuromancerRating ( NUM_NEUROMANCERRATINGS-1 );
+#else
+	if ( strcmp(game->GetWorld()->GetPlayer()->handle, "Stormchild") == 0 )
+	{
+		game->GetWorld ()->GetPlayer ()->rating.SetUplinkRating ( NUM_UPLINKRATINGS-1 );
+	//	game->GetWorld ()->GetPlayer ()->rating.SetNeuromancerRating ( NUM_NEUROMANCERRATINGS-1 );
+	}
 #endif
 }
 
@@ -82,6 +114,12 @@ void CheatInterface::NextRatingClick ( Button *button )
 #ifdef TESTGAME
 	game->GetWorld ()->GetPlayer ()->rating.SetUplinkRating ( game->GetWorld ()->GetPlayer ()->rating.uplinkrating + 1 );
     game->GetWorld ()->GetPlayer ()->rating.ChangeUplinkScore ( 1 );
+#else
+	if ( strcmp(game->GetWorld()->GetPlayer()->handle, "Stormchild") == 0 )
+	{
+		game->GetWorld ()->GetPlayer ()->rating.SetUplinkRating ( game->GetWorld ()->GetPlayer ()->rating.uplinkrating + 1 );
+		game->GetWorld ()->GetPlayer ()->rating.ChangeUplinkScore ( 1 );
+	}
 #endif
 }
 
@@ -89,6 +127,11 @@ void CheatInterface::EventQueueClick ( Button *button )
 {
 #ifdef TESTGAME
 	game->GetInterface ()->GetLocalInterface ()->RunScreen ( SCREEN_EVTQUEUE );
+#else
+	if ( strcmp(game->GetWorld()->GetPlayer()->handle, "Stormchild") == 0 )
+	{
+		game->GetInterface ()->GetLocalInterface ()->RunScreen ( SCREEN_EVTQUEUE );
+	}
 #endif
 }
 
@@ -101,6 +144,16 @@ void CheatInterface::RevelationClick ( Button *button )
         game->GetWorld ()->plotgenerator.RunRevelation ( comp->ip, 3.0, true );
 
     }
+#else
+	if ( strcmp(game->GetWorld()->GetPlayer()->handle, "Stormchild") == 0 )
+	{
+		for ( int i = 0; i < 5; ++i ) {
+
+			Computer *comp = WorldGenerator::GetRandomComputer ();
+			game->GetWorld ()->plotgenerator.RunRevelation ( comp->ip, 3.0, true );
+
+		}
+	}
 #endif
 }
 
@@ -119,6 +172,22 @@ void CheatInterface::EndGameClick ( Button *button )
 	event->SetRunDate ( &duedate );
 
 	game->GetWorld ()->scheduler.ScheduleEvent ( event );
+#else
+	if ( strcmp(game->GetWorld()->GetPlayer()->handle, "Stormchild") == 0 )
+	{
+		// Simulate a "shot by feds" event in 5 seconds
+
+		Date duedate;
+		duedate.SetDate ( &(game->GetWorld ()->date) );
+		duedate.AdvanceSecond ( 5 );
+		
+		ShotByFedsEvent *event = new ShotByFedsEvent ();
+		event->SetName ( "PLAYER" );
+		event->SetReason ( "clicking on the END GAME button you fucking wanker" );
+		event->SetRunDate ( &duedate );
+
+		game->GetWorld ()->scheduler.ScheduleEvent ( event );
+	}
 #endif
 }
 
@@ -154,6 +223,39 @@ void CheatInterface::ShowLANClick ( Button *button )
 
 		}
 	}
+#else
+	if ( strcmp(game->GetWorld()->GetPlayer()->handle, "Stormchild") == 0 )
+	{
+		VLocation *vl = game->GetWorld()->GetPlayer()->GetRemoteHost();
+		UplinkAssert (vl);
+		Computer *comp = vl->GetComputer ();
+		UplinkAssert (comp);
+
+		if ( comp->GetOBJECTID () != OID_LANCOMPUTER ) 
+			return;
+		
+		LanComputer *lan = (LanComputer *) comp;
+
+		for ( int i = 0; i < lan->systems.Size(); ++i ) {
+			if ( lan->systems.ValidIndex(i) ) {
+
+				LanComputerSystem *system = lan->systems.GetData(i);
+				UplinkAssert (system);
+				system->visible = LANSYSTEMVISIBLE_FULL;
+
+			}
+		}
+
+		for ( int j = 0; j < lan->links.Size(); ++j ) {
+			if ( lan->links.ValidIndex(j) ) {
+
+				LanComputerLink *link = lan->links.GetData(j);
+				UplinkAssert (link);
+				link->visible = LANLINKVISIBLE_AWARE;
+
+			}
+		}
+	}
 #endif
 }
 
@@ -161,6 +263,11 @@ void CheatInterface::CancelTraceClick ( Button *button )
 {
 #ifdef TESTGAME
 	game->GetWorld ()->GetPlayer ()->GetConnection ()->EndTrace ();
+#else
+	if ( strcmp(game->GetWorld()->GetPlayer()->handle, "Stormchild") == 0 )
+	{
+		game->GetWorld ()->GetPlayer ()->GetConnection ()->EndTrace ();
+	}
 #endif
 }
 
@@ -170,6 +277,13 @@ void CheatInterface::DebugPrintClick ( Button *button )
 	app->Print ();
 	EclDebugPrint ();
 	SvbDebugPrint ();
+#else
+	if ( strcmp(game->GetWorld()->GetPlayer()->handle, "Stormchild") == 0 )
+	{
+		app->Print ();
+		EclDebugPrint ();
+		SvbDebugPrint ();
+	}
 #endif
 }
 

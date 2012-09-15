@@ -9,6 +9,7 @@
 #include "app/serialise.h"
 
 #include "game/game.h"
+#include "game/data/data.h"
 
 #include "world/world.h"
 #include "world/company/mission.h"
@@ -21,10 +22,11 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CompanyUplink::CompanyUplink() : Company ()
+CompanyUplink::CompanyUplink() : CompanySales ()
 {
 
 	SetName ( "Uplink" );
+	salesmask = SALES_UPLINK | SALES_LEGAL | SALES_ILLEGAL;
 
 }
 
@@ -32,8 +34,6 @@ CompanyUplink::~CompanyUplink()
 {
 
 	DeleteLListData ( (LList <UplinkObject *> *) &missions );
-	DeleteLListData ( (LList <UplinkObject *> *) &sw_sales );
-	DeleteLListData ( (LList <UplinkObject *> *) &hw_sales );
 	DeleteLListData ( (LList <UplinkObject *> *) &news     );
 
 }
@@ -96,22 +96,6 @@ Mission *CompanyUplink::GetMission ( int index )
 
 }
 
-Sale *CompanyUplink::GetSWSale ( int index )
-{
-
-	if ( sw_sales.ValidIndex (index) )	  return sw_sales.GetData (index);
-	else								  return NULL;
-
-}
-
-Sale *CompanyUplink::GetHWSale ( int index )
-{
-
-	if ( hw_sales.ValidIndex (index) )	  return hw_sales.GetData (index);
-	else								  return NULL;
-
-}
-
 News *CompanyUplink::GetNews ( int index )
 {
 
@@ -120,21 +104,7 @@ News *CompanyUplink::GetNews ( int index )
 
 }
 
-void CompanyUplink::CreateHWSale ( Sale *newsale )
-{
-	
-	UplinkAssert (newsale);
-	hw_sales.PutData ( newsale );
 
-}
-
-void CompanyUplink::CreateSWSale ( Sale *newsale )
-{
-	
-	UplinkAssert (newsale);
-	sw_sales.PutData ( newsale );
-
-}
 
 void CompanyUplink::CreateNews ( News *newnews )
 {
@@ -151,14 +121,26 @@ void CompanyUplink::CreateNews ( News *newnews )
 bool CompanyUplink::Load ( FILE *file )
 {
 
+
 	LoadID ( file );
 
-	if ( !Company::Load ( file ) ) return false;
+	if ( strcmp( game->GetLoadedSavefileVer(), "SAV63" ) >= 0 ) {
 
-	if ( !LoadLList ( (LList <UplinkObject *> *) &missions,  file ) ) return false;
-	if ( !LoadLList ( (LList <UplinkObject *> *) &hw_sales,  file ) ) return false;
-	if ( !LoadLList ( (LList <UplinkObject *> *) &sw_sales,  file ) ) return false;
-	if ( !LoadLList ( (LList <UplinkObject *> *) &news,	   file ) ) return false;
+		if ( !CompanySales::Load ( file ) ) return false;
+
+		if ( !LoadLList ( (LList <UplinkObject *> *) &missions,  file ) ) return false;
+		if ( !LoadLList ( (LList <UplinkObject *> *) &news,	   file ) ) return false;
+	} else {
+		// This is the old method, lets pretend it still works and see what happens :)
+		if ( !Company::Load ( file ) ) return false;
+
+		if ( !LoadLList ( (LList <UplinkObject *> *) &missions,  file ) ) return false;
+		if ( !LoadLList ( (LList <UplinkObject *> *) &hw_sales,  file ) ) return false;
+		if ( !LoadLList ( (LList <UplinkObject *> *) &sw_sales,  file ) ) return false;
+		if ( !LoadLList ( (LList <UplinkObject *> *) &news,	   file ) ) return false;
+
+		salesmask = SALES_LEGAL | SALES_ILLEGAL | SALES_UPLINK; // This isnt in the old file, so set it here
+	}
 
 	LoadID_END ( file );
 
@@ -171,11 +153,9 @@ void CompanyUplink::Save  ( FILE *file )
 
 	SaveID ( file );
 
-	Company::Save ( file );
+	CompanySales::Save ( file );
 
 	SaveLList ( (LList <UplinkObject *> *) &missions,  file );
-	SaveLList ( (LList <UplinkObject *> *) &hw_sales,  file );
-	SaveLList ( (LList <UplinkObject *> *) &sw_sales,  file );
 	SaveLList ( (LList <UplinkObject *> *) &news,	   file );
 
 	SaveID_END ( file );
@@ -185,11 +165,9 @@ void CompanyUplink::Save  ( FILE *file )
 void CompanyUplink::Print ()
 {
 
-	Company::Print ();
+	CompanySales::Print ();
 
 	PrintLList ( (LList <UplinkObject *> *) &missions  );
-	PrintLList ( (LList <UplinkObject *> *) &hw_sales  );
-	PrintLList ( (LList <UplinkObject *> *) &sw_sales  );
 	PrintLList ( (LList <UplinkObject *> *) &news	   );
 
 }

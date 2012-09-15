@@ -47,6 +47,37 @@ void EmailInterface::EmailClose ( Button *button )
 
 }
 
+void EmailInterface::EmailDownload ( Button *button )
+{
+	EmailInterface *em = (EmailInterface *) game->GetInterface ()->GetLocalInterface ()->GetInterfaceScreen ();
+	UplinkAssert (em);
+	UplinkAssert (em->message);
+
+	// Get the mission at the supposed index
+
+	Message *realmessage = game->GetWorld ()->GetPlayer ()->messages.GetData (em->index);
+
+	// Check it matches (ie the player hasn't lost the email
+
+	if ( em->message != realmessage ) 
+		game->GetInterface ()->GetLocalInterface ()->RunScreen ( SCREEN_NONE );
+
+	if ( em->message->GetData () ) {
+		if ( game->GetWorld ()->GetPlayer ()->gateway.databank.FindValidPlacement(em->message->GetData ()) == -1 ) {
+			create_msgbox ( "Error", "Insufficient space to download attachment" );
+		}
+		else {
+			Data *datacopy = new Data ( em->message->GetData () );
+			game->GetWorld ()->GetPlayer ()->gateway.databank.PutData ( datacopy );
+			create_msgbox ( "Success", "File transfer complete" );
+		}
+	}
+	else {
+		create_msgbox ( "Error", "No attachment to download" );
+	}
+
+}
+
 void EmailInterface::EmailReply ( Button *button )
 {
 
@@ -150,6 +181,9 @@ void EmailInterface::Create ()
 		int panelwidth = (int)(screenw * PANELSIZE);
 
 		int boxheight = screenh - ((paneltop + 3) + 110) - 70;
+		if ( message->GetData () ) {
+			boxheight = boxheight - 20;
+		}
 
 		LocalInterfaceScreen::CreateHeight ( 3 + (110 + boxheight + 5) + 15 + 3 );
 
@@ -161,12 +195,16 @@ void EmailInterface::Create ()
 		char date [SIZE_DATE_LONG + 8];
 		size_t subjectsize = strlen(message->GetSubject()) + 12;
 		char *subject = new char [subjectsize];
+		size_t filesize = SIZE_DATA_TITLE + 32;
+		char *file = new char [filesize];
 		std::ostrstream body;
 
 		UplinkSnprintf ( from, sizeof ( from ), "From : %s", message->from );
 		UplinkSnprintf ( date, sizeof ( date ), "Date : %s", message->date.GetShortString () );
 		UplinkSnprintf ( subject, subjectsize, "Subject : %s", message->GetSubject () );
-
+		if ( message->GetData () ) {
+			UplinkSnprintf ( file, filesize, "Download %s v%1.1f (%d GQ)", message->GetData ()->title, message->GetData ()->version, message->GetData ()->size );
+		}
 		body << message->GetBody ();
 
 		// Concatenate any links onto the end of the message
@@ -286,6 +324,13 @@ void EmailInterface::Create ()
 		int x2 = x1 + w + ( (x3 - (x1 + w)) - w ) / 2;
         int y = (paneltop + 3) + 110 + boxheight + 5;
 
+		if ( message->GetData () )
+		{
+			EclRegisterButton ( x1, y, panelwidth - 7, 15, file, "Download the attached file", "email_download" );
+			EclRegisterButtonCallback ( "email_download", EmailDownload );
+			y = y + 20;
+		}
+
 		EclRegisterButton ( x1, y, w, 15, "Close", "Close and store this email", "email_close" );
         EclRegisterButton ( x2, y, w, 15, "Reply", "Reply to this email", "email_reply" );
 		EclRegisterButton ( x3, y, w, 15, "Delete", "Close and delete this email", "email_delete" );
@@ -293,6 +338,7 @@ void EmailInterface::Create ()
 		EclRegisterButtonCallback ( "email_close", EmailClose );
         EclRegisterButtonCallback ( "email_reply", EmailReply );
 		EclRegisterButtonCallback ( "email_delete", EmailDelete );		
+
 
 		delete [] subject;
 
@@ -320,6 +366,7 @@ void EmailInterface::Remove ()
 		EclRemoveButton ( "email_close" );
         EclRemoveButton ( "email_reply" );
 		EclRemoveButton ( "email_delete" );
+		EclRemoveButton ( "email_download" );
 
 	}
 

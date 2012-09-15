@@ -61,11 +61,12 @@ void Player::GiveMessage ( Message *message )
 
 	// Transfer any attached files from the message into memory
 
+	/* - Replaced by Download button in EmailInterface
 	if ( message->GetData () ) {
 		Data *datacopy = new Data ( message->GetData () );
 		gateway.databank.PutData ( datacopy );
 	}
-
+	*/
 }
 
 bool Player::IsPlayerAccount ( char *bankip, char *accno )

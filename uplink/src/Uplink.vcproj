@@ -475,6 +475,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\interface\remoteinterface\auxgatewayscreen_interface.h"
+				>
+			</File>
+			<File
 				RelativePath=".\world\computer\bankaccount.h"
 				>
 			</File>
@@ -496,6 +500,10 @@
 			</File>
 			<File
 				RelativePath=".\app\binreloc.h"
+				>
+			</File>
+			<File
+				RelativePath=".\interface\remoteinterface\buygatewayscreen_interface.h"
 				>
 			</File>
 			<File
@@ -540,6 +548,14 @@
 			</File>
 			<File
 				RelativePath=".\world\company\companyuplink.h"
+				>
+			</File>
+			<File
+				RelativePath=".\interface\taskmanager\compiler.h"
+				>
+			</File>
+			<File
+				RelativePath=".\interface\taskmanager\compressor.h"
 				>
 			</File>
 			<File
@@ -592,6 +608,14 @@
 			</File>
 			<File
 				RelativePath=".\world\date.h"
+				>
+			</File>
+			<File
+				RelativePath=".\interface\taskmanager\decompiler.h"
+				>
+			</File>
+			<File
+				RelativePath=".\interface\taskmanager\decompressor.h"
 				>
 			</File>
 			<File
@@ -791,6 +815,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\interface\localinterface\keymapper_interface.h"
+				>
+			</File>
+			<File
 				RelativePath=".\interface\localinterface\lan_interface.h"
 				>
 			</File>
@@ -932,6 +960,10 @@
 			</File>
 			<File
 				RelativePath=".\world\generator\namegenerator.h"
+				>
+			</File>
+			<File
+				RelativePath=".\interface\remoteinterface\nameserverscreen_interface.h"
 				>
 			</File>
 			<File
@@ -1167,6 +1199,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\world\generator\spamgenerator.h"
+				>
+			</File>
+			<File
 				RelativePath=".\interface\localinterface\status_interface.h"
 				>
 			</File>
@@ -1232,6 +1268,10 @@
 			</File>
 			<File
 				RelativePath=".\view\view.h"
+				>
+			</File>
+			<File
+				RelativePath=".\interface\taskmanager\virus.h"
 				>
 			</File>
 			<File
@@ -1323,6 +1363,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\interface\remoteinterface\auxgatewayscreen_interface.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\world\computer\bankaccount.cpp"
 				>
 			</File>
@@ -1344,6 +1388,10 @@
 			</File>
 			<File
 				RelativePath=".\app\binreloc.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\interface\remoteinterface\buygatewayscreen_interface.cpp"
 				>
 			</File>
 			<File
@@ -1388,6 +1436,14 @@
 			</File>
 			<File
 				RelativePath=".\world\company\companyuplink.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\interface\taskmanager\compiler.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\interface\taskmanager\compressor.cpp"
 				>
 			</File>
 			<File
@@ -1444,6 +1500,14 @@
 			</File>
 			<File
 				RelativePath=".\app\decode.c"
+				>
+			</File>
+			<File
+				RelativePath=".\interface\taskmanager\decompiler.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\interface\taskmanager\decompressor.cpp"
 				>
 			</File>
 			<File
@@ -1635,6 +1699,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\interface\localinterface\keymapper_interface.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\interface\localinterface\lan_interface.cpp"
 				>
 			</File>
@@ -1776,6 +1844,10 @@
 			</File>
 			<File
 				RelativePath=".\world\generator\namegenerator.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\interface\remoteinterface\nameserverscreen_interface.cpp"
 				>
 			</File>
 			<File
@@ -2007,6 +2079,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\world\generator\spamgenerator.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\interface\localinterface\status_interface.cpp"
 				>
 			</File>
@@ -2096,6 +2172,10 @@
 			</File>
 			<File
 				RelativePath=".\view\view.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\interface\taskmanager\virus.cpp"
 				>
 			</File>
 			<File

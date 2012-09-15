@@ -63,6 +63,7 @@ protected:
 	static void AnalyserClick	  ( Button *button );
     static void IRCClick          ( Button *button );
     static void LANClick          ( Button *button );
+    static void KeyMapperClick    ( Button *button );
 
 	static void ToolbarButtonDraw ( Button *button, bool highlighted, bool clicked );
 	static void EmailHighlight	  ( Button *button );

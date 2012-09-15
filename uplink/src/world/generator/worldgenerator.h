@@ -65,6 +65,7 @@ public:
 	static void GenerateInternationalAcademicDatabase ();
 	static void GenerateInterNIC ();
 	static void GenerateStockMarket ();
+	static void GenerateInternationalTelephoneDatabase ();
 	
     static void GenerateProtoVision ();
     static void GenerateOCP ();
@@ -80,6 +81,7 @@ public:
 	static VLocation *GenerateLocation ();			
 	static Company   *GenerateCompany ();
 	static Company   *GenerateCompany_Bank ();
+	static Company   *GenerateCompany_Sales ();
 	static Computer  *GenerateComputer ( char *companyname );
 	static Person    *GeneratePerson ();
 	static Agent	 *GenerateAgent ();
@@ -94,7 +96,11 @@ public:
 	static Computer  *GeneratePersonalComputer		  ( char *personname );
 	static Computer  *GenerateVoicePhoneSystem		  ( char *personname );
 	
+	static Computer	 *GenerateAuxGateway			  ( char *gatewaydef );
+	static Computer	 *GenerateNameServer			  ( char *companyname );
 
+	static void		 GenerateNameServerRecord		  ( Computer *computer, char *companyname );
+	static void		 GeneratePublicNameServerRecord	  ( Computer *computer );
 	// Low level functions for "fleshing out" specific items of data
 
 	static Company   *GenerateCompany ( char *companyname, int size, int TYPE, int growth, int alignment );

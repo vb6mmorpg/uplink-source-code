@@ -140,6 +140,7 @@ void HWInterface::CreateHWInterface ()
 		if ( gateway->HasHUDUpgrade ( HUDUPGRADE_CONNECTIONANALYSIS ) )		hudupgrades << "Connection analysis\n";
         if ( gateway->HasHUDUpgrade ( HUDUPGRADE_IRCCLIENT ) )              hudupgrades << "IRC Client\n";
         if ( gateway->HasHUDUpgrade ( HUDUPGRADE_LANVIEW ) )                hudupgrades << "LAN View\n";
+        if ( gateway->HasHUDUpgrade ( HUDUPGRADE_KEYMAPPER ) )              hudupgrades << "Keyboard Mapper\n";
 
 		hudupgrades << '\x0';
 

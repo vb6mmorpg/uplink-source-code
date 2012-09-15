@@ -32,6 +32,7 @@ class Probability;
 #define		MISSION_REMOVECOMPUTER		8
 #define		MISSION_REMOVECOMPANY		9
 #define		MISSION_REMOVEUSER			10
+#define		MISSION_CHANGEDATADNS		11
 
 #define		MISSION_PAYFINE				20
 
@@ -81,6 +82,7 @@ public:
 	static Mission *Generate_ChangeData_AcademicRecord ( Company *employer );
 	static Mission *Generate_ChangeData_SocialSecurity ( Company *employer );
 	static Mission *Generate_ChangeData_CriminalRecord ( Company *employer );
+	static Mission *Generate_ChangeData_DNSRecord      ( Company *employer );
 
 	static Mission *Generate_FindData_FinancialRecord  ( Company *employer, Computer *target );
 
@@ -119,6 +121,7 @@ public:
 	static bool IsMissionComplete_RemoveUser	 ( Mission *mission, Person *person, Message *message );
 	static bool IsMissionComplete_PayFine		 ( Mission *mission, Person *person, Message *message );
     static bool IsMissionComplete_Special        ( Mission *mission, Person *person, Message *message );
+    static bool IsMissionComplete_ChangeDNS      ( Mission *mission, Person *person, Message *message );
 
 	static void MissionCompleted ( Mission *mission, Person *person, Message *message );
 	static void MissionNotCompleted ( Mission *mission, Person *person, Message *message, char *reason );

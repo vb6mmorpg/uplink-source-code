@@ -39,7 +39,15 @@
 #include "interface/taskmanager/lanprobe.h"
 #include "interface/taskmanager/lanspoof.h"
 #include "interface/taskmanager/lanforce.h"
+// Software Mod
+#include "interface/taskmanager/compressor.h"
+#include "interface/taskmanager/decompressor.h"
+#include "interface/taskmanager/compiler.h"
+#include "interface/taskmanager/decompiler.h"
+// End Software Mod
+#include "interface/taskmanager/virus.h"
 
+#include "world/generator/spamgenerator.h"
 // ============================================================================
 
 
@@ -122,7 +130,22 @@ void TaskManager::RunSoftware ( char *name, float version )
     else if ( strcmp ( name, "LAN_Force" ) == 0 ) {             task = new LanForce ();
                                                                 task->SetFollowMouse ( true ); }
 
-	
+	// Software Mod
+	else if ( strcmp ( name, "Compressor" ) == 0 ) {			task = new Compressor ();
+																task->SetFollowMouse ( true ); }
+	else if ( strcmp ( name, "Decompressor" ) == 0 ) {			task = new Decompressor ();
+																task->SetFollowMouse ( true ); }
+	else if ( strcmp ( name, "Compiler" ) == 0 ) {				task = new Compiler (); }
+	else if ( strcmp ( name, "Decompiler" ) == 0 ) {			task = new Decompiler ();
+																task->SetFollowMouse ( true ); }
+	// End Software Mod
+
+	// Spam Mod Viruses!!!
+	// (Or Virii)
+	else if ( SpamGenerator::IsVirus ( name ) ) {				task = new Virus ( SpamGenerator::GetVirusType ( name ) );
+                                                                task->SetFollowMouse ( true ); }
+	// End Spam Mod
+
 	else {
 		printf ( "Task Manager warning : Called RunSoftware, name not recognised '%s'\n", name );
 		return;

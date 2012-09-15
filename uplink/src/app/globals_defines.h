@@ -36,8 +36,8 @@
 #define     VERSION_NAME            VERSION_NAME_INT
 #endif
 
-#define     SAVEFILE_VERSION        "SAV62"                     // Max version is SAVZZ (due to the number of characters to read)
-#define     SAVEFILE_VERSION_MIN    "SAV56"                     // Minimun Savefile version to run Uplink
+#define     SAVEFILE_VERSION        "SAV63"                     // Max version is SAVZZ (due to the number of characters to read)
+#define     SAVEFILE_VERSION_MIN    "SAV63"                     // Minimun Savefile version to run Uplink
 
 // SAVEFILE_VERSION 56 is 1.31 vanilla
 // SAVEFILE_VERSION 57 add world map connection saving, fix to save maxpayment and paymentmethod in mission

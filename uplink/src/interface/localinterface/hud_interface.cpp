@@ -47,7 +47,8 @@ HUDInterfaceUpgrade HUDInterface::hudUpgrades[8] = {
     
     2, "Analyser",     "Show the connection analyser",     "hud_analyser",     "hud/analyser.tif",     "hud/analyser_h.tif",   "hud/analyser_c.tif",   AnalyserClick,
     4, "IRCClient",    "Show the IRC Client",              "hud_ircclient",    "hud/irc.tif",          "hud/irc_h.tif",        "hud/irc_c.tif",        IRCClick,
-    8, "LANView",      "Show the LAN Viewer",              "hud_lanview",      "hud/lan.tif",          "hud/lan_h.tif",        "hud/lan_c.tif",        LANClick
+    8, "LANView",      "Show the LAN Viewer",              "hud_lanview",      "hud/lan.tif",          "hud/lan_h.tif",        "hud/lan_c.tif",        LANClick,
+   16, "KeyMapper",    "Show the Key Mapper",              "hud_kaymapper",    "mainmenu/theme.tif",   "mainmenu/theme_h.tif", "mainmenu/theme_c.tif", KeyMapperClick
 
     };
 
@@ -195,6 +196,17 @@ void HUDInterface::LANClick ( Button *button )
 
 	else
 		game->GetInterface ()->GetLocalInterface ()->RunScreen ( SCREEN_LAN );
+
+}
+
+void HUDInterface::KeyMapperClick ( Button *button )
+{
+
+	if ( GetHUD ()->previoushighlight && strcmp ( GetHUD ()->previoushighlight, button->name ) == 0 ) 
+		game->GetInterface ()->GetLocalInterface ()->RunScreen ( SCREEN_NONE );
+
+	else
+		game->GetInterface ()->GetLocalInterface ()->RunScreen ( SCREEN_KEYMAPPER );
 
 }
 
@@ -396,6 +408,7 @@ void HUDInterface::MoveSelecter ( int screenID, int screenindex )
 		case SCREEN_ANALYSER:		HighlightToolbarButton ( "hud_analyser" );				break;
         case SCREEN_IRC:            HighlightToolbarButton ( "hud_ircclient" );             break;
         case SCREEN_LAN:            HighlightToolbarButton ( "hud_lanview" );               break;
+        case SCREEN_KEYMAPPER:      HighlightToolbarButton ( "hud_keymapper" );             break;
 		case SCREEN_CHEATS:																	break;
 		case SCREEN_EVTQUEUE:																break;
 		case SCREEN_NONE:																	break;
@@ -761,6 +774,10 @@ void HUDInterface::Update ()
         if ( game->GetWorld ()->GetPlayer ()->gateway.HasHUDUpgrade ( HUDUPGRADE_LANVIEW ) ) 
             if ( !IsUpgradeVisible ( HUDUPGRADE_LANVIEW ) )
                     AddUpgrade ( HUDUPGRADE_LANVIEW );
+
+        if ( game->GetWorld ()->GetPlayer ()->gateway.HasHUDUpgrade ( HUDUPGRADE_KEYMAPPER ) ) 
+            if ( !IsUpgradeVisible ( HUDUPGRADE_KEYMAPPER ) )
+                    AddUpgrade ( HUDUPGRADE_KEYMAPPER );
 
 		// Update the world map and software menu
 

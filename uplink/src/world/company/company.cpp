@@ -250,3 +250,105 @@ int Company::GetOBJECTID ()
 
 }
 
+
+void CompanySales::CreateHWSale ( Sale *newsale )
+{
+	
+	UplinkAssert (newsale);
+	hw_sales.PutData ( newsale );
+
+}
+
+void CompanySales::CreateSWSale ( Sale *newsale )
+{
+	
+	UplinkAssert (newsale);
+	sw_sales.PutData ( newsale );
+}
+
+Sale *CompanySales::GetSWSale ( int index )
+{
+
+	if ( sw_sales.ValidIndex (index) )	  return sw_sales.GetData (index);
+	else								  return NULL;
+
+}
+
+Sale *CompanySales::GetHWSale ( int index )
+{
+
+	if ( hw_sales.ValidIndex (index) )	  return hw_sales.GetData (index);
+	else								  return NULL;
+
+}
+
+bool CompanySales::Load ( FILE *file )
+{
+
+	LoadID ( file );
+
+	if ( !Company::Load ( file ) ) return false;
+
+	if ( !FileReadData ( &salesmask, sizeof(salesmask), 1, file ) ) return false;
+	if ( !LoadLList ( (LList <UplinkObject *> *) &hw_sales,  file ) ) return false;
+	if ( !LoadLList ( (LList <UplinkObject *> *) &sw_sales,  file ) ) return false;
+
+	LoadID_END ( file );
+
+	return true;
+
+}
+
+void CompanySales::Save  ( FILE *file )
+{
+
+	SaveID ( file );
+
+	Company::Save ( file );
+
+	fwrite ( &salesmask, sizeof(salesmask), 1, file );
+	SaveLList ( (LList <UplinkObject *> *) &hw_sales,  file );
+	SaveLList ( (LList <UplinkObject *> *) &sw_sales,  file );
+
+	SaveID_END ( file );
+
+}
+
+void CompanySales::Print ()
+{
+
+	Company::Print ();
+
+	PrintLList ( (LList <UplinkObject *> *) &hw_sales  );
+	PrintLList ( (LList <UplinkObject *> *) &sw_sales  );
+
+}
+
+CompanySales::CompanySales() : Company ()
+{
+	salesmask = 0;
+}
+
+CompanySales::~CompanySales()
+{
+	DeleteLListData ( (LList <UplinkObject *> *) &sw_sales );
+	DeleteLListData ( (LList <UplinkObject *> *) &hw_sales );
+}
+
+void CompanySales::Update ()
+{
+}
+
+char *CompanySales::GetID ()
+{
+	
+	return "SALESCOM";
+
+}
+
+int CompanySales::GetOBJECTID ()
+{
+
+	return OID_COMPANYSALES;
+
+}

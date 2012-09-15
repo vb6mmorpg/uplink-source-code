@@ -36,6 +36,7 @@
 #include "world/generator/namegenerator.h"
 #include "world/generator/numbergenerator.h"
 #include "world/generator/langenerator.h"
+#include "world/company/company.h"
 #include "world/company/companyuplink.h"
 #include "world/company/sale.h"
 #include "world/company/mission.h"
@@ -100,6 +101,39 @@ void WorldGenerator::GenerateAll ()
 	GenerateRandomWorld ();								// Must come after GeneratePlayer
 	LoadDynamics ();
 
+	// Generate DNS data
+
+	DArray <Computer *> *computers = game->GetWorld ()->computers.ConvertToDArray ();
+	UplinkAssert (computers);
+
+	for ( int i = 0; i < computers->Size (); ++i ) {
+
+		if ( computers->ValidIndex ( i ) ) {
+
+			Computer *computer = computers->GetData (i);
+			UplinkAssert (computer);
+
+			switch ( computer->TYPE )
+			{
+			case COMPUTER_TYPE_PERSONALCOMPUTER:
+				GeneratePublicNameServerRecord(computer);
+				break;
+			case COMPUTER_TYPE_VOICEPHONESYSTEM:
+				break;
+			case COMPUTER_TYPE_NAMESERVER:
+				GeneratePublicNameServerRecord(computer);
+				break;
+			default:
+				GenerateNameServerRecord(computer, computer->companyname);
+			}
+
+		}
+
+	}
+
+    delete computers;
+
+	UpdateSoftwareUpgrades();
 }
 
 void WorldGenerator::GenerateValidMapPos ( int &x, int &y )
@@ -168,6 +202,9 @@ void WorldGenerator::GenerateRandomWorld ()
 	for ( i = 0; i < NUM_STARTING_BANKS; ++i )
 		GenerateCompany_Bank ();
 
+	for ( i = 0; i < NUM_STARTING_SALESCOMPANIES; ++i )
+		GenerateCompany_Sales ();
+
 	// Generate some people
 
 	for ( i = 0; i < NUM_STARTING_PEOPLE; ++i )
@@ -215,7 +252,6 @@ void WorldGenerator::GenerateRandomWorld ()
 	}
 
     delete companies;
-
 }
 
 void WorldGenerator::GenerateSimpleStartingMissionA ()
@@ -303,6 +339,7 @@ Player *WorldGenerator::GeneratePlayer ( char *handle )
 	player->GiveLink ( IP_ACADEMICDATABASE );
 //	player->GiveLink ( IP_CENTRALMEDICALDATABASE );
 	player->GiveLink ( IP_STOCKMARKETSYSTEM );
+	player->GiveLink ( IP_TELEPHONEDATABASE );
 
     Computer *comp = GetRandomComputer ( COMPUTER_TYPE_LAN );
     player->GiveLink( comp->ip );
@@ -325,6 +362,7 @@ void WorldGenerator::GenerateLocalMachine ()
 
 	localaddress->SetListed ( false );
 	localmachine->SetIsTargetable ( false );
+	localmachine->SetTYPE( COMPUTER_TYPE_PERSONALCOMPUTER ); // Stops the record generator crashing
 
 	// Screen 0			:			Links
 
@@ -452,6 +490,7 @@ void WorldGenerator::GenerateSpecifics ()
 //	GenerateCentralMedicalDatabase ();
 	GenerateGlobalIntelligenceAgency ();
 	GenerateInternationalAcademicDatabase ();
+	GenerateInternationalTelephoneDatabase ();
 	GenerateInterNIC ();
 	GenerateStockMarket ();
 	GenerateProtoVision ();
@@ -543,6 +582,7 @@ void WorldGenerator::GenerateCompanyUplink ()
 	GenerateUplinkTestMachine ();
 	GenerateUplinkCreditsMachine ();
 	Computer *ubank = GeneratePublicBankServer ( "Uplink" );
+	Computer *ns = GenerateNameServer ( "Uplink" );
 	ubank->SetIsTargetable ( false );
 
 	Person *pinternal = game->GetWorld ()->CreatePerson ( "internal@Uplink.net", IP_UPLINKINTERNALSERVICES );
@@ -552,40 +592,40 @@ void WorldGenerator::GenerateCompanyUplink ()
 
 	Sale *previoussale = NULL;
 
-	for ( int is = 0; is < NUM_STARTINGSOFTWAREUPGRADES; ++is ) {
+	//for ( int is = 0; is < NUM_STARTINGSOFTWAREUPGRADES; ++is ) {
 
-		if ( previoussale && strcmp ( previoussale->title, SOFTWARE_UPGRADES [is].name ) == 0 ) {
+	//	if ( previoussale && strcmp ( previoussale->title, SOFTWARE_UPGRADES [is].name ) == 0 ) {
 
-			// New version of an existing item
+	//		// New version of an existing item
 
-			previoussale->AddVersion ( SOFTWARE_UPGRADES [is].description,
-									   SOFTWARE_UPGRADES [is].cost,
-									   SOFTWARE_UPGRADES [is].size,
-									   SOFTWARE_UPGRADES [is].data );
+	//		previoussale->AddVersion ( SOFTWARE_UPGRADES [is].description,
+	//								   SOFTWARE_UPGRADES [is].cost,
+	//								   SOFTWARE_UPGRADES [is].size,
+	//								   SOFTWARE_UPGRADES [is].data );
 
-		}
-		else {
+	//	}
+	//	else {
 
-			// New sale item
+	//		// New sale item
 
-			Sale *sale = new Sale ();
-			sale->SetTitle			( SOFTWARE_UPGRADES [is].name );
-			sale->SetSaleTYPE		( SALETYPE_SOFTWARE );
-			sale->SetSwhwTYPE		( SOFTWARE_UPGRADES [is].TYPE );
+	//		Sale *sale = new Sale ();
+	//		sale->SetTitle			( SOFTWARE_UPGRADES [is].name );
+	//		sale->SetSaleTYPE		( SALETYPE_SOFTWARE );
+	//		sale->SetSwhwTYPE		( SOFTWARE_UPGRADES [is].TYPE );
 
-			sale->AddVersion		( " ", -1, -1, -1 );
-			sale->AddVersion		( SOFTWARE_UPGRADES [is].description,
-									  SOFTWARE_UPGRADES [is].cost,
-									  SOFTWARE_UPGRADES [is].size,
-									  SOFTWARE_UPGRADES [is].data );
+	//		sale->AddVersion		( " ", -1, -1, -1 );
+	//		sale->AddVersion		( SOFTWARE_UPGRADES [is].description,
+	//								  SOFTWARE_UPGRADES [is].cost,
+	//								  SOFTWARE_UPGRADES [is].size,
+	//								  SOFTWARE_UPGRADES [is].data );
 
-			cu->CreateSWSale ( sale );
+	//		cu->CreateSWSale ( sale );
 
-			previoussale = sale;
+	//		previoussale = sale;
 
-		}
+	//	}
 
-	}
+	//}
 
 	// Generate the hardware items for sale
 
@@ -799,6 +839,36 @@ void WorldGenerator::GenerateUplinkPublicAccessServer ()
 	dlg10->AddWidget ( "no", WIDGET_SCRIPTBUTTON, 300, 380, 100, 20, "NO", "Click here to log out", 51, -1, NULL, NULL );
 	comp->AddComputerScreen ( dlg10, 10 );
 
+	// Screen 11					Your Gateway is Gone!
+
+	DialogScreen *dlg11 = new DialogScreen ();
+	dlg11->SetMainTitle ( "Uplink" );
+	dlg11->SetSubTitle ( "Gateway connection failed" );
+	dlg11->AddWidget ( "caption1", WIDGET_CAPTION, 100, 130, 400, 270,
+							"We have been unable to connect you to your Gateway computer.\n\n"
+							"This may be due to a fault in out communications lines, and if this is the case then we "
+							"apologise and ask you to try again later.\n\n"
+							"We are aware that Uplink Agents occasionally suffer 'difficulties' with their Gateway "
+							"systems and sometimes require a new one as a result.  If this is the case, click YES below "
+							"and we will attempt to redirect your connection to one of your auxiliary gateways.  (There "
+							"will be an administrative charge of 500 credits if you take this action.)  Otherwise, "
+							"click NO to log off and try again later.\n\n"
+							"Rent a new Gateway computer?", "", 0, 0, NULL, NULL );
+	dlg11->AddWidget ( "yes", WIDGET_SCRIPTBUTTON, 170, 380, 100, 20, "YES", "Click here to rent a new Gateway", 52, 12, NULL, NULL );
+	dlg11->AddWidget ( "no", WIDGET_SCRIPTBUTTON, 300, 380, 100, 20, "NO", "Click here to log out", 51, -1, NULL, NULL );
+	comp->AddComputerScreen ( dlg11, 11 );
+
+	// Screen 12						World map - select nearby gateway
+
+	GenericScreen *gs12 = new GenericScreen ();
+	gs12->SetMainTitle ( "Uplink" );
+	gs12->SetSubTitle ( "Local gateway selection" );
+	gs12->SetScreenType ( SCREEN_AUXGATEWAY );
+
+	gs12->SetNextPage ( 9 );        // code card id
+
+	comp->AddComputerScreen ( gs12, 12 );
+
 }
 
 void WorldGenerator::GenerateUplinkInternalServicesSystem ()
@@ -839,6 +909,7 @@ void WorldGenerator::GenerateUplinkInternalServicesSystem ()
 	menu2->AddOption ( "Software upgrades", "Buy new Software", 6 );
 	menu2->AddOption ( "Hardware upgrades", "Buy new Hardware", 7 );
 	menu2->AddOption ( "Gateway upgrades",  "Exchange your gateway for a better model", 8 );
+	menu2->AddOption ( "Auxiliary gateways",  "Purchase an additional gateway server", 15 );
 	menu2->AddOption ( "Rankings",			"View the scores of the finest Uplink agents", 12 );
 	menu2->AddOption ( "Help",				"Read documents on a wide range of skills", 20 );
 	menu2->AddOption ( "Admin",				"Access Administrator services (security level 1 required)", 13, 1 );
@@ -950,6 +1021,14 @@ void WorldGenerator::GenerateUplinkInternalServicesSystem ()
 	fss14->SetNextPage ( 2 );
 	comp->AddComputerScreen ( fss14, 14 );
 
+	// Screen 15		( Aux Gateway )
+
+	GenericScreen *gs15 = new GenericScreen ();
+	gs15->SetScreenType ( SCREEN_NEWGATEWAY );
+	gs15->SetMainTitle ( "Uplink" );
+	gs15->SetSubTitle ( "Auxiliary gateway" );
+	gs15->SetNextPage ( 1 );
+	comp->AddComputerScreen ( gs15, 15 );
 
 	// Screen 20		( Help menu )
 
@@ -2098,6 +2177,8 @@ void WorldGenerator::GenerateInterNIC ()
 	GenerateValidMapPos ( x, y );
 	game->GetWorld ()->CreateVLocation ( IP_INTERNIC, x, y );
 
+	Company *company = game->GetWorld ()->GetCompany ( "Government" );
+
 	// Create the computer
 
 	Computer *comp = new Computer ();
@@ -2110,6 +2191,18 @@ void WorldGenerator::GenerateInterNIC ()
 						   COMPUTER_TRACEACTION_WARNINGMAIL );
 	comp->SetIsTargetable ( false );
 	game->GetWorld ()->CreateComputer ( comp );
+
+	/* Uncomment this to add security to InterNIC
+    int monitorstrength = (company->size - MINCOMPANYSIZE_MONITOR) / 3;
+    if ( monitorstrength > 5 ) monitorstrength = 5;
+    if ( monitorstrength < 1 ) monitorstrength = 1;
+    comp->security.AddSystem ( SECURITY_TYPE_MONITOR, monitorstrength );
+
+    int proxystrength = (company->size - MINCOMPANYSIZE_PROXY) / 3;
+    if ( proxystrength > 5 ) proxystrength = 5;
+    if ( proxystrength < 1 ) proxystrength = 1;
+    comp->security.AddSystem ( SECURITY_TYPE_PROXY, proxystrength );
+	*/
 
 	// Screen 0						-			Intro screen
 
@@ -2158,6 +2251,7 @@ void WorldGenerator::GenerateInterNIC ()
 	ms4->SetMainTitle ( "InterNIC" );
 	ms4->SetSubTitle ( "Admin menu" );
 	ms4->AddOption ( "Access Logs", "Click here to view access logs", 5 );
+	ms4->AddOption ( "Search DB", "Click here to search for a DNS record", 7 );
 	ms4->AddOption ( "Exit", "Return to the main menu", 1 );
 	comp->AddComputerScreen ( ms4, 4 );
 
@@ -2170,7 +2264,251 @@ void WorldGenerator::GenerateInterNIC ()
 	ls5->SetNextPage ( 4 );
 	comp->AddComputerScreen ( ls5, 5 );
 
+	// Screen 6					( View record )
 
+	GenericScreen *gs6 = new GenericScreen ();
+	gs6->SetMainTitle ( "InterNIC" );
+	gs6->SetSubTitle ( "View DNS record" );
+	gs6->SetNextPage ( 7 );
+	gs6->SetScreenType ( SCREEN_NAMESERVERSCREEN );
+	comp->AddComputerScreen ( gs6, 6 );
+
+	// Screen 7					( View record )
+
+	DialogScreen *ds7 = new DialogScreen ();
+	ds7->SetMainTitle ( "InterNIC" );
+	ds7->SetSubTitle ( "Search for DNS record" );
+	ds7->AddWidget ( "name", WIDGET_TEXTBOX, 150, 200, 200, 15, "Enter name or IP here", "Type the name ir IP of the computer to search for here" );
+	ds7->AddWidget ( "OK", WIDGET_SCRIPTBUTTON, 150, 240, 80, 15, "OK", "Click here when done", 18, -1, NULL, NULL );
+	ds7->AddWidget ( "Cancel", WIDGET_NEXTPAGE, 270, 240, 80, 15, "Cancel", "Click here to return to the menu", 4, -1, NULL, NULL );
+
+	ds7->AddWidget ( "border1", WIDGET_BASIC, 120, 170, 260, 4, "", "" );
+	ds7->AddWidget ( "border2", WIDGET_BASIC, 120, 266, 260, 4, "", "" );
+	ds7->AddWidget ( "border3", WIDGET_BASIC, 120, 170, 4, 100, "", "" );
+	ds7->AddWidget ( "border4", WIDGET_BASIC, 380, 170, 4, 100, "", "" );
+
+    ds7->SetReturnKeyButton ( "OK" );
+    ds7->SetEscapeKeyButton ( "Cancel" );
+
+	comp->AddComputerScreen ( ds7, 7 );
+}
+
+Computer *WorldGenerator::GenerateNameServer ( char *companyname )
+{
+
+	// Create the VLocation
+
+	char computername[MAX_COMPUTERNAME];
+	strncpy( computername, NameGenerator::GenerateNameServerName( companyname ),
+		     MAX_COMPUTERNAME );
+	if ( computername[MAX_COMPUTERNAME - 1] != '\0' ) {
+		computername[MAX_COMPUTERNAME - 1] = '\0';
+	}
+
+	Company *company = game->GetWorld ()->GetCompany ( companyname );
+	UplinkAssert (company);
+
+	// Create the location
+
+	VLocation *vl = GenerateLocation ();
+	vl->SetListed(false);
+
+	// Create the computer
+
+	Computer *comp = new Computer ();
+	comp->SetTYPE ( COMPUTER_TYPE_NAMESERVER );
+	comp->SetName ( computername );
+	comp->SetCompanyName ( companyname );
+	comp->SetIP ( vl->ip );
+	comp->SetTraceSpeed ( TRACESPEED_INTERNALSERVICESMACHINE );
+	comp->SetTraceAction ( COMPUTER_TRACEACTION_DISCONNECT |
+						   COMPUTER_TRACEACTION_LEGAL );
+	game->GetWorld ()->CreateComputer ( comp );
+
+    int monitorstrength = (company->size - MINCOMPANYSIZE_MONITOR) / 3;
+    if ( monitorstrength > 5 ) monitorstrength = 5;
+    if ( monitorstrength < 1 ) monitorstrength = 1;
+    comp->security.AddSystem ( SECURITY_TYPE_MONITOR, monitorstrength );
+
+    int proxystrength = (company->size - MINCOMPANYSIZE_PROXY) / 3;
+    if ( proxystrength > 5 ) proxystrength = 5;
+    if ( proxystrength < 1 ) proxystrength = 1;
+    comp->security.AddSystem ( SECURITY_TYPE_PROXY, proxystrength );
+
+	// Screen 0						-			Security menu
+
+	HighSecurityScreen *hs0 = new HighSecurityScreen ();
+	hs0->SetMainTitle ( companyname );
+	hs0->SetSubTitle ( "Authorisation required" );
+	hs0->AddSystem ( "UserID / password verification", 1 );
+	hs0->AddSystem ( "Elliptic-Curve Encryption Cypher", 2 );
+	hs0->SetNextPage ( 3 );
+	comp->AddComputerScreen ( hs0, 0 );
+
+	// Screen 1						-			UserID menu
+
+	UserIDScreen *uid1 = new UserIDScreen ();
+	uid1->SetMainTitle ( companyname );
+	uid1->SetSubTitle ( "Log in" );
+	uid1->SetDifficulty ( (int) NumberGenerator::RandomNormalNumber ( HACKDIFFICULTY_INTERNALSERVICESMACHINE,
+	                                                                 (float) ( HACKDIFFICULTY_INTERNALSERVICESMACHINE * HACKDIFFICULTY_VARIANCE ) ) );
+	uid1->SetNextPage ( 0 );
+	comp->AddComputerScreen ( uid1, 1 );
+
+	// Screen 2					( Cypher screen )
+
+	CypherScreen *cs2 = new CypherScreen ();
+	cs2->SetMainTitle ( companyname );
+	cs2->SetSubTitle ( "Enter elliptic-curve encryption cypher" );
+	cs2->SetDifficulty ( HACKDIFFICULTY_INTERNALSERVICESMACHINE );
+	cs2->SetNextPage ( 0 );
+	comp->AddComputerScreen ( cs2, 2 );
+
+	// Screen 3						-			Admin menu
+
+	MenuScreen *ms3 = new MenuScreen ();
+	ms3->SetMainTitle ( companyname );
+	ms3->SetSubTitle ( "Nameserver Administration" );
+	ms3->AddOption ( "View Links", "Click here to view the local links", 4 );
+	ms3->AddOption ( "Search DB", "Click here to search for a DNS record", 5 );
+	comp->AddComputerScreen ( ms3, 3 );
+
+	// Screen 4						-			Full list
+
+	LinksScreen *ls4 = new LinksScreen ();
+	ls4->SetMainTitle ( companyname );
+	ls4->SetSubTitle ( "Links" );
+	ls4->SetScreenType ( LINKSSCREENTYPE_LOCALLINKS );
+	ls4->SetNextPage ( 3);
+	comp->AddComputerScreen ( ls4, 4 );
+
+	// Screen 5					( View record )
+
+	DialogScreen *ds5 = new DialogScreen ();
+	ds5->SetMainTitle ( companyname );
+	ds5->SetSubTitle ( "Search for DNS record" );
+	ds5->AddWidget ( "name", WIDGET_TEXTBOX, 150, 200, 200, 15, "Enter name or IP here", "Type the name ir IP of the computer to search for here" );
+	ds5->AddWidget ( "OK", WIDGET_SCRIPTBUTTON, 150, 240, 80, 15, "OK", "Click here when done", 18, -1, NULL, NULL );
+	ds5->AddWidget ( "Cancel", WIDGET_NEXTPAGE, 270, 240, 80, 15, "Cancel", "Click here to return to the menu", 3, -1, NULL, NULL );
+
+	ds5->AddWidget ( "border1", WIDGET_BASIC, 120, 170, 260, 4, "", "" );
+	ds5->AddWidget ( "border2", WIDGET_BASIC, 120, 266, 260, 4, "", "" );
+	ds5->AddWidget ( "border3", WIDGET_BASIC, 120, 170, 4, 100, "", "" );
+	ds5->AddWidget ( "border4", WIDGET_BASIC, 380, 170, 4, 100, "", "" );
+
+    ds5->SetReturnKeyButton ( "OK" );
+    ds5->SetEscapeKeyButton ( "Cancel" );
+
+	comp->AddComputerScreen ( ds5, 5 );
+
+	// Screen 6					( View record )
+
+	GenericScreen *gs6 = new GenericScreen ();
+	gs6->SetMainTitle ( companyname );
+	gs6->SetSubTitle ( "View DNS record" );
+	gs6->SetNextPage ( 5 );
+	gs6->SetScreenType ( SCREEN_NAMESERVERSCREEN );
+	comp->AddComputerScreen ( gs6, 6 );
+
+
+	Record *record = new Record();
+	record->AddField(RECORDBANK_NAME,RECORDBANK_ADMIN);
+	record->AddField(RECORDBANK_PASSWORD,NameGenerator::GenerateComplexPassword());
+	record->AddField(RECORDBANK_SECURITY,1);
+	record->AddField("IP","-1");
+	comp->recordbank.AddRecord(record);
+
+	Record *record2 = new Record();
+	record2->AddField(RECORDBANK_NAME,RECORDBANK_READWRITE);
+	record2->AddField(RECORDBANK_PASSWORD,NameGenerator::GenerateComplexPassword());
+	record2->AddField(RECORDBANK_SECURITY,2);
+	record2->AddField("IP","-1");
+	comp->recordbank.AddRecord(record2);
+
+	return comp;
+}
+
+void WorldGenerator::GenerateInternationalTelephoneDatabase ()
+{
+
+	// Create the VLocation
+
+	int x, y;
+	GenerateValidMapPos ( x, y );
+	game->GetWorld ()->CreateVLocation ( IP_TELEPHONEDATABASE, x, y );
+
+	Company *company = game->GetWorld ()->GetCompany ( "Government" );
+
+	// Create the computer
+
+	Computer *comp = new Computer ();
+	comp->SetTYPE ( COMPUTER_TYPE_UNKNOWN );
+	comp->SetName ( "International Telephone Database" );
+	comp->SetCompanyName ( "Government" );
+	comp->SetIP ( IP_TELEPHONEDATABASE );
+	comp->SetTraceSpeed ( TRACESPEED_INTERNATIONALTELEPHONEDATABASE );
+	comp->SetTraceAction ( COMPUTER_TRACEACTION_DISCONNECT |
+						   COMPUTER_TRACEACTION_WARNINGMAIL );
+	comp->SetIsTargetable ( false );
+	game->GetWorld ()->CreateComputer ( comp );
+
+    int monitorstrength = (company->size - MINCOMPANYSIZE_MONITOR) / 3;
+    if ( monitorstrength > 5 ) monitorstrength = 5;
+    if ( monitorstrength < 1 ) monitorstrength = 1;
+    comp->security.AddSystem ( SECURITY_TYPE_MONITOR, monitorstrength );
+
+	// Screen 0					( Opening message screen )
+
+	MessageScreen *ms = new MessageScreen ();
+	ms->SetMainTitle ( "International Telephone Database" );
+	ms->SetSubTitle ( "Unauthorised Access will be punished" );
+	ms->SetTextMessage ( "This is a Government owned computer system - all attempts at\n"
+						 "illegal access will be severely punished to the full extent of the law.\n\n"
+						 "Valid User Accounts\n"
+						 "====================\n\n"
+						 "admin    - Complete system wide access\n"
+						 "readwrite  - Read/Write access to all records\n"
+						 "readonly  - Read only access to all records\n" );
+	ms->SetButtonMessage ( "Log in" );
+	ms->SetNextPage ( 1 );
+	comp->AddComputerScreen ( ms, 0 );
+
+	// Screen 1					( User ID Screen )
+
+	UserIDScreen *uid = new UserIDScreen ();
+	uid->SetMainTitle ( "International Telephone Database" );
+	uid->SetSubTitle ( "Log in" );
+	uid->SetDifficulty ( HACKDIFFICULTY_INTERNATIONALTELEPHONEDATABASE );
+	uid->SetNextPage ( 2 );
+	comp->AddComputerScreen ( uid, 1 );
+
+	// Screen 2						-			Full list
+
+	LinksScreen *ls2 = new LinksScreen ();
+	ls2->SetMainTitle ( "International Telephone Database" );
+	ls2->SetSubTitle ( "Search list" );
+	ls2->SetScreenType ( LINKSSCREENTYPE_TELEPHONE );
+	comp->AddComputerScreen ( ls2, 2 );
+
+	// Add in the accounts
+
+	Record *record = new Record ();
+	record->AddField ( RECORDBANK_NAME, RECORDBANK_ADMIN );
+	record->AddField ( RECORDBANK_PASSWORD, NameGenerator::GeneratePassword () );
+	record->AddField ( RECORDBANK_SECURITY, "1" );
+	comp->recordbank.AddRecord ( record );
+
+	Record *record2 = new Record ();
+	record2->AddField ( RECORDBANK_NAME, RECORDBANK_READWRITE );
+	record2->AddField ( RECORDBANK_PASSWORD, NameGenerator::GeneratePassword () );
+	record2->AddField ( RECORDBANK_SECURITY, "2" );
+	comp->recordbank.AddRecord ( record2 );
+
+	Record *record3 = new Record ();
+	record3->AddField ( RECORDBANK_NAME, RECORDBANK_READONLY );
+	record3->AddField ( RECORDBANK_PASSWORD, NameGenerator::GeneratePassword () );
+	record3->AddField ( RECORDBANK_SECURITY, "4" );
+	comp->recordbank.AddRecord ( record3 );
 }
 
 void WorldGenerator::GenerateStockMarket ()
@@ -2430,6 +2768,8 @@ void WorldGenerator::GenerateProtoVision ()
     gs4->SetNextPage ( 1 );
     comp->AddComputerScreen ( gs4 );
 
+	GenerateNameServer("Protovision"); // Stops a crash bug
+
 }
 
 void WorldGenerator::GenerateOCP ()
@@ -2486,6 +2826,7 @@ void WorldGenerator::GenerateOCP ()
 	Person *pinternal = game->GetWorld ()->CreatePerson ( personname, contact->ip );
 	pinternal->SetIsTargetable ( false );
 
+	GenerateNameServer("OCP"); // Stops a crash bug
 }
 
 void WorldGenerator::GenerateSJGames ()
@@ -2542,6 +2883,8 @@ void WorldGenerator::GenerateSJGames ()
 	UplinkStrncpy ( personname, "internal@Steve Jackson Games.net", sizeof ( personname ) );
 	Person *pinternal = game->GetWorld ()->CreatePerson ( personname, contact->ip );
 	pinternal->SetIsTargetable ( false );
+
+	GenerateNameServer("Steve Jackson Games"); // Stops a crash bug
 
 }
 
@@ -2726,6 +3069,7 @@ void WorldGenerator::GenerateIntroversion ()
 	Person *pinternal = game->GetWorld ()->CreatePerson ( personname, contact->ip );
 	pinternal->SetIsTargetable ( false );
 
+	GenerateNameServer("Introversion Software"); // Stops a crash bug
 }
 
 VLocation *WorldGenerator::GenerateLocation ()
@@ -2746,6 +3090,55 @@ VLocation *WorldGenerator::GenerateLocation ()
 
 }
 
+Company *WorldGenerator::GenerateCompany_Sales ()
+{
+
+	// Generate the company
+	char companyname [SIZE_COMPANY_NAME];
+	UplinkStrncpy ( companyname, NameGenerator::GenerateCompanyName (), sizeof ( companyname ) );
+
+	int size      = (int) NumberGenerator::RandomNormalNumber ( COMPANYSIZE_AVERAGE,      COMPANYSIZE_RANGE );
+	int growth    = (int) NumberGenerator::RandomNormalNumber ( COMPANYGROWTH_AVERAGE,    COMPANYGROWTH_RANGE );
+	int alignment = (int) NumberGenerator::RandomNormalNumber ( COMPANYALIGNMENT_AVERAGE, COMPANYALIGNMENT_RANGE );
+
+	CompanySales *company = new CompanySales ();
+	company->SetName ( companyname );
+	company->SetSize ( size );
+	company->SetTYPE ( COMPANYTYPE_COMMERCIAL );
+	company->SetGrowth ( growth );
+	company->SetAlignment ( alignment );
+	company->salesmask = SALES_LEGAL;
+
+	game->GetWorld ()->CreateCompany ( company );
+
+	// Generate the computers owned by this company
+
+	GeneratePublicAccessServer ( companyname );
+	GenerateInternalServicesMachine ( companyname );
+	GenerateCentralMainframe ( companyname );
+    GenerateLAN ( companyname );
+	GenerateNameServer ( companyname );
+
+	for ( int i = 0; i < size/20; ++i )
+		GenerateComputer ( companyname );
+
+	// Generate contact addresses for this company
+
+    char *contactcomputer = NameGenerator::GeneratePublicAccessServerName( companyname );
+	Computer *comp = game->GetWorld ()->GetComputer ( contactcomputer );
+	UplinkAssert (comp);
+
+	char personname [SIZE_PERSON_NAME];
+	UplinkSnprintf ( personname, sizeof ( personname ), "internal@%s.net", companyname );
+	Person *pinternal = game->GetWorld ()->CreatePerson ( personname, comp->ip );
+	pinternal->SetIsTargetable ( false );
+
+	// Set up our share prices for the start
+
+	company->Grow ( 0 );
+
+	return company;
+}
 Company *WorldGenerator::GenerateCompany ( char *companyname, int size, int TYPE, int growth, int alignment )
 {
 
@@ -2764,6 +3157,7 @@ Company *WorldGenerator::GenerateCompany ( char *companyname, int size, int TYPE
 	GenerateInternalServicesMachine ( companyname );
 	GenerateCentralMainframe ( companyname );
     GenerateLAN ( companyname );
+    GenerateNameServer ( companyname );
 
 	for ( int i = 0; i < size/20; ++i )
 		GenerateComputer ( companyname );
@@ -2893,19 +3287,44 @@ Computer *WorldGenerator::GeneratePublicAccessServer ( char *companyname )
 	                                                                  (float) ( TRACESPEED_PUBLICACCESSSERVER * TRACESPEED_VARIANCE ) ) );
 	comp->SetIP ( vl->ip );
 
+	Company *company = game->GetWorld ()->GetCompany ( companyname );
+	UplinkAssert(company);
+
 	MessageScreen *ms = new MessageScreen ();
 	ms->SetMainTitle ( companyname );
 	ms->SetSubTitle ( "Public Access Server" );
 	ms->SetTextMessage ( computername );
 	ms->SetButtonMessage ( "OK" );
-	ms->SetNextPage ( 1 );
+	if ( company->GetOBJECTID() == OID_COMPANYSALES )
+		ms->SetNextPage ( 2 );
+	else
+		ms->SetNextPage ( 1 );
 	comp->AddComputerScreen ( ms, 0 );
 
 	GenericScreen *gs = new GenericScreen ();
 	gs->SetMainTitle ( companyname );
 	gs->SetSubTitle ( "Company data" );
 	gs->SetScreenType ( SCREEN_COMPANYINFO );
+	if ( company->GetOBJECTID() == OID_COMPANYSALES )
+		gs->SetNextPage ( 2 );
 	comp->AddComputerScreen ( gs, 1 );
+
+	if ( company->GetOBJECTID() == OID_COMPANYSALES ) {
+		MenuScreen *ms2 = new MenuScreen ();
+		ms2->SetMainTitle ( companyname );
+		ms2->SetSubTitle ( "Public Services" );
+		ms2->AddOption ( "Software sales", "Purchase software from our online store", 3 );
+		ms2->AddOption ( "Contact details", "Find out how to contact our company", 1 );
+		comp->AddComputerScreen ( ms2, 2 );
+
+		GenericScreen *sss = new GenericScreen ();
+		sss->SetScreenType ( SCREEN_SWSALESSCREEN );
+		sss->SetMainTitle ( companyname );
+		sss->SetSubTitle ( "Software sales" );
+		sss->SetNextPage ( 2 );
+		comp->AddComputerScreen ( sss, 3 );
+
+	}
 
 	game->GetWorld ()->CreateComputer ( comp );
 
@@ -3774,57 +4193,78 @@ Agent *WorldGenerator::GenerateAgent ()
 void WorldGenerator::UpdateSoftwareUpgrades ( )
 {
 
-	CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
-
-	if ( !cu )
-		return;
+	//CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
 
 	// Update the software items for sale
 
-	for ( int i = 0; i < cu->sw_sales.Size (); i++ )
-		if ( cu->sw_sales.ValidIndex ( i ) ) {
-			Sale *sale = cu->sw_sales.GetData ( i );
-			if ( sale )
-				delete sale;
-	}
-	cu->sw_sales.Empty ();
+	DArray <Company *> *companies = game->GetWorld ()->companies.ConvertToDArray ();
+	UplinkAssert (companies);
 
-	Sale *previoussale = NULL;
+	for ( int i = 0; i < companies->Size (); ++i ) {
 
-	for ( int is = 0; is < NUM_STARTINGSOFTWAREUPGRADES; ++is ) {
+		if ( companies->ValidIndex ( i ) ) {
 
-		if ( previoussale && strcmp ( previoussale->title, SOFTWARE_UPGRADES [is].name ) == 0 ) {
+			Company *company = companies->GetData (i);
+			UplinkAssert (company);
+			if ( company->GetOBJECTID() == OID_COMPANYSALES || company->GetOBJECTID() == OID_COMPANYUPLINK)
+			{
+				CompanySales *cu = (CompanySales *) company;
+				UplinkAssert(cu);
 
-			// New version of an existing item
+				for ( int i = 0; i < cu->sw_sales.Size (); i++ )
+					if ( cu->sw_sales.ValidIndex ( i ) ) {
+						Sale *sale = cu->sw_sales.GetData ( i );
+						if ( sale )
+							delete sale;
+				}
+				cu->sw_sales.Empty ();
 
-			previoussale->AddVersion ( SOFTWARE_UPGRADES [is].description,
-			                           SOFTWARE_UPGRADES [is].cost,
-			                           SOFTWARE_UPGRADES [is].size,
-			                           SOFTWARE_UPGRADES [is].data );
+				Sale *previoussale = NULL;
 
+				for ( int is = 0; is < NUM_STARTINGSOFTWAREUPGRADES; ++is ) {
+
+					if ( previoussale && strcmp ( previoussale->title, SOFTWARE_UPGRADES [is].name ) == 0 ) {
+
+						// New version of an existing item
+
+						previoussale->AddVersion ( SOFTWARE_UPGRADES [is].description,
+												   SOFTWARE_UPGRADES [is].cost,
+												   SOFTWARE_UPGRADES [is].size,
+												   SOFTWARE_UPGRADES [is].data );
+
+					}
+					else {
+
+						if ( SOFTWARE_UPGRADES[is].salesmask & cu->salesmask )
+						{
+
+							// New sale item
+
+							Sale *sale = new Sale ();
+							sale->SetTitle         ( SOFTWARE_UPGRADES [is].name );
+							sale->SetSaleTYPE      ( SALETYPE_SOFTWARE );
+							sale->SetSwhwTYPE      ( SOFTWARE_UPGRADES [is].TYPE );
+
+							sale->AddVersion      ( " ", -1, -1, -1 );
+							sale->AddVersion      ( SOFTWARE_UPGRADES [is].description,
+													SOFTWARE_UPGRADES [is].cost,
+													SOFTWARE_UPGRADES [is].size,
+													SOFTWARE_UPGRADES [is].data );
+
+							cu->CreateSWSale ( sale );
+
+							previoussale = sale;
+						}
+
+					}
+
+				}
+			}
 		}
-		else {
-
-			// New sale item
-
-			Sale *sale = new Sale ();
-			sale->SetTitle         ( SOFTWARE_UPGRADES [is].name );
-			sale->SetSaleTYPE      ( SALETYPE_SOFTWARE );
-			sale->SetSwhwTYPE      ( SOFTWARE_UPGRADES [is].TYPE );
-
-			sale->AddVersion      ( " ", -1, -1, -1 );
-			sale->AddVersion      ( SOFTWARE_UPGRADES [is].description,
-			                        SOFTWARE_UPGRADES [is].cost,
-			                        SOFTWARE_UPGRADES [is].size,
-			                        SOFTWARE_UPGRADES [is].data );
-
-			cu->CreateSWSale ( sale );
-
-			previoussale = sale;
-
-		}
 
 	}
+
+    delete companies;
 
 }
 
@@ -4249,3 +4689,143 @@ void WorldGenerator::VerifyPlayerGatewayCloseDialog ( Button *button )
 
 }
 */
+
+void WorldGenerator::GenerateNameServerRecord(Computer *computer, char *companyname)
+{
+	UplinkAssert ( computer );
+
+	Computer *ns = game->GetWorld ()->GetComputer ( NameGenerator::GenerateNameServerName(companyname) );
+	UplinkAssert(ns);
+
+	Company *company = game->GetWorld ()->GetCompany ( computer->companyname );
+	UplinkAssert ( company );
+
+	Record *record = new Record();
+	record->AddField( RECORDBANK_NAME, computer->name );
+	record->AddField( "IP", computer->ip );
+	record->AddField( "Owner", company->name );
+	record->AddField( "Admin", company->boss );
+	record->AddField( "Tech", company->administrator );
+	record->AddField( "NS1", ns->ip );
+	record->AddField( "NS2", IP_INTERNIC );
+	ns->recordbank.AddRecordSorted(record, "IP");
+
+}
+
+void WorldGenerator::GeneratePublicNameServerRecord(Computer *computer)
+{
+	UplinkAssert ( computer );
+
+	Computer *ns = game->GetWorld ()->GetComputer ( "InterNIC" );
+	UplinkAssert(ns);
+
+	Company *company = game->GetWorld ()->GetCompany ( computer->companyname );
+	UplinkAssert ( company );
+
+	Record *record = new Record();
+	record->AddField( RECORDBANK_NAME, computer->name );
+	record->AddField( "IP", computer->ip );
+	record->AddField( "Owner", company->name );
+	record->AddField( "Admin", company->boss );
+	record->AddField( "Tech", company->administrator );
+	record->AddField( "NS1", ns->ip );
+	record->AddField( "NS2", IP_INTERNIC );
+	ns->recordbank.AddRecordSorted(record, "IP");
+
+}
+
+Computer *WorldGenerator::GenerateAuxGateway ( char *gatewaydef )
+{
+
+    //char *computername = strdup( NameGenerator::GenerateFileServerName( companyname ) );
+
+	char computername[SIZE_COMPUTER_NAME];
+	UplinkSnprintf(computername,sizeof(computername),"Gateway %d (%s)",NumberGenerator::RandomNumber(1000),gatewaydef);
+
+    Computer *existing = game->GetWorld ()->GetComputer ( computername );
+	while ( existing )
+	{
+		UplinkSnprintf(computername,sizeof(computername),"Gateway %d (%s)",NumberGenerator::RandomNumber(1000),gatewaydef);
+	}
+
+	VLocation *vl = GenerateLocation ();
+	vl->SetListed ( false );
+
+	Computer *comp = new Computer ();
+	comp->SetTYPE ( COMPUTER_TYPE_UNKNOWN );
+	comp->SetName ( computername );
+	comp->SetCompanyName ( "Player" );
+	comp->SetTraceSpeed ( 0 );
+	comp->SetTraceAction ( COMPUTER_TRACEACTION_NONE );
+	comp->SetIsTargetable ( false );
+	comp->SetIP ( vl->ip );
+	comp->databank.SetSize ( game->GetWorld ()->GetGatewayDef ( gatewaydef )->maxmemory * 8 );
+
+    //delete computername;
+
+	// Screen 0			User ID
+
+	UserIDScreen *uid0 = new UserIDScreen ();
+	uid0->SetMainTitle ( "Uplink" );
+	uid0->SetSubTitle ( computername );
+	uid0->SetNextPage ( 1 );
+	comp->AddComputerScreen ( uid0, 0 );
+
+	// Screen 1			Main Menu
+
+	MenuScreen *ms1 = new MenuScreen ();
+	ms1->SetMainTitle ( "Uplink" );
+	ms1->SetSubTitle ( "Main menu" );
+	ms1->AddOption ( "Files", "Click here to view the file server", 2 );
+	ms1->AddOption ( "Logs", "Click here to view the access logs", 3 );
+	comp->AddComputerScreen  ( ms1, 1 );
+
+	// Screen 2			File Server
+
+	GenericScreen *gs2 = new GenericScreen ();
+	gs2->SetMainTitle ( "Uplink" );
+	gs2->SetSubTitle ( "File Server" );
+	gs2->SetScreenType ( SCREEN_FILESERVERSCREEN );
+	gs2->SetNextPage ( 1 );
+	comp->AddComputerScreen ( gs2, 2 );
+
+	// Screen 3			File Server
+
+	LogScreen *ls3 = new LogScreen ();
+	ls3->SetMainTitle ( "Uplink" );
+	ls3->SetSubTitle ( "Log Screen" );
+	ls3->SetTARGET ( LOGSCREEN_TARGET_ACCESSLOGS );
+	ls3->SetNextPage ( 1 );
+	comp->AddComputerScreen ( ls3, 3 );
+
+
+	game->GetWorld ()->CreateComputer ( comp );
+
+	Computer *ism = game->GetWorld ()->GetComputer ( NAME_UPLINKINTERNALSERVICES );
+	UplinkAssert(ism);
+
+	Record *oldrecord = ism->recordbank.GetRecordFromName(game->GetWorld ()->GetPlayer ()->handle);
+	Record *record = new Record();
+	record->AddField(RECORDBANK_NAME, oldrecord->GetField(RECORDBANK_NAME));
+	record->AddField(RECORDBANK_PASSWORD, oldrecord->GetField(RECORDBANK_PASSWORD));
+	record->AddField(RECORDBANK_SECURITY, oldrecord->GetField(RECORDBANK_SECURITY));
+	comp->recordbank.AddRecord(record);
+
+	Data *copier = new Data ();
+	copier->SetTitle ( "File_Copier" );
+	copier->SetDetails ( DATATYPE_PROGRAM, 1, 0, 0, 1.0, SOFTWARETYPE_FILEUTIL );
+	comp->databank.PutData ( copier, 14 );
+
+	Data *deleter = new Data ();
+	deleter->SetTitle ( "File_Deleter" );
+	deleter->SetDetails ( DATATYPE_PROGRAM, 1, 0, 0, 1.0, SOFTWARETYPE_FILEUTIL );
+	comp->databank.PutData ( deleter, 15 );
+
+	Data *tutorial = new Data ();
+	tutorial->SetTitle ( "Tutorial" );
+	tutorial->SetDetails ( DATATYPE_PROGRAM, 4, 0, 0, 1.0, SOFTWARETYPE_OTHER );
+	comp->databank.PutData ( tutorial, 17 );
+
+	return comp;
+
+}

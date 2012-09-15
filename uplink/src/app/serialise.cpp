@@ -848,6 +848,7 @@ UplinkObject *CreateUplinkObject ( int OBJECTID )
         case OID_DISCONNECTEDSCREEN     : uo = new DisconnectedScreen ();   break;
 			
 		case OID_COMPANY				: uo = new Company ();				break;
+		case OID_COMPANYSALES			: uo = new CompanySales ();			break;
 		case OID_COMPANYUPLINK			: uo = new CompanyUplink ();		break;
 		case OID_MISSION				: uo = new Mission ();				break;
 		case OID_SALE					: uo = new Sale ();					break;

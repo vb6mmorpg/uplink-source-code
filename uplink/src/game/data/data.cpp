@@ -64,13 +64,14 @@ NEUROMANCERCHANGE [] = {
 								0,					// Steal file
 								5,					// Destroy file
 								0,					// Find data
-							   -5,					// Change data
+							   -5,					// Change data (Personal)
 							  -20,					// Frame user
 							  -30,					// Trace user
 							  -10,					// Change account
 							   30,					// Remove computer
 							   60,					// Remove company
-							  -60					// Remove user
+							  -60,					// Remove user
+							    5					// Change data (Corporate)
 	
 																	};
 
@@ -129,8 +130,8 @@ PHYSICALGATEWAYLOCATIONS_DEFCON [] = {
 		SOFTWARETYPE_HUDUPGRADE 9
 		SOFTWARETYPE_OTHER		10
 
-							Name						TYPE	Cost	Size	Data	Description
-							----						----	----	----	----	-----------
+							Name						TYPE	Cost	Size	Data	Sales	Description
+							----						----	----	----	----	-----	-----------
 
 */
 
@@ -139,61 +140,103 @@ const ComputerUpgrade
 SOFTWARE_UPGRADES [] = {
 
 
-							"Decrypter",				4,		800,	2,		1,  	"DECRYPTER V1.0\n" 
-                                                                                        "TYPE: software.Cracker\n\n"
-                                                                                        "Decrypts any file encrypted with an Encrypter V1.0",
+							"Compiler",					10,		5000,	5,		1,  	1,		"COMPILER V1.0\n" 
+																								"TYPE: software.Other\n\n"
+																								"Compiles Specification, Core and Data files into programs",
 
-							"Decrypter",				4,		1200,	2,		2,  	"DECRYPTER V2.0\n"
-                                                                                        "TYPE: software.Cracker\n\n"
-                                                                                        "Decrypts any file encrypted with an Encrypter V2.0 or V1.0",
+							"Compressor",				1,		400,	2,		1,  	1,		"COMPRESSOR V1.0\n" 
+																								"TYPE: software.FileUtil\n\n"
+																								"Compresses any file by as much as 1GQ",
 
-							"Decrypter",				4,		1600,	2,		3,  	"DECRYPTER V3.0\n"
-                                                                                        "TYPE: software.Cracker\n\n"
-                                                                                        "Decrypts any file encrypted with an Encrypter V3.0\n"
-                                                                                        "or below",
+							"Compressor",				1,		600,	2,		2,  	1,		"COMPRESSOR V2.0\n"
+																								"TYPE: software.FileUtil\n\n"
+																								"Compresses any file by as much as 2GQs",
 
-							"Decrypter",				4,		2200,	2,		4,  	"DECRYPTER V4.0\n"
-                                                                                        "TYPE: software.Cracker\n\n"
-                                                                                        "Decrypts any file encrypted with an Encrypter V4.0\n"
-                                                                                        "or below",
+							"Compressor",				1,		800,	2,		3,  	1,		"COMPRESSOR V3.0\n"
+																								"TYPE: software.FileUtil\n\n"
+																								"Compresses any file by as much as 3GQs",
 
-							"Decrypter",				4,		3000,	3,		5,  	"DECRYPTER V5.0\n"
-                                                                                        "TYPE: software.Cracker\n\n"
-                                                                                        "Decrypts any file encrypted with an Encrypter V5.0\n"
-                                                                                        "or below",
+							"Compressor",				1,		1100,	2,		4,  	1,		"COMPRESSOR V4.0\n"
+																								"TYPE: software.FileUtil\n\n"
+																								"Compresses any file by as much as 4GQs",
 
-							"Decrypter",				4,		7000,	4,		6,  	"DECRYPTER V6.0\n"
-                                                                                        "TYPE: software.Cracker\n\n"
-                                                                                        "Decrypts any file encrypted with an Encrypter V6.0\n"
-                                                                                        "or below",
+							"Decompiler",				10,		15000,	10,		1,  	1,		"DECOMPILER V1.0\n" 
+																								"TYPE: software.Other\n\n"
+																								"Decompiles programs into their component source files",
 
-							"Decrypter",				4,		15000,	5,		7,  	"DECRYPTER V7.0\n"  
-                                                                                        "TYPE: software.Cracker\n\n"
-                                                                                        "Decrypts any file encrypted with an Encrypter V7.0\n"
-                                                                                        "or below",
+							"Decompressor",				1,		600,	2,		1,  	1,		"DECOMPRESSOR V1.0\n" 
+																								"TYPE: software.FileUtil\n\n"
+																								"Decompresses any file compressed with a Compressor V1.0",
+
+							"Decompressor",				1,		800,	2,		2,  	1,		"DECOMPRESSOR V2.0\n"
+																								"TYPE: software.FileUtil\n\n"
+																								"Decompresses any file compressed with a Compressor V2.0 or V1.0",
+
+							"Decompressor",				1,		1200,	2,		3,  	1,		"DECOMPRESSOR V3.0\n"
+																								"TYPE: software.FileUtil\n\n"
+																								"Decompresses any file compressed with a Compressor V3.0\n"
+																								"or below",
+
+							"Decompressor",				1,		1650,	2,		4,  	1,		"DECOMPRESSOR V4.0\n"
+																								"TYPE: software.FileUtil\n\n"
+																								"Decompresses any file compressed with a Compressor V4.0\n"
+																								"or below",
+
+							"Decrypter",				4,		800,	2,		1,  	1,		"DECRYPTER V1.0\n" 
+																								"TYPE: software.Cracker\n\n"
+																								"Decrypts any file encrypted with an Encrypter V1.0",
+
+							"Decrypter",				4,		1200,	2,		2,  	1,		"DECRYPTER V2.0\n"
+																								"TYPE: software.Cracker\n\n"
+																								"Decrypts any file encrypted with an Encrypter V2.0 or V1.0",
+
+							"Decrypter",				4,		1600,	2,		3,  	1,		"DECRYPTER V3.0\n"
+																								"TYPE: software.Cracker\n\n"
+																								"Decrypts any file encrypted with an Encrypter V3.0\n"
+																								"or below",
+
+							"Decrypter",				4,		2200,	2,		4,  	1,		"DECRYPTER V4.0\n"
+																								"TYPE: software.Cracker\n\n"
+																								"Decrypts any file encrypted with an Encrypter V4.0\n"
+																								"or below",
+
+							"Decrypter",				4,		3000,	3,		5,  	1,		"DECRYPTER V5.0\n"
+																								"TYPE: software.Cracker\n\n"
+																								"Decrypts any file encrypted with an Encrypter V5.0\n"
+																								"or below",
+
+							"Decrypter",				4,		7000,	4,		6,  	4,		"DECRYPTER V6.0\n"
+																								"TYPE: software.Cracker\n\n"
+																								"Decrypts any file encrypted with an Encrypter V6.0\n"
+																								"or below",
+
+							"Decrypter",				4,		15000,	5,		7,  	4,		"DECRYPTER V7.0\n"  
+																								"TYPE: software.Cracker\n\n"
+																								"Decrypts any file encrypted with an Encrypter V7.0\n"
+																								"or below",
                            
 
 
-							"Decypher",					4,		3000,	2,		1,		"DECYPHER V1.0\n"
-                                                                                        "TYPE: software.Cracker\n\n"
-                                                                                        "Breaks through Encryption Cyphers\n"
-                                                                                        "Uses a Quadratic Decryption Algorithm to force crack an Elliptic-curve Encryption Cypher",
+							"Decypher",					4,		3000,	2,		1,		2,		"DECYPHER V1.0\n"
+																								"TYPE: software.Cracker\n\n"
+																								"Breaks through Encryption Cyphers\n"
+																								"Uses a Quadratic Decryption Algorithm to force crack an Elliptic-curve Encryption Cypher",
 
-							"Decypher",					4,		5000,	2,		2,		"DECYPHER V2.0\n"
-                                                                                        "TYPE: software.Cracker\n\n"
-                                                                                        "Breaks through Encryption Cyphers\n"
-                                                                                        "This is a faster implementation of the Quadratic Decryption Algorithm",
+							"Decypher",					4,		5000,	2,		2,		2,		"DECYPHER V2.0\n"
+																								"TYPE: software.Cracker\n\n"
+																								"Breaks through Encryption Cyphers\n"
+																								"This is a faster implementation of the Quadratic Decryption Algorithm",
 
-							"Decypher",					4,		8000,	2,		3,		"DECYPHER V3.0\n"
-                                                                                        "TYPE: software.Cracker\n\n"
-                                                                                        "Breaks through Encryption Cyphers\n"
-                                                                                        "This is the fastest version of this item of Software",
+							"Decypher",					4,		8000,	2,		3,		2,		"DECYPHER V3.0\n"
+																								"TYPE: software.Cracker\n\n"
+																								"Breaks through Encryption Cyphers\n"
+																								"This is the fastest version of this item of Software",
 
-							"Dictionary_Hacker",		4,		1000,	4,		1,  	"DICTIONARY HACKER V1.0\n"
-                                                                                        "TYPE: software.Cracker\n\n"
-                                                                                        "A cheap and fast method of breaking passwords\n"
-                                                                                        "This software tool tries every word in a ten-thousand word dictionary as a password. "
-                                                                                        "It is faster than a Password Breaker, but not guaranteed to find an answer.",
+							"Dictionary_Hacker",		4,		1000,	4,		1,  	2,		"DICTIONARY HACKER V1.0\n"
+																								"TYPE: software.Cracker\n\n"
+																								"A cheap and fast method of breaking passwords\n"
+																								"This software tool tries every word in a ten-thousand word dictionary as a password. "
+																								"It is faster than a Password Breaker, but not guaranteed to find an answer.",
 /*
 							"Encryption_Bypass",		5,		6000,	1,		1,  	"ENCRYPTION BYPASS V1.0\n"
                                                                                         "TYPE: software.Bypasser\n\n"
@@ -220,311 +263,316 @@ SOFTWARE_UPGRADES [] = {
                                                                                         "Actively bypasses encryption with a security level of 5 or below\n"
                                                                                         "All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
 */
-							"File_Copier",				1,		100,	1,		1,  	"FILE COPIER V1.0\n"
-                                                                                        "TYPE: software.FileUtil\n\n"
-                                                                                        "Copies programs and data from one databank to another\n"
-                                                                                        "Standard software tool given free to all Agents",
+							"File_Copier",				1,		100,	1,		1,  	1,		"FILE COPIER V1.0\n"
+																								"TYPE: software.FileUtil\n\n"
+																								"Copies programs and data from one databank to another\n"
+																								"Standard software tool given free to all Agents",
 
-							"File_Deleter",				1,		100,	1,		1,  	"FILE DELETER V1.0\n"
-                                                                                        "TYPE: software.FileUtil\n\n"
-                                                                                        "Deletes programs and data from a databank\n"
-                                                                                        "Standard software tool given free to all Agents",
+							"File_Deleter",				1,		100,	1,		1,  	1,		"FILE DELETER V1.0\n"
+																								"TYPE: software.FileUtil\n\n"
+																								"Deletes programs and data from a databank\n"
+																								"Standard software tool given free to all Agents",
 
-							"Defrag",					1,		5000,	2,		1,		"DEFRAG\n"
-																						"TYPE: software.FileUtil\n\n"
-																						"Pushes all of your files together at the top of your memory banks\n"
-																						"and frees up large blocks of space for use",
+							"Defrag",					1,		5000,	2,		1,		1,		"DEFRAG\n"
+																								"TYPE: software.FileUtil\n\n"
+																								"Pushes all of your files together at the top of your memory banks\n"
+																								"and frees up large blocks of space for use",
 
-							"Firewall_Bypass",			5,		3000,	1,		1,  	"FIREWALL BYPASS V1.0\n"
-                                                                                        "TYPE: software.Bypasser\n\n"
-                                                                                        "Actively bypasses firewall systems with a security level of 1\n"
-                                                                                        "All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
+							"Firewall_Bypass",			5,		3000,	1,		1,  	4,		"FIREWALL BYPASS V1.0\n"
+																								"TYPE: software.Bypasser\n\n"
+																								"Actively bypasses firewall systems with a security level of 1\n"
+																								"All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
 
-							"Firewall_Bypass",			5,		4000,	1,		2,  	"FIREWALL BYPASS V2.0\n"
-                                                                                        "TYPE: software.Bypasser\n\n"
-                                                                                        "Actively bypasses firewall systems with a security level of 2 or below\n"
-                                                                                        "All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
+							"Firewall_Bypass",			5,		4000,	1,		2,  	4,		"FIREWALL BYPASS V2.0\n"
+																								"TYPE: software.Bypasser\n\n"
+																								"Actively bypasses firewall systems with a security level of 2 or below\n"
+																								"All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
 
-							"Firewall_Bypass",			5,		6000,	1,		3,  	"FIREWALL BYPASS V3.0\n"
-                                                                                        "TYPE: software.Bypasser\n\n"
-                                                                                        "Actively bypasses firewall systems with a security level of 3 or below\n"
-                                                                                        "All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
+							"Firewall_Bypass",			5,		6000,	1,		3,  	4,		"FIREWALL BYPASS V3.0\n"
+																								"TYPE: software.Bypasser\n\n"
+																								"Actively bypasses firewall systems with a security level of 3 or below\n"
+																								"All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
 
-							"Firewall_Bypass",			5,		8000,	1,		4,  	"FIREWALL BYPASS V4.0\n"
-                                                                                        "TYPE: software.Bypasser\n\n"
-                                                                                        "Actively bypasses firewall systems with a security level of 4 or below\n"
-                                                                                        "All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
+							"Firewall_Bypass",			5,		8000,	1,		4,  	4,		"FIREWALL BYPASS V4.0\n"
+																								"TYPE: software.Bypasser\n\n"
+																								"Actively bypasses firewall systems with a security level of 4 or below\n"
+																								"All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
 
-							"Firewall_Bypass",			5,		10000,	1,		5,  	"FIREWALL BYPASS V5.0\n"
-                                                                                        "TYPE: software.Bypasser\n\n"
-                                                                                        "Actively bypasses firewall systems with a security level of 5 or below\n"
-                                                                                        "All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
+							"Firewall_Bypass",			5,		10000,	1,		5,  	4,		"FIREWALL BYPASS V5.0\n"
+																								"TYPE: software.Bypasser\n\n"
+																								"Actively bypasses firewall systems with a security level of 5 or below\n"
+																								"All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
 
-							"Firewall_Disable",			3,		2000,	1,		1,  	"FIREWALL DISABLE V1.0\n"
-                                                                                        "TYPE: software.Security\n\n"
-                                                                                        "Disables a firewall with a security level of 1\n"
-                                                                                        "This action will be detected immediately",
+							"Firewall_Disable",			3,		2000,	1,		1,  	2,		"FIREWALL DISABLE V1.0\n"
+																								"TYPE: software.Security\n\n"
+																								"Disables a firewall with a security level of 1\n"
+																								"This action will be detected immediately",
 
-							"Firewall_Disable",			3,		3000,	1,		2,  	"FIREWALL DISABLE V2.0\n"
-                                                                                        "TYPE: software.Security\n\n"
-                                                                                        "Disables a firewall with a security level of 2 or below\n"
-                                                                                        "This action will be detected immediately",
+							"Firewall_Disable",			3,		3000,	1,		2,  	2,		"FIREWALL DISABLE V2.0\n"
+																								"TYPE: software.Security\n\n"
+																								"Disables a firewall with a security level of 2 or below\n"
+																								"This action will be detected immediately",
 
-							"Firewall_Disable",			3,		4000,	1,		3,  	"FIREWALL DISABLE V3.0\n"
-                                                                                        "TYPE: software.Security\n\n"
-                                                                                        "Disables a firewall with a security level of 3 or below\n"
-                                                                                        "This action will be detected immediately",
+							"Firewall_Disable",			3,		4000,	1,		3,  	2,		"FIREWALL DISABLE V3.0\n"
+																								"TYPE: software.Security\n\n"
+																								"Disables a firewall with a security level of 3 or below\n"
+																								"This action will be detected immediately",
 
-							"Firewall_Disable",			3,		6000,	2,		4,  	"FIREWALL DISABLE V4.0\n"
-                                                                                        "TYPE: software.Security\n\n"
-                                                                                        "Disables a firewall with a security level of 4 or below\n"
-                                                                                        "This action will be detected immediately",
+							"Firewall_Disable",			3,		6000,	2,		4,  	2,		"FIREWALL DISABLE V4.0\n"
+																								"TYPE: software.Security\n\n"
+																								"Disables a firewall with a security level of 4 or below\n"
+																								"This action will be detected immediately",
 
-							"Firewall_Disable",			3,		8000,	3,		5,  	"FIREWALL DISABLE V5.0\n"
-                                                                                        "TYPE: software.Security\n\n"
-                                                                                        "Disables a firewall with a security level of 5 or below\n"
-                                                                                        "This action will be detected immediately",
+							"Firewall_Disable",			3,		8000,	3,		5,  	2,		"FIREWALL DISABLE V5.0\n"
+																								"TYPE: software.Security\n\n"
+																								"Disables a firewall with a security level of 5 or below\n"
+																								"This action will be detected immediately",
 
-							"HUD_ConnectionAnalysis",	9,		20000,	3,		1,  	"CONNECTION ANALYSIS V1.0\n"
-                                                                                        "TYPE: software.HUDUpgrade\n\n"
-                                                                                        "Upgrades your HUD so that you can see the security systems installed on your target computer, "
-                                                                                        "and launch Bypass software at them",
+							"HUD_ConnectionAnalysis",	9,		20000,	3,		1,  	4,		"CONNECTION ANALYSIS V1.0\n"
+																								"TYPE: software.HUDUpgrade\n\n"
+																								"Upgrades your HUD so that you can see the security systems installed on your target computer, "
+																								"and launch Bypass software at them",
 
-                            "HUD_IRC-Client",           9,      4000,   2,      1,      "IRC CLIENT V1.0\n"
-                                                                                        "TYPE: software.HUDUpgrade\n\n"
-                                                                                        "Upgrades your HUD with a new screen, in which you can participate in Internet Relay Chat. "
-                                                                                        "This allows you to talk to other hackers for help.\n"
-                                                                                        "You will also need an Internet Connection on your local machine.",
+                            "HUD_IRC-Client",           9,      4000,   2,      1,      1,		"IRC CLIENT V1.0\n"
+																								"TYPE: software.HUDUpgrade\n\n"
+																								"Upgrades your HUD with a new screen, in which you can participate in Internet Relay Chat. "
+																								"This allows you to talk to other hackers for help.\n"
+																								"You will also need an Internet Connection on your local machine.",
 
-							"HUD_MapShowTrace",			9,		5000,	1,		1,  	"MAP SHOW TRACE V1.0\n"
-                                                                                        "TYPE: software.HUDUpgrade\n\n"
-                                                                                        "Upgrades your HUD so that your map shows the progress of any trace on your connection.\n"
-                                                                                        "Replaces the Trace Tracker.",
+                            "HUD_KeyMapper",            9,       500,   1,      1,      4,		"KEY MAPPER V1.0\n"
+																								"TYPE: software.HUDUpgrade\n\n"
+																								"Upgrades your HUD with a new interface that lets you specify which programs are launched "
+																								"when you press the function keys. Keys reserved for other uses are indicated in the list.",
 
-							"HUD_LANView",			    9,		50000,	5,		1,  	"LAN VIEW V1.0\n"
-                                                                                        "TYPE: software.HUDUpgrade\n\n"
-                                                                                        "Upgrades your HUD so that you can analyse and connect to Local Area Network (LAN) systems.\n"
-                                                                                        "This upgrade is required before you can install and run any LAN software.",
+							"HUD_MapShowTrace",			9,		5000,	1,		1,  	4,		"MAP SHOW TRACE V1.0\n"
+																								"TYPE: software.HUDUpgrade\n\n"
+																								"Upgrades your HUD so that your map shows the progress of any trace on your connection.\n"
+																								"Replaces the Trace Tracker.",
 
-							"IP_Lookup",				10,		500,	1,		1,  	"IP LOOKUP V1.0\n"
-                                                                                        "TYPE: software.Other\n\n"
-                                                                                        "Converts a raw IP number into an Internet address and adds it to your links",
+							"HUD_LANView",			    9,		50000,	5,		1,  	1,		"LAN VIEW V1.0\n"
+																								"TYPE: software.HUDUpgrade\n\n"
+																								"Upgrades your HUD so that you can analyse and connect to Local Area Network (LAN) systems.\n"
+																								"This upgrade is required before you can install and run any LAN software.",
 
-							"IP_Probe",					10,		2000,	3,		1,  	"IP PROBE V1.0\n"
-                                                                                        "TYPE: software.Other\n\n"
-                                                                                        "Scans a given IP address for security systems and reports the types in use",
+							"IP_Lookup",				10,		500,	1,		1,  	2,		"IP LOOKUP V1.0\n"
+																								"TYPE: software.Other\n\n"
+																								"Converts a raw IP number into an Internet address and adds it to your links",
 
-							"IP_Probe",					10,		4000,	3,		2,  	"IP PROBE V2.0\n"
-                                                                                        "TYPE: software.Other\n\n"
-                                                                                        "Scans a given IP address for security systems and reports the types in use and their version information",
+							"IP_Probe",					10,		2000,	3,		1,  	2,		"IP PROBE V1.0\n"
+																								"TYPE: software.Other\n\n"
+																								"Scans a given IP address for security systems and reports the types in use",
 
-							"IP_Probe",					10,		5000,	3,		3,  	"IP PROBE V3.0\n"
-                                                                                        "TYPE: software.Other\n\n"
-                                                                                        "Scans a given IP address for security systems and reports the types in use, their version information and their status",
+							"IP_Probe",					10,		4000,	3,		2,  	4,		"IP PROBE V2.0\n"
+																								"TYPE: software.Other\n\n"
+																								"Scans a given IP address for security systems and reports the types in use and their version information",
 
-							"LAN_Probe",				6,		15000,	3,		1,		"LAN PROBE V1.0\n"
-																						"TYPE: Software.LAN\n\n"
-																						"Scans a single system on a LAN, and the links running from it.",
+							"IP_Probe",					10,		5000,	3,		3,  	4,		"IP PROBE V3.0\n"
+																								"TYPE: software.Other\n\n"
+																								"Scans a given IP address for security systems and reports the types in use, their version information and their status",
 
-							"LAN_Probe",				6,		20000,	3,		2,		"LAN PROBE V2.0\n"
-																						"TYPE: Software.LAN\n\n"
-																						"Scans a single system on a LAN, and the links running from it.",
+							"LAN_Probe",				6,		15000,	3,		1,		1,		"LAN PROBE V1.0\n"
+																								"TYPE: Software.LAN\n\n"
+																								"Scans a single system on a LAN, and the links running from it.",
 
-							"LAN_Probe",				6,		30000,	4,		3,		"LAN PROBE V3.0\n"
-																						"TYPE: Software.LAN\n\n"
-																						"Scans a single system on a LAN, and the links running from it.",
+							"LAN_Probe",				6,		20000,	3,		2,		1,		"LAN PROBE V2.0\n"
+																								"TYPE: Software.LAN\n\n"
+																								"Scans a single system on a LAN, and the links running from it.",
 
-							"LAN_Scan",					6,		10000,	2,		1,		"LAN SCAN V1.0\n"
-																						"TYPE: Software.LAN\n\n"
-																						"Scans an entire LAN, looking for systems",
+							"LAN_Probe",				6,		30000,	4,		3,		1,		"LAN PROBE V3.0\n"
+																								"TYPE: Software.LAN\n\n"
+																								"Scans a single system on a LAN, and the links running from it.",
 
-							"LAN_Scan",					6,		15000,	2,		2,		"LAN SCAN V2.0\n"
-																						"TYPE: Software.LAN\n\n"
-																						"Scans an entire LAN, looking for systems",
+							"LAN_Scan",					6,		10000,	2,		1,		1,		"LAN SCAN V1.0\n"
+																								"TYPE: Software.LAN\n\n"
+																								"Scans an entire LAN, looking for systems",
 
-							"LAN_Scan",					6,		25000,	2,		3,		"LAN SCAN V3.0\n"
-																						"TYPE: Software.LAN\n\n"
-																						"Scans an entire LAN, looking for systems",
+							"LAN_Scan",					6,		15000,	2,		2,		1,		"LAN SCAN V2.0\n"
+																								"TYPE: Software.LAN\n\n"
+																								"Scans an entire LAN, looking for systems",
 
-							"LAN_Spoof",				6,		20000,	2,		1,		"LAN SPOOF V1.0\n"
-																						"TYPE: Software.LAN\n\n"
-																						"Spoofs a system on the network, fooling the network itself\n"
-																						"into believing you are that system.\n"
-																						"Works on level 1 systems only.",
+							"LAN_Scan",					6,		25000,	2,		3,		1,		"LAN SCAN V3.0\n"
+																								"TYPE: Software.LAN\n\n"
+																								"Scans an entire LAN, looking for systems",
 
-							"LAN_Spoof",				6,		30000,	3,		2,		"LAN SPOOF V2.0\n"
-																						"TYPE: Software.LAN\n\n"
-																						"Spoofs a system on the network, fooling the network itself\n"
-																						"into believing you are that system.\n"
-																						"Works on level 1 and 2 systems.",
+							"LAN_Spoof",				6,		20000,	2,		1,		4,		"LAN SPOOF V1.0\n"
+																								"TYPE: Software.LAN\n\n"
+																								"Spoofs a system on the network, fooling the network itself\n"
+																								"into believing you are that system.\n"
+																								"Works on level 1 systems only.",
 
-							"LAN_Spoof",				6,		45000,	5,		3,		"LAN SPOOF V3.0\n"
-																						"TYPE: Software.LAN\n\n"
-																						"Spoofs a system on the network, fooling the network itself\n"
-																						"into believing you are that system.\n"
-																						"Works on all LAN systems.",
+							"LAN_Spoof",				6,		30000,	3,		2,		4,		"LAN SPOOF V2.0\n"
+																								"TYPE: Software.LAN\n\n"
+																								"Spoofs a system on the network, fooling the network itself\n"
+																								"into believing you are that system.\n"
+																								"Works on level 1 and 2 systems.",
 
-                            "LAN_Force",                6,      15000,  2,      1,      "LAN FORCE V1.0\n"
-                                                                                        "TYPE: Software.LAN\n\n"
-                                                                                        "This tool will force open any lock system you might\n"
-                                                                                        "encounter on a LAN system.\n"
-                                                                                        "The sys Admin will probably notice this.",
+							"LAN_Spoof",				6,		45000,	5,		3,		4,		"LAN SPOOF V3.0\n"
+																								"TYPE: Software.LAN\n\n"
+																								"Spoofs a system on the network, fooling the network itself\n"
+																								"into believing you are that system.\n"
+																								"Works on all LAN systems.",
 
-                            "LAN_Force",                6,      20000,  3,      2,      "LAN FORCE V2.0\n"
-                                                                                        "TYPE: Software.LAN\n\n"
-                                                                                        "This tool will force open any lock system you might\n"
-                                                                                        "encounter on a LAN system.\n"
-                                                                                        "The sys Admin will probably notice this.",
+                            "LAN_Force",                6,      15000,  2,      1,      2,		"LAN FORCE V1.0\n"
+																								"TYPE: Software.LAN\n\n"
+																								"This tool will force open any lock system you might\n"
+																								"encounter on a LAN system.\n"
+																								"The sys Admin will probably notice this.",
 
-                            "LAN_Force",                6,      25000,  4,      3,      "LAN FORCE V3.0\n"
-                                                                                        "TYPE: Software.LAN\n\n"
-                                                                                        "This tool will force open any lock system you might\n"
-                                                                                        "encounter on a LAN system.\n"
-                                                                                        "The sys Admin will probably notice this.",
+                            "LAN_Force",                6,      20000,  3,      2,      2,		"LAN FORCE V2.0\n"
+																								"TYPE: Software.LAN\n\n"
+																								"This tool will force open any lock system you might\n"
+																								"encounter on a LAN system.\n"
+																								"The sys Admin will probably notice this.",
+
+                            "LAN_Force",                6,      25000,  4,      3,      2,		"LAN FORCE V3.0\n"
+																								"TYPE: Software.LAN\n\n"
+																								"This tool will force open any lock system you might\n"
+																								"encounter on a LAN system.\n"
+																								"The sys Admin will probably notice this.",
                                                                                         
-                            "Log_Deleter",				3,		500,	1,		1,  	"LOG DELETER V1.0\n"
-                                                                                        "TYPE: software.Security\n\n"
-                                                                                        "Deletes the contents of an access log from a computer\n"
-																						"Leaves an empty log behind",
+                            "Log_Deleter",				3,		500,	1,		1,  	2,		"LOG DELETER V1.0\n"
+																								"TYPE: software.Security\n\n"
+																								"Deletes the contents of an access log from a computer\n"
+																								"Leaves an empty log behind",
 
-							"Log_Deleter",				3,		1000,	1,		2,  	"LOG DELETER V2.0\n"
-                                                                                        "TYPE: software.Security\n\n"
-                                                                                        "Deletes an access-log from a computer\n"
-																						"Leaves a distinctive blank space behind",
+							"Log_Deleter",				3,		1000,	1,		2,  	2,		"LOG DELETER V2.0\n"
+																								"TYPE: software.Security\n\n"
+																								"Deletes an access-log from a computer\n"
+																								"Leaves a distinctive blank space behind",
 
-							"Log_Deleter",				3,		2000,	1,		3,  	"LOG DELETER V3.0\n"
-                                                                                        "TYPE: software.Security\n\n"
-                                                                                        "Copies another user's legitimate access log over the top of of your own.\n"
-                                                                                        "Very difficult to detect.",	
+							"Log_Deleter",				3,		2000,	1,		3,  	2,		"LOG DELETER V3.0\n"
+																								"TYPE: software.Security\n\n"
+																								"Copies another user's legitimate access log over the top of of your own.\n"
+																								"Very difficult to detect.",	
 
-							"Log_Deleter",				3,		4000,	1,		4,  	"LOG DELETER V4.0\n"
-                                                                                        "TYPE: software.Security\n\n"
-                                                                                        "Deletes an access-log from a computer\n"
-																						"Moves other logs up to cover empty space.\n"
-                                                                                        "Impossible to detect.",
+							"Log_Deleter",				3,		4000,	1,		4,  	2,		"LOG DELETER V4.0\n"
+																								"TYPE: software.Security\n\n"
+																								"Deletes an access-log from a computer\n"
+																								"Moves other logs up to cover empty space.\n"
+																								"Impossible to detect.",
 
-							"Log_Modifier",				3,		4000,	2,		1,  	"LOG MODIFIER V1.0\n"
-                                                                                        "TYPE: software.Security\n\n"
-                                                                                        "Allows you to make modifications to an existing log",
+							"Log_Modifier",				3,		4000,	2,		1,  	2,		"LOG MODIFIER V1.0\n"
+																								"TYPE: software.Security\n\n"
+																								"Allows you to make modifications to an existing log",
 
-							"Log_Modifier",				3,		6000,	2,		2,  	"LOG MODIFIER V2.0\n"
-                                                                                        "TYPE: software.Security\n\n"
-                                                                                        "Allows you to make modifications to an existing log, and create new logs in blank spaces",
+							"Log_Modifier",				3,		6000,	2,		2,  	2,		"LOG MODIFIER V2.0\n"
+																								"TYPE: software.Security\n\n"
+																								"Allows you to make modifications to an existing log, and create new logs in blank spaces",
 
-							"Log_UnDeleter",			3,		5000,	1,		1,  	"LOG UNDELETER V1.0\n"
-                                                                                        "TYPE: software.Security\n\n"
-                                                                                        "Recovers previously deleted logs",
+							"Log_UnDeleter",			3,		5000,	1,		1,  	2,		"LOG UNDELETER V1.0\n"
+																								"TYPE: software.Security\n\n"
+																								"Recovers previously deleted logs",
 
-							"Monitor_Bypass",			5,		10000,	1,		1,  	"MONITOR BYPASS V1.0\n"
-                                                                                        "TYPE: software.Bypasser\n\n"
-                                                                                        "Actively bypasses a monitor with a security level of 1\n"
-                                                                                        "All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
+							"Monitor_Bypass",			5,		10000,	1,		1,  	4,		"MONITOR BYPASS V1.0\n"
+																								"TYPE: software.Bypasser\n\n"
+																								"Actively bypasses a monitor with a security level of 1\n"
+																								"All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
 
-							"Monitor_Bypass",			5,		12000,	1,		2,  	"MONITOR BYPASS V2.0\n"
-                                                                                        "TYPE: software.Bypasser\n\n"
-                                                                                        "Actively bypasses a monitor with a security level of 2 or below\n"
-                                                                                        "All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
+							"Monitor_Bypass",			5,		12000,	1,		2,  	4,		"MONITOR BYPASS V2.0\n"
+																								"TYPE: software.Bypasser\n\n"
+																								"Actively bypasses a monitor with a security level of 2 or below\n"
+																								"All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
 
-							"Monitor_Bypass",			5,		16000,	1,		3,  	"MONITOR BYPASS V3.0\n"
-                                                                                        "TYPE: software.Bypasser\n\n"
-                                                                                        "Actively bypasses a monitor with a security level of 3 or below\n"
-                                                                                        "All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
+							"Monitor_Bypass",			5,		16000,	1,		3,  	4,		"MONITOR BYPASS V3.0\n"
+																								"TYPE: software.Bypasser\n\n"
+																								"Actively bypasses a monitor with a security level of 3 or below\n"
+																								"All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
 
-							"Monitor_Bypass",			5,		20000,	1,		4,  	"MONITOR BYPASS V4.0\n"
-                                                                                        "TYPE: software.Bypasser\n\n"
-                                                                                        "Actively bypasses a monitor with a security level of 4 or below\n"
-                                                                                        "All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
+							"Monitor_Bypass",			5,		20000,	1,		4,  	4,		"MONITOR BYPASS V4.0\n"
+																								"TYPE: software.Bypasser\n\n"
+																								"Actively bypasses a monitor with a security level of 4 or below\n"
+																								"All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
 
-							"Monitor_Bypass",			5,		25000,	1,		5,  	"MONITOR BYPASS V5.0\n"
-                                                                                        "TYPE: software.Bypasser\n\n"
-                                                                                        "Actively bypasses a monitor with a security level of 5 or below\n"
-                                                                                        "All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
+							"Monitor_Bypass",			5,		25000,	1,		5,  	4,		"MONITOR BYPASS V5.0\n"
+																								"TYPE: software.Bypasser\n\n"
+																								"Actively bypasses a monitor with a security level of 5 or below\n"
+																								"All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
 
-							"Password_Breaker",			4,		1500,	2,		1,  	"PASSWORD BREAKER V1.0\n"
-                                                                                        "TYPE: software.Cracker\n\n"
-                                                                                        "Hacks past password protection screens\n"
-                                                                                        "Not as fast as a Dictionary Hacker but is guaranteed to find the password eventually",							
+							"Password_Breaker",			4,		1500,	2,		1,  	2,		"PASSWORD BREAKER V1.0\n"
+																								"TYPE: software.Cracker\n\n"
+																								"Hacks past password protection screens\n"
+																								"Not as fast as a Dictionary Hacker but is guaranteed to find the password eventually",							
 
-							"Proxy_Bypass",				5,		6000,	1,		1,  	"PROXY BYPASS V1.0\n"
-                                                                                        "TYPE: software.Bypasser\n\n"
-                                                                                        "Actively bypasses a proxy server with a security level of 1\n"
-                                                                                        "All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
+							"Proxy_Bypass",				5,		6000,	1,		1,  	4,		"PROXY BYPASS V1.0\n"
+																								"TYPE: software.Bypasser\n\n"
+																								"Actively bypasses a proxy server with a security level of 1\n"
+																								"All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
 
-							"Proxy_Bypass",				5,		8000,	1,		2,  	"PROXY BYPASS V2.0\n"
-                                                                                        "TYPE: software.Bypasser\n\n"
-                                                                                        "Actively bypasses a proxy server with a security level of 2 or below\n"
-                                                                                        "All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
+							"Proxy_Bypass",				5,		8000,	1,		2,  	4,		"PROXY BYPASS V2.0\n"
+																								"TYPE: software.Bypasser\n\n"
+																								"Actively bypasses a proxy server with a security level of 2 or below\n"
+																								"All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
 
-							"Proxy_Bypass",				5,		12000,	1,		3,  	"PROXY BYPASS V3.0\n"
-                                                                                        "TYPE: software.Bypasser\n\n"
-                                                                                        "Actively bypasses a proxy server with a security level of 3 or below\n"
-                                                                                        "All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
+							"Proxy_Bypass",				5,		12000,	1,		3,  	4,		"PROXY BYPASS V3.0\n"
+																								"TYPE: software.Bypasser\n\n"
+																								"Actively bypasses a proxy server with a security level of 3 or below\n"
+																								"All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
 
-							"Proxy_Bypass",				5,		16000,	1,		4,  	"PROXY BYPASS V4.0\n"
-                                                                                        "TYPE: software.Bypasser\n\n"
-                                                                                        "Actively bypasses a proxy server with a security level of 4 or below\n"
-                                                                                        "All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
+							"Proxy_Bypass",				5,		16000,	1,		4,  	4,		"PROXY BYPASS V4.0\n"
+																								"TYPE: software.Bypasser\n\n"
+																								"Actively bypasses a proxy server with a security level of 4 or below\n"
+																								"All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
 
-							"Proxy_Bypass",				5,		20000,	1,		5,  	"PROXY BYPASS V5.0\n"
-                                                                                        "TYPE: software.Bypasser\n\n"
-                                                                                        "Actively bypasses a proxy server with a security level of 5 or below\n"
-                                                                                        "All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
+							"Proxy_Bypass",				5,		20000,	1,		5,  	4,		"PROXY BYPASS V5.0\n"
+																								"TYPE: software.Bypasser\n\n"
+																								"Actively bypasses a proxy server with a security level of 5 or below\n"
+																								"All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
 
-							"Proxy_Disable",			3,		3000,	1,		1,  	"PROXY DISABLE V1.0\n"
-                                                                                        "TYPE: software.Security\n\n"
-                                                                                        "Disables a proxy with a security level of 1\n"
-                                                                                        "This action will be detected immediately",
+							"Proxy_Disable",			3,		3000,	1,		1,  	2,		"PROXY DISABLE V1.0\n"
+																								"TYPE: software.Security\n\n"
+																								"Disables a proxy with a security level of 1\n"
+																								"This action will be detected immediately",
 
-							"Proxy_Disable",			3,		4000,	1,		2,  	"PROXY DISABLE V2.0\n"
-                                                                                        "TYPE: software.Security\n\n"
-                                                                                        "Disables a proxy with a security level of 2 or below\n"
-                                                                                        "This action will be detected immediately",
+							"Proxy_Disable",			3,		4000,	1,		2,  	2,		"PROXY DISABLE V2.0\n"
+																								"TYPE: software.Security\n\n"
+																								"Disables a proxy with a security level of 2 or below\n"
+																								"This action will be detected immediately",
 
-							"Proxy_Disable",			3,		6000,	1,		3,  	"PROXY DISABLE V3.0\n"
-                                                                                        "TYPE: software.Security\n\n"
-                                                                                        "Disables a proxy with a security level of 3 or below\n"
-                                                                                        "This action will be detected immediately",
+							"Proxy_Disable",			3,		6000,	1,		3,  	2,		"PROXY DISABLE V3.0\n"
+																								"TYPE: software.Security\n\n"
+																								"Disables a proxy with a security level of 3 or below\n"
+																								"This action will be detected immediately",
 
-							"Proxy_Disable",			3,		8000,	2,		4,  	"PROXY DISABLE V4.0\n"
-                                                                                        "TYPE: software.Security\n\n"
-                                                                                        "Disables a proxy with a security level of 4 or below\n"
-                                                                                        "This action will be detected immediately",
+							"Proxy_Disable",			3,		8000,	2,		4,  	2,		"PROXY DISABLE V4.0\n"
+																								"TYPE: software.Security\n\n"
+																								"Disables a proxy with a security level of 4 or below\n"
+																								"This action will be detected immediately",
 
-							"Proxy_Disable",			3,		10000,	3,		5,  	"PROXY DISABLE V5.0\n"
-                                                                                        "TYPE: software.Security\n\n"
-                                                                                        "Disables a proxy with a security level of 5 or below\n"
-                                                                                        "This action will be detected immediately",
+							"Proxy_Disable",			3,		10000,	3,		5,  	2,		"PROXY DISABLE V5.0\n"
+																								"TYPE: software.Security\n\n"
+																								"Disables a proxy with a security level of 5 or below\n"
+																								"This action will be detected immediately",
 							
-							"Trace_Tracker",			3,		300,	1,		1,  	"TRACE TRACKER V1.0\n"
-                                                                                        "TYPE: software.Security\n\n"
-                                                                                        "Informs you on the progress of any traces on your connection\n"
-																						"(No trace detected, Trace in progress, Trace complete)",
+							"Trace_Tracker",			3,		300,	1,		1,  	2,		"TRACE TRACKER V1.0\n"
+																								"TYPE: software.Security\n\n"
+																								"Informs you on the progress of any traces on your connection\n"
+																								"(No trace detected, Trace in progress, Trace complete)",
 
-							"Trace_Tracker",			3,		600,	1,		2,  	"TRACE TRACKER V2.0\n"
-                                                                                        "TYPE: software.Security\n\n"
-                                                                                        "Informs you on the progress of any traces on your connection\n"
-																						"(No trace detected, Percentage of trace complete, Trace complete)",
+							"Trace_Tracker",			3,		600,	1,		2,  	2,		"TRACE TRACKER V2.0\n"
+																								"TYPE: software.Security\n\n"
+																								"Informs you on the progress of any traces on your connection\n"
+																								"(No trace detected, Percentage of trace complete, Trace complete)",
 
-							"Trace_Tracker",			3,		1400,	2,		3,  	"TRACE TRACKER V3.0\n"
-                                                                                        "TYPE: software.Security\n\n"
-                                                                                        "Informs you on the progress of any traces on your connection\n"
-																						"(No trace detected, Time remaining before trace, Trace complete)",
+							"Trace_Tracker",			3,		1400,	2,		3,  	2,		"TRACE TRACKER V3.0\n"
+																								"TYPE: software.Security\n\n"
+																								"Informs you on the progress of any traces on your connection\n"
+																								"(No trace detected, Time remaining before trace, Trace complete)",
 
-							"Trace_Tracker",			3,		2500,	3,		4,  	"TRACE TRACKER V4.0\n"
-                                                                                        "TYPE: software.Security\n\n"
-                                                                                        "Informs you on the progress of any traces on your connection\n"
-																						"(No trace detected, Time remaining before trace, Trace complete)\n"
-                                                                                        "Including an estimate of the exact time remaining",
+							"Trace_Tracker",			3,		2500,	3,		4,  	2,		"TRACE TRACKER V4.0\n"
+																								"TYPE: software.Security\n\n"
+																								"Informs you on the progress of any traces on your connection\n"
+																								"(No trace detected, Time remaining before trace, Trace complete)\n"
+																								"Including an estimate of the exact time remaining",
 
-							"Voice_Analyser",			10,		5000,	4,		1,		"VOICE ANALYSER V1.0\n"
-                                                                                        "TYPE: software.Other\n\n"
-                                                                                        "Records and analyses voice patterns for reproduction.\n"
-																						"Can be used to simulate voice authorisations.",
+							"Voice_Analyser",			10,		5000,	4,		1,		2,		"VOICE ANALYSER V1.0\n"
+																								"TYPE: software.Other\n\n"
+																								"Records and analyses voice patterns for reproduction.\n"
+																								"Can be used to simulate voice authorisations.",
 
-							"Voice_Analyser",			10,		10000,	5,		2,		"VOICE ANALYSER V2.0\n"
-                                                                                        "TYPE: software.Other\n\n"
-                                                                                        "Records and analyses voice patterns for reproduction.\n"
-																						"Can store and load voice data to and from gateway memory.\n"																						"Can be used to simulate voice authorisations."
+							"Voice_Analyser",			10,		10000,	5,		2,		2,		"VOICE ANALYSER V2.0\n"
+																								"TYPE: software.Other\n\n"
+																								"Records and analyses voice patterns for reproduction.\n"
+																								"Can store and load voice data to and from gateway memory.\n"																						"Can be used to simulate voice authorisations."
 																											
 																	};
 
@@ -545,53 +593,53 @@ SOFTWARE_UPGRADES [] = {
 const ComputerUpgrade
 HARDWARE_UPGRADES [] = {
 
-							"CPU ( 20 Ghz )",	        1,		250,	0,		20, 	"CPU ( 20 Ghz )\n\n"
-                                                                                        "A slow and simple processor designed for use in parallel with many others,"
-                                                                                        "in large scale super-computers",
-                            "CPU ( 60 Ghz )",			1,		1000,	0,		60,		"CPU ( 60 Ghz )\n\n"
-                                                                                        "An entry level processor, fitted as standard to all agent computers",
-							"CPU ( 80 Ghz )",			1,		1300,	0,		80,		"CPU ( 80 Ghz )\n\n"
-                                                                                        "A low budget, low speed processor",
-							"CPU ( 100 Ghz )",			1,		3000,	0,		100,	"CPU ( 100 Ghz )\n\n"
-                                                                                        "A reasonably fast processor, and a good upgrade choice for new agents",
-							"CPU ( 120 Ghz )",			1,		5000,	0,		120,	"CPU ( 120 Ghz )\n\n"
-                                                                                        "A faster processor with onboard MPU instruction handling for faster instruction execution",
-							"CPU ( 150 Ghz )",			1,		8000,	0,		150,	"CPU ( 150 Ghz )\n\n"
-                                                                                        "A very fast processor, ideal for cpu-intensive activity",
-							"CPU ( Turbo 200 Ghz )",	1,		12000,  0,		200,	"CPU ( Turbo 200 Ghz )\n\n"
-                                                                                        "A high-speed accelerated processor with unique pre-emptive instruction handling, "
-                                                                                        "for use in high-priority critical systems",							
+							"CPU ( 20 Ghz )",	        1,		250,	0,		20, 	2,		"CPU ( 20 Ghz )\n\n"
+																								"A slow and simple processor designed for use in parallel with many others,"
+																								"in large scale super-computers",
+                            "CPU ( 60 Ghz )",			1,		1000,	0,		60,		2,		"CPU ( 60 Ghz )\n\n"
+																								"An entry level processor, fitted as standard to all agent computers",
+							"CPU ( 80 Ghz )",			1,		1300,	0,		80,		2,		"CPU ( 80 Ghz )\n\n"
+																								"A low budget, low speed processor",
+							"CPU ( 100 Ghz )",			1,		3000,	0,		100,	2,		"CPU ( 100 Ghz )\n\n"
+																								"A reasonably fast processor, and a good upgrade choice for new agents",
+							"CPU ( 120 Ghz )",			1,		5000,	0,		120,	2,		"CPU ( 120 Ghz )\n\n"
+																								"A faster processor with onboard MPU instruction handling for faster instruction execution",
+							"CPU ( 150 Ghz )",			1,		8000,	0,		150,	2,		"CPU ( 150 Ghz )\n\n"
+																								"A very fast processor, ideal for cpu-intensive activity",
+							"CPU ( Turbo 200 Ghz )",	1,		12000,  0,		200,	2,		"CPU ( Turbo 200 Ghz )\n\n"
+																								"A high-speed accelerated processor with unique pre-emptive instruction handling, "
+																								"for use in high-priority critical systems",							
 
-							"Modem ( 1 Gq / s )",		2,		1000,	0,		1,		"Modem ( 1 Gq / s )\n\n"
-                                                                                        "An entry level modem with a low transfer rate, "
-                                                                                        "fitted as standard in all new Gateway systems",
-							"Modem ( 2 Gq / s )",		2,		2000,   0,		2,		"Modem ( 2 Gq / s )\n\n"
-                                                                                        "An low speed modem with a fairly low transfer rate",
-							"Modem ( 4 Gq / s )",		2,		4000,	0,		4,		"Modem ( 4 Gq / s )\n\n"
-                                                                                        "A reasonable speed modem at a good price",
-							"Modem ( 6 Gq / s )",		2,		6000,	0,		6,		"Modem ( 6 Gq / s )\n\n"
-                                                                                        "A fast modem, normally sufficient for all but the highest bandwidth requirements",
-                            "Modem ( 8 Gq / s )",		2,		8000,	0,		8,		"Modem ( 8 Gq / s )\n\n"
-                                                                                        "A very fast modem for large files and fast access times",
-							"Modem ( 10 Gq / s )",		2,		10000,	0,		10,		"Modem ( 10 Gq / s )\n\n"
-                                                                                        "A blindingly fast modem which will take full advantage of the network bandwidth available",
+							"Modem ( 1 Gq / s )",		2,		1000,	0,		1,		2,		"Modem ( 1 Gq / s )\n\n"
+																								"An entry level modem with a low transfer rate, "
+																								"fitted as standard in all new Gateway systems",
+							"Modem ( 2 Gq / s )",		2,		2000,   0,		2,		2,		"Modem ( 2 Gq / s )\n\n"
+																								"An low speed modem with a fairly low transfer rate",
+							"Modem ( 4 Gq / s )",		2,		4000,	0,		4,		2,		"Modem ( 4 Gq / s )\n\n"
+																								"A reasonable speed modem at a good price",
+							"Modem ( 6 Gq / s )",		2,		6000,	0,		6,		2,		"Modem ( 6 Gq / s )\n\n"
+																								"A fast modem, normally sufficient for all but the highest bandwidth requirements",
+                            "Modem ( 8 Gq / s )",		2,		8000,	0,		8,		2,		"Modem ( 8 Gq / s )\n\n"
+																								"A very fast modem for large files and fast access times",
+							"Modem ( 10 Gq / s )",		2,		10000,	0,		10,		2,		"Modem ( 10 Gq / s )\n\n"
+																								"A blindingly fast modem which will take full advantage of the network bandwidth available",
 
-							"Memory ( 8 Gq )",			4,		3000,	0,		8,		"Memory ( 8 Gq )\n\n"
-                                                                                        "8 Gigaquads of storage space",
-							"Memory ( 16 Gq )",			4,		5500,	0,		16,		"Memory ( 16 Gq )\n\n"
-                                                                                        "16 Gigaquads of storage space",
-							"Memory ( 24 Gq )",			4,		8000,	0,		24,		"Memory ( 24 Gq )\n\n"
-                                                                                        "24 Gigaquads of storage space",
-							"Memory ( 32 Gq )",			4,		11000,	0,		32,		"Memory ( 32 Gq )\n\n"
-                                                                                        "32 Gigaquads of storage space",
+							"Memory ( 8 Gq )",			4,		3000,	0,		8,		2,		"Memory ( 8 Gq )\n\n"
+																								"8 Gigaquads of storage space",
+							"Memory ( 16 Gq )",			4,		5500,	0,		16,		2,		"Memory ( 16 Gq )\n\n"
+																								"16 Gigaquads of storage space",
+							"Memory ( 24 Gq )",			4,		8000,	0,		24,		2,		"Memory ( 24 Gq )\n\n"
+																								"24 Gigaquads of storage space",
+							"Memory ( 32 Gq )",			4,		11000,	0,		32,		2,		"Memory ( 32 Gq )\n\n"
+																								"32 Gigaquads of storage space",
 
-							"Gateway Self Destruct",	5,		20000,	1,		0,		"Gateway Self Destruct\n\n"
-                                                                                        "Explosives are attached to your Gateway computer, "
-                                                                                        "designed to destroy any evidence.\n"
-                                                                                        "This is a doomsday device that has saved many agents from jail in the past.",
-							"Gateway Motion Sensor",	5,		10000,	1,		0,		"Gateway Motion Sensor\n\n"
-                                                                                        "An ultra-sonic based motion sensor, which can detect when people are near your gateway. "
-                                                                                        "Often used together with a Self Destruct device."
+							"Gateway Self Destruct",	5,		20000,	1,		0,		1,		"Gateway Self Destruct\n\n"
+																								"Explosives are attached to your Gateway computer, "
+																								"designed to destroy any evidence.\n"
+																								"This is a doomsday device that has saved many agents from jail in the past.",
+							"Gateway Motion Sensor",	5,		10000,	1,		0,		2,		"Gateway Motion Sensor\n\n"
+																								"An ultra-sonic based motion sensor, which can detect when people are near your gateway. "
+																								"Often used together with a Self Destruct device."
 
 																	};
 

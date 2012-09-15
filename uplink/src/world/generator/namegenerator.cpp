@@ -410,6 +410,12 @@ char *NameGenerator::GenerateLANName( char *companyname )
     return tempname;
 }
 
+char *NameGenerator::GenerateNameServerName( char *companyname )
+{
+    UplinkSnprintf( tempname, sizeof ( tempname ), "%s Nameserver", companyname );
+    return tempname;
+}
+
 char *NameGenerator::GeneratePersonalComputerName( char *personname )
 {
     UplinkSnprintf( tempname, sizeof ( tempname ), "%s's Personal Computer", personname );

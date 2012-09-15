@@ -73,6 +73,9 @@
 #include "interface/remoteinterface/protovisionscreen_interface.h"
 #include "interface/remoteinterface/nuclearwarscreen_interface.h"
 #include "interface/remoteinterface/radiotransmitterscreen_interface.h"
+#include "interface/remoteinterface/auxgatewayscreen_interface.h"
+#include "interface/remoteinterface/buygatewayscreen_interface.h"
+#include "interface/remoteinterface/nameserverscreen_interface.h"
 
 
 // ============================================================================
@@ -317,6 +320,9 @@ void RemoteInterface::RunScreen ( int screenindex, Computer *compref )
                     case SCREEN_PROTOVISION     :   screen = new ProtovisionScreenInterface ();     break;                  
                     case SCREEN_NUCLEARWAR      :   screen = new NuclearWarScreenInterface ();      break;
                     case SCREEN_RADIOTRANSMITTER:   screen = new RadioTransmitterScreenInterface ();break;
+                    case SCREEN_AUXGATEWAY		:   screen = new AuxGatewayScreenInterface ();		break;
+                    case SCREEN_NEWGATEWAY		:   screen = new BuyGatewayScreenInterface ();		break;
+                    case SCREEN_NAMESERVERSCREEN:   screen = new NameServerScreenInterface ();		break;
 
 					default:
 						UplinkAbortArgs ( "Unrecognised GenericScreen %d, computer '%s' (%s)", ((GenericScreen *) cs)->SCREEN_TYPE, comp->name, comp->ip );
@@ -413,7 +419,10 @@ bool RemoteInterface::VerifyScreen ( int screenindex )
                     case SCREEN_CODECARD        :
                     case SCREEN_PROTOVISION     :
                     case SCREEN_NUCLEARWAR      :
-                    case SCREEN_RADIOTRANSMITTER: break;
+                    case SCREEN_AUXGATEWAY      :
+                    case SCREEN_NEWGATEWAY      :
+                    case SCREEN_NAMESERVERSCREEN:
+					case SCREEN_RADIOTRANSMITTER: break;
 
 					default:
 						UplinkPrintAbortArgs ( "Unrecognised GenericScreen %d, computer '%s' (%s)", ((GenericScreen *) cs)->SCREEN_TYPE, comp->name, comp->ip );

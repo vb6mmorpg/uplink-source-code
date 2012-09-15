@@ -603,9 +603,12 @@ void LinksScreenInterface::ApplyFilter ( char *filter )
 			}
 
 			char *computername = vl->computer;
+			char *ip = vl->ip;
 			char *lowercasename = LowerCaseString ( computername );
+			char *lowercaseip = LowerCaseString ( ip );
 
-            if ( strstr ( lowercasename, lowercasefilter ) != NULL) {
+            if ( strstr ( lowercasename, lowercasefilter ) != NULL ||
+				 strstr ( lowercaseip,   lowercasefilter ) != NULL ) {
 
 				size_t datacopysize = SIZE_VLOCATION_IP;
                 char *datacopy = new char [datacopysize];
@@ -791,15 +794,45 @@ void LinksScreenInterface::Create ( ComputerScreen *newcs )
 			DArray <VLocation *> *locs = game->GetWorld ()->locations.ConvertToDArray ();
 
 			for ( int i = 0; i < locs->Size (); ++i )
-				if ( locs->ValidIndex (i) )		
-                    if ( locs->GetData (i)->GetOBJECTID () != OID_VLOCATIONSPECIAL )
+				if ( locs->ValidIndex (i) )	
+				{
+					VLocation *vl = locs->GetData (i);
+					Computer *comp = vl->GetComputer();
+					if ( vl->GetOBJECTID () != OID_VLOCATIONSPECIAL && comp->companyname == companyname )
 					    alllinks.PutData ( locs->GetData (i)->ip );
 
+				}
 			delete locs;
 
 			SetFullList ( &alllinks );
-			ApplyFilter ( companyname );
-			SetFullList ();
+			//ApplyFilter ( companyname );
+			//SetFullList ();
+	
+		}
+		else if ( GetComputerScreen ()->SCREENTYPE == LINKSSCREENTYPE_TELEPHONE ) {
+
+			char *companyname = GetComputerScreen ()->GetComputer ()->companyname;
+
+			LList <char *> alllinks;
+			DArray <VLocation *> *locs = game->GetWorld ()->locations.ConvertToDArray ();
+
+			for ( int i = 0; i < locs->Size (); ++i )
+			{
+				if ( locs->ValidIndex (i) )	
+				{
+					VLocation *vl = locs->GetData (i);
+					Computer *comp = vl->GetComputer();
+					if ( (vl->GetOBJECTID () == OID_VLOCATIONSPECIAL && comp->TYPE == COMPUTER_TYPE_LAN ) ||
+						 comp->TYPE == COMPUTER_TYPE_VOICEPHONESYSTEM )
+					    alllinks.PutData ( vl->ip );
+
+				}
+			}
+			delete locs;
+
+			SetFullList ( &alllinks );
+			//ApplyFilter ( companyname );
+			//SetFullList ();
 	
 		}
 

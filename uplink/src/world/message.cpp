@@ -191,6 +191,14 @@ bool Message::Load ( FILE *file )
 	if ( !LoadLList ( &links, file ) ) return false;
 	if ( !LoadBTree ( &codes, file ) ) return false;
 
+	// Conditional loading for attachments
+	bool dataexists = false;
+	if ( !FileReadData ( &dataexists, sizeof(dataexists), 1, file ) ) return false;
+	if ( dataexists ) {
+		data = new Data();
+		if ( !data->Load( file ) ) return false;
+	}
+
 	LoadID_END ( file );
 
 	return true;
@@ -212,7 +220,17 @@ void Message::Save ( FILE *file )
 
 	SaveLList ( &links, file );
 	SaveBTree ( &codes, file );
-
+	
+	//Conditional saving for attachment
+	bool dataexists = false;
+	if ( data ) {
+		dataexists = true;
+		fwrite ( &dataexists, sizeof(dataexists), 1, file );
+		data->Save( file );
+	}
+	else {
+		fwrite ( &dataexists, sizeof(dataexists), 1, file );
+	}
 	SaveID_END ( file );
 
 }

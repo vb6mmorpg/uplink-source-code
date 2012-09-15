@@ -119,7 +119,7 @@ void AnalyserInterface::ConnectionDraw ( Button *button, bool highlighted, bool 
 	// Draw connecting lines
 	//
 
-	if ( strcmp ( remotehost, IP_LOCALHOST ) != 0 ) {
+	if ( strcmp ( remotehost, game->GetWorld ()->GetPlayer ()->localhost ) != 0 ) {
 
 		glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );
 		glLineWidth ( 2 );
@@ -311,7 +311,7 @@ void AnalyserInterface::Update ()
 
 		// Create the new remote host buttons
 
-		if ( strcmp ( comp->ip, IP_LOCALHOST ) != 0 ) {
+		if ( strcmp ( comp->ip, game->GetWorld ()->GetPlayer ()->localhost ) != 0 ) {
 
 			if ( !EclGetButton ( "analyser_remotehost" ) ) {
 

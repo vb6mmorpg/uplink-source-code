@@ -16,6 +16,7 @@
 
 #include "app/app.h"
 #include "app/globals.h"
+#include "app/serialise.h"
 #include "app/miscutils.h"
 #include "app/opengl_interface.h"
 
@@ -31,8 +32,10 @@
 
 #include "world/world.h"
 #include "world/player.h"
+#include "world/computer/computer.h"
 #include "world/company/sale.h"
-#include "world/company/companyuplink.h"
+#include "world/company/company.h"
+//#include "world/company/companyuplink.h"
 
 #include "mmgr.h"
 
@@ -61,8 +64,14 @@ void SWSalesScreenInterface::ClickSWButton ( Button *button )
 	UplinkSnprintf ( oldname, sizeof ( oldname ), "SWsale %d", currentselect - baseoffset );
 	EclDirtyButton ( oldname );
 
-	CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
-	UplinkAssert ( cu );
+	//CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
+	ComputerScreen *hostscreen = game->GetInterface ()->GetRemoteInterface ()->GetComputerScreen ();
+	UplinkAssert (hostscreen);
+	Computer *host = hostscreen->GetComputer ();
+	UplinkAssert (host);
+	Company *comp = game->GetWorld ()->GetCompany ( host->companyname );
+	UplinkAssert( comp->GetOBJECTID () == OID_COMPANYSALES || comp->GetOBJECTID () == OID_COMPANYUPLINK );
+	CompanySales *cu = (CompanySales *) comp;
 
 	if ( cu->GetSWSale ( index ) && cu->GetSWSale ( index )->GetVersion (1) ) {
 
@@ -88,8 +97,14 @@ void SWSalesScreenInterface::DrawSWButton ( Button *button, bool highlighted, bo
 
 	// Get the text from sale number (index + baseoffset)
 
-	CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
-	UplinkAssert ( cu );
+	//CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
+	ComputerScreen *hostscreen = game->GetInterface ()->GetRemoteInterface ()->GetComputerScreen ();
+	UplinkAssert (hostscreen);
+	Computer *host = hostscreen->GetComputer ();
+	UplinkAssert (host);
+	Company *comp = game->GetWorld ()->GetCompany ( host->companyname );
+	UplinkAssert( comp->GetOBJECTID () == OID_COMPANYSALES || comp->GetOBJECTID () == OID_COMPANYUPLINK );
+	CompanySales *cu = (CompanySales *) comp;
 
 	Sale *sale = cu->GetSWSale ( index );
 
@@ -168,8 +183,14 @@ void SWSalesScreenInterface::MousedownSWButton ( Button *button )
 	int index;
 	sscanf ( button->name, "SWsale %d", &index );
 
-	CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
-	UplinkAssert ( cu );
+	//CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
+	ComputerScreen *hostscreen = game->GetInterface ()->GetRemoteInterface ()->GetComputerScreen ();
+	UplinkAssert (hostscreen);
+	Computer *host = hostscreen->GetComputer ();
+	UplinkAssert (host);
+	Company *comp = game->GetWorld ()->GetCompany ( host->companyname );
+	UplinkAssert( comp->GetOBJECTID () == OID_COMPANYSALES || comp->GetOBJECTID () == OID_COMPANYUPLINK );
+	CompanySales *cu = (CompanySales *) comp;
 
 	if ( cu->GetSWSale ( index + baseoffset ) ) {
 
@@ -186,8 +207,14 @@ void SWSalesScreenInterface::HighlightSWButton ( Button *button )
 	int index;
 	sscanf ( button->name, "SWsale %d", &index );
 
-	CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
-	UplinkAssert ( cu );
+	//CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
+	ComputerScreen *hostscreen = game->GetInterface ()->GetRemoteInterface ()->GetComputerScreen ();
+	UplinkAssert (hostscreen);
+	Computer *host = hostscreen->GetComputer ();
+	UplinkAssert (host);
+	Company *comp = game->GetWorld ()->GetCompany ( host->companyname );
+	UplinkAssert( comp->GetOBJECTID () == OID_COMPANYSALES || comp->GetOBJECTID () == OID_COMPANYUPLINK );
+	CompanySales *cu = (CompanySales *) comp;
 
 	if ( cu->GetSWSale ( index + baseoffset ) )
 		button_highlight ( button );
@@ -215,8 +242,14 @@ bool SWSalesScreenInterface::EscapeKeyPressed ()
 void SWSalesScreenInterface::AcceptClick ( Button *button )
 {
 
-	CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
-	UplinkAssert ( cu );
+	//CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
+	ComputerScreen *hostscreen = game->GetInterface ()->GetRemoteInterface ()->GetComputerScreen ();
+	UplinkAssert (hostscreen);
+	Computer *host = hostscreen->GetComputer ();
+	UplinkAssert (host);
+	Company *comp = game->GetWorld ()->GetCompany ( host->companyname );
+	UplinkAssert( comp->GetOBJECTID () == OID_COMPANYSALES || comp->GetOBJECTID () == OID_COMPANYUPLINK );
+	CompanySales *cu = (CompanySales *) comp;
 
 	Sale *sale = cu->GetSWSale ( currentselect );
 
@@ -251,6 +284,9 @@ void SWSalesScreenInterface::AcceptClick ( Button *button )
 
                 else if ( strcmp ( sale->title, "HUD_LANView" ) == 0 )
                     game->GetWorld ()->GetPlayer ()->gateway.GiveHUDUpgrade ( HUDUPGRADE_LANVIEW );
+
+                else if ( strcmp ( sale->title, "HUD_KeyMapper" ) == 0 )
+                    game->GetWorld ()->GetPlayer ()->gateway.GiveHUDUpgrade ( HUDUPGRADE_KEYMAPPER );
 
 				else
 					UplinkAbort ( "Unrecognised HUD upgrade" );
@@ -312,7 +348,9 @@ void SWSalesScreenInterface::AcceptClick ( Button *button )
 			// Go ahead and buy it
 			//
 
-			game->GetWorld ()->GetPlayer ()->ChangeBalance ( sv->cost * -1, "Uplink Corporation Software sales" );
+			char caption[128];
+			UplinkSnprintf(caption, sizeof(caption), "%s Software sales", host->companyname);
+			game->GetWorld ()->GetPlayer ()->ChangeBalance ( sv->cost * -1, caption );
 
 			EclRegisterCaptionChange ( "swsales_details", "Item purchased" );
 
@@ -356,8 +394,14 @@ void SWSalesScreenInterface::AcceptClick ( Button *button )
 void SWSalesScreenInterface::NextVersionClick ( Button *button )
 {
 
-	CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
-	UplinkAssert ( cu );
+	//CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
+	ComputerScreen *hostscreen = game->GetInterface ()->GetRemoteInterface ()->GetComputerScreen ();
+	UplinkAssert (hostscreen);
+	Computer *host = hostscreen->GetComputer ();
+	UplinkAssert (host);
+	Company *comp = game->GetWorld ()->GetCompany ( host->companyname );
+	UplinkAssert( comp->GetOBJECTID () == OID_COMPANYSALES || comp->GetOBJECTID () == OID_COMPANYUPLINK );
+	CompanySales *cu = (CompanySales *) comp;
 
 	Sale *sale = cu->GetSWSale ( currentselect );
 
@@ -383,8 +427,14 @@ void SWSalesScreenInterface::NextVersionClick ( Button *button )
 void SWSalesScreenInterface::PrevVersionClick ( Button *button )
 {
 
-	CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
-	UplinkAssert ( cu );
+	//CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
+	ComputerScreen *hostscreen = game->GetInterface ()->GetRemoteInterface ()->GetComputerScreen ();
+	UplinkAssert (hostscreen);
+	Computer *host = hostscreen->GetComputer ();
+	UplinkAssert (host);
+	Company *comp = game->GetWorld ()->GetCompany ( host->companyname );
+	UplinkAssert( comp->GetOBJECTID () == OID_COMPANYSALES || comp->GetOBJECTID () == OID_COMPANYUPLINK );
+	CompanySales *cu = (CompanySales *) comp;
 
 	Sale *sale = cu->GetSWSale ( currentselect );
 
@@ -470,8 +520,14 @@ void SWSalesScreenInterface::Create ( ComputerScreen *newcs )
 		EclRegisterButton ( baseX, baseY + 110 - 15, 72, 15, "Exit Market", "Close the screen and return to the main menu", "swsales_exit" );
 		EclRegisterButtonCallback ( "swsales_exit", ExitClick );
 
-    	CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
-	    UplinkAssert ( cu );
+		//CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
+		ComputerScreen *hostscreen = game->GetInterface ()->GetRemoteInterface ()->GetComputerScreen ();
+		UplinkAssert (hostscreen);
+		Computer *host = hostscreen->GetComputer ();
+		UplinkAssert (host);
+		Company *comp = game->GetWorld ()->GetCompany ( host->companyname );
+		UplinkAssert( comp->GetOBJECTID () == OID_COMPANYSALES || comp->GetOBJECTID () == OID_COMPANYUPLINK );
+		CompanySales *cu = (CompanySales *) comp;
         ScrollBox::CreateScrollBox ( "swsales_scroll", 22 + SY(390), 47, 15, NumItemsOnScreen() * 20, cu->sw_sales.Size(), NumItemsOnScreen(), 0, ScrollChange );
 
 		baseoffset = 0;
