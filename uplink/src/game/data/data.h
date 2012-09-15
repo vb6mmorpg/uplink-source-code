@@ -278,6 +278,7 @@ const int PROB_MISSION_TRACEUSER []         =          {  0,  0,  0,  0,  0,  0,
 #define		PAYMENT_MISSION_REMOVECOMPANY				2000
 #define		PAYMENT_MISSION_REMOVEUSER					1900
 
+#define		PAYMENT_MISSION_FREEAGENT					2000
 
 /*
     Payment for special missions
@@ -298,6 +299,7 @@ const int PROB_MISSION_TRACEUSER []         =          {  0,  0,  0,  0,  0,  0,
 #define     PAYMENT_SPECIALMISSION_GRANDTOUR            50000
 
 #define     PAYMENT_SPECIALMISSION_MOLE                 50000
+
 
 
 /*  ===========================================================================
@@ -332,6 +334,7 @@ const int PROB_MISSION_TRACEUSER []         =          {  0,  0,  0,  0,  0,  0,
 #define		MINDIFFICULTY_MISSION_REMOVECOMPANY				8
 #define		MINDIFFICULTY_MISSION_REMOVEUSER				8
 
+#define		MINDIFFICULTY_MISSION_FREEAGENT					5
 
 
 /*  ===========================================================================

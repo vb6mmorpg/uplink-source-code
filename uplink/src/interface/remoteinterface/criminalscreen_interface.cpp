@@ -199,6 +199,39 @@ void CriminalScreenInterface::ArrestClick ( Button *button )
 			brokenparole = strstr ( convictions, "parole" ) || strstr ( convictions, "Parole" );
 		}
 
+		Person *person = game->GetWorld()->GetPerson(name);
+		UplinkAssert(person);
+		if ( person->GetStatus() == PERSON_STATUS_INJAIL ) {
+			// We actually clicked Release not Arrest if we got here
+			if ( numconvictions > 0 ) {
+				create_msgbox ( "Release Rejected", "This person has a criminal record." );
+				return;
+			}
+
+			Date rundate;
+			rundate.SetDate ( &(game->GetWorld ()->date) );
+			rundate.AdvanceMinute ( TIME_LEGALACTION );
+			
+			ArrestEvent *ae = new ArrestEvent ();
+			ae->SetName ( name );
+			ae->SetReason ( "falsely accused" );
+			ae->SetRunDate ( &rundate );
+			game->GetWorld ()->scheduler.ScheduleEvent ( ae );
+
+			rundate.AdvanceMinute ( TIME_LEGALACTION_WARNING * -1 );
+			game->GetWorld ()->scheduler.ScheduleWarning ( ae, &rundate );
+			
+			char message [128];
+			sprintf ( message, "Authorisation Accepted\nThis man will be released in %d hours.", TIME_LEGALACTION / 60 );
+
+			create_msgbox ( "Release Authorised", message );
+			return;
+		} else if ( person->GetStatus() == PERSON_STATUS_DEAD ) {
+			// Arrest a dead man?
+			create_msgbox ( "Arrest Rejected", "This person is deceased." );
+			return;
+		}
+
 		if ( numconvictions >= 2 && brokenparole ) {
 
 			// This person is going down
@@ -343,6 +376,7 @@ void CriminalScreenInterface::UpdateScreen ()
 {
 
 	if ( IsVisible () ) {
+		if ( recordindex < 0 ) { return; }
 
 		Computer *comp = game->GetWorld ()->GetComputer ( "Global Criminal Database" );
 		UplinkAssert (comp);
@@ -365,7 +399,17 @@ void CriminalScreenInterface::UpdateScreen ()
 			char filename [256];
 			UplinkSnprintf ( filename, sizeof ( filename ), "photos/image%d.tif", person->photoindex );
 			button_assignbitmap ( "criminal_photo", filename );
-
+			// For neatness, we dont bother changing the caption if we are ReadOnly and have no arrest button
+			if ( searchname != NULL || EclGetButton("criminal_arrest") == NULL )
+			{
+				// Idle here, we dont care what the button is showing while we are searching
+				// or have no button to change the caption of
+			} else if ( person->GetStatus() == PERSON_STATUS_INJAIL )
+			{
+				EclRegisterCaptionChange("criminal_arrest","Authorise Release");
+			} else {
+				EclRegisterCaptionChange("criminal_arrest","Authorise Arrest");
+			}
 		}
 		else {
 
@@ -401,8 +445,8 @@ void CriminalScreenInterface::Update ()
 				delete [] searchname;
 				searchname = NULL;
 				recordindex = -1;
+				UpdateScreen ();
 				return;
-
 			}
 
 			Record *rec = comp->recordbank.GetRecord ( recordindex );

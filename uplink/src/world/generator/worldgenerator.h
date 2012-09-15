@@ -101,6 +101,9 @@ public:
 
 	static void		 GenerateNameServerRecord		  ( Computer *computer, char *companyname );
 	static void		 GeneratePublicNameServerRecord	  ( Computer *computer );
+
+	static Computer  *GenerateProjectServer	          ( char *companyname );
+
 	// Low level functions for "fleshing out" specific items of data
 
 	static Company   *GenerateCompany ( char *companyname, int size, int TYPE, int growth, int alignment );

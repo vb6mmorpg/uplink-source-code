@@ -43,6 +43,7 @@
 
 #include "mmgr.h"
 
+#include "darwinia.h"
 
 char *MISSION_TITLE [] = {
                                 "Backfire",
@@ -383,17 +384,21 @@ void PlotGenerator::Initialise_DARWIN ()
 	Computer *cm  = WorldGenerator::GenerateCentralMainframe		( companyname );
     Computer *lan = WorldGenerator::GenerateLAN                     ( companyname );
     Computer *ns  = WorldGenerator::GenerateNameServer              ( companyname );
+	Computer *ps  = WorldGenerator::GenerateProjectServer			( companyname );
 
 	WorldGenerator::GenerateNameServerRecord(pas,companyname);
 	WorldGenerator::GenerateNameServerRecord(ism,companyname);
 	WorldGenerator::GenerateNameServerRecord(cm,companyname);
 	WorldGenerator::GenerateNameServerRecord(lan,companyname);
+	WorldGenerator::GenerateNameServerRecord(ps,companyname);
 	WorldGenerator::GeneratePublicNameServerRecord(ns);
 
 	pas->SetIsTargetable ( false );
 	ism->SetIsTargetable ( false );
 	 cm->SetIsTargetable ( false );
     lan->SetIsTargetable ( false );
+	 ns->SetIsTargetable ( false );
+	 ps->SetIsTargetable ( false );
 
 	for ( int i = 0; i < 3; ++i ) {
 		Computer *comp = WorldGenerator::GenerateComputer ( companyname );
@@ -417,6 +422,50 @@ void PlotGenerator::Initialise_DARWIN ()
 
     company->Grow ( 0 );
 
+	Record *record = new Record ();
+	record->AddField ( RECORDBANK_NAME, "sepulveda" );
+	record->AddField ( RECORDBANK_PASSWORD, NameGenerator::GenerateComplexPassword () );
+	record->AddField ( RECORDBANK_SECURITY, "1" );
+	ps->recordbank.AddRecord ( record );
+
+	Data *darwinia = new Data();
+#ifdef DEMOGAME
+	darwinia->SetTitle("Darwinia_Demo");
+#else
+	darwinia->SetTitle("Darwinia");
+#endif
+	darwinia->SetDetails(DATATYPE_PROGRAM,16,8,5,1.0);
+	ps->databank.InsertData(darwinia);
+
+	Data *monitor2 = new Data();
+	monitor2->SetTitle("Darwin_Monitor");
+#ifdef DEMOGAME
+	monitor2->SetDetails(DATATYPE_PROGRAM,2,8,0,1.0,SOFTWARETYPE_OTHER);
+#else
+	monitor2->SetDetails(DATATYPE_PROGRAM,4,8,0,2.0,SOFTWARETYPE_OTHER);
+#endif
+	ps->databank.InsertData(monitor2);
+
+#ifdef DEMOGAME
+	game->GetWorld ()->GetDarwinia ()->CreateDarwiniaDemo();
+#else
+	game->GetWorld ()->GetDarwinia ()->CreateDarwinia();
+#endif
+	game->GetWorld ()->GetDarwinia ()->CreateDarwiniaDemo2();
+
+	for ( int i = 0; i < game->GetWorld ()->GetDarwinia ()->CountIslands (); i++ )
+	{
+		DarwiniaIsland *island = game->GetWorld ()->GetDarwinia ()->GetIsland ( i );
+		UplinkAssert(island);
+
+		Data *data = new Data();
+		char title[SIZE_DATA_TITLE];
+		UplinkSnprintf(title, sizeof(title), "Darwinia%s", island->name);
+		data->SetTitle(title);
+		data->SetDetails(DATATYPE_DATA,island->size,8,5);
+		ps->databank.InsertData(data);
+
+	}
 }
 
 void PlotGenerator::Run_Scene ( int newact, int newscene )

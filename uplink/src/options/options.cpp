@@ -405,7 +405,7 @@ bool Options::Load ( FILE *file )
 	// Read from our own options file
 
 	char filename [256];
-	UplinkSnprintf ( filename, sizeof ( filename ), "%soptions", app->userpath );
+	UplinkSnprintf ( filename, sizeof ( filename ), "%soptions.storm", app->userpath );
 	printf ( "Loading uplink options from %s...", filename );
 
 	FILE *optionsfile = NULL;
@@ -495,7 +495,7 @@ void Options::Save ( FILE *file )
 	MakeDirectory ( app->userpath );
 
 	char filename [256];
-	UplinkSnprintf ( filename, sizeof ( filename ), "%soptions", app->userpath );
+	UplinkSnprintf ( filename, sizeof ( filename ), "%soptions.storm", app->userpath );
 
 	printf ( "Saving uplink options to %s...", filename );
 

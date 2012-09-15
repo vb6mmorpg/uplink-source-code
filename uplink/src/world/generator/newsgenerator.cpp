@@ -396,6 +396,16 @@ void NewsGenerator::ComputerDestroyed ( Computer *comp, bool filesdeleted )
 
 	UplinkAssert ( comp );
 
+	// Fix for news reports about people companies
+	Company *c = game->GetWorld()->GetCompany(comp->companyname);
+	UplinkAssert(c);
+
+	if ( c->TYPE == COMPANYTYPE_UNKNOWN ) {
+		return;
+	}
+	// End Fix
+
+
 		/* ==========================================================
 			Structure
 
@@ -546,6 +556,7 @@ void NewsGenerator::AllFilesStolen ( Computer *comp, char *filetype, int totalfi
 {
 
 	UplinkAssert (comp);
+
 
 	// Filetype is SCIENTIFIC, CORPORATE, CUSTOMER or SOFTWARE
 
@@ -938,6 +949,155 @@ void NewsGenerator::Arrested ( Person *person, Computer *comp, char *reason )
 	//delete [] part2.str ();
 	//delete [] part3.str ();
 	//delete [] details.str ();
+
+	CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
+	UplinkAssert (cu);
+	cu->CreateNews ( news );
+
+}
+
+void NewsGenerator::Released ( Person *person, Computer *comp, char *reason )
+{
+
+	UplinkAssert ( person );
+	UplinkAssert ( reason );
+	// comp can be NULL
+
+
+		/* ==========================================================
+			Structure:		
+
+			Headline
+			Part1		:		Intro and basic overview
+			part2		:		Background of person
+			part3		:		World reaction / consequences
+
+		   ========================================================== */
+
+	ostrstream headline;
+	ostrstream part1, part2, part3;
+
+	part1 << "Earlier today a man was released from jail by Federal Agents after being falsely accused.";
+
+	// ================================================================================================================
+	// Civilian released
+	// ================================================================================================================
+
+	if ( person->rating.uplinkrating == 0 ) {								
+
+		switch ( NumberGenerator::RandomNumber ( 3 ) + 1 ) {
+			case 1 :			headline << "Computer crime suspect released";							break;
+			case 2 :			headline << "Comuter fraud suspect released";			break;
+			case 3 :			headline << "Federal agents release suspect";				break;
+		}
+
+		part2 << "The man released, who has been named as " << person->name << ", had protested his innocence "
+				 "from the start, claiming he had no knowledge of Computers at all and could not have "
+				 "committed this crime.";
+
+		switch ( NumberGenerator::RandomNumber ( 2 ) + 1 ) {
+			case 1 :			part3 << "The man could have served "
+										 " several years in jail for this crime.";
+								break;
+			case 2 :			part3 << "This case went to court and he could have faced some time in jail.  "
+										 "Friends and family today celebrated the success of a campaign to prove his innocence, claiming "
+										 "that he does not have the knowledge or equipment necessary to complete "
+										 "the crimes he had been accused of.";
+								break;
+		}
+
+	}
+
+	// ================================================================================================================
+	// Amateur hacker released
+	// ================================================================================================================
+	else if ( person->rating.uplinkrating < 3 ) {							
+
+		switch ( NumberGenerator::RandomNumber ( 3 ) + 1 ) {
+			case 1 :			headline << "Amateur hacker back at large";						break;
+			case 2 :			headline << "Hacker released by federal agents";					break;
+			case 3 :			headline << "Part-time hacker set free";						break;
+		}
+
+		part2 << "The man has been named by Federal Agents as " << person->name << ", and was on record with a "
+				 "history of small time computer crime.  Police who arrested him found Computer equipment and "
+				 "hardware for hacking in his house.  It was believed this man was a part-time employee of the "
+				 "underground hacker group Uplink-Corporation, where he went by the hacker alias of "
+				 << ((Agent *) person)->handle << ".";
+
+		part3 << "Unfortunately, the man in question has been released due to a lack of hard evidence against him.";
+
+	}
+
+	// ================================================================================================================
+	// Experienced hacker released
+	// ================================================================================================================
+
+	else if ( person->rating.uplinkrating < 11 ) {							
+
+		switch ( NumberGenerator::RandomNumber ( 3 ) + 1 ) {
+			case 1 :			headline << "Experienced computer hacker back at large";				break;
+			case 2 :			headline << "Federal Agents release underground Hacker";			break;
+			case 3 :			headline << "High-ranked Uplink Agent free again";						break;
+		}
+
+		part2 << "The man's real name is " << person->name << " and he was thought to be a well known player in the underground "
+				 "hacker scene.  It was believed he was a full-time freelance hacker, working for several organised "
+				 "groups including the well known Uplink-Corporation, where he went by the hacker alias of "
+				 << ((Agent *) person)->handle << ".";
+
+		part3 << "Police suspected this man of multiple computer crimes and as such it was believed he will serve "
+			     "between ten and fifteen years inprisonment, but the case collapsed earlier today due to the disappearance "
+				 "of key evidence.";
+
+
+	}
+
+	// ================================================================================================================
+	// Hacker demi-god released
+	// ================================================================================================================
+
+	else {																	
+
+		switch ( NumberGenerator::RandomNumber ( 3 ) + 1 ) {
+			case 1 :			headline << "Hacker ring-leader arrested free again";					break;
+			case 2 :			headline << "Police release hacker 'Demi-God'";							break;
+			case 3 :			headline << "Federal Agents annoyed with release of hacker leader";		break;
+		}
+
+		part2 << "The man in question is " << person->name << " and he was thought to be a well established member of the secretive "
+				 "underground hacker movement Uplink-Corporation, where he worked behind the hacker alias of "
+				 << ((Agent *) person)->handle << ". Police have had a file on this many for several years and finally "
+				 "caught him red handed.";
+
+		part3 << "Unfortunately, key evidence and witnesses failed to appear at court, and the case has collapsed. "
+				 "This man is now free to hack again.";
+
+	}
+
+
+	//
+	// Concatenate each part together and post it
+	//
+
+	headline << '\x0';
+	part1 << '\x0';	
+	part2 << '\x0';
+	part3 << '\x0';
+
+	ostrstream details;
+	details << part1.str () << "\n\n" << part2.str () << "\n\n" << part3.str () << '\x0';
+	
+	News *news = new News ();
+	news->SetHeadline ( headline.str () );
+	news->SetDetails ( details.str () );
+	news->SetData ( NEWS_TYPE_RELEASE, person->name, NULL );
+	
+	delete [] headline.str ();
+	delete [] part1.str ();
+	delete [] part2.str ();
+	delete [] part3.str ();
+	delete [] details.str ();
 
 	CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
 	UplinkAssert (cu);

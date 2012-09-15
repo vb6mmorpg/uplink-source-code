@@ -43,6 +43,8 @@
 #include "world/scheduler/eventscheduler.h"
 #include "world/scheduler/notificationevent.h"
 
+#include "darwinia.h"
+
 #include "mmgr.h"
 
 
@@ -64,7 +66,9 @@ World::World()
 	ConsequenceGenerator::Initialise ();
 	NewsGenerator::Initialise ();
 	LanGenerator::Initialise ();
-	
+
+	darwinia = new Darwinia();
+
 	//
 	// Load the password list from a disk file
 	//
@@ -382,6 +386,11 @@ Player *World::GetPlayer ()
 
 }
 
+Darwinia *World::GetDarwinia ( )
+{
+	return darwinia;
+}
+
 bool World::Load ( FILE *file )
 {
 	
@@ -407,6 +416,8 @@ bool World::Load ( FILE *file )
 
 	WorldGenerator::UpdateSoftwareUpgrades ( ); 
 
+	darwinia->Load(file);
+
 	LoadID_END ( file );
 
 	return true;
@@ -428,6 +439,8 @@ void World::Save ( FILE *file )
 	SaveBTree ( (BTree <UplinkObject *> *) &computers, file );
 	SaveBTree ( (BTree <UplinkObject *> *) &people,    file );
 	
+	darwinia->Save(file);	// Will save all the darwinia islands for us :)
+
 	SaveID_END ( file );
 
 }
@@ -499,6 +512,8 @@ void World::Update ()
 
 		nextupdate.SetDate ( &date );
 		nextupdate.AdvanceSecond ( 2 );
+
+		darwinia->Update();
 
 	}
 

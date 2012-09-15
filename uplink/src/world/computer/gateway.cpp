@@ -633,6 +633,11 @@ void Gateway::GiveStartingSoftware ()
     defrag->SetTitle ( "Defrag" );
     defrag->SetDetails ( DATATYPE_PROGRAM, 2, 0, 0, 1.0, SOFTWARETYPE_FILEUTIL );
     databank.PutData ( defrag, 4 );
+
+    Data *monitor = new Data ();
+    monitor->SetTitle ( "Darwin_Monitor" );
+    monitor->SetDetails ( DATATYPE_PROGRAM, 4, 0, 0, 2.0, SOFTWARETYPE_OTHER );
+    databank.PutData ( monitor, 4 );
 #endif
 
 }

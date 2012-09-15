@@ -203,7 +203,7 @@ Mission *MissionGenerator::Generate_StealFile ( Company *employer )
 
 	UplinkAssert (employer);
 
-	int type = NumberGenerator::RandomNumber ( 2 ) + 1;
+	int type = NumberGenerator::RandomNumber ( 3 ) + 1;
 
 	Mission *m = NULL;
 
@@ -229,6 +229,16 @@ Mission *MissionGenerator::Generate_StealFile ( Company *employer )
 			break;
 		}
 
+		case 3 :
+		{
+			Computer *target = WorldGenerator::GetRandomComputer ( COMPUTER_TYPE_INTERNALSERVICESMACHINE |
+                                                                   COMPUTER_TYPE_CENTRALMAINFRAME |
+                                                                   COMPUTER_TYPE_LAN );
+			UplinkAssert (target);
+			if ( strcmp ( employer->name, target->companyname ) == 0 ) return NULL;
+			m = Generate_StealSourceFile   ( employer, target );
+			break;
+		}
 	};
 
 	return m;
@@ -369,6 +379,170 @@ Mission *MissionGenerator::Generate_StealSingleFile ( Company *employer, Compute
 
 }
 
+Mission *MissionGenerator::Generate_StealSourceFile ( Company *employer, Computer *target )
+{
+
+	UplinkAssert (employer);
+	UplinkAssert (target);
+
+
+	if ( strcmp ( employer->name, target->companyname ) == 0 ) return NULL;
+
+	int difficulty = (int) NumberGenerator::RandomNormalNumber ( MINDIFFICULTY_MISSION_STEALFILE, DIFFICULTY_MISSION_VARIANCE );
+	if ( difficulty < MINDIFFICULTY_MISSION_STEALFILE ) difficulty = MINDIFFICULTY_MISSION_STEALFILE;
+
+	if ( target->TYPE == COMPUTER_TYPE_CENTRALMAINFRAME )   difficulty += 1;
+    if ( target->TYPE == COMPUTER_TYPE_LAN )                difficulty += 2;
+
+
+	// Set up the basic variables of the mission
+
+	int payment			= (int) NumberGenerator::RandomNormalNumber ( (float) ( difficulty * PAYMENT_MISSION_STEALFILE ),
+	                                                                  (float) ( difficulty * PAYMENT_MISSION_STEALFILE
+	                                                                                       * PAYMENT_MISSION_VARIANCE ) );
+	int minrating		= difficulty;
+
+	int acceptrating	= minrating + NumberGenerator::RandomNumber ( 2 );
+
+	if ( minrating > 10 ) minrating = 10;
+	if ( acceptrating > 10 ) acceptrating = 10;
+
+	payment = int ( payment / 100 ) * 100;				// Rounds payment to the nearest 100
+
+
+	// Create the data to be stolen and add it to the target computer's memory
+
+
+	int softwareIndex = (int) NumberGenerator::RandomNumber(NUM_STARTINGSOFTWAREUPGRADES);
+	const ComputerUpgrade *cu = &(SOFTWARE_UPGRADES [softwareIndex]);
+
+	int range = cu->data + 2;
+	int fileSection = (int) NumberGenerator::RandomNumber(range);
+
+	while ( cu->TYPE == 2 || cu->TYPE == 9 ) {
+		softwareIndex = (int) NumberGenerator::RandomNumber(NUM_STARTINGSOFTWAREUPGRADES);
+		cu = &(SOFTWARE_UPGRADES [softwareIndex]);
+	}
+
+
+	char sprinkleTitle [64];
+	if ( fileSection == 0 ) {
+		UplinkSnprintf ( sprinkleTitle, sizeof( sprinkleTitle ), "%sCore", cu->name );
+	} else if ( fileSection == 1 ) {
+		UplinkSnprintf ( sprinkleTitle, sizeof( sprinkleTitle ), "%sSpec", cu->name );
+	} else {
+		UplinkSnprintf ( sprinkleTitle, sizeof( sprinkleTitle ), "%sData-%d", cu->name, cu->data );
+	}
+	int datasize = (int) ((cu->size * 5) / (cu->data+2));
+
+	//char *datatitle = NameGenerator::GenerateDataName ( target->name, DATATYPE_DATA );
+
+	int encrypted = difficulty < 3 ? 0 : (int) NumberGenerator::RandomNormalNumber ( (float) difficulty, (float) ( difficulty / 2 ) );
+    if ( encrypted > 7 ) encrypted = 7;
+
+	int compressed = 0;
+
+	Data *data = new Data ();
+	data->SetTitle ( sprinkleTitle );
+	data->SetDetails ( DATATYPE_DATA, datasize, encrypted, compressed, 1.0, (fileSection == 1 ? cu->TYPE : 0) );
+
+	if ( target->databank.FindValidPlacement ( data ) == -1 )
+		target->databank.SetSize ( target->databank.GetSize () + data->size + 2 );
+
+    target->databank.InsertData ( data );
+	//target->databank.PutData ( data );
+
+	if ( strcmp ( game->GetWorld ()->GetPlayer ()->GetRemoteHost ()->ip, target->ip ) != 0 )
+		target->databank.RandomizeDataPlacement ();
+
+	// Infer the internal services contact address
+
+	char personname [SIZE_PERSON_NAME];
+	UplinkSnprintf ( personname, sizeof ( personname ), "internal@%s.net", employer->name );
+
+
+	// Generate the fields of the mission
+
+	char description [SIZE_MISSION_DESCRIPTION];
+	std::ostrstream details;
+	std::ostrstream fulldetails;
+
+	switch ( NumberGenerator::RandomNumber ( 3 ) + 1 ) {
+
+		case 1 :		UplinkStrncpy ( description,  "Steal important source code from a rival company's file server", sizeof ( description ) );		break;
+		case 2 :		UplinkStrncpy ( description,  "Access a remote system and copy important source code", sizeof ( description ) );			break;
+		case 3 :		UplinkStrncpy ( description,  "Gain access to a rival system and steal source code", sizeof ( description ) );			break;
+
+	}
+
+	details << "Payment for this job is " << payment << " credits.\n"
+			<< "You will require " << datasize << " GigaQuads of storage space.\n"
+			<< "This job has been assigned an Uplink difficulty of " << difficulty << ".\n"
+			<< "An UplinkRating of " << Rating::GetUplinkRatingString ( acceptrating ) << " or above will be sufficient for automatic acceptance.\n\n";
+
+	if ( target->TYPE == COMPUTER_TYPE_LAN )
+		details << "\nThe data is stored on a LAN.\n";
+
+	details << '\x0';
+
+
+	fulldetails << "Thankyou for working for " << employer->name << ".\n"
+				<< "\n"
+				<< "TARGET COMPUTER DATA :\n"
+				<< "   LOCATION: " << target->name << "\n"
+				<< "   IP      : " << target->ip << "\n"
+				<< "   FILENAME: " << sprinkleTitle << "\n"
+				<< "   FILESIZE: " << datasize << " GigaQuads\n"
+				<< "\n";
+
+	if ( encrypted > 0 && encrypted < 5 )	fulldetails << "\nThe file will be encrypted.\n";
+	else if ( encrypted >= 5 )				fulldetails << "\nThe file will be heavily encrypted.\n";
+
+	if ( compressed > 0 && compressed < 5 )	fulldetails << "\nThe file will be compressed.\n";
+	else if ( compressed >= 5 )				fulldetails << "\nThe file will be heavily compressed.\n";
+
+
+	fulldetails	<< "\nReturn the file via email to\n"
+				<< personname << "\n"
+				<< "\n"
+				<< "END"
+				<< '\x0';
+
+	Date postdate;
+	postdate.SetDate ( &(game->GetWorld ()->date) );
+	postdate.AdvanceHour ( NumberGenerator::RandomNumber ( 96 ) * -1 );
+	postdate.AdvanceMinute ( NumberGenerator::RandomNumber ( 60 ) * -1 );
+
+	// Insert the mission
+	Mission *mission = new Mission ();
+	mission->SetTYPE		 ( MISSION_STEALFILE );
+	mission->SetCompletion   ( target->ip, sprinkleTitle, NULL, NULL, NULL );
+	mission->SetEmployer     ( employer->name );
+	mission->SetContact      ( personname );
+	mission->SetPayment      ( payment, (int) ( payment * 1.1 ) );
+	mission->SetDifficulty   ( difficulty );
+	mission->SetMinRating    ( minrating );
+	mission->SetAcceptRating ( acceptrating );
+	mission->SetDescription  ( description );
+	mission->SetDetails		 ( details.str () );
+	mission->SetFullDetails  ( fulldetails.str () );
+	if ( difficulty > 3 )		mission->SetWhySoMuchMoney ( "The files contain sensitive data." );
+	if ( !game->IsRunning () )	mission->SetCreateDate   ( &postdate );
+	mission->GiveLink ( target->ip );
+
+	details.rdbuf()->freeze( 0 );
+	fulldetails.rdbuf()->freeze( 0 );
+	//delete [] details.str ();
+	//delete [] fulldetails.str ();
+
+	CompanyUplink *cup = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
+	UplinkAssert ( cup );
+	cup->CreateMission ( mission );
+
+	return mission;
+
+}
+
 Mission *MissionGenerator::Generate_StealAllFiles ( Company *employer, Computer *target )
 {
 
@@ -472,6 +646,42 @@ Mission *MissionGenerator::Generate_StealAllFiles ( Company *employer, Computer 
 		target->databank.PutData ( file );
 
 	}
+
+	// Sprinkle some compiler files around
+	if ( missiontype == 4 ) {
+		int softwareIndex = (int) NumberGenerator::RandomNumber(NUM_STARTINGSOFTWAREUPGRADES);
+		const ComputerUpgrade *cu = &(SOFTWARE_UPGRADES [softwareIndex]);
+
+		int range = cu->data + 2;
+		int fileSection = (int) NumberGenerator::RandomNumber(range);
+
+		// Ignore type 2 (HW Driver) and 9 (HUD Upgrades)
+		if ( cu->TYPE != 2 && cu->TYPE != 9 ) {
+			char sprinkleTitle [64];
+			if ( fileSection == 0 ) {
+				UplinkSnprintf ( sprinkleTitle, sizeof( sprinkleTitle ), "%sCore", cu->name );
+			} else if ( fileSection == 1 ) {
+				UplinkSnprintf ( sprinkleTitle, sizeof( sprinkleTitle ), "%sSpec", cu->name );
+			} else {
+				UplinkSnprintf ( sprinkleTitle, sizeof( sprinkleTitle ), "%sData-%d", cu->name, cu->data );
+			}
+
+			Data *sprinkle = new Data ();
+			sprinkle->SetTitle(sprinkleTitle);
+			if ( fileSection == 1 ) {
+				// xxxSpec contains the SoftwareType for the compiled program, so we must store it here
+				sprinkle->SetDetails( DATATYPE_DATA, min(3,(cu->size * 5) / (cu->data +2)), 0, 0, 1.0, cu->TYPE);
+			} else {
+				sprinkle->SetDetails( DATATYPE_DATA, min(3,(cu->size * 5) / (cu->data +2)), 0, 0);
+			}
+
+			while ( target->databank.FindValidPlacement (sprinkle) == -1 )
+				target->databank.SetSize ( target->databank.GetSize () + sprinkle->size );
+
+			target->databank.PutData ( sprinkle );
+		}
+	}
+	// End Sprinkle
 
 	if ( strcmp ( game->GetWorld ()->GetPlayer ()->GetRemoteHost ()->ip, target->ip ) != 0 )
 		target->databank.RandomizeDataPlacement ();
@@ -882,6 +1092,41 @@ Mission *MissionGenerator::Generate_DestroyAllFiles ( Company *employer, Compute
 		target->databank.PutData ( file );
 
 	}
+	// Sprinkle some compiler files around
+	if ( type == 4 ) {
+		int softwareIndex = (int) NumberGenerator::RandomNumber(NUM_STARTINGSOFTWAREUPGRADES);
+		const ComputerUpgrade *cu = &(SOFTWARE_UPGRADES [softwareIndex]);
+
+		int range = cu->data + 2;
+		int fileSection = (int) NumberGenerator::RandomNumber(range);
+
+		// Ignore type 2 (HW Driver) and 9 (HUD Upgrades)
+		if ( cu->TYPE != 2 && cu->TYPE != 9 ) {
+			char sprinkleTitle [64];
+			if ( fileSection == 0 ) {
+				UplinkSnprintf ( sprinkleTitle, sizeof( sprinkleTitle ), "%sCore", cu->name );
+			} else if ( fileSection == 1 ) {
+				UplinkSnprintf ( sprinkleTitle, sizeof( sprinkleTitle ), "%sSpec", cu->name );
+			} else {
+				UplinkSnprintf ( sprinkleTitle, sizeof( sprinkleTitle ), "%sData-%d", cu->name, cu->data );
+			}
+
+			Data *sprinkle = new Data ();
+			sprinkle->SetTitle(sprinkleTitle);
+			if ( fileSection == 1 ) {
+				// xxxSpec contains the SoftwareType for the compiled program, so we must store it here
+				sprinkle->SetDetails( DATATYPE_DATA, min(3,(cu->size * 5) / (cu->data +2)), 0, 0, 1.0, cu->TYPE);
+			} else {
+				sprinkle->SetDetails( DATATYPE_DATA, min(3,(cu->size * 5) / (cu->data +2)), 0, 0);
+			}
+
+			while ( target->databank.FindValidPlacement (sprinkle) == -1 )
+				target->databank.SetSize ( target->databank.GetSize () + sprinkle->size );
+
+			target->databank.PutData ( sprinkle );
+		}
+	}
+	// End Sprinkle
 
 	if ( strcmp ( game->GetWorld ()->GetPlayer ()->GetRemoteHost ()->ip, target->ip ) != 0 )
 		target->databank.RandomizeDataPlacement ();
@@ -3084,8 +3329,9 @@ bool MissionGenerator::IsMissionComplete ( Mission *mission, Person *person, Mes
 		case MISSION_CHANGEACCOUNT:			return IsMissionComplete_ChangeAccount  ( mission, person, message );		break;
 		case MISSION_REMOVECOMPUTER:		return IsMissionComplete_RemoveComputer ( mission, person, message );		break;
 		case MISSION_REMOVEUSER:			return IsMissionComplete_RemoveUser		( mission, person, message );		break;
-		case MISSION_PAYFINE:				return IsMissionComplete_PayFine		( mission, person, message );		break;
 		case MISSION_CHANGEDATADNS:			return IsMissionComplete_ChangeDNS		( mission, person, message );		break;
+		case MISSION_PAYFINE:				return IsMissionComplete_PayFine		( mission, person, message );		break;
+		case MISSION_FREEAGENT:				return IsMissionComplete_FreeAgent		( mission, person, message );		break;
 
         case MISSION_SPECIAL:               return IsMissionComplete_Special        ( mission, person, message );       break;
 
@@ -4252,8 +4498,10 @@ void MissionGenerator::MissionCompleted ( Mission *mission, Person *person, Mess
 	else if ( mission->paymentmethod == MISSIONPAYMENT_AFTERCOMPLETION )	game->GetWorld ()->GetPlayer ()->ChangeBalance ( mission->payment, "Anonymous benefactor" );
 
 	game->GetWorld ()->GetPlayer ()->rating.ChangeUplinkScore ( mission->difficulty );
-	game->GetWorld ()->GetPlayer ()->rating.ChangeNeuromancerScore ( NEUROMANCERCHANGE [mission->TYPE] );
-
+	//game->GetWorld ()->GetPlayer ()->rating.ChangeNeuromancerScore ( NEUROMANCERCHANGE [mission->TYPE] );
+	if ( mission->TYPE < MISSION_PAYFINE ) {
+		game->GetWorld ()->GetPlayer ()->rating.ChangeNeuromancerScore ( NEUROMANCERCHANGE [mission->TYPE] );
+	}
 	ConsequenceGenerator::MissionCompleted ( mission, game->GetWorld ()->GetPlayer () );
 
 #ifdef DEMOGAME
@@ -4394,4 +4642,144 @@ bool MissionGenerator::IsMissionComplete_ChangeDNS	( Mission *mission, Person *p
 	UplinkAbort ( "MissionGenerator::IsMissionComplete_ChangeDNS - could not find record" );
 	return false;				// Keeps the compiler happy
 	
+}
+
+
+Mission *MissionGenerator::Generate_FreeAgent ( Person *target )
+{
+
+	int difficulty = NumberGenerator::RandomNormalNumber ( MINDIFFICULTY_MISSION_FREEAGENT, DIFFICULTY_MISSION_VARIANCE );
+	if ( difficulty < MINDIFFICULTY_MISSION_FREEAGENT ) difficulty = MINDIFFICULTY_MISSION_FREEAGENT;
+
+	Company *employer = game->GetWorld()->GetCompany("Uplink");
+	UplinkAssert ( employer );
+
+	//
+	// Set up the basic variables of the mission
+	//
+
+	int payment			= NumberGenerator::RandomNormalNumber ( difficulty * PAYMENT_MISSION_FREEAGENT,
+																difficulty * PAYMENT_MISSION_FREEAGENT 
+																		   * PAYMENT_MISSION_VARIANCE );
+
+	int minrating		= difficulty;
+	int acceptrating	= minrating + NumberGenerator::RandomNumber ( 3 );
+
+	if ( minrating > 10 ) minrating = 10;
+	if ( acceptrating > 10 ) acceptrating = 10;
+
+	payment = int ( payment / 100 ) * 100;				// Rounds payment to the nearest 100
+
+	
+	char personname [SIZE_PERSON_NAME];					// Person to send completion email to
+	sprintf ( personname, "internal@%s.net", employer->name );	
+
+	//
+	// Find the target person
+	// (Never the player)
+	//
+
+	//Person *target = WorldGenerator::GetRandomPerson ();
+	if ( target == game->GetWorld ()->GetPlayer () ) return NULL;
+
+	//
+	// Fill in the fields
+	//
+
+	char description [SIZE_MISSION_DESCRIPTION];
+	ostrstream details;
+	ostrstream fulldetails;
+
+
+	sprintf ( description, "Skilled Agent required to free fellow agent" );
+	
+	details << "Payment for this job is " << payment << " credits.\n"			
+			<< "This job has been assigned an Uplink difficulty of " << difficulty << ".\n"
+			<< "An UplinkRating of " << Rating::GetUplinkRatingString ( acceptrating ) << " or above will be sufficient for automatic acceptance.\n\n"
+			<< '\x0';
+
+	fulldetails << "One of our Agents has had the misfortune to get himself arrested. "
+				   "Since he has knowledge of our operations, we would like him released "
+				   "as soon as possible. Break into the global criminal database and "
+				   "authorise his release.\n\n"
+				   "TARGET : " << target->name << "\n\n"
+				   "Once you have completed the task, send a mail to "
+				   << personname << " and we will determine if you have "
+				   "been successful.\n"
+				   "END" <<
+				   '\x0';
+					
+
+	char completionA [SIZE_MISSION_COMPLETION];
+	sprintf ( completionA, "%s", target->name );
+
+	Date postdate;
+	postdate.SetDate ( &(game->GetWorld ()->date) );
+	postdate.AdvanceHour ( NumberGenerator::RandomNumber ( 96 ) * -1 );
+	postdate.AdvanceMinute ( NumberGenerator::RandomNumber ( 60 ) * -1 );
+
+	//
+	// Insert the mission
+	//
+
+	Mission *mission = new Mission ();
+	mission->SetTYPE		 ( MISSION_FREEAGENT );
+	mission->SetCompletion   ( completionA, NULL, NULL, NULL, NULL );
+	mission->SetEmployer     ( employer->name );
+	mission->SetContact      ( personname );
+	mission->SetPayment      ( payment, payment * 1.1 );
+	mission->SetDifficulty   ( difficulty );
+	mission->SetMinRating    ( minrating );
+	mission->SetAcceptRating ( acceptrating );
+	mission->SetDescription  ( description );
+	mission->SetDetails		 ( details.str () );
+	mission->SetFullDetails  ( fulldetails.str () );
+	mission->SetWhySoMuchMoney ( "This agent has important information." );
+	mission->SetHowSecure ( "The GCD has a proxy and uses an elliptic curve cypher." );
+	mission->SetWhoIsTheTarget( "A high ranking Uplink agent.");
+	mission->GiveLink(IP_GLOBALCRIMINALDATABASE);
+	if ( !game->IsRunning () ) mission->SetCreateDate   ( &postdate );
+	
+	delete [] details.str ();
+	delete [] fulldetails.str ();
+
+	CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
+	UplinkAssert ( cu );
+	cu->CreateMission ( mission );
+
+	return mission;
+
+}
+bool MissionGenerator::IsMissionComplete_FreeAgent	( Mission *mission, Person *person, Message *message )
+{
+
+	UplinkAssert (mission);
+	UplinkAssert (person);
+	UplinkAssert (message);
+
+	char *personname = mission->completionA;
+
+	//
+	// Look through recent news articles 
+	//
+
+	CompanyUplink *uplink = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
+	UplinkAssert (uplink);
+
+	for ( int i = 0; i < uplink->news.Size (); ++i ) {
+		
+		News *news = uplink->news.GetData (i);
+		UplinkAssert (news);
+
+		if ( news->NEWSTYPE == NEWS_TYPE_RELEASE && news->data1 && strcmp ( news->data1, personname ) == 0 ) {
+			MissionCompleted ( mission, person, message );
+			return true;
+
+		}
+
+	}
+
+	MissionNotCompleted ( mission, person, message, "He doesn't appear to have been released yet." );
+	return false;
+		
 }

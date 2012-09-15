@@ -25,15 +25,19 @@
 #error "One of FULLGAME DEMOGAME or TESTGAME must be defined"
 #endif
 
-#define     VERSION_NUMBER_INT      "10.0"                       // Only the 2 first digit after the . are effective
+#define     VERSION_NUMBER_INT      "1.55"                       // Only the 2 first digit after the . are effective
+#ifdef TESTGAME
+#define     VERSION_NAME_INT        "INTERNAL"
+#else
 #define     VERSION_NAME_INT        "RELEASE"
+#endif
 
 #if defined(DEMOGAME)
 #define     VERSION_NUMBER          VERSION_NUMBER_INT "DEMO"
 #define     VERSION_NAME            VERSION_NAME_INT "-DEMO"
 #else
-#define     VERSION_NUMBER          VERSION_NUMBER_INT
-#define     VERSION_NAME            VERSION_NAME_INT
+#define     VERSION_NUMBER          VERSION_NUMBER_INT "STORM"
+#define     VERSION_NAME            VERSION_NAME_INT "-STORM"
 #endif
 
 #define     SAVEFILE_VERSION        "SAV63"                     // Max version is SAVZZ (due to the number of characters to read)
@@ -84,7 +88,7 @@
 
 //#define     MULTIMONITOR_SUPPORT                              // Is the multi-monitor support is enabled
 
-#if defined(FULLGAME) && !defined(WAREZRELEASE)
+#if defined(FULLGAME) && !defined(WAREZRELEASE) && !defined(STEAM_AUTH)
 #define VERIFY_UPLINK_LEGIT                                     // Verify if a standard patch is put on the warez or steam version.
 #endif
 

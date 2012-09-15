@@ -3,6 +3,7 @@
 
 #include "app/app.h"
 #include "app/globals.h"
+#include "app/serialise.h"
 
 #include "game/game.h"
 #include "game/data/data.h"
@@ -356,7 +357,33 @@ void ConsequenceGenerator::Arrested ( Person *person, Computer *comp, char *reas
 
 		*/
 
+	// Stormchild: Lets make Uplink try to get its best agents out
+	if ( person->GetOBJECTID() == OID_AGENT ) {
+		Agent *agent = (Agent *) person;
+		UplinkAssert (agent);
+		if ( strcmp(agent->handle,"") != 0 )
+		{
+			if ( agent->rating.uplinkrating >= 4 ) {
+				MissionGenerator::Generate_FreeAgent(person);
+			}
+		}
+	}
 	NewsGenerator::Arrested ( person, comp, reason );
+
+}
+
+void ConsequenceGenerator::Released ( Person *person, Computer *comp, char *reason )
+{
+
+	UplinkAssert (person);
+
+	/*
+		For future versions : generate news stories,
+		vendetta's etc from this
+
+		*/
+
+	NewsGenerator::Released ( person, comp, reason );
 
 }
 

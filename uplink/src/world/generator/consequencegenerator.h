@@ -44,6 +44,7 @@ public:
 
 	static void CaughtHacking ( Person *person, Computer *comp );
 	static void Arrested	  ( Person *person, Computer *comp, char *reason );
+	static void Released	  ( Person *person, Computer *comp, char *reason );
 	static void DidntPayFine  ( Person *person, Mission *fine  );
 	static void ShotByFeds	  ( Person *person, char *reason );
 	static void SeizeGateway  ( Person *person, char *reason );

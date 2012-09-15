@@ -468,6 +468,16 @@ void WorldGenerator::GenerateLocalMachine ()
 	ms10->SetNextPage ( 0 );
 	localmachine->AddComputerScreen ( ms10, 10 );
 
+	// Screen 11						Number not in service
+
+	MessageScreen *ms11 = new MessageScreen ();
+	ms11->SetMainTitle ( "Error 404" );
+	ms11->SetSubTitle ( "System not found" );
+	ms11->SetTextMessage ( "The phone number you have dialled is currently not in service." );
+	ms11->SetButtonMessage ( "OK" );
+	ms11->SetNextPage ( 0 );
+	localmachine->AddComputerScreen ( ms11, 11 );
+
 }
 
 void WorldGenerator::GenerateSpecifics ()
@@ -4689,6 +4699,162 @@ void WorldGenerator::VerifyPlayerGatewayCloseDialog ( Button *button )
 
 }
 */
+
+Computer *WorldGenerator::GenerateProjectServer ( char *companyname )
+{
+
+    //char *computername = strdup( NameGenerator::GenerateCentralMainframeName(companyname) );
+	char computername[MAX_COMPUTERNAME];
+	strncpy( computername, NameGenerator::GenerateProjectServerName( companyname ),
+		     MAX_COMPUTERNAME );
+	if ( computername[MAX_COMPUTERNAME - 1] != '\0' ) {
+		computername[MAX_COMPUTERNAME - 1] = '\0';
+	}
+
+    Company *company = game->GetWorld ()->GetCompany (companyname);
+    UplinkAssert (company);
+
+	VLocation *vl = GenerateLocation ();
+	vl->SetListed ( false );
+
+	Computer *comp = new Computer ();
+	comp->SetTYPE ( COMPUTER_TYPE_UNKNOWN );
+	comp->SetName ( computername );
+	comp->SetCompanyName ( companyname );
+	comp->SetIsExternallyOpen ( false );
+	comp->SetTraceSpeed ( (int) NumberGenerator::RandomNormalNumber ( TRACESPEED_CENTRALMAINFRAME,
+	                                                                  (float) ( TRACESPEED_CENTRALMAINFRAME * TRACESPEED_VARIANCE ) ) );
+	comp->SetTraceAction ( COMPUTER_TRACEACTION_DISCONNECT |
+						   COMPUTER_TRACEACTION_LEGAL );
+
+	comp->SetIP ( vl->ip );
+
+    //delete computername;
+
+    int monitorstrength = (company->size - MINCOMPANYSIZE_MONITOR) / 3;
+    if ( monitorstrength > 5 ) monitorstrength = 5;
+    if ( monitorstrength < 1 ) monitorstrength = 1;
+    comp->security.AddSystem ( SECURITY_TYPE_MONITOR, monitorstrength );
+
+    int proxystrength = (company->size - MINCOMPANYSIZE_PROXY) / 3;
+    if ( proxystrength > 5 ) proxystrength = 5;
+    if ( proxystrength < 1 ) proxystrength = 1;
+    comp->security.AddSystem ( SECURITY_TYPE_PROXY, proxystrength );
+
+    int firewallstrength = (company->size - MINCOMPANYSIZE_FIREWALL) / 3;
+    if ( firewallstrength > 5 ) firewallstrength = 5;
+    if ( firewallstrength < 1 ) firewallstrength = 1;
+    comp->security.AddSystem ( SECURITY_TYPE_FIREWALL, firewallstrength );
+
+	comp->SetIsTargetable (false);
+
+	game->GetWorld ()->CreateComputer ( comp );
+
+	// Create the screens
+
+	HighSecurityScreen *hs = new HighSecurityScreen ();
+	hs->SetMainTitle ( companyname );
+	hs->SetSubTitle ( "Authorisation required" );
+	hs->AddSystem ( "UserID / password verification", 1 );
+	hs->AddSystem ( "Voice Print Identification", 2 );
+	hs->SetNextPage ( 3 );
+	comp->AddComputerScreen ( hs, 0 );
+
+	UserIDScreen *uid = new UserIDScreen ();
+	uid->SetMainTitle ( companyname );
+	uid->SetSubTitle ( "Log in" );
+	uid->SetDifficulty ( (int) NumberGenerator::RandomNormalNumber ( HACKDIFFICULTY_CENTRALMAINFRAME,
+	                                                                 (float) ( HACKDIFFICULTY_CENTRALMAINFRAME * HACKDIFFICULTY_VARIANCE ) ) );
+	uid->SetNextPage ( 0 );
+	comp->AddComputerScreen ( uid, 1 );
+
+	GenericScreen *gs2 = new GenericScreen ();
+	gs2->SetMainTitle ( companyname );
+	gs2->SetSubTitle ( "Voice print analysis required" );
+	gs2->SetScreenType ( SCREEN_VOICEANALYSIS );
+	gs2->SetNextPage ( 0 );
+	comp->AddComputerScreen ( gs2, 2 );
+
+	MenuScreen *ms = new MenuScreen ();
+	ms->SetMainTitle ( companyname );
+	ms->SetSubTitle ( "Central Mainframe Main Menu" );
+	ms->AddOption ( " File Server", "Access the file server", 4, 3 );
+	ms->AddOption ( "View logs", "View the access logs on this system", 5, 1 );
+	ms->AddOption ( "Console", "Use a console on this system", 6, 1 );
+	comp->AddComputerScreen ( ms, 3 );
+
+	GenericScreen *fss = new GenericScreen ();
+	fss->SetScreenType ( SCREEN_FILESERVERSCREEN );
+	fss->SetMainTitle ( companyname );
+	fss->SetSubTitle ( "File server" );
+	fss->SetNextPage ( 3 );
+	comp->AddComputerScreen ( fss, 4 );
+
+	LogScreen *ls = new LogScreen ();
+	ls->SetTARGET ( LOGSCREEN_TARGET_ACCESSLOGS );
+	ls->SetMainTitle ( companyname );
+	ls->SetSubTitle ( "Access Logs" );
+	ls->SetNextPage ( 3 );
+	comp->AddComputerScreen ( ls, 5 );
+
+	GenericScreen *gs6 = new GenericScreen ();
+	gs6->SetScreenType ( SCREEN_CONSOLESCREEN );
+	gs6->SetMainTitle ( companyname );
+	gs6->SetSubTitle ( "Console" );
+	gs6->SetNextPage ( 3 );
+	comp->AddComputerScreen ( gs6, 6 );
+
+    // 7 is taken up on some companies such as ARC and Arunmor
+
+	// Create the files
+
+	int i;
+
+	comp->databank.SetSize(512);
+
+	int numfiles = (int) NumberGenerator::RandomNormalNumber ( 10, 5 );
+
+	for ( i = 0; i < numfiles; ++i ) {
+
+		int TYPE = NumberGenerator::RandomNumber ( 2 ) + 1;
+		int size = (int) NumberGenerator::RandomNormalNumber ( 6, 4 );
+		int encrypted = (int) NumberGenerator::RandomNumber ( 2 );
+		int compressed = NumberGenerator::RandomNumber ( 2 );
+		char *datatitle = NameGenerator::GenerateDataName ( companyname, TYPE );
+
+		Data *data = new Data ();
+		data->SetTitle ( datatitle );
+		data->SetDetails ( TYPE, size, (encrypted ? NumberGenerator::RandomNumber ( 5 ) : 0),
+									   (compressed ? NumberGenerator::RandomNumber ( 5 ) : 0) );
+		comp->databank.PutData ( data );
+
+	}
+
+	// Create some logs
+
+	int numlogs = NumberGenerator::RandomNumber ( 10 );
+
+	for ( i = 0; i < numlogs; ++i ) {
+
+		AccessLog *al = new AccessLog ();
+		al->SetProperties ( &(game->GetWorld ()->date), WorldGenerator::GetRandomLocation ()->ip, " " );
+		al->SetData1 ( "Accessed File" );
+		comp->logbank.AddLog (al);
+
+	}
+
+	// Create some log-in's
+
+	//Record *record = new Record ();
+	//record->AddField ( RECORDBANK_NAME, RECORDBANK_ADMIN );
+	//record->AddField ( RECORDBANK_PASSWORD, NameGenerator::GenerateComplexPassword () );
+	//record->AddField ( RECORDBANK_SECURITY, "1" );
+	//comp->recordbank.AddRecord ( record );
+
+
+	return comp;
+
+}
 
 void WorldGenerator::GenerateNameServerRecord(Computer *computer, char *companyname)
 {

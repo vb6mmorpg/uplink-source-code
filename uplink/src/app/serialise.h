@@ -123,6 +123,8 @@ UplinkObject *CreateUplinkObject ( int OBJECTID );
 #define OID_CHANGEGATEWAYEVENT  78
 #define OID_BANKROBBERYEVENT    79
 
+#define OID_DARWINIA			90
+#define OID_DARWINIAISLAND		91
 
 // ============================================================================
 // Functions for saving strings of unknown size

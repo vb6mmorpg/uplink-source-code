@@ -437,6 +437,90 @@
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
+		<Configuration
+			Name="ReleaseSteam|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+				Description="Performing Custom Build Step"
+				CommandLine="xcopy &quot;$(OutDir)\$(TargetFileName)&quot; &quot;$(OutDir)\$(ConfigurationName)\&quot; /Y /I&#x0D;&#x0A;xcopy &quot;$(OutDir)\$(TargetName).pdb&quot; &quot;$(OutDir)\$(ConfigurationName)\&quot; /Y /I&#x0D;&#x0A;xcopy &quot;$(OutDir)\$(ConfigurationName)\*.exe&quot; &quot;$(ProjectDir)\..\..\Installer\Data\&quot; /Y /I&#x0D;&#x0A;&quot;C:\Program Files\NSIS\makensis.exe&quot; &quot;$(ProjectDir)\..\..\Installer\Uplink-patch.nsi&quot;&#x0D;&#x0A;&quot;C:\Program Files\NSIS\makensis.exe&quot; &quot;$(ProjectDir)\..\..\Installer\Uplink-full.nsi&quot;&#x0D;&#x0A;&quot;C:\Program Files\NSIS\makensis.exe&quot; &quot;$(ProjectDir)\..\..\Installer\Uplink-download.nsi&quot;&#x0D;&#x0A;"
+				AdditionalDependencies="$(OutDir)\$(TargetFileName)"
+				Outputs="$(OutDir)\$(ConfigurationName)\$(TargetFileName);$(OutDir)\$(ConfigurationName)\$(TargetName).pdb"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				AdditionalIncludeDirectories=".;..\..\lib\mmgr;..\..\lib\tosser;..\..\lib\eclipse;..\..\lib\bungle;..\..\lib\gucci;..\..\lib\redshirt;..\..\lib\soundgarden;..\..\lib\vanbakel;..\..\lib\common;..\..\contrib\tcp4u.331\include;..\..\contrib\irclib;..\..\contrib\XCrashReport;&quot;..\..\contrib\SDL-1.2.11\include&quot;"
+				PreprocessorDefinitions="USE_SDL;WIN32;_CRT_SECURE_NO_DEPRECATE;FULLGAME;STEAM_AUTH;"
+				RuntimeLibrary="0"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+				DisableSpecificWarnings="4996, 4800"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="bungle.lib eclipse.lib gucci.lib redshirt.lib soundgarden.lib vanbakel.lib irclib.lib sdl.lib SDL_mixer.lib tcp4w32.lib libtiff.lib gltt.lib freetype.lib dbghelp.lib opengl32.lib glu32.lib winmm.lib"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories="..\..\lib\bin;..\..\contrib\bin;..\..\contrib\tcp4u.331\tcp4w32;&quot;..\..\contrib\tiff-3.7.2\libtiff&quot;;&quot;..\..\contrib\gltt-2.5&quot;;&quot;..\..\contrib\freetype-1.3.1&quot;;&quot;..\..\contrib\SDL-1.2.11_dev\VisualC\SDL\Release&quot;;&quot;..\..\contrib\SDL_mixer-1.2.7_patched\VisualC\Release&quot;"
+				IgnoreAllDefaultLibraries="false"
+				IgnoreDefaultLibraryNames="libcd.lib,libc.lib"
+				GenerateDebugInformation="true"
+				SubSystem="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
 	</Configurations>
 	<References>
 	</References>
@@ -596,6 +680,14 @@
 			</File>
 			<File
 				RelativePath=".\interface\remoteinterface\cypherscreen_interface.h"
+				>
+			</File>
+			<File
+				RelativePath=".\darwinia.h"
+				>
+			</File>
+			<File
+				RelativePath=".\interface\taskmanager\darwinmonitor.h"
 				>
 			</File>
 			<File
@@ -1484,6 +1576,14 @@
 			</File>
 			<File
 				RelativePath=".\interface\remoteinterface\cypherscreen_interface.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\darwinia.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\interface\taskmanager\darwinmonitor.cpp"
 				>
 			</File>
 			<File

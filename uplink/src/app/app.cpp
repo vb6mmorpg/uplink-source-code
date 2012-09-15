@@ -196,7 +196,7 @@ void CopyGame ( char *username, char *filename )
 {
 
 	char filenametmp [256];
-	UplinkSnprintf ( filenametmp, sizeof ( filenametmp ), "%scuragent.usr", app->usertmppath);
+	UplinkSnprintf ( filenametmp, sizeof ( filenametmp ), "%scuragent.stu", app->usertmppath);
 
 	//char filenametmpUplink [256];
 	//UplinkSnprintf ( filenametmpUplink, sizeof ( filenametmpUplink ), "%scuragent_clear.bin", app->usertmppath );
@@ -240,11 +240,11 @@ void App::LoadGame ( char *username )
 	// Try to load from the local dir
 
 	char filename [256];
-	UplinkSnprintf ( filename, sizeof ( filename ), "%s%s.usr", app->userpath, username );
+	UplinkSnprintf ( filename, sizeof ( filename ), "%s%s.stu", app->userpath, username );
 
 	if ( !RsFileEncrypted ( filename ) ) {
 		char filenametmp [256];
-		UplinkSnprintf ( filenametmp, sizeof ( filenametmp ), "%s%s.tmp", app->userpath, username );
+		UplinkSnprintf ( filenametmp, sizeof ( filenametmp ), "%s%s.stt", app->userpath, username );
 		if ( RsFileEncrypted ( filenametmp ) ) {
 			UplinkSafeStrcpy ( filename, filenametmp );
 		}
@@ -390,10 +390,10 @@ void App::SaveGame ( char *username )
 	MakeDirectory ( userpath );
 
 	char filename [256];
-	//UplinkSnprintf ( filename, sizeof ( filename ), "%s%s.usr", userpath, username );
-	UplinkSnprintf ( filename, sizeof ( filename ), "%s%s.tmp", userpath, username );
+	//UplinkSnprintf ( filename, sizeof ( filename ), "%s%s.stu", userpath, username );
+	UplinkSnprintf ( filename, sizeof ( filename ), "%s%s.stt", userpath, username );
 	char filenamereal [256];
-	UplinkSnprintf ( filenamereal, sizeof ( filenamereal ), "%s%s.usr", userpath, username );
+	UplinkSnprintf ( filenamereal, sizeof ( filenamereal ), "%s%s.stu", userpath, username );
 
 	printf ( "Saving profile to %s...", filename );
 
@@ -436,14 +436,14 @@ void App::RetireGame ( char *username )
 {
 
 	char filenamereal [256];
-	UplinkSnprintf ( filenamereal, sizeof ( filenamereal ), "%s%s.usr", userpath, username );
+	UplinkSnprintf ( filenamereal, sizeof ( filenamereal ), "%s%s.stu", userpath, username );
 	char filenametmp [256];
-	UplinkSnprintf ( filenametmp, sizeof ( filenametmp ), "%s%s.tmp", userpath, username );
+	UplinkSnprintf ( filenametmp, sizeof ( filenametmp ), "%s%s.stt", userpath, username );
 
 	char filenameretirereal [256];
-	UplinkSnprintf ( filenameretirereal, sizeof ( filenameretirereal ), "%s%s.usr", userretirepath, username );
+	UplinkSnprintf ( filenameretirereal, sizeof ( filenameretirereal ), "%s%s.stu", userretirepath, username );
 	char filenameretiretmp [256];
-	UplinkSnprintf ( filenameretiretmp, sizeof ( filenameretiretmp ), "%s%s.tmp", userretirepath, username );
+	UplinkSnprintf ( filenameretiretmp, sizeof ( filenameretiretmp ), "%s%s.stt", userretirepath, username );
 
 	printf ( "Retire profile %s ...", username );
 
@@ -468,7 +468,7 @@ DArray <char *> *App::ListExistingGames ()
 #ifdef WIN32
 
 	char searchstring [_MAX_PATH + 1];
-	UplinkSnprintf ( searchstring, sizeof ( searchstring ), "%s*.usr", app->userpath );
+	UplinkSnprintf ( searchstring, sizeof ( searchstring ), "%s*.stu", app->userpath );
 
 	_finddata_t thisfile;
 	intptr_t fileindex = _findfirst ( searchstring, &thisfile );
@@ -500,7 +500,7 @@ DArray <char *> *App::ListExistingGames ()
 
 	    while (entry != NULL) {
 	    
-		char *p = strstr(entry->d_name, ".usr");
+		char *p = strstr(entry->d_name, ".stu");
 		if ( p ) {
 		    *p = '\x0';
 	      

@@ -40,6 +40,7 @@ public:
 	// Events related to people
 
 	static void Arrested ( Person *person, Computer *comp, char *reason );
+	static void Released ( Person *person, Computer *comp, char *reason );
 
 };
 

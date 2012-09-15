@@ -1,0 +1,67 @@
+15/9/12 Part 2 - Found some more code, and ported some bits from older source
+=======
+
+** NOTE: To run the mod on steam, you either need to disable the legit check, or provide a copy of world.dat **
+
+** This mod uses a seperate options file and saves users as .stu/.stt instead of .usr/.tmp to avoid conflicts with incompatible vanilla 1.55 users
+
+
+
++ GCD now has the ability to release people who have been previously arrested.
+
++ Added DRA Project Server (backend appears to need tweaking, but its an easter egg, so this can wait)
+
+
+
+
+15/9/12 Part 1 - Merged almost all available 1.55 source code into a single package
+=======
+
++ Replaced auto-installation of data files in emails with a download button to prevent an issue where a file sent by email would be lost if the player has insufficient storage space. The file can also be re-downloaded from the email if it is deleted from the databank.
+
++ Added Software Sales Companies that sell some miscellaneous utility software. These companies will be identified during normal game progression.
+
++ Added the ability to buy auxiliary gateways. These act like file servers, and in the event of your gateway being destroyed, can be repurposed as your primary gateway instead of starting from scratch.
+
++ Added Nameservers, which are the basis for a corporate (positive neuromancer) version of change data missions. 
+
++ Added International Telephone Database.
+
++ Added Change DNS Record missions.
+
++ Added Compiler, Decompiler, Compressor and Decompressor.
+
++ Cross-patched the above to work with Software Sales Companies.
+
++ Added HUD_KeyMapper which allows you to bind function keys and ctrl+letter keys to either run programs or perform a handful of built-in operations.
+++ **SCREENSHOT will take a screenshot
+++ **EXIT will exit the game
+++ Entering the name of a program will cause it to be started when you press the associated key
+
++ I'm sure you'll work out what this hidden feature is sooner or later
+
++ Data files are now coloured differently in your databank if they are encrypted and/or compressed, and show the encryption/compression level.
+
+
++++ Software Mod Notes +++
+==========================
+
+The compiler requires the following files to generate a program:
+	<program>Spec
+	<program>Core
+	<program>Data-0
+
+Any additional data files (<program>Data-1, <program>Data-2, ..., <program>Data<N>) increase the version number of the final output file. Note that all data files must be sequential, the compiler will stop looking as soon as it fails to find the next data file in the series.
+The sum total of the input file sizes is then divided by 5 to determine the output file size.
+The DataType is always DATATYPE_PROGRAM, the SoftwareType is copied from the Spec file.
+Since Spec files are data, the SoftwareType is safely hidden away from the player at all times.
+
+The Decompiler works in reverse, creating the files needed to generate the file being decompiled. It will automatically generate the SoftwareType, and the required number of Data files. There may, however, be a minor difference in the file size if it is then recompiled. This is due to float/int conversions.
+
+Neither the compiler nor the decompiler will work on compressed or encrypted files. The former is due to an issue whereby repeatedly decompiling a program, compressing the source and recompiling it will result in all files being reduced to 1 GQ. The latter is so that you can create a custom file with level 8 encryption to prevent the player decompiling it and making new versions.
+
+The Compressor reduces a file by 1 Gq per version, to a maximum of 4GQ at V4.0. If the file would be reduced to less than 1 GQ, the file is instead reduced to 1GQ. Only uncompressed data can be compressed. There is no fixed limit on the compression level, just add more versions to data.cpp to make more powerful compressors.
+
+The decompressor works in reverse, but can only decompress files with the same version or lower compression.
+
+All that is missing is some means of providing the player with data files they cannot get by decompiling their programs, in order to allow them to compile new versions that can't be bought from uplink. 

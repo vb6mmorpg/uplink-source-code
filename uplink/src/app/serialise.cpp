@@ -54,6 +54,8 @@
 #include "world/scheduler/changegatewayevent.h"
 #include "world/scheduler/bankrobberyevent.h"
 
+#include "darwinia.h"
+
 #include "mmgr.h"
 
 #define min(a,b) (((a) < (b)) ? (a) : (b))
@@ -865,6 +867,9 @@ UplinkObject *CreateUplinkObject ( int OBJECTID )
 		case OID_RUNPLOTSCENEEVENT		: uo = new RunPlotSceneEvent ();	break;
 		case OID_CHANGEGATEWAYEVENT		: uo = new ChangeGatewayEvent ();	break;
         case OID_BANKROBBERYEVENT       : uo = new BankRobberyEvent ();     break;			
+
+        case OID_DARWINIA		        : uo = new Darwinia ();				break;			
+        case OID_DARWINIAISLAND         : uo = new DarwiniaIsland ();		break;
 
 		case OID_UNKNOWN				: UplinkPrintAbort ( "OBJECTID Not assigned" ); break;
 		default							: UplinkPrintAbortArgs ( "Unrecognised OBJECTID=%d", OBJECTID );

@@ -428,3 +428,9 @@ char *NameGenerator::GenerateVoicePhoneSystemName( char *personname )
     return tempname;
 }
 
+
+char *NameGenerator::GenerateProjectServerName( char *companyname )
+{
+    UplinkSnprintf( tempname, sizeof ( tempname ), "%s Project Server", companyname );
+    return tempname;
+}

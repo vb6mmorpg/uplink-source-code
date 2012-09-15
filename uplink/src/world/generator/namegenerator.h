@@ -44,6 +44,7 @@ public:
     static char *GenerateNameServerName             ( char *companyname );
     static char *GeneratePersonalComputerName       ( char *personname );
     static char *GenerateVoicePhoneSystemName       ( char *personname );
+    static char *GenerateProjectServerName          ( char *companyname );
 };
 
 #endif

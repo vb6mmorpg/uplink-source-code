@@ -31,6 +31,7 @@ class Person;
 class Mission;
 class Player;
 class GatewayDef;
+class Darwinia;
 
 // ============================================================================
 
@@ -42,6 +43,7 @@ class World : public UplinkObject
 protected:
 
 	Date nextupdate;
+	Darwinia *darwinia;
 
 public:
 
@@ -84,6 +86,7 @@ public:
 	Person     *GetPerson     ( char *name );			//  (check before dereferencing) 
 	char	   *GetPassword   ( int index );					
 	GatewayDef *GetGatewayDef ( char *name );
+	Darwinia   *GetDarwinia   ();
 
 	Player    *GetPlayer     ();						//  Asserts that player exists
 

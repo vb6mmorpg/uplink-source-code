@@ -27,6 +27,7 @@
 #define NEWS_TYPE_STOLEN	4				// Data1 = IP
 #define NEWS_TYPE_COMPUTERSHUTDOWN 5		// Data1 = IP			
 #define NEWS_TYPE_COMPUTERDESTROYED 6		// Data1 = IP			All databanks formatted first
+#define NEWS_TYPE_RELEASE	7				// Data1 = name of person
 
 
 // ============================================================================

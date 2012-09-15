@@ -190,6 +190,19 @@ void RemoteInterface::RunNewLocation ()
 
 	}
 
+	if ( GetComputerScreen ()->GetComputer ()->TYPE == COMPUTER_TYPE_VOICEPHONESYSTEM ) {
+		Person *person = game->GetWorld()->GetPerson(GetComputerScreen()->GetComputer()->companyname);
+		if ( person->GetStatus() > PERSON_STATUS_NONE ) {
+			// Dead people and convicts can't answer the phone
+			game->GetWorld ()->GetPlayer ()->connection.Disconnect ();
+			game->GetWorld ()->GetPlayer ()->connection.Reset ();
+		
+			game->GetInterface ()->GetRemoteInterface ()->RunNewLocation ();
+			game->GetInterface ()->GetRemoteInterface ()->RunScreen ( 11 );
+		}
+	}
+
+
 }
 
 local void li_draw ( Button *button, bool highlighted, bool clicked ) 

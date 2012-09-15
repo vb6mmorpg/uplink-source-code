@@ -35,6 +35,7 @@ class Probability;
 #define		MISSION_CHANGEDATADNS		11
 
 #define		MISSION_PAYFINE				20
+#define		MISSION_FREEAGENT			21
 
 //=============================================================================
 
@@ -65,6 +66,7 @@ public:
 
 	static Mission *Generate_StealFile			( Company *employer );
 	static Mission *Generate_StealSingleFile	( Company *employer, Computer *target );
+	static Mission *Generate_StealSourceFile	( Company *employer, Computer *target );
 	static Mission *Generate_StealAllFiles		( Company *employer, Computer *target );
 	static Mission *Generate_DestroyFile		( Company *employer );
 	static Mission *Generate_DestroySingleFile  ( Company *employer, Computer *target );
@@ -83,6 +85,8 @@ public:
 	static Mission *Generate_ChangeData_SocialSecurity ( Company *employer );
 	static Mission *Generate_ChangeData_CriminalRecord ( Company *employer );
 	static Mission *Generate_ChangeData_DNSRecord      ( Company *employer );
+
+	static Mission *Generate_FreeAgent      ( Person *person );
 
 	static Mission *Generate_FindData_FinancialRecord  ( Company *employer, Computer *target );
 
@@ -122,6 +126,7 @@ public:
 	static bool IsMissionComplete_PayFine		 ( Mission *mission, Person *person, Message *message );
     static bool IsMissionComplete_Special        ( Mission *mission, Person *person, Message *message );
     static bool IsMissionComplete_ChangeDNS      ( Mission *mission, Person *person, Message *message );
+    static bool IsMissionComplete_FreeAgent      ( Mission *mission, Person *person, Message *message );
 
 	static void MissionCompleted ( Mission *mission, Person *person, Message *message );
 	static void MissionNotCompleted ( Mission *mission, Person *person, Message *message, char *reason );

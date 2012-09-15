@@ -103,10 +103,12 @@ Computer  *LanGenerator::LoadLAN ( char *filename )
 
 	game->GetWorld()->CreateVLocation( ip, x, y );
 //	game->GetWorld()->CreateCompany( companyName );
-	int size      = (int) NumberGenerator::RandomNormalNumber ( COMPANYSIZE_AVERAGE,      COMPANYSIZE_RANGE );
+
+/*	int size      = (int) NumberGenerator::RandomNormalNumber ( COMPANYSIZE_AVERAGE,      COMPANYSIZE_RANGE );
 	int growth    = (int) NumberGenerator::RandomNormalNumber ( COMPANYGROWTH_AVERAGE,    COMPANYGROWTH_RANGE );
 	int alignment = (int) NumberGenerator::RandomNormalNumber ( COMPANYALIGNMENT_AVERAGE, COMPANYALIGNMENT_RANGE );
-    Company *company = WorldGenerator::GenerateCompany ( companyName, size, COMPANYTYPE_COMMERCIAL, growth, alignment );
+
+	Company *company = WorldGenerator::GenerateCompany ( companyName, size, COMPANYTYPE_COMMERCIAL, growth, alignment );
 
     Person *ceo = WorldGenerator::GetRandomPerson ();
     Person *admin = WorldGenerator::GetRandomPerson ();
@@ -114,6 +116,22 @@ Computer  *LanGenerator::LoadLAN ( char *filename )
     UplinkAssert (admin);
 	company->SetBoss ( ceo->name );
 	company->SetAdmin ( admin->name );
+*/
+
+	Company *company = game->GetWorld ()->GetCompany( companyName );
+	if ( !company ) {
+		int size      = NumberGenerator::RandomNormalNumber ( COMPANYSIZE_AVERAGE,      COMPANYSIZE_RANGE );
+		int growth    = NumberGenerator::RandomNormalNumber ( COMPANYGROWTH_AVERAGE,    COMPANYGROWTH_RANGE );
+		int alignment = NumberGenerator::RandomNormalNumber ( COMPANYALIGNMENT_AVERAGE, COMPANYALIGNMENT_RANGE );
+    		company = WorldGenerator::GenerateCompany ( companyName, size, COMPANYTYPE_COMMERCIAL, growth, alignment );
+    
+		Person *ceo = WorldGenerator::GetRandomPerson ();
+		Person *admin = WorldGenerator::GetRandomPerson ();
+		UplinkAssert (ceo);
+		UplinkAssert (admin);
+		company->SetBoss ( ceo->name );
+		company->SetAdmin ( admin->name );
+	}
 
 	LanComputer *comp = new LanComputer ();
 	comp->SetTYPE ( COMPUTER_TYPE_LAN );

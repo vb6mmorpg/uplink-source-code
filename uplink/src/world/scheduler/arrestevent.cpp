@@ -70,6 +70,12 @@ void ArrestEvent::Run ()
 
 	Person *person = game->GetWorld ()->GetPerson ( name );
 	UplinkAssert (person);
+	if ( strcmp(reason,"falsely accused") == 0 )
+	{
+		person->SetStatus ( PERSON_STATUS_NONE );
+		ConsequenceGenerator::Released ( person, NULL, reason );
+		return;
+	}
 
 	person->SetStatus ( PERSON_STATUS_INJAIL );
 

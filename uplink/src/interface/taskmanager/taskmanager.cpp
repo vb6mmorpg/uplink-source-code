@@ -46,6 +46,7 @@
 #include "interface/taskmanager/decompiler.h"
 // End Software Mod
 #include "interface/taskmanager/virus.h"
+#include "interface/taskmanager/darwinmonitor.h"
 
 #include "world/generator/spamgenerator.h"
 // ============================================================================
@@ -146,6 +147,9 @@ void TaskManager::RunSoftware ( char *name, float version )
                                                                 task->SetFollowMouse ( true ); }
 	// End Spam Mod
 
+	// Darwinia
+	else if ( strcmp ( name, "Darwin_Monitor" ) == 0 ) {        task = new DarwinMonitor (); }
+	// End Darwinia
 	else {
 		printf ( "Task Manager warning : Called RunSoftware, name not recognised '%s'\n", name );
 		return;
