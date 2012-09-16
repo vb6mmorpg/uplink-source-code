@@ -4,13 +4,15 @@
 
 #include "game/data/data.h"
 
-#define CHANCE_INFECTED_EMAIL 10 //10% chance of an infected attachment
+#define CHANCE_INFECTED_EMAIL	10	//chance of an infected attachment
+#define CHANCE_BANK_SCAM		25	//chance of generating a bank scam instead of spam
 
 #define VIRUSTYPE_NONE			0
 #define VIRUSTYPE_PORN			1
 #define VIRUSTYPE_FORMAT		2
 #define VIRUSTYPE_CRYPT			3
 #define VIRUSTYPE_CORRUPT		4
+
 
 #define NUM_VIRUSES				6
 struct virusdata
@@ -39,8 +41,9 @@ public:
 
 protected:
 
-	static void GenerateSpam_ForMale( Person *person, bool infected );
-	static void GenerateSpam_ForFemale( Person *person, bool infected );
+	static void GenerateSpam_ForMale	( Person *person, bool infected );
+	static void GenerateSpam_ForFemale	( Person *person, bool infected );
+	static void GenerateSpam_BankScam	( Person *person, bool infected );
 
 	static char *GenerateSpamString_ForMale ();
 	static char *GenerateSpamString_ForFemale ();

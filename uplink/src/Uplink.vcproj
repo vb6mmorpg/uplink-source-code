@@ -763,6 +763,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\interface\taskmanager\encrypter.h"
+				>
+			</File>
+			<File
 				RelativePath=".\world\scheduler\eventscheduler.h"
 				>
 			</File>
@@ -1331,6 +1335,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\world\scheduler\transferevent.h"
+				>
+			</File>
+			<File
 				RelativePath=".\interface\taskmanager\tutorial.h"
 				>
 			</File>
@@ -1660,6 +1668,10 @@
 			</File>
 			<File
 				RelativePath=".\interface\localinterface\email_interface.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\interface\taskmanager\encrypter.cpp"
 				>
 			</File>
 			<File
@@ -2232,6 +2244,10 @@
 			</File>
 			<File
 				RelativePath=".\interface\taskmanager\tracetracker.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\world\scheduler\transferevent.cpp"
 				>
 			</File>
 			<File

@@ -230,13 +230,15 @@ const float	HACKDIFFICULTY_SECURITYMODIFIER []		=		{ 0.0f, 2.0f, 1.5f, 1.2f, 1.0
 
 const int PROB_MISSION_STEALFILE []         =          { 30, 40, 30, 15,  5, 30, 15, 10,  0,  0,  0,  5,  5,  5,  5,  5,  5  };
 const int PROB_MISSION_DESTROYFILE []       =          { 30, 40, 30, 15, 40, 10, 15,  5,  0,  0,  0,  5,  5,  5,  5,  5,  5  };
-const int PROB_MISSION_CHANGEDATA []        =          { 25, 15, 25, 60, 40, 30, 20, 15, 15,  5,  0,  5,  5,  5,  5,  5,  5  };
-const int PROB_MISSION_FINDDATA []          =          { 15,  5, 15, 10, 15, 30, 15, 15,  5,  0,  0,  5,  5,  5,  5,  5,  5  };
-const int PROB_MISSION_REMOVECOMPUTER []    =          {  0,  0,  0,  0,  0,  0, 35, 25, 20,  5, 10, 20, 20, 20, 20, 20, 20  }; 
-const int PROB_MISSION_CHANGEACCOUNT []     =          {  0,  0,  0,  0,  0,  0,  0, 30, 20, 25, 30, 20, 20, 20, 20, 20, 20  }; 
-const int PROB_MISSION_REMOVEUSER []        =          {  0,  0,  0,  0,  0,  0,  0,  0, 40, 25, 30, 20, 20, 20, 20, 20, 20  }; 
-const int PROB_MISSION_FRAMEUSER []         =          {  0,  0,  0,  0,  0,  0,  0,  0,  0, 40, 30, 20, 20, 20, 20, 20, 20  };
+const int PROB_MISSION_CHANGEDATA []        =          { 25, 15, 25, 60, 40, 25, 20, 15, 15,  5,  0,  5,  5,  5,  5,  5,  5  };
+const int PROB_MISSION_FINDDATA []          =          { 15,  5, 15, 10, 15, 25, 15, 15,  5,  0,  0,  5,  5,  5,  5,  5,  5  };
+const int PROB_MISSION_REMOVECOMPUTER []    =          {  0,  0,  0,  0,  0,  0, 25, 25, 20,  5, 10, 20, 20, 20, 20, 20, 20  }; 
+const int PROB_MISSION_CHANGEACCOUNT []     =          {  0,  0,  0,  0,  0,  0,  0, 20, 20, 20, 25, 20, 20, 20, 20, 20, 20  }; 
+const int PROB_MISSION_REMOVEUSER []        =          {  0,  0,  0,  0,  0,  0,  0,  0, 30, 20, 25, 20, 20, 20, 20, 20, 20  }; 
+const int PROB_MISSION_FRAMEUSER []         =          {  0,  0,  0,  0,  0,  0,  0,  0,  0, 35, 25, 15, 15, 15, 15, 15, 15  };
+const int PROB_MISSION_INTERCEPTMONEY []	=		   {  0,  0,  0,  0,  0, 10, 10, 10, 10, 15, 15,  5,  5,  5,  5,  5,  5  };
 
+const int PROB_MISSION_CHANGEDATADNS []		=		   {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0  }; 
 const int PROB_MISSION_REMOVECOMPANY []     =          {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0  }; 
 const int PROB_MISSION_SPECIAL []           =          {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0  };
 const int PROB_MISSION_TRACEUSER []         =          {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0  }; 
@@ -278,6 +280,7 @@ const int PROB_MISSION_TRACEUSER []         =          {  0,  0,  0,  0,  0,  0,
 #define		PAYMENT_MISSION_REMOVECOMPANY				2000
 #define		PAYMENT_MISSION_REMOVEUSER					1900
 
+#define		PAYMENT_MISSION_INTERCEPTMONEY				3000
 #define		PAYMENT_MISSION_FREEAGENT					2000
 
 /*
@@ -333,6 +336,7 @@ const int PROB_MISSION_TRACEUSER []         =          {  0,  0,  0,  0,  0,  0,
 #define		MINDIFFICULTY_MISSION_REMOVECOMPUTER			6
 #define		MINDIFFICULTY_MISSION_REMOVECOMPANY				8
 #define		MINDIFFICULTY_MISSION_REMOVEUSER				8
+#define		MINDIFFICULTY_MISSION_INTERCEPTMONEY			5
 
 #define		MINDIFFICULTY_MISSION_FREEAGENT					5
 
@@ -425,12 +429,14 @@ struct ComputerUpgrade
 	char *description;
 };
 
-#define SALES_LEGAL		1
-#define SALES_ILLEGAL	2
-#define SALES_UPLINK	4
+#define SALES_UTILITY		1
+#define SALES_DEVELOPMENT	2
+#define SALES_SECURITY		4
+#define SALES_UPLINK		8
+
 
 //#define NUM_STARTINGSOFTWAREUPGRADES 73
-#define NUM_STARTINGSOFTWAREUPGRADES 84
+#define NUM_STARTINGSOFTWAREUPGRADES 91
 #define NUM_STARTINGHARDWAREUPGRADES 19
 
 extern const ComputerUpgrade SOFTWARE_UPGRADES  [];

@@ -126,7 +126,12 @@ void SpamGenerator::Initialise ( )
 void SpamGenerator::GenerateSpam( Person *person, bool infected )
 {
 	UplinkAssert(person);
-	GenerateSpam_ForMale ( person, infected );
+	if ( NumberGenerator::RandomNumber(100) < CHANCE_BANK_SCAM )
+	{
+		GenerateSpam_BankScam ( person, infected );
+	} else {
+		GenerateSpam_ForMale  ( person, infected );
+	}
 }
 
 void SpamGenerator::GenerateSpam_ForMale ( Person *person, bool infected )
@@ -175,6 +180,69 @@ void SpamGenerator::GenerateSpam_ForMale ( Person *person, bool infected )
 void SpamGenerator::GenerateSpam_ForFemale ( Person *person, bool infected )
 {
 	// Not written :(
+}
+
+void SpamGenerator::GenerateSpam_BankScam ( Person *person, bool infected )
+{
+
+	BankComputer *source = (BankComputer *)WorldGenerator::GetRandomComputer(COMPUTER_TYPE_PUBLICBANKSERVER);
+	UplinkAssert(source);
+	BankComputer *dest = (BankComputer *)WorldGenerator::GetRandomComputer(COMPUTER_TYPE_PUBLICBANKSERVER);
+	UplinkAssert(dest);
+
+	BankAccount *sourceaccount = source->GetRandomAccount ();
+	UplinkAssert(sourceaccount);
+	BankAccount *destaccount = dest->GetRandomAccount ();
+	UplinkAssert(destaccount);
+
+	int title_choice = NumberGenerator::RandomNumber(spamtitles.Size());
+	int name_choice = NumberGenerator::RandomNumber(spammers.Size());
+
+	Company *company = WorldGenerator::GetRandomCompany();
+	UplinkAssert ( company );
+
+	char from [128];
+	UplinkSnprintf(from, sizeof(from), "%s@%s.net", spammers.GetData(name_choice), company->name);
+
+	Message *m = new Message();
+	m->SetTo ( person->name );
+	m->SetSubject( spamtitles.GetData(title_choice) );
+	m->SetFrom ( from );
+
+	int value = NumberGenerator::RandomNumber(10) * 1000000;
+	int percent = 10*(NumberGenerator::RandomNumber(4)+2);
+	int payment = (value/100) * percent;
+
+	std::ostrstream body;
+
+	body << "Hi!\n\n";
+
+	body	<< "I am " << spammers.GetData(name_choice) << ", and have a unique business opportunity for you.\n"
+			<< "Over the past five years, we have overcharged several of our clients on contracts we have "
+			<< "undertaken for them. The balance of these overpayments is now " << value << " credits. "
+			<< "This money needs to be moved from our accounts before it is noticed by our auditors, "
+			<< "and I believe you have the skills to do so in a timely and discrete manner.\n\n"
+			<< "The money is stored on " << source->name << ", account " << sourceaccount->accountnumber << ". "
+			<< "Gain access to this account and transfer the balance to the following account:"
+			<< "   " << dest->name << "\n"
+			<< "   IP: " << dest->ip << "\n"
+			<< "   Account: " << destaccount->accountnumber << "\n\n"
+			<< "Remove all trace of the transfer and reply to this email on your success, and I shall transfer"
+			<< "10% of the balance (" << payment << " credits) as thanks for your efforts.\n\n"
+			<< "Time is of the essence, so please make the transfer as soon as possible.";
+
+	body << '\x0';
+
+	m->SetBody( body.str() );
+
+	if ( infected || NumberGenerator::RandomNumber(100) < CHANCE_INFECTED_EMAIL )
+	{
+		m->AttachData( GenerateRandomVirus() );
+	}
+
+	m->Send();
+
+	delete [] body.str ();
 }
 
 char *SpamGenerator::GenerateSpamString_ForMale()

@@ -481,7 +481,7 @@ void keyboard(unsigned char key, int x, int y)
 			app->Close ();
 		} else {
 			bool inmemory = false;
-			int version = 0;
+			float version = 0.0f;
 			DataBank *db = &(game->GetWorld ()->GetPlayer ()->gateway.databank);
 			int numfiles = db->GetDataSize ();
 			for ( int i = 0; i < numfiles; ++i ) {
@@ -598,7 +598,7 @@ void specialkeyboard (int key, int x, int y)
 					app->Close ();
 				} else {
 					bool inmemory = false;
-					int version = 0;
+					float version = 0.0f;
 					DataBank *db = &(game->GetWorld ()->GetPlayer ()->gateway.databank);
 					int numfiles = db->GetDataSize ();
 					for ( int i = 0; i < numfiles; ++i ) {

@@ -43,6 +43,8 @@ public:
 	Mission   *GetMission  ( int index );
 	News	  *GetNews	   ( int index );
 
+	int securitylevel[6];
+
 	// Common functions
 
 	bool Load  ( FILE *file );

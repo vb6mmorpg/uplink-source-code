@@ -47,6 +47,7 @@
 // End Software Mod
 #include "interface/taskmanager/virus.h"
 #include "interface/taskmanager/darwinmonitor.h"
+#include "interface/taskmanager/encrypter.h"
 
 #include "world/generator/spamgenerator.h"
 // ============================================================================
@@ -150,6 +151,10 @@ void TaskManager::RunSoftware ( char *name, float version )
 	// Darwinia
 	else if ( strcmp ( name, "Darwin_Monitor" ) == 0 ) {        task = new DarwinMonitor (); }
 	// End Darwinia
+	else if ( strcmp ( name, "Encrypter" ) == 0 ) {				task = new Encrypter ();
+																task->SetFollowMouse ( true ); }
+
+
 	else {
 		printf ( "Task Manager warning : Called RunSoftware, name not recognised '%s'\n", name );
 		return;

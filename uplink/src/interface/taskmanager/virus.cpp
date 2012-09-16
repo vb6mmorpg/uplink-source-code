@@ -464,7 +464,7 @@ void Virus::CryptEffect ( Data *data )
 	if ( data )
 	{
 		if ( data->TYPE == DATATYPE_DATA )
-			data->encrypted = NumberGenerator::RandomNumber(version)+1;
+			data->encrypted = NumberGenerator::RandomNumber((int)version)+1;
 	}
 }
 

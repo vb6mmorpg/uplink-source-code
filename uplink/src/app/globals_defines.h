@@ -33,11 +33,16 @@
 #endif
 
 #if defined(DEMOGAME)
-#define     VERSION_NUMBER          VERSION_NUMBER_INT "DEMO"
-#define     VERSION_NAME            VERSION_NAME_INT "-DEMO"
+	#define     VERSION_NUMBER          VERSION_NUMBER_INT "DEMO"
+	#define     VERSION_NAME            VERSION_NAME_INT "-DEMO"
 #else
-#define     VERSION_NUMBER          VERSION_NUMBER_INT "STORM"
-#define     VERSION_NAME            VERSION_NAME_INT "-STORM"
+	#if defined(STEAM_AUTH)
+		#define     VERSION_NUMBER          VERSION_NUMBER_INT "STEAM"
+		#define     VERSION_NAME            VERSION_NAME_INT "-STEAM"
+	#else
+		#define     VERSION_NUMBER          VERSION_NUMBER_INT
+		#define     VERSION_NAME            VERSION_NAME_INT
+	#endif
 #endif
 
 #define     SAVEFILE_VERSION        "SAV63"                     // Max version is SAVZZ (due to the number of characters to read)

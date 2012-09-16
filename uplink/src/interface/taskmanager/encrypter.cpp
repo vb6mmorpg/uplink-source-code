@@ -22,29 +22,31 @@
 
 #include "interface/interface.h"
 #include "interface/taskmanager/taskmanager.h"
-#include "interface/taskmanager/decompiler.h"
+#include "interface/taskmanager/encrypter.h"
 
 #include "world/world.h"
 #include "world/player.h"
 #include "world/computer/databank.h"
 
+#include "mmgr.h"
 
-Decompiler::Decompiler () : UplinkTask ()
+
+Encrypter::Encrypter () : UplinkTask ()
 {
 	
 	source = NULL;
 	sourceindex = -1;
-	status = DECOMPILER_OFF;
+	status = ENCRYPTER_OFF;
 	numticksrequired = 0;
 	progress = 0;
 
 }
 
-Decompiler::~Decompiler ()
+Encrypter::~Encrypter ()
 {
 }
 
-void Decompiler::MoveTo ( int x, int y, int time_ms )
+void Encrypter::MoveTo ( int x, int y, int time_ms )
 {
 
 	UplinkTask::MoveTo ( x, y, time_ms );
@@ -56,10 +58,10 @@ void Decompiler::MoveTo ( int x, int y, int time_ms )
 	char sprogress [128];
 	char sclose    [128];
 
-	sprintf ( stitle, "decompiler_title %d", pid );
-	sprintf ( sborder, "decompiler_border %d", pid );
-	sprintf ( sprogress, "decompiler_progress %d", pid );
-	sprintf ( sclose, "decompiler_close %d", pid );	
+	UplinkSnprintf ( stitle, sizeof ( stitle ), "encrypter_title %d", pid );
+	UplinkSnprintf ( sborder, sizeof ( sborder ), "encrypter_border %d", pid );
+	UplinkSnprintf ( sprogress, sizeof ( sprogress ), "encrypter_progress %d", pid );
+	UplinkSnprintf ( sclose, sizeof ( sclose ), "encrypter_close %d", pid );	
 
 	EclRegisterMovement ( stitle, x, y, time_ms);
 	EclRegisterMovement ( sborder, x + 20, y, time_ms );
@@ -73,7 +75,7 @@ void Decompiler::MoveTo ( int x, int y, int time_ms )
 
 }
 
-void Decompiler::SetTarget ( UplinkObject *uo, char *uos, int uoi )
+void Encrypter::SetTarget ( UplinkObject *uo, char *uos, int uoi )
 {
 
 	/*
@@ -84,7 +86,7 @@ void Decompiler::SetTarget ( UplinkObject *uo, char *uos, int uoi )
 
 		*/
 
-	if ( status == DECOMPILER_OFF ) {
+	if ( status == ENCRYPTER_OFF ) {
 
 		if ( uo->GetOBJECTID () == OID_DATABANK ) {
 
@@ -98,7 +100,7 @@ void Decompiler::SetTarget ( UplinkObject *uo, char *uos, int uoi )
 				Data *data = source->GetData (sourceindex);
 				UplinkAssert (data);
 
-				numticksrequired = (int)((float)(data->size + data->compressed) * (float)TICKSREQUIRED_DECOMPILE / version);
+				numticksrequired = data->size * TICKSREQUIRED_DECRYPT;
 				progress = 0;
 
                 remotefile = strstr ( uos, "fileserverscreen" ) ? true : false;
@@ -116,7 +118,7 @@ void Decompiler::SetTarget ( UplinkObject *uo, char *uos, int uoi )
 
 }
 
-void Decompiler::BorderDraw ( Button *button, bool highlighted, bool clicked )
+void Encrypter::BorderDraw ( Button *button, bool highlighted, bool clicked )
 {
 
 	glBegin ( GL_QUADS );
@@ -152,7 +154,7 @@ void Decompiler::BorderDraw ( Button *button, bool highlighted, bool clicked )
 
 }
 
-void Decompiler::ProgressDraw ( Button *button, bool highlighted, bool clicked )
+void Encrypter::ProgressDraw ( Button *button, bool highlighted, bool clicked )
 {
 
 	UplinkAssert ( button );
@@ -184,7 +186,7 @@ void Decompiler::ProgressDraw ( Button *button, bool highlighted, bool clicked )
 
 }
 
-void Decompiler::CloseClick ( Button *button )
+void Encrypter::CloseClick ( Button *button )
 {
 
 	int pid;
@@ -195,7 +197,7 @@ void Decompiler::CloseClick ( Button *button )
 
 }
 
-void Decompiler::BorderClick ( Button *button )
+void Encrypter::BorderClick ( Button *button )
 {
 
 	int pid;
@@ -206,11 +208,11 @@ void Decompiler::BorderClick ( Button *button )
 
 }
 
-void Decompiler::Initialise ()
+void Encrypter::Initialise ()
 {
 }
 
-static bool Decompiler_ReSetTargetProgram ( int pid )
+static bool Encrypter_ReSetTargetProgram ( int pid )
 {
 
 	TaskManager *tm = game->GetInterface ()->GetTaskManager ();
@@ -221,10 +223,10 @@ static bool Decompiler_ReSetTargetProgram ( int pid )
 		char sprogress [128];
 		char sclose    [128];
 
-		UplinkSnprintf ( stitle, sizeof ( stitle ), "decompiler_title %d", pid );
-		UplinkSnprintf ( sborder, sizeof ( sborder ), "decompiler_border %d", pid );
-		UplinkSnprintf ( sprogress, sizeof ( sprogress ), "decompiler_progress %d", pid );
-		UplinkSnprintf ( sclose, sizeof ( sclose ), "decompiler_close %d", pid );	
+		UplinkSnprintf ( stitle, sizeof ( stitle ), "ecrypter_title %d", pid );
+		UplinkSnprintf ( sborder, sizeof ( sborder ), "encrypter_border %d", pid );
+		UplinkSnprintf ( sprogress, sizeof ( sprogress ), "encrypter_progress %d", pid );
+		UplinkSnprintf ( sclose, sizeof ( sclose ), "encrypter_close %d", pid );	
 
 		int animationid;
 		if ( ( animationid = EclIsNoCaptionChangeActive( stitle ) ) != -1 )
@@ -247,35 +249,36 @@ static bool Decompiler_ReSetTargetProgram ( int pid )
 	return false;
 
 }
-void Decompiler::Tick ( int n )
+
+void Encrypter::Tick ( int n )
 {
 
 	if ( IsInterfaceVisible () ) {
 
 		int pid = SvbLookupPID ( this );
 		char sprogress [128];
-		sprintf ( sprogress, "decompiler_progress %d", pid );
+		UplinkSnprintf ( sprogress, sizeof ( sprogress ), "encrypter_progress %d", pid );
 
-		if ( status == DECOMPILER_OFF ) {
+		if ( status == ENCRYPTER_OFF ) {
 
-			// Not decrypting - look for a new target
+			// Not encrypting - look for a new target
 
 			if ( source ) {
 
-				// A new source file has been specified - start decrypting it
-				status = DECOMPILER_INPROGRESS;
+				// A new source file has been specified - start encrypting it
+				status = ENCRYPTER_INPROGRESS;
 
-				EclRegisterCaptionChange ( sprogress, "Decompiling...", 0 );
+				EclRegisterCaptionChange ( sprogress, "Encrypting...", 0 );
 
-			} else {
+			}
+			else {
 
-				Decompiler_ReSetTargetProgram ( pid );
+				Encrypter_ReSetTargetProgram ( pid );
 
 			}
 
-
 		}
-		else if ( status == DECOMPILER_INPROGRESS ) {
+		else if ( status == ENCRYPTER_INPROGRESS ) {
 
 			UplinkAssert (source);
 
@@ -287,105 +290,70 @@ void Decompiler::Tick ( int n )
 
 
 			Data *data = source->GetData (sourceindex);
-            if ( !data ) {
-                SvbRemoveTask(pid);
-                return;
-            }
+			
+			// The data was probably removed
+			if ( !data ) {
 
-			for ( int count = 0; count < n; ++count ) {
-
-				// Decrypt in progress
-				++progress;		
-
-				UplinkAssert ( EclGetButton ( sprogress ) );
-				EclGetButton ( sprogress )->width = (int)(120 * ( (float) progress / (float) numticksrequired ));
+				EclGetButton ( sprogress )->width = 120;
 				EclDirtyButton ( sprogress );
 
-				if ( progress >= numticksrequired ) {
+				status = ENCRYPTER_FINISHED;
+				EclRegisterCaptionChange ( sprogress, "Failed" );
 
-					status = DECOMPILER_FINISHED;
-					// Finished decrypting now
+				Encrypter_ReSetTargetProgram ( pid );
 
-					if ( data->encrypted )
-					{
-						char caption[128];
-						UplinkSnprintf(caption, sizeof(caption), "Error: %s is encrypted", data->title);
-						EclRegisterCaptionChange ( sprogress, caption );
-					}
-					else if ( data->compressed )
-					{
-						char caption[128];
-						UplinkSnprintf(caption, sizeof(caption), "Error: %s is compressed", data->title);
-						EclRegisterCaptionChange ( sprogress, caption );
-					}
-					else if ( data->TYPE == DATATYPE_PROGRAM  ) {
-						int filesize = (int)(((float)(data->size + data->compressed) * 5.0f) / (data->version + 2.0f));
-						if ( filesize < 3 ) filesize = 3;
+			}
+			else {
 
-						char specname[SIZE_DATA_TITLE];
-						UplinkSnprintf(specname, sizeof(specname), "%sSpec", data->title);
+				for ( int count = 0; count < n; ++count ) {
 
-						Data *spec = new Data();
-						spec->SetTitle(specname);
-						spec->SetDetails(DATATYPE_DATA, filesize, 0, 0, 1.0, data->softwareTYPE);
-						source->PutData(spec);
+					// Encrypt in progress
+					if ( version <= data->encrypted )		++progress;		
+					else									progress += (int) (version - data->encrypted);
 
-						char corename[SIZE_DATA_TITLE];
-						UplinkSnprintf(corename, sizeof(corename), "%sCore", data->title);
+					UplinkAssert ( EclGetButton ( sprogress ) );
+					EclGetButton ( sprogress )->width = (int) ( 120 * ( (float) progress / (float) numticksrequired ) );
+					EclDirtyButton ( sprogress );
 
-						Data *core = new Data();
-						core->SetTitle(corename);
-						core->SetDetails(DATATYPE_DATA, filesize);
-						source->PutData(core);
+					if ( progress >= numticksrequired ) {
 
-						for ( int i = 0; i < data->version; i++ )
-						{
-							char dataname[SIZE_DATA_TITLE];
-							UplinkSnprintf(dataname, sizeof(dataname), "%sData-%d", data->title, i);
+						// Finished decrypting now
+						status = ENCRYPTER_FINISHED;
 
-							Data *newdata = new Data();
-							newdata->SetTitle(dataname);
-							newdata->SetDetails(DATATYPE_DATA,filesize);
-							source->PutData(newdata);
+						
+						if ( data->encrypted < version ) {
+						
+							EclRegisterCaptionChange ( sprogress, "Finished" );			
+							data->encrypted = (int) version;
+
 						}
+						else {
 
-						EclRegisterCaptionChange ( sprogress, "Finished" );			
+							EclRegisterCaptionChange ( sprogress, "Failed" );
+
+						}
+						
+
+						Encrypter_ReSetTargetProgram ( pid );
+
+						break;
+
 					}
-					else {
-
-						EclRegisterCaptionChange ( sprogress, "Failed" );
-
-					}
-					Decompiler_ReSetTargetProgram ( pid );
-					break;
 
 				}
 
 			}
 
 		}
-		else if ( status == DECOMPILER_FINISHED ) {
-
-			//source = NULL;
-			//sourceindex = -1;
-			//progress = 0;	
-			//numticksrequired = 0;
-			//status = COMPRESSOR_OFF;
-			// Don't close it, put it back in it's initial state
+		else if ( status == ENCRYPTER_FINISHED ) {
 
 			source = NULL;
 			sourceindex = -1;
-			status = DECOMPILER_OFF;
+			progress = 0;	
 			numticksrequired = 0;
-			progress = 0;
-			remotefile = true;
+			status = ENCRYPTER_OFF;
 
-			UplinkAssert ( EclGetButton ( sprogress ) );
-			EclGetButton ( sprogress )->width = 120;
-			EclRegisterCaptionChange ( sprogress, "Select target" );
-			EclDirtyButton ( sprogress );
-
-			Decompiler_ReSetTargetProgram ( pid );
+			Encrypter_ReSetTargetProgram ( pid );
 
 		}
 
@@ -393,7 +361,7 @@ void Decompiler::Tick ( int n )
 
 }
 
-void Decompiler::CreateInterface ()
+void Encrypter::CreateInterface ()
 {
 
 	if ( !IsInterfaceVisible () ) {
@@ -405,21 +373,21 @@ void Decompiler::CreateInterface ()
 		char sprogress [128];
 		char sclose    [128];
 
-		sprintf ( stitle, "decompiler_title %d", pid );
-		sprintf ( sborder, "decompiler_border %d", pid );
-		sprintf ( sprogress, "decompiler_progress %d", pid );
-		sprintf ( sclose, "decompiler_close %d", pid );	
+		UplinkSnprintf ( stitle, sizeof ( stitle ), "encrypter_title %d", pid );
+		UplinkSnprintf ( sborder, sizeof ( sborder ), "encrypter_border %d", pid );
+		UplinkSnprintf ( sprogress, sizeof ( sprogress ), "encrypter_progress %d", pid );
+		UplinkSnprintf ( sclose, sizeof ( sclose ), "encrypter_close %d", pid );	
 
-		EclRegisterButton ( 265, 450, 20, 15, "", "Decompiler", stitle );
-		button_assignbitmap ( stitle, "software/dec.tif" );
+		EclRegisterButton ( 265, 450, 20, 15, "", "Encrypter", stitle );
+		button_assignbitmap ( stitle, "software/enc.tif" );
 
 		EclRegisterButton ( 285, 450, 120, 15, "", "", sborder );
 		EclRegisterButtonCallbacks ( sborder, BorderDraw, BorderClick, button_click, button_highlight );
 
-		EclRegisterButton ( 285, 450, 120, 13, "Select target", "Shows the progress of the decompilation", sprogress );
+		EclRegisterButton ( 285, 450, 120, 13, "Select target", "Shows the progress of the encryption", sprogress );
 		EclRegisterButtonCallbacks ( sprogress, ProgressDraw, BorderClick, button_click, button_highlight );		
 
-		EclRegisterButton ( 405, 450, 13, 13, "", "Close the Decompiler (and stop decompiling)", sclose );		
+		EclRegisterButton ( 405, 450, 13, 13, "", "Close the Encrypter (and stop encrypting)", sclose );		
 		button_assignbitmaps ( sclose, "close.tif", "close_h.tif", "close_c.tif" );
 		EclRegisterButtonCallback ( sclose, CloseClick );
 		
@@ -427,7 +395,7 @@ void Decompiler::CreateInterface ()
 
 }
 
-void Decompiler::RemoveInterface ()
+void Encrypter::RemoveInterface ()
 {
 
 	if ( IsInterfaceVisible () ) {
@@ -439,10 +407,10 @@ void Decompiler::RemoveInterface ()
 		char sprogress [128];
 		char sclose    [128];
 
-		sprintf ( stitle, "decompiler_title %d", pid );
-		sprintf ( sborder, "decompiler_border %d", pid );
-		sprintf ( sprogress, "decompiler_progress %d", pid );
-		sprintf ( sclose, "decompiler_close %d", pid );	
+		UplinkSnprintf ( stitle, sizeof ( stitle ), "encrypter_title %d", pid );
+		UplinkSnprintf ( sborder, sizeof ( sborder ), "encrypter_border %d", pid );
+		UplinkSnprintf ( sprogress, sizeof ( sprogress ), "encrypter_progress %d", pid );
+		UplinkSnprintf ( sclose, sizeof ( sclose ), "encrypter_close %d", pid );	
 
 		EclRemoveButton ( stitle );
 		EclRemoveButton ( sborder );
@@ -453,7 +421,7 @@ void Decompiler::RemoveInterface ()
 
 }
 
-void Decompiler::ShowInterface ()
+void Encrypter::ShowInterface ()
 {
 
 	if ( !IsInterfaceVisible () ) CreateInterface ();
@@ -465,10 +433,10 @@ void Decompiler::ShowInterface ()
 	char sprogress [128];
 	char sclose    [128];
 
-	sprintf ( stitle, "decompiler_title %d", pid );
-	sprintf ( sborder, "decompiler_border %d", pid );
-	sprintf ( sprogress, "decompiler_progress %d", pid );
-	sprintf ( sclose, "decompiler_close %d", pid );	
+	UplinkSnprintf ( stitle, sizeof ( stitle ), "encrypter_title %d", pid );
+	UplinkSnprintf ( sborder, sizeof ( sborder ), "encrypter_border %d", pid );
+	UplinkSnprintf ( sprogress, sizeof ( sprogress ), "encrypter_progress %d", pid );
+	UplinkSnprintf ( sclose, sizeof ( sclose ), "encrypter_close %d", pid );	
 
 	EclButtonBringToFront ( stitle );
 	EclButtonBringToFront ( sborder );
@@ -477,15 +445,14 @@ void Decompiler::ShowInterface ()
 
 }
 
-bool Decompiler::IsInterfaceVisible ()
+bool Encrypter::IsInterfaceVisible ()
 {
 
 	int pid = SvbLookupPID ( this );
 
 	char stitle [128];
-	sprintf ( stitle, "decompiler_border %d", pid );
+	UplinkSnprintf ( stitle, sizeof ( stitle ), "encrypter_border %d", pid );
 	
 	return ( EclGetButton (stitle) != NULL );
 
 }
-

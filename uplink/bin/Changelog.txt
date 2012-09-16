@@ -1,11 +1,11 @@
 15/9/12 Part 2 - Found some more code, and ported some bits from older source
 =======
 
-** NOTE: To run the mod on steam, you either need to disable the legit check, or provide a copy of world.dat **
 
 ** This mod uses a seperate options file and saves users as .stu/.stt instead of .usr/.tmp to avoid conflicts with incompatible vanilla 1.55 users
 
 
++ Now works on Steam
 
 + GCD now has the ability to release people who have been previously arrested.
 

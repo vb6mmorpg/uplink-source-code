@@ -33,11 +33,14 @@ class Probability;
 #define		MISSION_REMOVECOMPANY		9
 #define		MISSION_REMOVEUSER			10
 #define		MISSION_CHANGEDATADNS		11
+#define		MISSION_INTERCEPTMONEY		12
 
 #define		MISSION_PAYFINE				20
 #define		MISSION_FREEAGENT			21
 
 //=============================================================================
+
+#define		CHANCE_SOURCE_FILE			25
 
 
 class MissionGenerator
@@ -70,6 +73,7 @@ public:
 	static Mission *Generate_StealAllFiles		( Company *employer, Computer *target );
 	static Mission *Generate_DestroyFile		( Company *employer );
 	static Mission *Generate_DestroySingleFile  ( Company *employer, Computer *target );
+	static Mission *Generate_DestroySourceFile  ( Company *employer, Computer *target );
 	static Mission *Generate_DestroyAllFiles    ( Company *employer, Computer *target );
 	
 	static Mission *Generate_FindData       ( Company *employer );
@@ -85,6 +89,8 @@ public:
 	static Mission *Generate_ChangeData_SocialSecurity ( Company *employer );
 	static Mission *Generate_ChangeData_CriminalRecord ( Company *employer );
 	static Mission *Generate_ChangeData_DNSRecord      ( Company *employer );
+
+	static Mission *Generate_InterceptMoney	( Company *employer );
 
 	static Mission *Generate_FreeAgent      ( Person *person );
 
@@ -127,6 +133,7 @@ public:
     static bool IsMissionComplete_Special        ( Mission *mission, Person *person, Message *message );
     static bool IsMissionComplete_ChangeDNS      ( Mission *mission, Person *person, Message *message );
     static bool IsMissionComplete_FreeAgent      ( Mission *mission, Person *person, Message *message );
+	static bool	IsMissionComplete_InterceptMoney ( Mission *mission, Person *person, Message *message );
 
 	static void MissionCompleted ( Mission *mission, Person *person, Message *message );
 	static void MissionNotCompleted ( Mission *mission, Person *person, Message *message, char *reason );

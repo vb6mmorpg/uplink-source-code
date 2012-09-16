@@ -54,6 +54,8 @@ public:
 	bool IsRunning_Encryption ();
 	bool IsRunning_Monitor	  ();
 
+	bool IsInstalled	      ( int TYPE );
+
 	bool IsAnythingEnabled    ();
 	bool IsAnythingDisabled   ();							// Returns true if any system is disabled
 

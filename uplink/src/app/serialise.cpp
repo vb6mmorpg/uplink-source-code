@@ -53,6 +53,7 @@
 #include "world/scheduler/runplotsceneevent.h"
 #include "world/scheduler/changegatewayevent.h"
 #include "world/scheduler/bankrobberyevent.h"
+#include "world/scheduler/transferevent.h"
 
 #include "darwinia.h"
 
@@ -867,6 +868,7 @@ UplinkObject *CreateUplinkObject ( int OBJECTID )
 		case OID_RUNPLOTSCENEEVENT		: uo = new RunPlotSceneEvent ();	break;
 		case OID_CHANGEGATEWAYEVENT		: uo = new ChangeGatewayEvent ();	break;
         case OID_BANKROBBERYEVENT       : uo = new BankRobberyEvent ();     break;			
+		case OID_TRANSFEREVENT			: uo = new TransferEvent ();		break;
 
         case OID_DARWINIA		        : uo = new Darwinia ();				break;			
         case OID_DARWINIAISLAND         : uo = new DarwiniaIsland ();		break;

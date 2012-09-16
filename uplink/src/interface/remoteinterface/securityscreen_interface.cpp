@@ -155,7 +155,7 @@ void SecurityScreenInterface::Create ( ComputerScreen *newcs )
 					UplinkSnprintf ( level, sizeof ( level ), "securityscreen_systemlevel %d", i );
 					UplinkSnprintf ( status, sizeof ( status ), "securityscreen_systemstatus %d", i );
 
-					char leveltext [8];
+					char leveltext [10];
 					UplinkSnprintf ( leveltext, sizeof ( leveltext ), "level %d", ss->level );
 
 					EclRegisterButton ( 50, 140 + i * 40, 150, 25, ss->GetName (), "Click here to toggle its status", title );

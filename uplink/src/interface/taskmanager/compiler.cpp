@@ -378,7 +378,7 @@ void Compiler::Tick ( int n )
 				//char realfilename[SIZE_DATA_TITLE];
 				//sscanf(filename, "Linking %s", realfilename);
 
-				datasize = datasize - version;
+				datasize = datasize - (int) version;
 				if ( datasize < dataversion ) datasize = dataversion;
 
 				Data *data = new Data();

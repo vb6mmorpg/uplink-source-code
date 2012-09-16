@@ -98,7 +98,7 @@ void Compressor::SetTarget ( UplinkObject *uo, char *uos, int uoi )
 				Data *data = source->GetData (sourceindex);
 				UplinkAssert (data);
 
-				numticksrequired = data->size * TICKSREQUIRED_COMPRESS * version;
+				numticksrequired = (int)((float)data->size * (float)TICKSREQUIRED_COMPRESS * version);
 				progress = 0;
 
                 remotefile = strstr ( uos, "fileserverscreen" ) ? true : false;
@@ -121,31 +121,31 @@ void Compressor::BorderDraw ( Button *button, bool highlighted, bool clicked )
 
 	glBegin ( GL_QUADS );
 
-		if      ( clicked )		glColor4f ( 0.5, 0.5, 0.6, ALPHA );
-		else if ( highlighted ) glColor4f ( 0.2, 0.2, 0.5, ALPHA );
-		else					glColor4f ( 0.2, 0.2, 0.4, ALPHA );
+		if      ( clicked )		glColor4f ( 0.5f, 0.5f, 0.6f, ALPHA );
+		else if ( highlighted ) glColor4f ( 0.2f, 0.2f, 0.5f, ALPHA );
+		else					glColor4f ( 0.2f, 0.2f, 0.4f, ALPHA );
 		glVertex2i ( button->x, button->y );
 
-		if		( clicked )		glColor4f ( 0.7, 0.7, 0.6, ALPHA );
-		else if ( highlighted ) glColor4f ( 0.5, 0.5, 0.6, ALPHA );
-		else					glColor4f ( 0.3, 0.3, 0.5, ALPHA );
+		if		( clicked )		glColor4f ( 0.7f, 0.7f, 0.6f, ALPHA );
+		else if ( highlighted ) glColor4f ( 0.5f, 0.5f, 0.6f, ALPHA );
+		else					glColor4f ( 0.3f, 0.3f, 0.5f, ALPHA );
 		glVertex2i ( button->x + button->width, button->y );
 
-		if		( clicked )		glColor4f ( 0.5, 0.5, 0.6, ALPHA );
-		else if ( highlighted ) glColor4f ( 0.2, 0.2, 0.5, ALPHA );
-		else					glColor4f ( 0.2, 0.2, 0.4, ALPHA );
+		if		( clicked )		glColor4f ( 0.5f, 0.5f, 0.6f, ALPHA );
+		else if ( highlighted ) glColor4f ( 0.2f, 0.2f, 0.5f, ALPHA );
+		else					glColor4f ( 0.2f, 0.2f, 0.4f, ALPHA );
 		glVertex2i ( button->x + button->width, button->y + button->height );
 
-		if		( clicked )		glColor4f ( 0.7, 0.7, 0.6, ALPHA );
-		else if ( highlighted ) glColor4f ( 0.5, 0.5, 0.6, ALPHA );
-		else					glColor4f ( 0.3, 0.3, 0.5, ALPHA );
+		if		( clicked )		glColor4f ( 0.7f, 0.7f, 0.6f, ALPHA );
+		else if ( highlighted ) glColor4f ( 0.5f, 0.5f, 0.6f, ALPHA );
+		else					glColor4f ( 0.3f, 0.3f, 0.5f, ALPHA );
 		glVertex2i ( button->x, button->y + button->height );
 
 	glEnd ();
 
 	if ( highlighted || clicked ) {
 
-		glColor4f ( 0.3, 0.3, 0.7, 1.0 );
+		glColor4f ( 0.3f, 0.3f, 0.7f, 1.0f );
 		border_draw ( button );
 
 	}
@@ -157,21 +157,21 @@ void Compressor::ProgressDraw ( Button *button, bool highlighted, bool clicked )
 
 	UplinkAssert ( button );
 
-	float scale = (float) button->width / 100.0;
+	float scale = (float) button->width / 100.0f;
 	if ( highlighted ) scale *= 2;
 
 	glBegin ( GL_QUADS );
 
-		glColor4f ( 0.0, 1.5 - scale, scale, 0.6 );
+		glColor4f ( 0.0f, 1.5f - scale, scale, 0.6f );
 		glVertex3i ( button->x, button->y, 0 );
 
-		glColor4f ( 0.0, 1.5 - scale, scale, 0.6 );
+		glColor4f ( 0.0f, 1.5f - scale, scale, 0.6f );
 		glVertex3i ( button->x + button->width, button->y, 0 );
 
-		glColor4f ( 0.0, 1.5 - scale, scale, 0.6 );
+		glColor4f ( 0.0f, 1.5f - scale, scale, 0.6f );
 		glVertex3i ( button->x + button->width, button->y + button->height, 0 );
 
-		glColor4f ( 0.0, 1.5 - scale, scale, 0.6 );
+		glColor4f ( 0.0f, 1.5f - scale, scale, 0.6f );
 		glVertex3i ( button->x, button->y + button->height, 0 );
 
 	glEnd ();
@@ -179,7 +179,7 @@ void Compressor::ProgressDraw ( Button *button, bool highlighted, bool clicked )
 	int xpos = button->x + 5;
 	int ypos = (button->y + button->height / 2) + 3;
 		
-	glColor4f ( 1.0, 1.0, 1.0, 1.0 );    
+	glColor4f ( 1.0f, 1.0f, 1.0f, 1.0f );    
     GciDrawText ( xpos, ypos, button->caption, HELVETICA_10 );
 
 }
@@ -295,7 +295,7 @@ void Compressor::Tick ( int n )
 				++progress;		
 
 				UplinkAssert ( EclGetButton ( sprogress ) );
-				EclGetButton ( sprogress )->width = 120 * ( (float) progress / (float) numticksrequired );
+				EclGetButton ( sprogress )->width = 120 * int( (float) progress / (float) numticksrequired );
 				EclDirtyButton ( sprogress );
 
 				if ( progress >= numticksrequired ) {
@@ -306,7 +306,7 @@ void Compressor::Tick ( int n )
 					if ( data->TYPE == DATATYPE_DATA && data->compressed == 0 && data->size > 1 ) {
 						Data *newdata = new Data(data);
 
-						int reduce = version;
+						int reduce = (int) version;
 						if ( data->size <= reduce ) {
 							reduce = data->size - 1;
 						}

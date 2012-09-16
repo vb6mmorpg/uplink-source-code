@@ -3117,7 +3117,9 @@ Company *WorldGenerator::GenerateCompany_Sales ()
 	company->SetTYPE ( COMPANYTYPE_COMMERCIAL );
 	company->SetGrowth ( growth );
 	company->SetAlignment ( alignment );
-	company->salesmask = SALES_LEGAL;
+	company->salesmask = SALES_UTILITY;
+
+	if ( NumberGenerator::RandomNumber(10) > 5 ) { company->salesmask |= SALES_DEVELOPMENT; }
 
 	game->GetWorld ()->CreateCompany ( company );
 

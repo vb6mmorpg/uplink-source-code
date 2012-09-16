@@ -19,6 +19,8 @@
 #include "world/computer/security.h"
 #include "world/computer/securitysystem.h"
 #include "world/computer/computerscreen/computerscreen.h"
+#include "world/company/companyuplink.h"
+#include "world/company/sale.h"
 
 #include "world/generator/namegenerator.h"
 #include "world/generator/worldgenerator.h"
@@ -374,9 +376,125 @@ bool Computer::ChangeSecurityCodes ()
 
 	// Re-enable all our security
 
+	/* Replaced by Adaptive Security
 	for ( int i = 0; i < security.NumSystems (); ++i ) 
 		if ( security.GetSystem (i) ) 
 			security.GetSystem (i)->Enable ();
+	*/
+
+	// Note: this causes Uplink to automatically have the latest and greatest versions of software when a new version comes out
+	CompanyUplink *cu = (CompanyUplink *)game->GetWorld ()->GetCompany ( "Uplink" );
+	UplinkAssert ( cu );
+	for ( int i = 0; i < security.NumSystems (); ++i ) 
+	{
+		if ( security.GetSystem (i) ) 
+		{
+			security.GetSystem (i)->Enable ();
+			if ( NumberGenerator::RandomNumber(100) < CHANCE_UPGRADE_SECURITY ) {
+				security.GetSystem (i)->SetLevel( security.GetSystem (i)->level + 1 );
+
+
+				int TYPE = security.GetSystem (i)->TYPE;
+				int level = security.GetSystem (i)->level;
+
+				while( cu->securitylevel[TYPE] < level )
+				{
+
+					cu->securitylevel[TYPE] += 1;
+
+					char *title = new char[64];
+					char *title2 = new char[64];
+					char *details = new char[256];
+					char *details2 = new char[256];
+
+					sprintf(title, " ");
+					sprintf(title2, " ");
+					sprintf(details, " ");
+					sprintf(details2, " ");
+
+					switch ( TYPE )
+					{
+					case SECURITY_TYPE_PROXY:
+						sprintf(title,"Proxy_Bypass");
+						sprintf(details,"PROXY_BYPASS V%1.1f\nTYPE: software.Bypasser\n\n"
+										"Actively bypasses a proxy with a security level of %d or below\n"
+										"All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
+										(float) level, level);
+						sprintf(title2,"Proxy_Disable");
+						sprintf(details2,	"PROXY_DISABLE V%1.1f\nTYPE: software.Disabler\n\n"
+											"Disables a proxy with a security level of %d or below\n"
+											"This action will be detected immediately",
+											(float) level, level);
+						break;
+					case SECURITY_TYPE_FIREWALL:
+						sprintf(title,"Firewall_Bypass");
+						sprintf(details,"FIREWALL_BYPASS V%1.1f\nTYPE: software.Bypasser\n\n"
+										"Actively bypasses a firewall with a security level of %d or below\n"
+										"All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
+										(float) level, level);
+						sprintf(title2,"Firewall_Disable");
+						sprintf(details2,	"FIREWALL_DISABLE V%1.1f\nTYPE: software.Disabler\n\n"
+											"Disables a firewall with a security level of %d or below\n"
+											"This action will be detected immediately",
+											(float) level, level);
+						break;
+					case SECURITY_TYPE_MONITOR:
+						sprintf(title,"Monitor_Bypass");
+						sprintf(details,"MONITOR_BYPASS V%1.1f\nTYPE: software.Bypasser\n\n"
+										"Actively bypasses a monitor with a security level of %d or below\n"
+										"All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
+										(float) level, level);
+						sprintf(title2," ");
+						sprintf(details2,	" ");
+						break;
+
+					} // End Switch
+
+					for ( int s = 0; s < cu->sw_sales.Size(); s++ )
+					{
+						if ( cu->sw_sales.ValidIndex(s) )
+						{
+							Sale *sale = cu->GetSWSale(s);
+							if ( strcmp(sale->title, title) == 0 )
+							{
+								// xxx_Bypass
+								SaleVersion *sv = sale->GetVersion(5); // Get version 5.0
+								int cost = sv->cost;
+								sv = sale->GetVersion(4);
+								cost += (cost-sv->cost) * 2 * (cu->securitylevel[TYPE]-5);
+								cost = (cost/1000)*1000;	// Round to nearest 1000 credits
+								sale->AddVersion(details, cost, (int)(cu->securitylevel[TYPE]/5), cu->securitylevel[TYPE] );
+							}
+							else if ( strcmp(sale->title, title2) == 0 )
+							{
+								// xxx_Disable
+								SaleVersion *sv = sale->GetVersion(5); // Get version 5.0
+								int cost = sv->cost;
+								sv = sale->GetVersion(4);
+								cost += (cost-sv->cost) * 2 * (cu->securitylevel[TYPE]-5);
+								int size = sv->size + (level/5);
+								cost = (cost/1000)*1000;	// Round to nearest 1000 credits
+								sale->AddVersion(details, cost, size, cu->securitylevel[TYPE] );
+							}
+						}
+					} // End For
+				} // End While securitylevel[TYPE] < level
+			}
+		}
+	}
+
+	if ( NumberGenerator::RandomNumber(100) < CHANCE_INSTALL_SECURITY ) {
+		if ( !security.IsInstalled(SECURITY_TYPE_MONITOR)  ) {
+			security.AddSystem(SECURITY_TYPE_MONITOR,1);
+
+		} else if ( !security.IsInstalled(SECURITY_TYPE_PROXY) ) {
+			security.AddSystem(SECURITY_TYPE_PROXY,1);
+
+		} else if ( !security.IsInstalled(SECURITY_TYPE_FIREWALL) ) {
+			security.AddSystem(SECURITY_TYPE_FIREWALL,1);
+
+		}
+	}
 
     return changed;
 

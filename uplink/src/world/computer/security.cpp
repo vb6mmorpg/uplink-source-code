@@ -84,6 +84,20 @@ int Security::NumRunningSystems ()
 
 }
 
+
+bool Security::IsInstalled ( int TYPE )
+{
+
+	for ( int i = 0; i < systems.Size (); ++i ) 
+		if ( systems.ValidIndex (i) )
+			if ( systems.GetData (i) )
+				if ( systems.GetData (i)->TYPE == TYPE )
+					return true;
+
+	return false;
+
+}
+
 bool Security::IsRunning ( int TYPE )
 {
 
