@@ -40,6 +40,7 @@ public:
 	static void Script15 ();						// Search for Criminal Record
 	static void Script16 ();						// Search for Academic Record
 	static void Script17 ();						// Search for Social Security
+	static void Script18 ();						// Search for DNS Record
 
 	// ========    Start sequence =============================================
 

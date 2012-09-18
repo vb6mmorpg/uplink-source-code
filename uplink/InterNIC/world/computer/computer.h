@@ -36,6 +36,7 @@
 #define COMPUTER_TYPE_PERSONALCOMPUTER		  16
 #define COMPUTER_TYPE_VOICEPHONESYSTEM		  32
 #define COMPUTER_TYPE_LAN                     64
+#define COMPUTER_TYPE_NAMESERVER			  128
 
 
 #define COMPUTER_TYPE_ANY     COMPUTER_TYPE_PUBLICACCESSSERVER          | \
@@ -44,7 +45,8 @@
                               COMPUTER_TYPE_PUBLICBANKSERVER            | \
                               COMPUTER_TYPE_PERSONALCOMPUTER            | \
                               COMPUTER_TYPE_VOICEPHONESYSTEM            | \
-                              COMPUTER_TYPE_LAN
+                              COMPUTER_TYPE_LAN				            | \
+                              COMPUTER_TYPE_NAMESERVER
 
     
 // Trace actions

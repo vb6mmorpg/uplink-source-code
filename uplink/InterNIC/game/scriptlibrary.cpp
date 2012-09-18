@@ -35,6 +35,7 @@
 #include "interface/remoteinterface/academicscreen_interface.h"
 #include "interface/remoteinterface/socialsecurityscreen_interface.h"
 #include "interface/remoteinterface/radiotransmitterscreen_interface.h"
+#include "interface/remoteinterface/nameserverscreen_interface.h"
 
 #include "world/world.h"
 #include "world/player.h"
@@ -80,6 +81,7 @@ void ScriptLibrary::RunScript ( int scriptindex )
 		case 15			:			Script15 ();		break;
 		case 16			:			Script16 ();		break;
 		case 17			:			Script17 ();		break;
+		case 18			:			Script18 ();		break;
 
 		case 30			:			Script30 ();		break;
 		case 31			:			Script31 ();		break;
@@ -514,6 +516,39 @@ void ScriptLibrary::Script17 ()
 	UplinkAssert ( sssi );
 	UplinkAssert ( sssi->ScreenID () == SCREEN_SOCSECSCREEN );
 	sssi->SetSearchName ( name );
+
+}
+
+void ScriptLibrary::Script18 ()
+{
+
+	/*
+		PURPOSE : To search for a DNS Record and display it on 
+		a DNS record screen.
+
+		OCCURS : The player is logged onto a nameserver
+		and clicks on SEARCH
+
+		*/
+
+	// Get the search string
+
+	char name [SIZE_COMPUTER_NAME];
+	Button *button = EclGetButton ( "name 0 0" );
+	UplinkAssert ( button );
+	strncpy ( name, button->caption, sizeof ( name ) );
+	name [ sizeof ( name ) - 1 ] = '\0';
+
+	// Run the DNS Record Screen
+
+	game->GetInterface ()->GetRemoteInterface ()->RunScreen ( 6, game->GetInterface ()->GetRemoteInterface ()->GetComputerScreen ()->GetComputer () );
+	
+	// Start the search going
+
+	NameServerScreenInterface *nsi = (NameServerScreenInterface *) game->GetInterface ()->GetRemoteInterface ()->GetInterfaceScreen ();
+	UplinkAssert ( nsi );
+	UplinkAssert ( nsi->ScreenID () == SCREEN_NAMESERVERSCREEN );
+	nsi->SetSearchName ( name );
 
 }
 

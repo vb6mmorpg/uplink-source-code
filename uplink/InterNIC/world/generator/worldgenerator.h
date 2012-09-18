@@ -65,6 +65,7 @@ public:
 	static void GenerateInternationalAcademicDatabase ();
 	static void GenerateInterNIC ();
 	static void GenerateStockMarket ();
+	static void GenerateInternationalTelephoneDatabase ();
 	
     static void GenerateProtoVision ();
     static void GenerateOCP ();
@@ -93,7 +94,10 @@ public:
     static Computer  *GenerateLAN                     ( char *companyname );
 	static Computer  *GeneratePersonalComputer		  ( char *personname );
 	static Computer  *GenerateVoicePhoneSystem		  ( char *personname );
-	
+	static Computer	 *GenerateNameServer			  ( char *companyname );
+
+	static void		 GenerateNameServerRecord		  ( Computer *computer, char *companyname );
+	static void		 GeneratePublicNameServerRecord	  ( Computer *computer );
 
 	// Low level functions for "fleshing out" specific items of data
 

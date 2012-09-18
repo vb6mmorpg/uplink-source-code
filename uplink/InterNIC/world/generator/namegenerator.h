@@ -41,6 +41,7 @@ public:
     static char *GenerateInternationalBankName      ( char *companyname );
     static char *GenerateFileServerName             ( char *companyname );
     static char *GenerateLANName                    ( char *companyname );
+    static char *GenerateNameServerName             ( char *companyname );
     static char *GeneratePersonalComputerName       ( char *personname );
     static char *GenerateVoicePhoneSystemName       ( char *personname );
 };

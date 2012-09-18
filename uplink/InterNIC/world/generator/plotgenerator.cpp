@@ -162,6 +162,13 @@ void PlotGenerator::Initialise_ARC ()
 	Computer *ism = WorldGenerator::GenerateInternalServicesMachine ( companyname );
 	Computer *cm  = WorldGenerator::GenerateCentralMainframe		( companyname );
     Computer *lan = WorldGenerator::GenerateLAN                     ( companyname );
+    Computer *ns  = WorldGenerator::GenerateNameServer              ( companyname );
+
+	WorldGenerator::GenerateNameServerRecord(pas,companyname);
+	WorldGenerator::GenerateNameServerRecord(ism,companyname);
+	WorldGenerator::GenerateNameServerRecord(cm,companyname);
+	WorldGenerator::GenerateNameServerRecord(lan,companyname);
+	WorldGenerator::GeneratePublicNameServerRecord(ns);
 
     HighSecurityScreen *hs = (HighSecurityScreen *) cm->GetComputerScreen (0);
     hs->AddSystem ( "Elliptic-Curve Encryption Cypher", 7 );
@@ -192,6 +199,7 @@ void PlotGenerator::Initialise_ARC ()
 	for ( int i = 0; i < 8; ++i ) {
 		Computer *comp = WorldGenerator::GenerateComputer ( companyname );
 		comp->SetIsTargetable ( false );
+		WorldGenerator::GenerateNameServerRecord(comp,companyname);
 	}
 
 	// Generate contact addresses for this company
@@ -281,6 +289,7 @@ void PlotGenerator::Initialise_Andromeda ()
     ms4->SetNextPage ( 1 );
     comp->AddComputerScreen ( ms4, 4 );
 
+	WorldGenerator::GenerateNameServerRecord(comp,"ARC");
 
 }
 
@@ -302,7 +311,13 @@ void PlotGenerator::Initialise_ARUNMOR ()
 	Computer *ism = WorldGenerator::GenerateInternalServicesMachine ( companyname );
 	Computer *cm  = WorldGenerator::GenerateCentralMainframe		( companyname );
     Computer *lan = WorldGenerator::GenerateLAN                     ( companyname );
+    Computer *ns  = WorldGenerator::GenerateNameServer              ( companyname );
 
+	WorldGenerator::GenerateNameServerRecord(pas,companyname);
+	WorldGenerator::GenerateNameServerRecord(ism,companyname);
+	WorldGenerator::GenerateNameServerRecord(cm,companyname);
+	WorldGenerator::GenerateNameServerRecord(lan,companyname);
+	WorldGenerator::GeneratePublicNameServerRecord(ns);
 
     HighSecurityScreen *hs = (HighSecurityScreen *) cm->GetComputerScreen (0);
     hs->AddSystem ( "Elliptic-Curve Encryption Cypher", 7 );
@@ -333,6 +348,7 @@ void PlotGenerator::Initialise_ARUNMOR ()
 	for ( int i = 0; i < 8; ++i ) {
 		Computer *comp = WorldGenerator::GenerateComputer ( companyname );
 		comp->SetIsTargetable ( false );
+		WorldGenerator::GenerateNameServerRecord(comp,companyname);
 	}
 
 	// Generate contact addresses for this company
@@ -366,6 +382,13 @@ void PlotGenerator::Initialise_DARWIN ()
 	Computer *ism = WorldGenerator::GenerateInternalServicesMachine ( companyname );
 	Computer *cm  = WorldGenerator::GenerateCentralMainframe		( companyname );
     Computer *lan = WorldGenerator::GenerateLAN                     ( companyname );
+    Computer *ns  = WorldGenerator::GenerateNameServer              ( companyname );
+
+	WorldGenerator::GenerateNameServerRecord(pas,companyname);
+	WorldGenerator::GenerateNameServerRecord(ism,companyname);
+	WorldGenerator::GenerateNameServerRecord(cm,companyname);
+	WorldGenerator::GenerateNameServerRecord(lan,companyname);
+	WorldGenerator::GeneratePublicNameServerRecord(ns);
 
 	pas->SetIsTargetable ( false );
 	ism->SetIsTargetable ( false );

@@ -327,7 +327,7 @@ bool Computer::ChangeSecurityCodes ()
 
     switch ( TYPE ) {
 
-		case COMPUTER_TYPE_INTERNALSERVICESMACHINE :		
+		case COMPUTER_TYPE_INTERNALSERVICESMACHINE :
 		{
 			Record *admin = recordbank.GetRecordFromName ( RECORDBANK_ADMIN );
 			UplinkAssert (admin);
@@ -345,11 +345,21 @@ bool Computer::ChangeSecurityCodes ()
 			break;
         }
 
-        case COMPUTER_TYPE_UNKNOWN :
+		case COMPUTER_TYPE_NAMESERVER :
+		{
+			Record *admin = recordbank.GetRecordFromName ( RECORDBANK_ADMIN );
+			UplinkAssert (admin);
+			admin->ChangeField ( RECORDBANK_PASSWORD, NameGenerator::GenerateComplexPassword () );		
+            changed = true;
+			break;
+		}
+
+		case COMPUTER_TYPE_UNKNOWN :
         {
 
             if ( strcmp ( ip, IP_SOCIALSECURITYDATABASE ) == 0 ||
                  strcmp ( ip, IP_GLOBALCRIMINALDATABASE ) == 0 ||
+                 strcmp ( ip, IP_TELEPHONEDATABASE ) == 0 ||
                  strcmp ( ip, IP_ACADEMICDATABASE ) == 0 ) {
 
 			    Record *admin = recordbank.GetRecordFromName ( RECORDBANK_ADMIN );

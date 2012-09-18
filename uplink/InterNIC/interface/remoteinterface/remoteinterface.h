@@ -60,6 +60,7 @@
 #define  SCREEN_PROTOVISION             35
 #define  SCREEN_NUCLEARWAR              36
 #define  SCREEN_RADIOTRANSMITTER        37
+#define  SCREEN_NAMESERVERSCREEN		38
 
 
 // ============================================================================

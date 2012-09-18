@@ -64,13 +64,14 @@ NEUROMANCERCHANGE [] = {
 								0,					// Steal file
 								5,					// Destroy file
 								0,					// Find data
-							   -5,					// Change data
+							   -5,					// Change data (Personal)
 							  -20,					// Frame user
 							  -30,					// Trace user
 							  -10,					// Change account
 							   30,					// Remove computer
 							   60,					// Remove company
-							  -60					// Remove user
+							  -60,					// Remove user
+							    5					// Change data (Corporate)
 	
 																	};
 

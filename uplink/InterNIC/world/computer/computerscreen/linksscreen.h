@@ -17,6 +17,7 @@
 #define  LINKSSCREENTYPE_ALLLINKS			1
 #define  LINKSSCREENTYPE_PLAYERLINKS		2
 #define  LINKSSCREENTYPE_LOCALLINKS			3
+#define  LINKSSCREENTYPE_TELEPHONE			4
 
 // ============================================================================
 

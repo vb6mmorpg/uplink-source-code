@@ -66,6 +66,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="bungle.lib eclipse.lib gucci.lib redshirt.lib soundgarden.lib vanbakel.lib irclib.lib sdl.lib SDL_mixer.lib tcp4w32.lib libtiff.lib gltt.lib freetype.lib dbghelp.lib opengl32.lib glu32.lib winmm.lib"
+				OutputFile="$(OutDir)\$(ProjectName)-NIC.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\lib\bin;..\..\contrib\bin;..\..\contrib\tcp4u.331\tcp4w32;&quot;..\..\contrib\tiff-3.7.2\libtiff&quot;;&quot;..\..\contrib\gltt-2.5&quot;;&quot;..\..\contrib\freetype-1.3.1&quot;;&quot;..\..\contrib\SDL-1.2.11_dev\VisualC\SDL\Release&quot;;&quot;..\..\contrib\SDL_mixer-1.2.7_patched\VisualC\Release&quot;"
 				IgnoreDefaultLibraryNames="libcd.lib,libc.lib"
@@ -935,6 +936,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\interface\remoteinterface\nameserverscreen_interface.h"
+				>
+			</File>
+			<File
 				RelativePath=".\interface\remoteinterface\nearestgatewayscreen_interface.h"
 				>
 			</File>
@@ -1776,6 +1781,10 @@
 			</File>
 			<File
 				RelativePath=".\world\generator\namegenerator.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\interface\remoteinterface\nameserverscreen_interface.cpp"
 				>
 			</File>
 			<File
