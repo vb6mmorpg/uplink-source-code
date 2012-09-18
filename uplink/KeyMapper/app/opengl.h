@@ -33,5 +33,6 @@ void display ();
 //void passivemouse ( int x, int y );
 //void resize(int width, int height);
 
+void keymapper ( char *softwarename );
 
 #endif

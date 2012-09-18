@@ -16,6 +16,7 @@
 #include "app/uplinkobject.h"
 
 #include "world/computer/databank.h"
+#include "world/computer/recordbank.h"
 #include "world/computer/gatewaydef.h"
 
 
@@ -23,6 +24,7 @@
 #define HUDUPGRADE_CONNECTIONANALYSIS		2
 #define HUDUPGRADE_IRCCLIENT                4
 #define HUDUPGRADE_LANVIEW                  8
+#define HUDUPGRADE_KEYMAPPER                16
 
 #define GATEWAYUPGRADETYPE_CPU				1
 #define GATEWAYUPGRADETYPE_MODEM			2
@@ -46,6 +48,7 @@ protected:
 public:
 
 	DataBank databank;
+	Record functionKeys;
 
 	GatewayDef* curgatewaydef;				// GatewayDef of the current Gateway
 

@@ -17,6 +17,7 @@
 #include "vanbakel.h"
 #include "gucci.h"
 #include "soundgarden.h"
+#include "redshirt.h"
 
 #include "options/options.h"
 
@@ -38,12 +39,15 @@
 #include "interface/localinterface/localinterface.h"
 #include "interface/localinterface/hud_interface.h"
 #include "interface/localinterface/irc_interface.h"
+#include "interface/localinterface/phonedialler.h"
 #include "interface/remoteinterface/remoteinterface.h"
 #include "interface/taskmanager/taskmanager.h"
 #include "interface/taskmanager/uplinktask.h"
 
 #include "world/world.h"
 #include "world/player.h"
+#include "world/vlocation.h"
+#include "world/computer/computer.h"
 
 #include "mmgr.h"
 
@@ -447,6 +451,16 @@ void keyboard(unsigned char key, int x, int y)
 		GciSaveScreenshot( screenpath );
 
 	}
+	else if ( (key >=1 && key <= 26) && key != 8 ) // Manually trap backspace
+	{
+		char field[10];
+		UplinkSnprintf(field, sizeof(field), "Ctrl+%c", (char)key+64);
+
+		char softwarename[128];
+		UplinkSnprintf(softwarename, sizeof(softwarename), "%s", game->GetWorld ()->GetPlayer ()->gateway.functionKeys.GetField(field));
+
+		keymapper(softwarename);
+	}
     else {
 
 		char *name = EclGetHighlightedButton ();
@@ -466,39 +480,59 @@ void specialkeyboard (int key, int x, int y)
 
 	switch ( key ) {
 
-		case GCI_KEY_F1:							// Cheat menu
-
-#ifdef CHEATMODES_ENABLED
-            game->GetInterface ()->GetLocalInterface ()->RunScreen ( SCREEN_CHEATS );
-#else
-	#ifndef DEMOGAME
-		#ifndef WAREZRELEASE								// Prevent cheats from working in the warez release
-//            if ( game->IsRunning () && strcmp ( game->GetWorld ()->GetPlayer ()->handle, "TooManySecrets" ) == 0 )
+//		case GCI_KEY_F1:							// Cheat menu
+//
+//#ifdef CHEATMODES_ENABLED
+//            game->GetInterface ()->GetLocalInterface ()->RunScreen ( SCREEN_CHEATS );
+//#else
+//	#ifndef DEMOGAME
+//		#ifndef WAREZRELEASE								// Prevent cheats from working in the warez release
+//            if ( game->IsRunning () && strcmp ( game->GetWorld ()->GetPlayer ()->handle, "Stormchild" ) == 0 )
 //                game->GetInterface ()->GetLocalInterface ()->RunScreen ( SCREEN_CHEATS );
-		#endif
-	#endif
-#endif  
-			break;
-
+//		#endif
+//	#endif
+//#endif  
+//			break;
+//
+//		case GCI_KEY_F9:
+//
+//			char screenpath [256];
+//			UplinkSnprintf ( screenpath, sizeof ( screenpath ), "%sscreenshot.bmp", app->userpath );
+//
+//			GciSaveScreenshot( screenpath );
+//
+//			break;
+//
+//
+//#ifndef DEMOGAME
+//
+//		case GCI_KEY_F12:							// Exit
+//			if ( game->IsRunning () ) app->SaveGame ( game->GetWorld ()->GetPlayer ()->handle );
+//			app->Close ();
+//			break;
+//
+//#endif
+		case GCI_KEY_F1:
+		case GCI_KEY_F2:
+		case GCI_KEY_F3:
+		case GCI_KEY_F4:
+		case GCI_KEY_F5:
+		case GCI_KEY_F6:
+		case GCI_KEY_F7:
+		case GCI_KEY_F8:
 		case GCI_KEY_F9:
+		case GCI_KEY_F10:
+		case GCI_KEY_F11:
+		case GCI_KEY_F12:
 
-			char screenpath [256];
-			UplinkSnprintf ( screenpath, sizeof ( screenpath ), "%sscreenshot.bmp", app->userpath );
-
-			GciSaveScreenshot( screenpath );
-
+			char field[5];
+			UplinkSnprintf(field, sizeof(field), "F%d", key);
+			
+			char softwarename[128];
+			UplinkSnprintf(softwarename, sizeof(softwarename), "%s", game->GetWorld ()->GetPlayer ()->gateway.functionKeys.GetField(field));
+			
+			keymapper(softwarename);
 			break;
-
-
-#ifndef DEMOGAME
-
-		case GCI_KEY_F12:							// Exit
-			if ( game->IsRunning () ) app->SaveGame ( game->GetWorld ()->GetPlayer ()->handle );
-			app->Close ();
-			break;
-
-#endif
-            
 	}
 
 	//GciPostRedisplay ();
@@ -747,4 +781,107 @@ void setcallbacks ()
 	GciSpecialFunc(specialkeyboard);
 	GciIdleFunc (idle);
 	GciReshapeFunc(resize);  
+}
+
+
+void keymapper( char *softwarename)
+{
+	if ( strcmp(softwarename, "**CHEATS") == 0 ) {
+
+#ifdef CHEATMODES_ENABLED
+		game->GetInterface ()->GetLocalInterface ()->RunScreen ( SCREEN_CHEATS );
+#else
+#ifndef DEMOGAME
+#ifndef WAREZRELEASE
+		if ( game->IsRunning () && strcmp ( game->GetWorld ()->GetPlayer ()->handle, "Stormchild" ) == 0 ) {
+			game->GetInterface ()->GetLocalInterface ()->RunScreen ( SCREEN_CHEATS );
+		} else {
+			create_msgbox("TooManySecrets","Whose game is it anyway?");
+		}
+#endif
+#endif
+#endif
+		return;
+	} else if ( strcmp(softwarename, "**SCREENSHOT") == 0 ) {
+		char screenpath [256];
+		UplinkSnprintf ( screenpath, sizeof ( screenpath ), "%sscreenshot.bmp", app->userpath );
+
+		GciSaveScreenshot( screenpath );
+		return;
+	} else if ( strcmp(softwarename, "**EXIT") == 0 ) {
+		if ( game->IsRunning () ) app->SaveGame ( game->GetWorld ()->GetPlayer ()->handle );
+		app->Close ();
+		return;
+	}
+	// Add any more ** commands here
+
+	// Check if the name is a valid program in our databank
+	bool inmemory = false;
+	float version = 0.0f;
+	DataBank *db = &(game->GetWorld ()->GetPlayer ()->gateway.databank);
+	int numfiles = db->GetDataSize ();
+	for ( int i = 0; i < numfiles; ++i ) {
+
+		if ( db->GetDataFile (i) &&
+			strcmp ( db->GetDataFile (i)->title, softwarename ) == 0 &&
+			db->GetDataFile (i)->version > version ) {
+			inmemory = true;
+			version = db->GetDataFile (i)->version;
+		}
+
+	}
+
+	// Run it if it is
+	if ( inmemory ) {
+		game->GetInterface ()->GetTaskManager ()->RunSoftware ( softwarename, version );
+		SgPlaySound ( RsArchiveFileOpen ("sounds/runsoftware.wav"), "sounds/runsoftware.wav", false );
+		return;
+	}
+
+
+	// Check if the name is a valid IP address or computer name
+	VLocation *vl = game->GetWorld()->GetVLocation( softwarename );
+	// If we can't find the IP, try looking for a computer name first
+	if ( !vl )
+	{
+		Computer *computer = game->GetWorld()->GetComputer( softwarename );
+		if ( computer )	vl = game->GetWorld()->GetVLocation( computer->ip );
+	}
+
+	// If it is valid and in our links, lets connect!
+	if ( vl && game->GetWorld()->GetPlayer()->HasLink( vl->ip ) )
+	{
+		// End any existing connection
+		if ( game->GetWorld()->GetPlayer()->connection.Connected() ) {
+			game->GetWorld()->GetPlayer()->connection.Disconnect();
+			game->GetWorld()->GetPlayer()->connection.Reset();
+			game->GetInterface ()->GetRemoteInterface ()->RunNewLocation ();
+			game->GetInterface ()->GetRemoteInterface ()->RunScreen ( 1 );        
+		}
+
+		// Load our saved connection if we have it
+		game->GetWorld()->GetPlayer()->connection.Reset();
+		WorldMapInterface *wmi = &(game->GetInterface ()->GetLocalInterface ()->GetHUD ()->wmi);
+		UplinkAssert (wmi);
+		wmi->LoadConnection ();
+
+		// Remove the target if its in the chain
+		if ( game->GetWorld()->GetPlayer()->connection.LocationIncluded(vl->ip) ) {
+			game->GetWorld()->GetPlayer()->connection.AddOrRemoveVLocation(vl->ip);
+		}
+
+		// Add the location to the end
+		game->GetWorld()->GetPlayer()->connection.AddVLocation(vl->ip);
+
+		// Connect
+		if ( WorldMapInterface::IsVisibleWorldMapInterface () == WORLDMAP_LARGE ) {
+			WorldMapInterface::CreateWorldMapInterface ( WORLDMAP_SMALL );
+		}
+		PhoneDialler *pd = new PhoneDialler ();
+		pd->DialNumber ( 100, 100, game->GetWorld ()->GetPlayer ()->GetConnection ()->GetTarget (), 3 );
+		return;
+	}
+
+	// Add any new keymapper functions below here
+
 }

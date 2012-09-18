@@ -39,6 +39,7 @@
 #include "interface/localinterface/analyser_interface.h"
 #include "interface/localinterface/irc_interface.h"
 #include "interface/localinterface/lan_interface.h"
+#include "interface/localinterface/keymapper_interface.h"
 
 #include "mmgr.h"
 
@@ -187,6 +188,10 @@ void LocalInterface::RunScreen ( int SCREENCODE, int index )
 			screen = new EventQueueInterface ();
 			break;
 
+		case SCREEN_KEYMAPPER:
+			screen = new KeyMapperInterface ();
+			break;
+
 		default:
 			UplinkAbortArgs ("Tried to create a local screen with unknown SCREENCODE %d", SCREENCODE );
 
@@ -217,6 +222,7 @@ bool LocalInterface::VerifyScreen ( int SCREENCODE, int index )
 		case SCREEN_SENDMAIL:
 		case SCREEN_CHEATS:
 		case SCREEN_EVTQUEUE:
+		case SCREEN_KEYMAPPER:
 			break;
 		default:
 			UplinkPrintAbortArgs ( "Tried to create a local screen with unknown SCREENCODE %d", SCREENCODE );

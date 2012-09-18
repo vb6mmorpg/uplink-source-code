@@ -296,6 +296,11 @@ SOFTWARE_UPGRADES [] = {
                                                                                         "This allows you to talk to other hackers for help.\n"
                                                                                         "You will also need an Internet Connection on your local machine.",
 
+                            "HUD_KeyMapper",            9,       500,   1,      1,      "KEY MAPPER V1.0\n"
+                                                                                        "TYPE: software.HUDUpgrade\n\n"
+                                                                                        "Upgrades your HUD with a new interface that lets you specify which programs are launched "
+                                                                                        "when you press the function keys. Keys reserved for other uses are indicated in the list.",
+
 							"HUD_MapShowTrace",			9,		5000,	1,		1,  	"MAP SHOW TRACE V1.0\n"
                                                                                         "TYPE: software.HUDUpgrade\n\n"
                                                                                         "Upgrades your HUD so that your map shows the progress of any trace on your connection.\n"

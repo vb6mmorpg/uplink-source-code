@@ -35,6 +35,29 @@ Gateway::Gateway ()
 
 	hudupgrades = 0;
 
+	for ( int i = 0; i < 13; i++ )
+	{
+		char title[64];
+		UplinkSnprintf(title, sizeof(title), "F%d", i);
+		functionKeys.AddField(title,"unused");
+		UplinkSnprintf(title, sizeof(title), "Ctrl+%c", (char) i+65);
+		functionKeys.AddField(title,"unused");
+		UplinkSnprintf(title, sizeof(title), "Ctrl+%c", (char) i+78);
+		functionKeys.AddField(title,"unused");
+	}
+	functionKeys.ChangeField("F0", "<<Invalid Key>>");
+#ifdef CHEATMODES_ENABLED
+	functionKeys.ChangeField("F1", "**CHEATS");
+#endif
+	functionKeys.ChangeField("F9", "**SCREENSHOT");
+#ifndef DEMOGAME
+	functionKeys.ChangeField("F12","**EXIT");
+#endif
+	functionKeys.ChangeField("Ctrl+M", "<<Invalid Key>>");
+	functionKeys.ChangeField("Ctrl+H", "<<Invalid Key>>");
+	functionKeys.ChangeField("Ctrl+I", "<<Invalid Key>>");
+
+
 }
 
 Gateway::~Gateway ()
@@ -641,6 +664,12 @@ bool Gateway::Load  ( FILE *file )
 
 	if ( !databank.Load ( file ) ) return false;
 
+	if ( strcmp( game->GetLoadedSavefileVer(), "SAV63" ) >= 0 )
+	{
+		functionKeys.fields.Empty(); // Clear out the existing  fields or this wont work
+		functionKeys.Load ( file );
+	}
+
 	if ( !LoadLList ( &hardware, file ) ) return false;
 
 	int old_type = -1;
@@ -723,6 +752,7 @@ void Gateway::Save  ( FILE *file )
 	SaveID ( file );
 
 	databank.Save ( file );
+	functionKeys.Save ( file );
 
 	SaveLList ( &hardware, file );
 

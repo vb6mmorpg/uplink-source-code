@@ -252,6 +252,9 @@ void SWSalesScreenInterface::AcceptClick ( Button *button )
                 else if ( strcmp ( sale->title, "HUD_LANView" ) == 0 )
                     game->GetWorld ()->GetPlayer ()->gateway.GiveHUDUpgrade ( HUDUPGRADE_LANVIEW );
 
+                else if ( strcmp ( sale->title, "HUD_KeyMapper" ) == 0 )
+                    game->GetWorld ()->GetPlayer ()->gateway.GiveHUDUpgrade ( HUDUPGRADE_KEYMAPPER );
+
 				else
 					UplinkAbort ( "Unrecognised HUD upgrade" );
 
