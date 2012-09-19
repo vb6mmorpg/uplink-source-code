@@ -212,6 +212,14 @@ bool Player::Load ( FILE *file )
 
 	if ( !LoadBTree ( &shares, file ) ) return false;
 
+	if ( game->GetLoadedSavefileVer() >= "SAV63" ) {
+		if ( !LoadDynamicStringStatic ( realname, SIZE_PERSON_NAME, file ) ) return false;
+	} else {
+		// Patch older saves by using the handle to mimic pre-patch behaviour
+		SetRealName(handle);
+	}
+
+
 	LoadID_END ( file );
 
 	return true;
@@ -232,6 +240,8 @@ void Player::Save ( FILE *file )
 	fwrite ( &score_highsecurityhacks, sizeof(score_highsecurityhacks), 1, file );
 
 	SaveBTree ( &shares, file );
+
+	SaveDynamicString ( realname, SIZE_PERSON_NAME, file );
 
 	SaveID_END ( file );
 
@@ -382,3 +392,10 @@ int Player::GetOBJECTID ()
 	return OID_PLAYER;
 }
 
+void Player::SetRealName ( char *newrealname )
+{
+
+	UplinkAssert ( strlen(newrealname) < SIZE_PERSON_NAME );
+	UplinkStrncpy ( realname, newrealname, sizeof ( realname ) );
+
+}

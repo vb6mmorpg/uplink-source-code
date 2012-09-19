@@ -306,7 +306,8 @@ void UplinkAgentList::UpdateLists ()
 
         if ( person == game->GetWorld ()->GetPlayer () ) {
 
-            UplinkStrncpy ( name, "Unknown", namesize );
+            //UplinkStrncpy ( name, "Unknown", namesize );
+            UplinkStrncpy ( name, game->GetWorld ()->GetPlayer ()->realname, namesize );
 
         }
         else { 

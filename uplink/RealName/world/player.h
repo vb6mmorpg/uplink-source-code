@@ -28,6 +28,8 @@ protected:
 
 public:
 
+	char realname [SIZE_PERSON_NAME];
+
 	Gateway gateway;	
 
 	int score_peoplefucked;
@@ -41,6 +43,8 @@ public:
 
 	bool IsPlayerAccount   ( char *bankip, char *accno );							// True if this account is owned by the player
 	
+	void SetRealName ( char *newrealname );
+
 	void GiveAllLinks ();
 	void GiveMessage ( Message *message );
 

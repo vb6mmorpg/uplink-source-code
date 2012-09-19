@@ -314,7 +314,7 @@ Computer *World::GetComputer ( char *name )
 Person *World::GetPerson ( char *name )
 {
 
-	if ( people.LookupTree("PLAYER") && strcmp ( name, GetPlayer ()->handle ) == 0 ) {
+	if ( people.LookupTree("PLAYER") && (strcmp ( name, GetPlayer ()->handle ) == 0 || strcmp( name, GetPlayer ()->realname ) == 0) ) {
 	
 		// We're looking for the player
 		return game->GetWorld ()->GetPlayer ();

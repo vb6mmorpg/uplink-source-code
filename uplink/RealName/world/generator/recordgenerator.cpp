@@ -542,7 +542,7 @@ Record *RecordGenerator::GetSocialSecurity ( char *personname )
 	UplinkAssert ( comp );
 
 	char *name = ( strcmp ( personname, "PLAYER" ) == 0 ?
-							game->GetWorld ()->GetPlayer ()->handle :
+							game->GetWorld ()->GetPlayer ()->realname :
 							personname );
 
 	Record *rec = comp->recordbank.GetRecordFromName ( name );
@@ -558,7 +558,7 @@ Record *RecordGenerator::GetCriminal ( char *personname )
 	UplinkAssert ( comp );
 
 	char *name = ( strcmp ( personname, "PLAYER" ) == 0 ?
-							game->GetWorld ()->GetPlayer ()->handle :
+							game->GetWorld ()->GetPlayer ()->realname :
 							personname );
 
 	Record *rec = comp->recordbank.GetRecordFromName ( name );
@@ -574,7 +574,7 @@ Record *RecordGenerator::GetMedical ( char *personname )
 	UplinkAssert ( comp );
 
 	char *name = ( strcmp ( personname, "PLAYER" ) == 0 ?
-							game->GetWorld ()->GetPlayer ()->handle :
+							game->GetWorld ()->GetPlayer ()->realname :
 							personname );
 
 	Record *rec = comp->recordbank.GetRecordFromName ( name );
@@ -590,7 +590,7 @@ Record *RecordGenerator::GetAcademic ( char *personname )
 	UplinkAssert ( comp );
 
 	char *name = ( strcmp ( personname, "PLAYER" ) == 0 ?
-							game->GetWorld ()->GetPlayer ()->handle :
+							game->GetWorld ()->GetPlayer ()->realname :
 							personname );
 
 	Record *rec = comp->recordbank.GetRecordFromName ( name );

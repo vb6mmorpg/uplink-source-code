@@ -706,13 +706,15 @@ void WorldGenerator::GenerateUplinkPublicAccessServer ()
 	DialogScreen *dlg3 = new DialogScreen ();
 	dlg3->SetMainTitle ( "Uplink Registration" );
 	dlg3->SetSubTitle ( "Create your agent profile" );
-	dlg3->AddWidget ( "name",      WIDGET_BASIC, 80, 140, 170, 20, "Enter your name", "Enter the name you wish to use" );
-	dlg3->AddWidget ( "password",  WIDGET_BASIC, 80, 170, 170, 20, "Enter your password", "You will need this to access the Uplink Services Machine" );
-	dlg3->AddWidget ( "password2", WIDGET_BASIC, 80, 200, 170, 20, "Re-type your password", "For verification purposes" );
+	dlg3->AddWidget ( "realname",  WIDGET_BASIC, 80, 140, 170, 20, "Enter your name", "Enter the name you wish to use" );
+	dlg3->AddWidget ( "name",      WIDGET_BASIC, 80, 170, 170, 20, "Enter your handle", "Enter the handle you wish to use" );
+	dlg3->AddWidget ( "password",  WIDGET_BASIC, 80, 200, 170, 20, "Enter your password", "You will need this to access the Uplink Services Machine" );
+	dlg3->AddWidget ( "password2", WIDGET_BASIC, 80, 230, 170, 20, "Re-type your password", "For verification purposes" );
 
-	dlg3->AddWidget ( "nametext",      WIDGET_TEXTBOX,     270, 140, 170, 20, "Fill this in", "Enter your name here" );
-	dlg3->AddWidget ( "passwordtext",  WIDGET_PASSWORDBOX, 270, 170, 170, 20, "", "Enter your password here" );
-	dlg3->AddWidget ( "passwordtext2", WIDGET_PASSWORDBOX, 270, 200, 170, 20, "", "Re-type your password here" );
+	dlg3->AddWidget ( "realnametext",  WIDGET_TEXTBOX,     270, 140, 170, 20, "Fill this in", "Enter your real name here" );
+	dlg3->AddWidget ( "nametext",      WIDGET_TEXTBOX,     270, 170, 170, 20, "Fill this in", "Enter your hndle here" );
+	dlg3->AddWidget ( "passwordtext",  WIDGET_PASSWORDBOX, 270, 200, 170, 20, "", "Enter your password here" );
+	dlg3->AddWidget ( "passwordtext2", WIDGET_PASSWORDBOX, 270, 230, 170, 20, "", "Re-type your password here" );
 
 	dlg3->AddWidget ( "moretext", WIDGET_CAPTION, 80, 270, 360, 100, "Uplink Corporation will not ask for any more personal details.  "
 																	 "In the event of you being charged with illegal operations, our "
@@ -1420,7 +1422,7 @@ void WorldGenerator::GenerateUplinkInternalServicesSystem ()
         int size = 5;
         int encrypted = 7;
 
-        if ( i != 4 ) {                                             // Miss out 4 to make some of the names Unknown
+        //if ( i != 4 ) {                                             // Miss out 4 to make some of the names Unknown
 
 		    Data *file = new Data ();
 		    file->SetTitle ( datatitle );
@@ -1428,7 +1430,7 @@ void WorldGenerator::GenerateUplinkInternalServicesSystem ()
 
             comp->databank.PutData ( file );
 
-        }
+        //}
 
     }
 

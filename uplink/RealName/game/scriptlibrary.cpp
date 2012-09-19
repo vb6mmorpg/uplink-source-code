@@ -684,6 +684,7 @@ void ScriptLibrary::Script33 ()
 		*/
 
 	char name [SIZE_AGENT_HANDLE];
+	char realname [SIZE_PERSON_NAME];
 	char password [33];
 	char password2 [33];
 	char accesscode [SIZE_AGENT_HANDLE + 32 + 32];
@@ -691,12 +692,23 @@ void ScriptLibrary::Script33 ()
 	strncpy ( name, EclGetButton ( "nametext 0 0" )->caption, sizeof( name ) );
 	name [ sizeof( name ) - 1 ] = '\0';
 
+	strncpy ( realname, EclGetButton ( "realnametext 0 0" )->caption, sizeof( realname ) );
+	realname [ sizeof( realname ) - 1 ] = '\0';
+
 	strncpy ( password, EclGetButton ( "passwordtext 0 0" )->caption, sizeof( password ) );
 	password [ sizeof( password ) - 1 ] = '\0';
 
 	strncpy ( password2, EclGetButton ( "passwordtext2 0 0" )->caption, sizeof( password2 ) );
 	password2 [ sizeof( password2 ) - 1 ] = '\0';
 	
+	Person *person = game->GetWorld ()->GetPerson ( realname );
+	if ( person ) {
+		create_msgbox ( "Error", "Government records show that\n"
+                                 "someone with that name already\n"
+								 "exists. Please try another." );
+		return;
+	}
+
     Computer::GenerateAccessCode( name, password, accesscode, sizeof ( accesscode ) );
 
 	if ( strcmp ( game->GetWorld ()->GetPlayer ()->handle, "NEWAGENT" ) != 0 ) {
@@ -709,6 +721,10 @@ void ScriptLibrary::Script33 ()
         create_msgbox ( "Error", "You must first enter a username" );
         return;
     }
+    if ( strcmp ( realname, "Fill this in" ) == 0 ) {
+        create_msgbox ( "Error", "You must first enter a real name" );
+        return;
+    }
 
 	if ( strchr ( name, ':' ) || strchr ( name, '/' ) || strchr ( name, '\\' ) ||
 		 strchr ( name, '?' ) || strchr ( name, '.' ) || strchr ( name, ',' ) ||
@@ -716,6 +732,17 @@ void ScriptLibrary::Script33 ()
 		 strchr ( name, '|' ) || strchr ( name, '*' ) ) {
 
 		create_msgbox ( "Error", "Usernames cannot contain\n"
+                                 "any of these characters:\n"
+								 " : / \\ ? . , \" < > | * " );
+		return;
+
+	}
+	if ( strchr ( realname, ':' ) || strchr ( realname, '/' ) || strchr ( realname, '\\' ) ||
+		 strchr ( realname, '?' ) || strchr ( realname, '.' ) || strchr ( realname, ',' ) ||
+		 strchr ( realname, '"' ) || strchr ( realname, '<' ) || strchr ( realname, '>' ) ||
+		 strchr ( realname, '|' ) || strchr ( realname, '*' ) ) {
+
+		create_msgbox ( "Error", "Names cannot contain\n"
                                  "any of these characters:\n"
 								 " : / \\ ? . , \" < > | * " );
 		return;
@@ -742,6 +769,7 @@ void ScriptLibrary::Script33 ()
 	}
 
 	game->GetWorld ()->GetPlayer ()->SetHandle ( name );
+	game->GetWorld ()->GetPlayer ()->SetRealName ( realname );
 
 	// Open a new account with Uplink International Bank
 
@@ -764,7 +792,7 @@ void ScriptLibrary::Script33 ()
 
 	// Create the rest of your records
 
-	RecordGenerator::GenerateRecords_Player ( name );
+	RecordGenerator::GenerateRecords_Player ( realname );
 
 	// Change his uplink rating to beginner
 
