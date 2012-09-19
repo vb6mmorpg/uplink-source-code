@@ -103,7 +103,13 @@
 #define		TICKSREQUIRED_SPOOFLANSYSTEM	100					
 #define     TICKSREQUIRED_FORCELANLOCK      100
 #define		TICKSREQUIRED_LANSCAN			300					// (To scan all LAN systems)
-
+// Software Mod
+#define		TICKSREQUIRED_COMPRESS			90					// (To scan all LAN systems)
+#define		TICKSREQUIRED_DECOMPRESS		90					// (To scan all LAN systems)
+#define		TICKSREQUIRED_COMPILE			225					// (To scan all LAN systems)
+#define		TICKSREQUIRED_COMPILE_LINK		90					// (To scan all LAN systems)
+#define		TICKSREQUIRED_DECOMPILE			1125				// (To scan all LAN systems)
+// End Software Mod
 #define     TIMEREQUIRED_DELETEONELOG           300             // Used in ConsoleScreen
 #define     TIMEREQUIRED_DELETEONEGIGAQUAD      150             //
 
@@ -411,7 +417,9 @@ struct ComputerUpgrade
 };
 
 
-#define NUM_STARTINGSOFTWAREUPGRADES 73
+//#define NUM_STARTINGSOFTWAREUPGRADES 73
+// +7 Decrypter, +1 Compiler, +1 Decompiler, +4 Compressor, +4 Decompressor = +17
+#define NUM_STARTINGSOFTWAREUPGRADES 90
 #define NUM_STARTINGHARDWAREUPGRADES 19
 
 extern const ComputerUpgrade SOFTWARE_UPGRADES  [];

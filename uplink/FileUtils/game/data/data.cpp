@@ -139,6 +139,48 @@ const ComputerUpgrade
 SOFTWARE_UPGRADES [] = {
 
 
+							"Compiler",					10,		5000,	5,		1,  	"COMPILER V1.0\n" 
+                                                                                        "TYPE: software.Other\n\n"
+                                                                                        "Compiles Specification, Core and Data files into programs",
+
+							"Compressor",				1,		400,	2,		1,  	"COMPRESSOR V1.0\n" 
+                                                                                        "TYPE: software.FileUtil\n\n"
+                                                                                        "Compresses any file by as much as 1GQ",
+
+							"Compressor",				1,		600,	2,		2,  	"COMPRESSOR V2.0\n"
+                                                                                        "TYPE: software.FileUtil\n\n"
+                                                                                        "Compresses any file by as much as 2GQs",
+
+							"Compressor",				1,		800,	2,		3,  	"COMPRESSOR V3.0\n"
+                                                                                        "TYPE: software.FileUtil\n\n"
+                                                                                        "Compresses any file by as much as 3GQs",
+
+							"Compressor",				1,		1100,	2,		4,  	"COMPRESSOR V4.0\n"
+                                                                                        "TYPE: software.FileUtil\n\n"
+                                                                                        "Compresses any file by as much as 4GQs",
+
+							"Decompiler",				10,		15000,	10,		1,  	"DECOMPILER V1.0\n" 
+                                                                                        "TYPE: software.Other\n\n"
+                                                                                        "Decompiles programs into their component source files",
+
+							"Decompressor",				1,		600,	2,		1,  	"DECOMPRESSOR V1.0\n" 
+                                                                                        "TYPE: software.FileUtil\n\n"
+                                                                                        "Decompresses any file compressed with a Compressor V1.0",
+
+							"Decompressor",				1,		800,	2,		2,  	"DECOMPRESSOR V2.0\n"
+                                                                                        "TYPE: software.FileUtil\n\n"
+                                                                                        "Decompresses any file compressed with a Compressor V2.0 or V1.0",
+
+							"Decompressor",				1,		1200,	2,		3,  	"DECOMPRESSOR V3.0\n"
+                                                                                        "TYPE: software.FileUtil\n\n"
+                                                                                        "Decompresses any file compressed with a Compressor V3.0\n"
+                                                                                        "or below",
+
+							"Decompressor",				1,		1650,	2,		4,  	"DECOMPRESSOR V4.0\n"
+                                                                                        "TYPE: software.FileUtil\n\n"
+                                                                                        "Decompresses any file compressed with a Compressor V4.0\n"
+                                                                                        "or below",
+
 							"Decrypter",				4,		800,	2,		1,  	"DECRYPTER V1.0\n" 
                                                                                         "TYPE: software.Cracker\n\n"
                                                                                         "Decrypts any file encrypted with an Encrypter V1.0",
@@ -172,8 +214,6 @@ SOFTWARE_UPGRADES [] = {
                                                                                         "Decrypts any file encrypted with an Encrypter V7.0\n"
                                                                                         "or below",
                            
-
-
 							"Decypher",					4,		3000,	2,		1,		"DECYPHER V1.0\n"
                                                                                         "TYPE: software.Cracker\n\n"
                                                                                         "Breaks through Encryption Cyphers\n"
@@ -220,6 +260,40 @@ SOFTWARE_UPGRADES [] = {
                                                                                         "Actively bypasses encryption with a security level of 5 or below\n"
                                                                                         "All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
 */
+							"Encrypter",				4,		800,	2,		1,  	"ENCRYPTER V1.0\n" 
+                                                                                        "TYPE: software.Cracker\n\n"
+                                                                                        "Encrypts an unencrypted file with v1.0 encryption",
+
+							"Encrypter",				4,		1200,	2,		2,  	"ENCRYPTER V2.0\n"
+                                                                                        "TYPE: software.Cracker\n\n"
+                                                                                        "Encrypts an unencrypted file with v2.0 encryption, or\n"
+																						"increases encryption to this level",
+
+							"Encrypter",				4,		1600,	2,		3,  	"ENCRYPTER V3.0\n"
+                                                                                        "TYPE: software.Cracker\n\n"
+                                                                                        "Encrypts an unencrypted file with v3.0 encryption, or\n"
+																						"increases encryption to this level",
+
+							"Encrypter",				4,		2200,	2,		4,  	"ENCRYPTER V4.0\n"
+                                                                                        "TYPE: software.Cracker\n\n"
+                                                                                        "Encrypts an unencrypted file with v4.0 encryption, or\n"
+																						"increases encryption to this level",
+
+							"Encrypter",				4,		3000,	3,		5,  	"ENCRYPTER V5.0\n"
+                                                                                        "TYPE: software.Cracker\n\n"
+                                                                                        "Encrypts an unencrypted file with v5.0 encryption, or\n"
+																						"increases encryption to this level",
+
+							"Encrypter",				4,		7000,	4,		6,  	"ENCRYPTER V6.0\n"
+                                                                                        "TYPE: software.Cracker\n\n"
+                                                                                        "Encrypts an unencrypted file with v6.0 encryption, or\n"
+																						"increases encryption to this level",
+
+							"Encrypter",				4,		15000,	5,		7,  	"ENCRYPTER V7.0\n"  
+                                                                                        "TYPE: software.Cracker\n\n"
+                                                                                        "Encrypts an unencrypted file with v7.0 encryption, or\n"
+																						"increases encryption to this level",
+                           
 							"File_Copier",				1,		100,	1,		1,  	"FILE COPIER V1.0\n"
                                                                                         "TYPE: software.FileUtil\n\n"
                                                                                         "Copies programs and data from one databank to another\n"

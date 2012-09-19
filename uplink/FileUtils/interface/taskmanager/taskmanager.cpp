@@ -39,6 +39,13 @@
 #include "interface/taskmanager/lanprobe.h"
 #include "interface/taskmanager/lanspoof.h"
 #include "interface/taskmanager/lanforce.h"
+// Software Mod
+#include "interface/taskmanager/compressor.h"
+#include "interface/taskmanager/decompressor.h"
+#include "interface/taskmanager/compiler.h"
+#include "interface/taskmanager/decompiler.h"
+#include "interface/taskmanager/encrypter.h"
+// End Software Mod
 
 // ============================================================================
 
@@ -122,7 +129,17 @@ void TaskManager::RunSoftware ( char *name, float version )
     else if ( strcmp ( name, "LAN_Force" ) == 0 ) {             task = new LanForce ();
                                                                 task->SetFollowMouse ( true ); }
 
-	
+	// Software Mod
+	else if ( strcmp ( name, "Compressor" ) == 0 ) {			task = new Compressor ();
+																task->SetFollowMouse ( true ); }
+	else if ( strcmp ( name, "Decompressor" ) == 0 ) {			task = new Decompressor ();
+																task->SetFollowMouse ( true ); }
+	else if ( strcmp ( name, "Compiler" ) == 0 ) {				task = new Compiler (); }
+	else if ( strcmp ( name, "Decompiler" ) == 0 ) {			task = new Decompiler ();
+																task->SetFollowMouse ( true ); }
+	else if ( strcmp ( name, "Encrypter" ) == 0 ) {				task = new Encrypter ();
+																task->SetFollowMouse ( true ); }
+	// End Software Mod
 	else {
 		printf ( "Task Manager warning : Called RunSoftware, name not recognised '%s'\n", name );
 		return;

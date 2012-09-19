@@ -25,18 +25,24 @@
 #error "One of FULLGAME DEMOGAME or TESTGAME must be defined"
 #endif
 
-#define     VERSION_NUMBER_INT      "10.0"                       // Only the 2 first digit after the . are effective
+#define     VERSION_NUMBER_INT      "1.55"                       // Only the 2 first digit after the . are effective
 #define     VERSION_NAME_INT        "RELEASE"
 
 #if defined(DEMOGAME)
 #define     VERSION_NUMBER          VERSION_NUMBER_INT "DEMO"
 #define     VERSION_NAME            VERSION_NAME_INT "-DEMO"
 #else
+#if defined(STEAM_AUTH)
+#define     VERSION_NUMBER          VERSION_NUMBER_INT "STEAM"
+#define     VERSION_NAME            VERSION_NAME_INT "-STEAM"
+#else
 #define     VERSION_NUMBER          VERSION_NUMBER_INT
 #define     VERSION_NAME            VERSION_NAME_INT
 #endif
+#endif
 
-#define     SAVEFILE_VERSION        "SAV62"                     // Max version is SAVZZ (due to the number of characters to read)
+// New save due to new taskmanager classes
+#define     SAVEFILE_VERSION        "SAV63"                     // Max version is SAVZZ (due to the number of characters to read)
 #define     SAVEFILE_VERSION_MIN    "SAV56"                     // Minimun Savefile version to run Uplink
 
 // SAVEFILE_VERSION 56 is 1.31 vanilla
