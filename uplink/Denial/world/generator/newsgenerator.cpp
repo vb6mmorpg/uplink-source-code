@@ -944,3 +944,114 @@ void NewsGenerator::Arrested ( Person *person, Computer *comp, char *reason )
 	cu->CreateNews ( news );
 
 }
+
+void NewsGenerator::ComputerDDoSed ( Computer *comp, bool formatted )
+{
+
+	UplinkAssert ( comp );
+
+		/* ==========================================================
+			Structure
+
+			headline
+			Part1		:		Who was broken into, everything destroyed
+			Part2		:		Details
+			part2b		:		<unused>
+			Part3		:		<unused>
+			Part4		:		Actions
+
+		   ========================================================== */
+
+	ostrstream headline;
+	//ostrstream part1, part2, part3, part4;
+	ostrstream part1, part2, part4;
+
+	switch ( NumberGenerator::RandomNumber ( 3 ) + 1 ) {
+
+		case 1 :			headline << "Hackers take down major computer system";						break;
+		case 2 :			headline << "Large corporation stung by malicious hacker attack";			break;
+		case 3 :			headline << "Agressive computer attacker leaves system crippled";			break;
+	}
+
+	switch ( NumberGenerator::RandomNumber ( 3 ) + 1 ) {
+
+		case 1 :			part1 << comp->companyname << " have taken a major blow to their operations today as a malicious "
+							"computer hacker performed a distributed denail of service attack one of their key computer "
+							"systems.";
+							break;
+
+		case 2 :			part1 << "A distributed denial of service attack has targetted one of the primary "
+							"computer systems of " << comp->companyname << " and shut down the system.";
+							break;
+
+		case 3 :			part1 << "Federal agents are now searching for the identity of a computer criminal "
+							"who used a distributed denial of service attack on the "
+							<< comp->name << ".";
+							break;
+
+	}
+	switch ( NumberGenerator::RandomNumber ( 3 ) + 1 ) {
+
+		case 1 :			part2 << "It has been difficult to piece together exactly what happened, but it appears "
+							"that a trojan program running on external servers was used to initiate the attack. ";
+							break;
+
+		case 2 :			part2 << "Industry experts have re-created the final moments of the system crash from "
+							"the access logs.  A few moments before the computer shut down, a large "
+							"number of connections were made from external servers, flooding the sysem with requests.";
+							break;
+
+		case 3 :			part2 << "A single hacker could responsible for this high-tech crime.  Moments before the failure "
+							"a large volume of traffic flooded the machine from many external connections.  The exact method has "
+							"not yet been determined.";
+							break;
+
+	}
+
+	switch ( NumberGenerator::RandomNumber ( 3 ) + 1 ) {
+
+		case 1 :			part4 << "Company executives today released a press statement, indicating they were investigating "
+							"the incident and would be seeking outside assistance from industry professionals.";
+							break;
+
+		case 2 :			part4 << "Federal agents have been brought in on the case and will no doubt be searching for "
+							"the identity of the dangerous computer hacker responsible.";
+							break;
+
+		case 3 :			part4 << comp->companyname << " have tightened security on their remaining computer systems, "
+							"and federal agents from the government cyber-crimes division were seen entering the corporate "
+							"headquarters today.";
+							break;
+
+	}
+
+	//
+	// Concatenate each part together and post it
+	//
+
+	headline << '\x0';
+	part1 << '\x0';	
+	part2 << '\x0';
+	part4 << '\x0';
+
+	ostrstream details;
+	details << part1.str () << "\n\n" << part2.str () << "\n\n" << part4.str () << '\x0';
+	
+	News *news = new News ();
+	news->SetHeadline ( headline.str () );
+	news->SetDetails ( details.str () );
+	
+	news->SetData ( ( formatted ? NEWS_TYPE_COMPUTERDESTROYED : NEWS_TYPE_COMPUTERSHUTDOWN ), comp->ip );
+	
+	delete [] headline.str ();
+	delete [] part1.str ();
+	delete [] part2.str ();
+	//delete [] part3.str ();
+	delete [] part4.str ();
+	delete [] details.str ();
+
+	CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
+	UplinkAssert (cu);
+	cu->CreateNews ( news );
+
+}

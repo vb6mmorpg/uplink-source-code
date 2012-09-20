@@ -57,6 +57,8 @@
 #define COMPUTER_TRACEACTION_TACTICAL			16
 #define COMPUTER_TRACEACTION_COVERT				32
 
+#define TSR_DENIAL			1		// Bitmask for DENIAL
+#define TSR_DENIED			2		// Set when a server is DENIED
 
 class ComputerScreen;
 
@@ -96,6 +98,9 @@ public:
 	RecordBank recordbank;
 	Security   security;
 
+	long int iTSR;			// Bitmask: TSR programs loaded
+	long int iTSR_wait;		// Bitmask: TSR programs awaiting restart
+
 public:
 
 	Computer();
@@ -130,6 +135,9 @@ public:
     static void GenerateAccessCode( char *code, char *result, size_t resultsize );
     static void GenerateAccessCode( char *name, char *code, char *result, size_t resultsize );
     static void GenerateAccessCode( int accNo, char *code, char *result, size_t resultsize );
+
+	void RunTSR( long int newTSR ) { iTSR_wait |= newTSR; }
+	void LoadTSR () { iTSR |= iTSR_wait; iTSR_wait = 0; }
 
 	// Common functions
 

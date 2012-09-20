@@ -615,6 +615,17 @@ void ConsoleScreenInterface::RunCommand_RUN	( char *program, bool actuallyrun )
 					game->GetWorld ()->plotgenerator.RunRevelation ( comp->ip, data->version, true );
 
 				}
+				else if ( strcmp ( program, "denial" ) == 0 ) {
+					if ( comp->security.IsRunning_Firewall () ) {
+						queue.PutDataAtStart ( new ConsoleCommand ( CMDTYPE_TEXT, "Denied access by Firewall", 0 ) );
+						queue.PutDataAtStart ( new ConsoleCommand ( CMDTYPE_TEXT, "Installing Denial client...", 0 ) );
+						return;
+					}
+					comp->RunTSR(TSR_DENIAL);
+                    queue.PutDataAtStart ( new ConsoleCommand ( CMDTYPE_TEXT, "Denial has been loaded into the boot sector", 0 ) );                 
+				    queue.PutDataAtStart ( new ConsoleCommand ( CMDTYPE_TEXT, "Success...", 0 ) );            
+					queue.PutDataAtStart ( new ConsoleCommand ( CMDTYPE_TEXT, "Installing Denial client...", 0 ) );
+				}
                 else if ( strcmp ( program, "faith" ) == 0 ) {
 
                     game->GetWorld ()->plotgenerator.RunFaith ( comp->ip, data->version, true );
@@ -729,6 +740,8 @@ void ConsoleScreenInterface::RunCommand_SHUTDOWN ()
 		if ( comp->GetOBJECTID () != OID_LANCOMPUTER )
 			GetComputerScreen ()->GetComputer ()->SetIsRunning ( false );
 
+		comp->iTSR = 0;
+		comp->iTSR_wait = 0;
 		queue.PutDataAtStart ( new ConsoleCommand ( CMDTYPE_DISCONNECT, NULL, 3000 ) );
 		queue.PutDataAtStart ( new ConsoleCommand ( CMDTYPE_TEXT, "System failure - disconnecting remote users...", 2000 ) );
 		queue.PutDataAtStart ( new ConsoleCommand ( CMDTYPE_TEXT, "[Failed]", 5000 ) );
@@ -740,7 +753,12 @@ void ConsoleScreenInterface::RunCommand_SHUTDOWN ()
 	}
 	else {
 
+		// Load TSR programs here
+		comp->LoadTSR();
 		queue.PutDataAtStart ( new ConsoleCommand ( CMDTYPE_TEXT, "Reboot completed.", 2000 ) );
+		if ( comp->iTSR & TSR_DENIAL ) {
+			queue.PutDataAtStart( new ConsoleCommand ( CMDTYPE_TEXT, "Running Denial Client...", 2000 ) );
+		}
 		queue.PutDataAtStart ( new ConsoleCommand ( CMDTYPE_TEXT, "Running Console Services...", 2000 ) );
 		queue.PutDataAtStart ( new ConsoleCommand ( CMDTYPE_TEXT, "Starting User Services...", 2000 ) );
 		queue.PutDataAtStart ( new ConsoleCommand ( CMDTYPE_TEXT, "Loading Operating System...", 2000 ) );

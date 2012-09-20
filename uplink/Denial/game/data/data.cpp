@@ -189,6 +189,11 @@ SOFTWARE_UPGRADES [] = {
                                                                                         "Breaks through Encryption Cyphers\n"
                                                                                         "This is the fastest version of this item of Software",
 
+							"Denial",					10,		10000,	2,		1,		"DENIAL V1.0\n"
+																						"TYPE: software.Other\n\n"
+																						"A basic distributed denial of service client\n"
+																						"Install on remote machines, then run locally to issue commands",
+
 							"Dictionary_Hacker",		4,		1000,	4,		1,  	"DICTIONARY HACKER V1.0\n"
                                                                                         "TYPE: software.Cracker\n\n"
                                                                                         "A cheap and fast method of breaking passwords\n"

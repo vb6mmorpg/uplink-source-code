@@ -36,6 +36,7 @@ public:
 	static void ComputerDestroyed	( Computer *comp, bool filesdeleted );
 	static void AllFilesStolen		( Computer *comp, char *filetype, int totalfilesize );
 	static void AllFilesDeleted		( Computer *comp, char *filetype );
+	static void ComputerDDoSed		( Computer *comp, bool formatted );
 
 	// Events related to people
 

@@ -39,6 +39,7 @@
 #include "interface/taskmanager/lanprobe.h"
 #include "interface/taskmanager/lanspoof.h"
 #include "interface/taskmanager/lanforce.h"
+#include "interface/taskmanager/denial.h"
 
 // ============================================================================
 
@@ -121,6 +122,7 @@ void TaskManager::RunSoftware ( char *name, float version )
                                                                 task->SetFollowMouse ( true ); }
     else if ( strcmp ( name, "LAN_Force" ) == 0 ) {             task = new LanForce ();
                                                                 task->SetFollowMouse ( true ); }
+    else if ( strcmp ( name, "Denial" ) == 0 )					task = new Denial ();
 
 	
 	else {

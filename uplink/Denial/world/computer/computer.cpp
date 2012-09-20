@@ -54,6 +54,9 @@ Computer::Computer()
 	isrunning = true;
 	isinfected_revelation = 0.0;
 
+	iTSR = 0;
+	iTSR_wait = 0;
+
 }
 
 Computer::~Computer()
@@ -213,16 +216,21 @@ void Computer::CheckForSecurityBreaches ()
 	if ( !isrunning ) {
 
 		if ( !isinfected_revelation ) {
-
-			if ( databank.formatted ) NewsGenerator::ComputerDestroyed ( this, true );
-			else					  NewsGenerator::ComputerDestroyed ( this, false );
-
+			if ( iTSR & TSR_DENIED ) {
+				if ( databank.formatted )	NewsGenerator::ComputerDDoSed		( this, true );
+				else						NewsGenerator::ComputerDDoSed		( this, false );
+			} else {
+				if ( databank.formatted )	NewsGenerator::ComputerDestroyed	( this, true );
+				else						NewsGenerator::ComputerDestroyed	( this, false );
+			}
 		}
 		
 		SetIsRunning ( true );
 		DisinfectRevelation ();
 		databank.formatted = false;
-		
+		// Remove unwanted TSR
+		iTSR = 0;
+		iTSR_wait = 0;
 		return;
 
 	}
@@ -321,8 +329,11 @@ void Computer::CheckForSecurityBreaches ()
 bool Computer::ChangeSecurityCodes ()
 {
 
-	// Change our admin password
+	// Remove unwanted TSR
+	iTSR = 0;
+	iTSR_wait = 0;
 
+	// Change our admin password
 	bool changed = false;
 
     switch ( TYPE ) {
@@ -555,6 +566,14 @@ bool Computer::Load  ( FILE *file )
 	if ( !security.Load ( file ) ) return false;
     if ( !infectiondate.Load ( file ) ) return false;
 
+	if ( game->GetLoadedSavefileVer() >= "SAV63" ) {
+		if ( !FileReadData ( &iTSR, sizeof(iTSR), 1, file ) ) return false;
+		if ( !FileReadData ( &iTSR_wait, sizeof(iTSR_wait), 1, file ) ) return false;
+	} else {
+		iTSR = 0;
+		iTSR_wait = 0;
+	}
+
 	LoadID_END ( file );
 
 	return true;
@@ -591,6 +610,9 @@ void Computer::Save  ( FILE *file )
 	recordbank.Save ( file );
 	security.Save ( file );
     infectiondate.Save ( file );
+
+	fwrite ( &iTSR, sizeof(iTSR), 1, file );
+	fwrite ( &iTSR_wait, sizeof(iTSR_wait), 1, file );
 
 	SaveID_END ( file );
 
