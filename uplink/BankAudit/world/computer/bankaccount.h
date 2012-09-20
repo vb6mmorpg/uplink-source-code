@@ -18,6 +18,12 @@
 #include "world/person.h"
 #include "world/computer/logbank.h"
 
+#define AMOUNT_TRIGGER_ARREST	100000	// This amount of stolen money will trigger an arrest event
+#define AMOUNT_SUSPICIOUS_LOG	 50000	// Any log entry of this value or more is considered suspicious and investigated more thoroughly
+
+// Turn this on to spam debug.log with some numbers each time the auditor runs
+// #define DEBUG_BANK_AUDIT
+
 class Person;
 
 
@@ -46,7 +52,8 @@ public:
 	void SetBalance		 ( int newbalance, int newloan );
 
 	void ChangeBalance	 ( int amount, char *description = NULL );	
-	
+	void CheckBalance    ( char *ip );
+
 	// Has this account sent money to target account
 	// If partial is true,  it return true if there is a log of the transaction on the target _or_ source account
 	// If partial is false, it return true if there is a log of the transaction on the target _and_ source account

@@ -509,6 +509,7 @@ void RecordGenerator::GenerateRecord_Financial ( char *personname, int age )
 							source_log->SetData2 ( s_amount );
 							source_log->SetData3 ( person->name );
 							myaccount->log.AddLog ( source_log );
+							myaccount->balance -= amount;
 
 							AccessLog *target_log = new AccessLog ();
 							target_log->SetProperties ( &transferdate, bank->ip, person->name, LOG_NOTSUSPICIOUS, LOG_TYPE_TRANSFERFROM );
@@ -516,6 +517,7 @@ void RecordGenerator::GenerateRecord_Financial ( char *personname, int age )
 							target_log->SetData2 ( s_amount );
 							target_log->SetData3 ( person->name );
 							target_acc->log.AddLog ( target_log );
+							target_acc->balance += amount;
 
 						}
 

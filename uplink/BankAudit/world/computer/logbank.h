@@ -69,6 +69,8 @@ public:
 #define LOG_TYPE_BOUNCE				5						// User bounces to ip 'data1'
 #define LOG_TYPE_TRANSFERTO			6						// Transfer money to 'data1' [IP ACCNO], amount 'data2', person 'data3'
 #define LOG_TYPE_TRANSFERFROM		7						// Transfer from     'data1' [IP ACCNO], amount 'data2', person 'data3']
+#define LOG_TYPE_DEPOSIT			8						// Caption included in 'data1', value in 'data2'
+#define LOG_TYPE_WITHDRAWAL			9						// Caption included in 'data1', value in 'data2'
 
 /*
 	Most logs are not suspicious.

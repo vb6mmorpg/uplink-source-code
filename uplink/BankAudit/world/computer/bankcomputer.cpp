@@ -81,6 +81,7 @@ int BankComputer::CreateBankAccount ( char *name, char *password, int security,
 	BankAccount *ba = new BankAccount ();
 	ba->SetOwner ( name );
 	ba->SetSecurity ( password, security );
+	ba->ChangeBalance(balance - loan,"Starting Balance"); // Creates a log for balancing purposes
 	ba->SetBalance ( balance, loan );
 	ba->SetAccNumber ( GenerateUniqueAccountNumber () );
 
@@ -182,3 +183,18 @@ int BankComputer::GetOBJECTID ()
 
 }
 
+void BankComputer::UpdateRecentBankHacks ()
+{
+	// Check Account Balances Add Up
+	DArray <BankAccount *> *accs = accounts.ConvertToDArray();
+
+	for ( int i = 0; i < accs->Size(); i++ )
+	{
+		BankAccount *ba = accs->GetData(i);
+		if ( ba )
+		{
+			ba->CheckBalance( ip );
+		}
+	}
+	delete accs;
+}

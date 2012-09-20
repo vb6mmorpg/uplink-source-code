@@ -1142,7 +1142,8 @@ Mission *MissionGenerator::Generate_FindData_FinancialRecord ( Company *employer
 
 		int amount = (int) NumberGenerator::RandomNormalNumber ( 1000000, 700000 );
 		amount = 100000 * ( amount / 100000 );
-        taccount->balance += amount;
+        //taccount->balance += amount;
+		taccount->ChangeBalance(amount,"Anonymous Benefactor");	// To fix the auditor
 
 		Person *transferer = game->GetWorld ()->GetPerson ( taccount->name );
 		UplinkAssert (transferer);

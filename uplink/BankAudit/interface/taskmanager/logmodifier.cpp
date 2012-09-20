@@ -32,7 +32,8 @@
 
 #include "mmgr.h"
 
-static int numlogtypes = 9 - 1;					// (-1 to 7)
+//static int numlogtypes = 9 - 1;					// (-1 to 7)
+static int numlogtypes = 11 - 1;					// (-1 to 9)
 
 static char *logtypes [] = {	"Deleted",
 								"None",
@@ -42,7 +43,9 @@ static char *logtypes [] = {	"Deleted",
 								"BounceBegin",
 								"Bounce",
 								"TransferTo",
-								"TransferFrom"   };
+								"TransferFrom",
+								"Deposit",
+								"Withdrawal"   };
 
 
 void LogModifier::CloseClick ( Button *button )
@@ -146,6 +149,9 @@ void LogModifier::ChangeLogType ( int pid )
 	char data1 [64];
 	UplinkSnprintf ( data1, sizeof ( data1 ), "logmodifier_tdata1 %d", pid );
 	
+	char data2 [64];
+	UplinkSnprintf ( data2, sizeof ( data2 ), "logmodifier_tdata2 %d", pid );
+
 	switch ( thistask->logtype ) {
 		
 		case LOG_TYPE_DELETED:
@@ -155,17 +161,39 @@ void LogModifier::ChangeLogType ( int pid )
 		case LOG_TYPE_CONNECTIONCLOSED:
 
 			EclGetButton ( data1 )->SetCaption ( "NA" );
+			EclGetButton ( data2 )->SetCaption ( "NA" );
 			break;
 
 		case LOG_TYPE_BOUNCEBEGIN:
 		case LOG_TYPE_BOUNCE:
 
 			EclGetButton ( data1 )->SetCaption ( "To" );
+			EclGetButton ( data2 )->SetCaption ( "NA" );
+			break;
+
+		case LOG_TYPE_TRANSFERTO:
+
+			EclGetButton ( data1 )->SetCaption ( "To" );
+			EclGetButton ( data2 )->SetCaption ( "Amount" );
+			break;
+
+		case LOG_TYPE_TRANSFERFROM:
+
+			EclGetButton ( data1 )->SetCaption ( "From" );
+			EclGetButton ( data2 )->SetCaption ( "Amount" );
+			break;
+
+		case LOG_TYPE_WITHDRAWAL:
+		case LOG_TYPE_DEPOSIT:
+
+			EclGetButton ( data1 )->SetCaption ( "Reason" );
+			EclGetButton ( data2 )->SetCaption ( "Amount" );
 			break;
 
 		default:
 
 			EclGetButton ( data1 )->SetCaption ( "NA" );
+			EclGetButton ( data2 )->SetCaption ( "NA" );
 
 	};
 	
@@ -340,6 +368,8 @@ void LogModifier::MoveTo ( int x, int y, int time_ms )
 			char fromip		[64];
 			char t_data1	[64];
 			char data1		[64];
+			char t_data2	[64];
+			char data2		[64];
 
 			char nexttype   [64];
 			char commit		[64];
@@ -352,6 +382,8 @@ void LogModifier::MoveTo ( int x, int y, int time_ms )
 			UplinkSnprintf ( fromip, sizeof ( fromip ),  	  "logmodifier_fromip %d",		pid );
 			UplinkSnprintf ( t_data1, sizeof ( t_data1 ),	  "logmodifier_tdata1 %d",		pid );
 			UplinkSnprintf ( data1, sizeof ( data1 ),	  "logmodifier_data1 %d",		pid );
+			UplinkSnprintf ( t_data2, sizeof ( t_data2 ),	  "logmodifier_tdata2 %d",		pid );
+			UplinkSnprintf ( data2, sizeof ( data2 ),	  "logmodifier_data2 %d",		pid );
 			
 			UplinkSnprintf ( nexttype, sizeof ( nexttype ),	  "logmodifier_nexttype %d",	pid );
 			UplinkSnprintf ( commit, sizeof ( commit ),	  "logmodifier_commit %d",		pid );
@@ -364,10 +396,12 @@ void LogModifier::MoveTo ( int x, int y, int time_ms )
 			EclRegisterMovement ( fromip,		x + 215, y + 35,	time_ms );
 			EclRegisterMovement ( t_data1,		x + 165, y + 60,	time_ms );
 			EclRegisterMovement ( data1,		x + 215, y + 60,	time_ms );
+			EclRegisterMovement ( t_data2,		x + 165, y + 85,	time_ms );
+			EclRegisterMovement ( data2,		x + 215, y + 85,	time_ms );
 
 			EclRegisterMovement ( nexttype,		x + 315, y + 10,	time_ms );
-			EclRegisterMovement ( commit,		x + 165, y + 85,	time_ms );
-			EclRegisterMovement ( close,		x + 220, y + 85,	time_ms );
+			EclRegisterMovement ( commit,		x + 165, y + 110,	time_ms );
+			EclRegisterMovement ( close,		x + 220, y + 110,	time_ms );
 
 		}
 
@@ -423,15 +457,19 @@ void LogModifier::Tick ( int n )
 
 					char fromip	  [64];
 					char data1	  [64];
+					char data2	  [64];
 
 					UplinkSnprintf ( fromip, sizeof ( fromip ),	"logmodifier_fromip %d",	pid );
 					UplinkSnprintf ( data1, sizeof ( data1 ),	"logmodifier_data1 %d",		pid );
+					UplinkSnprintf ( data2, sizeof ( data2 ),	"logmodifier_data2 %d",		pid );
 
 					Button *b_fromip = EclGetButton ( fromip );
 					Button *b_data1  = EclGetButton ( data1 );
+					Button *b_data2  = EclGetButton ( data2 );
 
 					UplinkAssert (b_fromip);
 					UplinkAssert (b_data1);
+					UplinkAssert (b_data2);
 
 					log->SetTYPE   ( logtype );
 
@@ -445,16 +483,23 @@ void LogModifier::Tick ( int n )
 					log->SetData1  ( tempData1 );
 					delete [] tempData1;
 
+					char *tempData2 = StripCarriageReturns ( b_data2->caption );
+					log->SetData2  ( tempData2 );
+					delete [] tempData2;
+
 					// This should be undetectable - so copy the result into internal logs
 
-					if ( source->internallogs.ValidIndex (sourceindex) ) {
-						source->internallogs.GetData ( sourceindex )->SetProperties ( log );
+					// Log Modifier is untraceable for connection logs, but auditor needs undelete functions to make things harder :)
+					if ( logtype < LOG_TYPE_TRANSFERTO ) {
+						if ( source->internallogs.ValidIndex (sourceindex) ) {
+							source->internallogs.GetData ( sourceindex )->SetProperties ( log );
 
-					}
-					else {
-						AccessLog *internalcopy = new AccessLog ();
-						internalcopy->SetProperties ( log );
-						source->internallogs.PutData ( internalcopy, sourceindex );
+						}
+						else {
+							AccessLog *internalcopy = new AccessLog ();
+							internalcopy->SetProperties ( log );
+							source->internallogs.PutData ( internalcopy, sourceindex );
+						}
 					}
 
 					status = LOGMODIFIER_STATUS_FINISHED;
@@ -629,6 +674,8 @@ void LogModifier::ShowInterface ()
 		char fromip		[64];
 		char t_data1	[64];
 		char data1		[64];
+		char t_data2	[64];
+		char data2		[64];
 
 		char nexttype   [64];
 		char commit		[64];
@@ -641,6 +688,8 @@ void LogModifier::ShowInterface ()
 		UplinkSnprintf ( fromip, sizeof ( fromip ),  	  "logmodifier_fromip %d",		pid );
 		UplinkSnprintf ( t_data1, sizeof ( t_data1 ),	  "logmodifier_tdata1 %d",		pid );
 		UplinkSnprintf ( data1, sizeof ( data1 ),	  "logmodifier_data1 %d",		pid );
+		UplinkSnprintf ( t_data2, sizeof ( t_data2 ),	  "logmodifier_tdata2 %d",		pid );
+		UplinkSnprintf ( data2, sizeof ( data2 ),	  "logmodifier_data2 %d",		pid );
 		
 		UplinkSnprintf ( nexttype, sizeof ( nexttype ),	  "logmodifier_nexttype %d",	pid );
 		UplinkSnprintf ( commit, sizeof ( commit ),	  "logmodifier_commit %d",		pid );
@@ -653,6 +702,8 @@ void LogModifier::ShowInterface ()
 		EclButtonBringToFront ( fromip );
 		EclButtonBringToFront ( t_data1 );
 		EclButtonBringToFront ( data1 );
+		EclButtonBringToFront ( t_data2 );
+		EclButtonBringToFront ( data2 );
 		
 		EclButtonBringToFront ( nexttype );
 		EclButtonBringToFront ( commit );
@@ -699,6 +750,8 @@ void LogModifier::CreateExpandedInterface ()
 			char fromip		[64];
 			char t_data1	[64];
 			char data1		[64];
+			char t_data2	[64];
+			char data2		[64];
 			char commit		[64];
 			char close		[64];
 			char nexttype	[64];
@@ -710,11 +763,13 @@ void LogModifier::CreateExpandedInterface ()
 			UplinkSnprintf ( fromip, sizeof ( fromip ),  	  "logmodifier_fromip %d",		pid );
 			UplinkSnprintf ( t_data1, sizeof ( t_data1 ),	  "logmodifier_tdata1 %d",		pid );
 			UplinkSnprintf ( data1, sizeof ( data1 ),	  "logmodifier_data1 %d",		pid );
+			UplinkSnprintf ( t_data2, sizeof ( t_data2 ),	  "logmodifier_tdata2 %d",		pid );
+			UplinkSnprintf ( data2, sizeof ( data2 ),	  "logmodifier_data2 %d",		pid );
 			UplinkSnprintf ( commit, sizeof ( commit ),	  "logmodifier_commit %d",		pid );
 			UplinkSnprintf ( close, sizeof ( close ),	  "logmodifier_close2 %d",		pid );
 			UplinkSnprintf ( nexttype, sizeof ( nexttype ),	  "logmodifier_nexttype %d",	pid );
 			
-			EclRegisterButton ( btitle->x + 155, btitle->y, 180, 110, "", "", background );
+			EclRegisterButton ( btitle->x + 155, btitle->y, 180, 135, "", "", background );
 			EclRegisterButtonCallbacks ( background, BackgroundDraw, NULL, NULL, NULL );
 
 			EclRegisterButton ( btitle->x + 165, btitle->y + 10, 50, 15, "Type", "", t_ltype );
@@ -723,6 +778,8 @@ void LogModifier::CreateExpandedInterface ()
 			EclRegisterButton ( btitle->x + 215, btitle->y + 35, 100, 15, "", "Enter new data here", fromip );
 			EclRegisterButton ( btitle->x + 165, btitle->y + 60, 50, 15, "", "", t_data1 );
 			EclRegisterButton ( btitle->x + 215, btitle->y + 60, 100, 15, "", "Enter new data here", data1 );
+			EclRegisterButton ( btitle->x + 165, btitle->y + 85, 50, 15, "", "", t_data2 );
+			EclRegisterButton ( btitle->x + 215, btitle->y + 85, 100, 15, "", "Enter new data here", data2 );
 
 			EclRegisterButtonCallbacks ( t_ltype, textbutton_draw, NULL, NULL, NULL );
 			EclRegisterButtonCallbacks ( ltype, textbutton_draw, NULL, NULL, NULL );
@@ -730,6 +787,8 @@ void LogModifier::CreateExpandedInterface ()
 			EclRegisterButtonCallbacks ( fromip, textbutton_draw, NULL, button_click, button_highlight );
 			EclRegisterButtonCallbacks ( t_data1, textbutton_draw, NULL, NULL, NULL );
 			EclRegisterButtonCallbacks ( data1, textbutton_draw, NULL, button_click, button_highlight );
+			EclRegisterButtonCallbacks ( t_data2, textbutton_draw, NULL, NULL, NULL );
+			EclRegisterButtonCallbacks ( data2, textbutton_draw, NULL, button_click, button_highlight );
 
 			EclRegisterButton ( btitle->x + 215 + 100, btitle->y + 10, 15, 15, ">", "Change the type of this log", nexttype );
 			EclRegisterButtonCallback ( nexttype, NextTypeClick );
@@ -743,6 +802,7 @@ void LogModifier::CreateExpandedInterface ()
 			EclMakeButtonEditable ( ltype );
 			EclMakeButtonEditable ( fromip );
 			EclMakeButtonEditable ( data1 );
+			EclMakeButtonEditable ( data2 );
 
 			// Register those caption changes
 
@@ -753,6 +813,7 @@ void LogModifier::CreateExpandedInterface ()
 
 			EclRegisterCaptionChange ( fromip, log->fromip );
 			if ( log->data1 ) EclRegisterCaptionChange ( data1, log->data1 );
+			if ( log->data2 ) EclRegisterCaptionChange ( data2, log->data2 );
 
 			logtype = log->TYPE;
 			ChangeLogType ( pid );
@@ -784,6 +845,8 @@ void LogModifier::RemoveExpandedInterface ()
 		char fromip		[64];
 		char t_data1	[64];
 		char data1		[64];
+		char t_data2	[64];
+		char data2		[64];
 
 		char nexttype   [64];
 		char commit		[64];
@@ -796,7 +859,9 @@ void LogModifier::RemoveExpandedInterface ()
 		UplinkSnprintf ( fromip, sizeof ( fromip ),  	  "logmodifier_fromip %d",		pid );
 		UplinkSnprintf ( t_data1, sizeof ( t_data1 ),	  "logmodifier_tdata1 %d",		pid );
 		UplinkSnprintf ( data1, sizeof ( data1 ),	  "logmodifier_data1 %d",		pid );
-		
+		UplinkSnprintf ( t_data2, sizeof ( t_data2 ),	  "logmodifier_tdata2 %d",		pid );
+		UplinkSnprintf ( data2, sizeof ( data2 ),	  "logmodifier_data2 %d",		pid );
+	
 		UplinkSnprintf ( nexttype, sizeof ( nexttype ),	  "logmodifier_nexttype %d",	pid );
 		UplinkSnprintf ( commit, sizeof ( commit ),	  "logmodifier_commit %d",		pid );
 		UplinkSnprintf ( close, sizeof ( close ),	  "logmodifier_close2 %d",		pid );
@@ -808,7 +873,9 @@ void LogModifier::RemoveExpandedInterface ()
 		EclRemoveButton ( fromip );
 		EclRemoveButton ( t_data1 );
 		EclRemoveButton ( data1 );
-		
+		EclRemoveButton ( t_data2 );
+		EclRemoveButton ( data2 );
+	
 		EclRemoveButton ( nexttype );
 		EclRemoveButton ( commit );
 		EclRemoveButton ( close );

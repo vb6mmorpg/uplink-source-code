@@ -30,6 +30,7 @@ public:
 							 int balance, int loan );
 
     void CloseAccount ( int accno );
+	void UpdateRecentBankHacks ();
 
 	BankAccount *GetRandomAccount ();
 

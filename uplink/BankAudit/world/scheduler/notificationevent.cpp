@@ -19,6 +19,7 @@
 #include "world/company/mission.h"
 #include "world/company/news.h"
 #include "world/computer/computer.h"
+#include "world/computer/bankcomputer.h"
 #include "world/computer/bankaccount.h"
 #include "world/scheduler/notificationevent.h"
 #include "world/scheduler/attemptmissionevent.h"
@@ -26,6 +27,7 @@
 #include "world/generator/missiongenerator.h"
 #include "world/generator/numbergenerator.h"
 #include "world/generator/worldgenerator.h"
+#include "world/generator/namegenerator.h"
 
 #include "mmgr.h"
 
@@ -414,6 +416,18 @@ void NotificationEvent::CheckRecentHackCount ()
 			d_computers->GetData (i)->UpdateRecentHacks ();
 
 	delete d_computers;
+
+	// Check bank balances
+	DArray <Company *> *d_companies = game->GetWorld ()->companies.ConvertToDArray ();
+
+	for ( int i = 0; i < d_companies->Size (); ++i )
+		if ( d_companies->ValidIndex (i) && d_companies->GetData(i)->TYPE == COMPANYTYPE_FINANCIAL )
+		{
+			BankComputer *bc = (BankComputer *) game->GetWorld ()->GetComputer ( NameGenerator::GenerateInternationalBankName(d_companies->GetData(i)->name) );
+			UplinkAssert(bc);
+			bc->UpdateRecentBankHacks();
+		}
+	delete d_companies;
 
 	// Schedule another
 
