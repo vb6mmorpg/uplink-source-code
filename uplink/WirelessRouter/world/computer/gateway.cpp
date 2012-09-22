@@ -552,6 +552,20 @@ bool Gateway::IsHWInstalled ( char *name )
 
 }
 
+void Gateway::RemoveHardware ( char *newhardware )
+{
+
+	char *hwtitle = new char [strlen(newhardware)+1];
+	strcpy ( hwtitle, newhardware );
+
+	int index = hardware.FindData( hwtitle );
+	if ( index != -1 )
+	{
+		hardware.RemoveData( index );
+	}
+
+}
+
 void Gateway::GiveStartingSoftware ()
 {
 

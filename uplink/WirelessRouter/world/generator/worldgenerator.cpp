@@ -430,6 +430,15 @@ void WorldGenerator::GenerateLocalMachine ()
 	ms10->SetNextPage ( 0 );
 	localmachine->AddComputerScreen ( ms10, 10 );
 
+	// Screen 12			:			WIFI Connection lost
+
+	DisconnectedScreen *ms12 = new DisconnectedScreen ();
+	ms12->SetMainTitle ( "Error" );
+	ms12->SetSubTitle ( "Connection Lost" );
+	ms12->SetTextMessage ( "The connection to your wireless router has been terminated.\n          \nRe-routing connection...\n                    \nSuccess." );
+	ms12->SetNextPage ( 0 );
+	localmachine->AddComputerScreen ( ms12, 12 );
+
 }
 
 void WorldGenerator::GenerateSpecifics ()

@@ -104,18 +104,19 @@ void InstallHardwareEvent::Run ()
 			UplinkStrncpy ( failure, "There was not enough space to fit the security device into your gateway.", sizeof ( failure ) );
 			game->GetWorld ()->GetPlayer ()->ChangeBalance ( sv->cost, "Refund from Uplink Corporation" );
 		}
-        else {
+        else  {
 
             game->GetWorld ()->GetPlayer ()->gateway.GiveHardware ( hwsale->title );
 
-            Data *driver = new Data ();
-		    driver->SetDetails ( DATATYPE_PROGRAM, 1, 0, 0, 1.0, SOFTWARETYPE_HWDRIVER );
+			if ( hwsale->GetVersion((hwsale->versions.Size())-1)->size > 0 ) {
+				Data *driver = new Data ();
+				driver->SetDetails ( DATATYPE_PROGRAM, hwsale->GetVersion((hwsale->versions.Size())-1)->size, 0, 0, 1.0, SOFTWARETYPE_HWDRIVER );
 
-            if      ( strcmp ( hwsale->title, "Gateway Self Destruct" ) == 0 )      driver->SetTitle ( "Gateway_Nuke" );
-            else if ( strcmp ( hwsale->title, "Gateway Motion Sensor" ) == 0 )      driver->SetTitle ( "Motion_Sensor" );
+				if      ( strcmp ( hwsale->title, "Gateway Self Destruct" ) == 0 )      driver->SetTitle ( "Gateway_Nuke" );
+				else if ( strcmp ( hwsale->title, "Gateway Motion Sensor" ) == 0 )      driver->SetTitle ( "Motion_Sensor" );
 
-		    game->GetWorld ()->GetPlayer ()->gateway.databank.PutData ( driver );
-
+				game->GetWorld ()->GetPlayer ()->gateway.databank.PutData ( driver );
+			}
         }
 
     }

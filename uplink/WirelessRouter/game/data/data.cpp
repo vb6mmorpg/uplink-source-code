@@ -591,8 +591,10 @@ HARDWARE_UPGRADES [] = {
                                                                                         "This is a doomsday device that has saved many agents from jail in the past.",
 							"Gateway Motion Sensor",	5,		10000,	1,		0,		"Gateway Motion Sensor\n\n"
                                                                                         "An ultra-sonic based motion sensor, which can detect when people are near your gateway. "
-                                                                                        "Often used together with a Self Destruct device."
-
+                                                                                        "Often used together with a Self Destruct device.",
+							"Wireless Router",			5,		60000,	0,		0,		"Wireless Router\n\n"
+																						"This wireless router diverts your modem connection, meaning that all attempts to trace your "
+																						"connection will end at the router, not your gateway.\n"
 																	};
 
 

@@ -20,6 +20,9 @@
 #include "world/generator/consequencegenerator.h"
 #include "world/scheduler/seizegatewayevent.h"
 
+#include "interface/interface.h"
+#include "interface/remoteinterface/remoteinterface.h"
+
 #include "options/options.h"
 
 #include "mmgr.h"
@@ -81,7 +84,39 @@ void SeizeGatewayEvent::Run ()
 
 	if ( strcmp ( name, "PLAYER" ) == 0 ) {
 
-		if ( gateway_id == game->GetWorld ()->GetPlayer ()->gateway.id ) {
+		if ( game->GetWorld ()->GetPlayer ()->gateway.IsHWInstalled("Wireless Router") == true )
+		{
+			Message *m = new Message ();
+			m->SetTo ( "PLAYER" );
+			m->SetFrom ( "Uplink Corporation" );
+			m->SetSubject ( "Router seizure" );
+			m->SetBody ( "Your wireless router was recently seized by federal agents.\n"
+						 "It seems that no evidence was found of the crime that you didn't commit.\n\n" 
+						 "A very lucky escape, if you ask us.\n" );
+			m->Send ();
+
+			// If we are connected, disconnect as we have lost the wifi and need to re-route
+			if ( game->GetWorld ()->GetPlayer ()->IsConnected() ) {
+				game->GetWorld ()->GetPlayer ()->connection.Disconnect ();
+				game->GetWorld ()->GetPlayer ()->connection.Reset ();
+
+				game->GetInterface ()->GetRemoteInterface ()->RunNewLocation ();
+				game->GetInterface ()->GetRemoteInterface ()->RunScreen ( 12 );
+			}
+			game->GetWorld ()->GetPlayer ()->gateway.RemoveHardware("Wireless Router");	// The router has been seized
+
+			game->GetWorld ()->GetPlayer ()->gateway.DecrementProximity ( 2 );	// The feds leave
+
+			// Uplink Corporation won't like you for this (it's reckless after all)
+			// Other hackers love this - everybody knows you did it but
+			// you got away with it scott free!
+
+			game->GetWorld ()->GetPlayer ()->rating.ChangeNeuromancerScore ( NEUROMANCERCHANGE_GATEWAYNEARMISS );
+			game->GetWorld ()->GetPlayer ()->rating.ChangeUplinkScore ( UPLINKCHANGE_GATEWAYNEARMISS );
+			return;
+
+		}
+		else if ( gateway_id == game->GetWorld ()->GetPlayer ()->gateway.id ) {
 
 			std::ostrstream deathmsg;
 

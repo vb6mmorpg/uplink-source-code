@@ -99,6 +99,7 @@ public:
 	void GiveStartingHardware ();
 	void GiveHardware  ( char *newhardware );
 	bool IsHWInstalled ( char *name );
+	void RemoveHardware( char *newhardware );
 
 	void GiveStartingSoftware ();
 
