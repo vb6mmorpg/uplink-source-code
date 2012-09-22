@@ -349,6 +349,9 @@ Computer  *LanGenerator::LoadLAN ( char *filename )
 Computer  *LanGenerator::GenerateLAN ( char *companyname, int difficulty )
 {
 
+	Company *company = game->GetWorld ()->GetCompany ( companyname );
+	UplinkAssert ( company );
+
     //
     // Generate the location and computer
     //
@@ -373,6 +376,7 @@ Computer  *LanGenerator::GenerateLAN ( char *companyname, int difficulty )
 						   COMPUTER_TRACEACTION_LEGAL );
 	comp->security.AddSystem ( SECURITY_TYPE_PROXY, 5 );
 	comp->security.AddSystem ( SECURITY_TYPE_MONITOR, 5 );
+    if ( company->size > MINCOMPANYSIZE_ENCRYPTION ) comp->security.AddSystem ( SECURITY_TYPE_ENCRYPTION, 5 );
 	comp->SetIP ( vl->ip );
 	game->GetWorld ()->CreateComputer ( comp );
 

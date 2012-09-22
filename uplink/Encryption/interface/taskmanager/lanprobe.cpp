@@ -23,8 +23,10 @@
 #include "world/player.h"
 #include "world/computer/lancomputer.h"
 #include "world/computer/lanmonitor.h"
+#include "world/computer/computerscreen/genericscreen.h"
 
 #include "interface/interface.h"
+#include "interface/remoteinterface/remoteinterface.h"
 #include "interface/taskmanager/taskmanager.h"
 #include "interface/taskmanager/lanprobe.h"
 #include "interface/localinterface/lan_interface.h"
@@ -155,6 +157,12 @@ void LanProbe::SetTarget ( UplinkObject *uo, char *uos, int uoi )
 
 			comp = (LanComputer *) uo;
 			if ( !comp->systems.ValidIndex( uoi ) ) return;
+
+			if ( comp->security.IsRunning_Encryption () ) {
+				create_msgbox ( "Error", "Connection is encrypted." );
+				return;
+			}
+
 			systemIndex = uoi;
 			LanComputerSystem *system = comp->systems.GetData( uoi );
             LanInterfaceObject *lio = LanInterface::GetLanInterfaceObject( system->TYPE );

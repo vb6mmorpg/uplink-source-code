@@ -818,6 +818,7 @@ void WorldGenerator::GenerateUplinkInternalServicesSystem ()
 	comp->security.AddSystem ( SECURITY_TYPE_PROXY, 5 );
 	comp->security.AddSystem ( SECURITY_TYPE_FIREWALL, 5 );
 	comp->security.AddSystem ( SECURITY_TYPE_MONITOR, 5 );
+	comp->security.AddSystem ( SECURITY_TYPE_ENCRYPTION, 5 );
 	comp->SetIsTargetable ( false );
 
 	// Screen 0			( ID )
@@ -1605,6 +1606,7 @@ void WorldGenerator::GenerateGlobalCriminalDatabase ()
 	comp->SetIsTargetable ( false );
 	comp->security.AddSystem ( SECURITY_TYPE_PROXY, 1 );
 	comp->security.AddSystem ( SECURITY_TYPE_MONITOR, 1 );
+	comp->security.AddSystem ( SECURITY_TYPE_ENCRYPTION, 1 );
 	game->GetWorld ()->CreateComputer ( comp );
 
 	// Screen 0					( Opening message screen )
@@ -2966,6 +2968,12 @@ Computer *WorldGenerator::GenerateInternalServicesMachine ( char *companyname )
         comp->security.AddSystem ( SECURITY_TYPE_FIREWALL, firewallstrength );
     }
 
+    if ( company->size > MINCOMPANYSIZE_ENCRYPTION ) {
+        int encryptionstrength = (company->size - MINCOMPANYSIZE_ENCRYPTION) / 3;
+        if ( encryptionstrength > 5 ) encryptionstrength = 5;
+        if ( encryptionstrength < 1 ) encryptionstrength = 1;
+        comp->security.AddSystem ( SECURITY_TYPE_ENCRYPTION, encryptionstrength );
+    }
 
     if ( company->size < MAXCOMPANYSIZE_WARNINGMAIL )
         comp->SetTraceAction ( COMPUTER_TRACEACTION_DISCONNECT |
@@ -3151,6 +3159,13 @@ Computer *WorldGenerator::GenerateCentralMainframe ( char *companyname )
     if ( firewallstrength < 1 ) firewallstrength = 1;
     comp->security.AddSystem ( SECURITY_TYPE_FIREWALL, firewallstrength );
 
+    if ( company->size > MINCOMPANYSIZE_ENCRYPTION ) {
+        int encryptionstrength = (company->size - MINCOMPANYSIZE_ENCRYPTION) / 3;
+        if ( encryptionstrength > 5 ) encryptionstrength = 5;
+        if ( encryptionstrength < 1 ) encryptionstrength = 1;
+        comp->security.AddSystem ( SECURITY_TYPE_ENCRYPTION, encryptionstrength );
+    }
+
 	if ( strcmp ( companyname, "Government" ) == 0 )
 		comp->SetIsTargetable (false);
 
@@ -3285,6 +3300,7 @@ Computer *WorldGenerator::GeneratePublicBankServer ( char *companyname )
 						   COMPUTER_TRACEACTION_LEGAL );
 	comp->security.AddSystem ( SECURITY_TYPE_PROXY, 5 );
 	comp->security.AddSystem ( SECURITY_TYPE_MONITOR, 5 );
+	comp->security.AddSystem ( SECURITY_TYPE_ENCRYPTION, 5 );
 	comp->SetIP ( vl->ip );
 
     //delete computername;

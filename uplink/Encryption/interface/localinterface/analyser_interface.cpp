@@ -126,11 +126,21 @@ void AnalyserInterface::ConnectionDraw ( Button *button, bool highlighted, bool 
 		glLineStipple ( 2, moving_stipplepattern );
 		glEnable ( GL_LINE_STIPPLE );
 
+/*
 		glBegin ( GL_LINE_STRIP );
 			glVertex2i ( screenw - panelwidth + 40, paneltop + 75 );
 			glVertex2i ( screenw - panelwidth + 40, paneltop + 160 );
 			glVertex2i ( screenw - 40, paneltop + 160 );
 			glVertex2i ( screenw - 40, paneltop + 240 );				
+		glEnd ();
+*/
+		glBegin ( GL_LINE_STRIP );
+			glVertex2i ( screenw - panelwidth + 40, paneltop +  75 );
+			glVertex2i ( screenw - 40,				paneltop +  75 );
+			glVertex2i ( screenw - 40,				paneltop + 160 );
+			glVertex2i ( screenw - panelwidth + 40, paneltop + 160 );
+			glVertex2i ( screenw - panelwidth + 40, paneltop + 240 );
+			glVertex2i ( screenw - 40,				paneltop + 240 );
 		glEnd ();
 
 		glLineWidth ( 1 );
@@ -383,7 +393,36 @@ void AnalyserInterface::Update ()
 			EclRegisterButtonCallbacks ( "analyser_system_t 2", text_draw, NULL, NULL, NULL );
 
 		}
+		else if ( comp->security.NumSystems () == 4 ) {
 
+			EclRegisterButton ( screenw - panelwidth + 25, paneltop + 145, 32, 32, "", "Shows a security system", "analyser_system 0" );
+			button_assignbitmaps_blend ( "analyser_system 0", "analyser/unknown.tif", "analyser/unknown.tif", "analyser/unknown.tif" );
+			EclRegisterButtonCallback ( "analyser_system 0", SystemClick );
+
+			EclRegisterButton ( screenw - panelwidth + 15, paneltop + 180, 70, 15, "Analysing", "", "analyser_system_t 0" );
+			EclRegisterButtonCallbacks ( "analyser_system_t 0", text_draw, NULL, NULL, NULL );
+
+			EclRegisterButton ( screenw - panelwidth / 2 - 16, paneltop + 145, 32, 32, "", "Shows a security system", "analyser_system 1" );			
+			button_assignbitmaps_blend ( "analyser_system 1", "analyser/unknown.tif", "analyser/unknown.tif", "analyser/unknown.tif" );
+			EclRegisterButtonCallback ( "analyser_system 1", SystemClick );
+
+			EclRegisterButton ( screenw - panelwidth / 2 - 26, paneltop + 180, 70, 15, "Analysing", "", "analyser_system_t 1" );
+			EclRegisterButtonCallbacks ( "analyser_system_t 1", text_draw, NULL, NULL, NULL );
+
+			EclRegisterButton ( screenw - 55, paneltop + 145, 32, 32, "", "Shows a security system", "analyser_system 2" );
+			button_assignbitmaps_blend ( "analyser_system 2", "analyser/unknown.tif", "analyser/unknown.tif", "analyser/unknown.tif" );
+			EclRegisterButtonCallback ( "analyser_system 2", SystemClick );
+	
+			EclRegisterButton ( screenw - 65, paneltop + 130, 70, 15, "Analysing", "", "analyser_system_t 2" );
+			EclRegisterButtonCallbacks ( "analyser_system_t 2", text_draw, NULL, NULL, NULL );
+
+			EclRegisterButton ( screenw - 55, paneltop + 60, 32, 32, "", "Shows a security system", "analyser_system 3" );
+			button_assignbitmaps_blend ( "analyser_system 3", "analyser/unknown.tif", "analyser/unknown.tif", "analyser/unknown.tif" );
+			EclRegisterButtonCallback ( "analyser_system 3", SystemClick );
+	
+			EclRegisterButton ( screenw - 65, paneltop + 117, 70, 15, "Analysing", "", "analyser_system_t 3" );
+			EclRegisterButtonCallbacks ( "analyser_system_t 3", text_draw, NULL, NULL, NULL );
+		}
 		// Bring all bypassers to the front
 
 		SvbShowAllTasks ();

@@ -73,6 +73,14 @@ void UserIDScreenInterface::AccessCodeClick ( Button *button )
 
 	UplinkAssert (button);
 
+	Computer *comp = game->GetInterface ()->GetRemoteInterface ()->GetComputerScreen ()->GetComputer ();
+	UplinkAssert ( comp );
+
+	if ( comp->security.IsRunning_Encryption () ) {
+		create_msgbox ( "Error", "Connection is encrypted" );
+		return;
+	}
+
 	char *fullcode = new char [strlen(button->caption) + 1];
 	UplinkSafeStrcpy ( fullcode, button->caption );
 

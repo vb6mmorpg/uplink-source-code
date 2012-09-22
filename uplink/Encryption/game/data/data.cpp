@@ -194,7 +194,7 @@ SOFTWARE_UPGRADES [] = {
                                                                                         "A cheap and fast method of breaking passwords\n"
                                                                                         "This software tool tries every word in a ten-thousand word dictionary as a password. "
                                                                                         "It is faster than a Password Breaker, but not guaranteed to find an answer.",
-/*
+
 							"Encryption_Bypass",		5,		6000,	1,		1,  	"ENCRYPTION BYPASS V1.0\n"
                                                                                         "TYPE: software.Bypasser\n\n"
                                                                                         "Actively bypasses encryption systems with a security level of 1\n"
@@ -219,7 +219,7 @@ SOFTWARE_UPGRADES [] = {
                                                                                         "TYPE: software.Bypasser\n\n"
                                                                                         "Actively bypasses encryption with a security level of 5 or below\n"
                                                                                         "All bypassers require a 'HUD:ConnectionAnalysis' upgrade first",
-*/
+
 							"File_Copier",				1,		100,	1,		1,  	"FILE COPIER V1.0\n"
                                                                                         "TYPE: software.FileUtil\n\n"
                                                                                         "Copies programs and data from one databank to another\n"

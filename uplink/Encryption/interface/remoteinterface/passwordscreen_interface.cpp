@@ -52,6 +52,14 @@ void PasswordScreenInterface::PasswordClick ( Button *button )
 
 	UplinkAssert (button);
 
+	Computer *comp = game->GetInterface ()->GetRemoteInterface ()->GetComputerScreen ()->GetComputer ();
+	UplinkAssert ( comp );
+
+	if ( comp->security.IsRunning_Encryption () ) {
+		create_msgbox ( "Error", "Connection is encrypted" );
+		return;
+	}
+
 	RemoteInterfaceScreen *ris = game->GetInterface ()->GetRemoteInterface ()->GetInterfaceScreen ();
 	UplinkAssert (ris);
 	PasswordScreenInterface *ps = (PasswordScreenInterface *) ris;

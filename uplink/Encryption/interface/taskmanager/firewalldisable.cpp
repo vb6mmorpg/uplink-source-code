@@ -224,7 +224,11 @@ void FirewallDisable::Tick ( int n )
 				ticksrequired = TICKSREQUIRED_DISABLEFIREWALL * comp->security.NumSystems ();
 				ticksdone = 0;
 				
-	            if ( comp->security.IsRunning_Monitor () )
+	            if ( comp->security.IsRunning_Encryption () ) {
+					progress = 3;
+					EclRegisterCaptionChange ( sprogress, "Failed" );
+					timersync = time(NULL) + 2;
+				} else if ( comp->security.IsRunning_Monitor () )
 		            game->GetWorld ()->GetPlayer ()->GetConnection ()->BeginTrace ();
 
 			}

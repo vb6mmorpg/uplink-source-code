@@ -26,7 +26,10 @@
 #include "world/player.h"
 #include "world/computer/computer.h"
 #include "world/computer/lancomputer.h"
+#include "world/computer/computerscreen/genericscreen.h"
 
+#include "interface/interface.h"
+#include "interface/remoteinterface/remoteinterface.h"
 #include "interface/taskmanager/lanscan.h"
 
 #include "mmgr.h"
@@ -123,6 +126,14 @@ void LanScan::GoClick ( Button *button )
 	LanScan *thistask = (LanScan *) SvbGetTask ( pid );
 	UplinkAssert (thistask);
 		
+	Computer *comp = game->GetInterface ()->GetRemoteInterface ()->GetComputerScreen ()->GetComputer ();
+	UplinkAssert ( comp );
+
+	if ( comp->security.IsRunning_Encryption () ) {
+		create_msgbox ( "Error", "Connection is encrypted." );
+		return;
+	}
+
 	// Set it going
 
 	UplinkStrncpy ( thistask->ip, game->GetWorld ()->GetPlayer ()->remotehost, sizeof ( thistask->ip ) );

@@ -192,6 +192,7 @@
 #define     MINCOMPANYSIZE_MONITOR                      1
 #define     MINCOMPANYSIZE_PROXY                        8
 #define     MINCOMPANYSIZE_FIREWALL                     10
+#define     MINCOMPANYSIZE_ENCRYPTION                   15
 
 #define     MAXCOMPANYSIZE_WARNINGMAIL                  5
 #define     MAXCOMPANYSIZE_FINE                         12
@@ -411,7 +412,8 @@ struct ComputerUpgrade
 };
 
 
-#define NUM_STARTINGSOFTWAREUPGRADES 73
+//#define NUM_STARTINGSOFTWAREUPGRADES 73
+#define NUM_STARTINGSOFTWAREUPGRADES 78
 #define NUM_STARTINGHARDWAREUPGRADES 19
 
 extern const ComputerUpgrade SOFTWARE_UPGRADES  [];
