@@ -212,7 +212,7 @@ bool Player::Load ( FILE *file )
 
 	if ( !LoadBTree ( &shares, file ) ) return false;
 
-	if ( game->GetLoadedSavefileVer() >= "SAV63" ) {
+	if ( strcmp(game->GetLoadedSavefileVer(),"SAV63") >= 0 ) {
 		if ( !LoadDynamicStringStatic ( realname, SIZE_PERSON_NAME, file ) ) return false;
 	} else {
 		// Patch older saves by using the handle to mimic pre-patch behaviour

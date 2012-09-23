@@ -73,10 +73,30 @@ void StatusInterface::Create ()
 		EclRegisterButtonCallback ( "status_title", TitleClick );
 
 		//
+		// Personal
+		//
+
+		EclRegisterButton ( screenw - panelwidth + 50, paneltop + 40, 80, 20, "Personal", "", "status_personaltitle" );
+		EclRegisterButtonCallbacks ( "status_personaltitle", MiniTitleDraw, NULL, NULL, NULL );
+
+		EclRegisterButton ( screenw - panelwidth, paneltop + 70, panelwidth - 5, 30, "", "", "status_personalname" );
+		EclRegisterButton ( screenw - panelwidth, paneltop + 90, panelwidth - 5, 30, "", "", "status_personalhandle" );
+		
+		EclRegisterButtonCallbacks ( "status_personalname", text_draw, NULL, NULL, NULL );		
+		EclRegisterButtonCallbacks ( "status_personalhandle", text_draw, NULL, NULL, NULL );
+
+        char pname [256];        
+        char phandle [256];
+		UplinkSnprintf ( pname,   sizeof ( pname ),   "Real Name: %s\n", game->GetWorld ()->GetPlayer ()->realname );
+        UplinkSnprintf ( phandle, sizeof ( phandle ), "Handle: %s\n", game->GetWorld ()->GetPlayer ()->handle );
+		EclRegisterCaptionChange ( "status_personalname", pname );
+		EclRegisterCaptionChange ( "status_personalhandle", phandle );
+
+		//
 		// Ratings
 		//
 
-		EclRegisterButton ( screenw - panelwidth + 50, paneltop + 40, 80, 20, "Ratings", "", "status_ratingstitle" );
+		EclRegisterButton ( screenw - panelwidth + 50, paneltop + 160, 80, 20, "Ratings", "", "status_ratingstitle" );
 		EclRegisterButtonCallbacks ( "status_ratingstitle", MiniTitleDraw, NULL, NULL, NULL );
 
 //		EclRegisterButton ( screenw - panelwidth, paneltop + 70, cwidth, 30, "UPLINK", "", "status_tuplinkrating" );		
@@ -85,8 +105,8 @@ void StatusInterface::Create ()
 //		EclRegisterButtonCallbacks ( "status_tuplinkrating", text_draw, NULL, NULL, NULL );		
 //		EclRegisterButtonCallbacks ( "status_tneuromancerrating", text_draw, NULL, NULL, NULL );
 
-		EclRegisterButton ( screenw - panelwidth, paneltop + 70, panelwidth - 5, 30, "", "", "status_uplinkrating" );
-		EclRegisterButton ( screenw - panelwidth, paneltop + 120, panelwidth - 5, 30, "", "", "status_neuromancerrating" );
+		EclRegisterButton ( screenw - panelwidth, paneltop + 190, panelwidth - 5, 30, "", "", "status_uplinkrating" );
+		EclRegisterButton ( screenw - panelwidth, paneltop + 240, panelwidth - 5, 30, "", "", "status_neuromancerrating" );
 		
 		EclRegisterButtonCallbacks ( "status_uplinkrating", text_draw, NULL, NULL, NULL );		
 		EclRegisterButtonCallbacks ( "status_neuromancerrating", text_draw, NULL, NULL, NULL );
@@ -105,14 +125,14 @@ void StatusInterface::Create ()
 		// Legal
 		//
 
-		EclRegisterButton ( screenw - panelwidth + 50, paneltop + 190, 80, 20, "Criminal", "", "status_legaltitle" );
+		EclRegisterButton ( screenw - panelwidth + 50, paneltop + 310, 80, 20, "Criminal", "", "status_legaltitle" );
 		EclRegisterButtonCallbacks ( "status_legaltitle", MiniTitleDraw, NULL, NULL, NULL );
 			
 		Record *rec = RecordGenerator::GetCriminal ( "PLAYER" );
 		char *crimrec = NULL;
 		if ( rec ) crimrec = rec->GetField ( "Convictions" );					
 
-		EclRegisterButton ( screenw - panelwidth + 5, paneltop + 220, panelwidth - 15, 60, "", "", "status_legal" );
+		EclRegisterButton ( screenw - panelwidth + 5, paneltop + 340, panelwidth - 15, 60, "", "", "status_legal" );
 		EclRegisterButtonCallbacks ( "status_legal", text_draw, NULL, NULL, NULL );
 		EclRegisterCaptionChange ( "status_legal", crimrec ? crimrec : (char *) "None" );
 
@@ -156,6 +176,10 @@ void StatusInterface::Remove ()
 		LocalInterfaceScreen::Remove ();
 
 		EclRemoveButton ( "status_title" );
+
+		EclRemoveButton ( "status_personaltitle" );
+		EclRemoveButton ( "status_personalname" );
+		EclRemoveButton ( "status_personalhandle" );
 
 		EclRemoveButton ( "status_ratingstitle" );
 //		EclRemoveButton ( "status_tuplinkrating" );
