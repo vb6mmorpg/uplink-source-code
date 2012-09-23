@@ -30,6 +30,7 @@
 #include "world/generator/worldgenerator.h"
 #include "world/generator/numbergenerator.h"
 #include "world/generator/plotgenerator.h"
+#include "world/generator/spamgenerator.h"
 #include "world/scheduler/notificationevent.h"
 
 #include "mmgr.h"
@@ -112,6 +113,7 @@ void Game::NewGame ()
 	WorldGenerator::GenerateAll ();
 	world->plotgenerator.Initialise ();
     world->demoplotgenerator.Initialise ();
+	SpamGenerator::Initialise();
 
     SgPlaySound ( RsArchiveFileOpen ( "sounds/ringout.wav" ), "sounds/ringout.wav", false );
 
@@ -245,6 +247,8 @@ GameObituary *Game::GetObituary ()
 
 bool Game::LoadGame ( FILE *file )
 {
+
+	SpamGenerator::Initialise();
 
 	// Initialise the random number generator
 

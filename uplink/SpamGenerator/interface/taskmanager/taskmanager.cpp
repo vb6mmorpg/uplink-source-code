@@ -39,6 +39,9 @@
 #include "interface/taskmanager/lanprobe.h"
 #include "interface/taskmanager/lanspoof.h"
 #include "interface/taskmanager/lanforce.h"
+#include "interface/taskmanager/virus.h"
+
+#include "world/generator/spamgenerator.h"
 
 // ============================================================================
 
@@ -121,7 +124,10 @@ void TaskManager::RunSoftware ( char *name, float version )
                                                                 task->SetFollowMouse ( true ); }
     else if ( strcmp ( name, "LAN_Force" ) == 0 ) {             task = new LanForce ();
                                                                 task->SetFollowMouse ( true ); }
-
+	// Viruses!!!
+	// (Or Virii)
+	else if ( SpamGenerator::IsVirus ( name ) ) {				task = new Virus ( SpamGenerator::GetVirusType ( name ) );
+                                                                task->SetFollowMouse ( true ); }
 	
 	else {
 		printf ( "Task Manager warning : Called RunSoftware, name not recognised '%s'\n", name );
