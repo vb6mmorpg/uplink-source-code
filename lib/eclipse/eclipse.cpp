@@ -124,7 +124,9 @@ void EclReset ( int width, int height )
 //    anims.Empty ();
 	editablebuttons.Empty ();
         
-	superhighlight_borderwidth = 0;
+	// Stormchild: I have commented out this as all it seems to do is break EclSuperHighlight
+	// when a userfile is reloaded without exiting the app
+	//superhighlight_borderwidth = 0;
     
     // TODO sort this out sometime
     EclDirtyClear();
@@ -733,6 +735,9 @@ void EclUnClickButton ()
 void EclSuperHighlight ( char *name )
 {
 
+	EclSuperHighlight ( name, ECL_YELLOW );
+
+	/*
 	Button *button = EclGetButton ( name );
 
 	if ( !superhighlightedbuttons.LookupTree ( name ) && button ) {
@@ -756,6 +761,39 @@ void EclSuperHighlight ( char *name )
 		EclButtonSendToBack ( superhighlightname );
 
 	}
+	*/
+
+}
+void EclSuperHighlight ( char *name, char *eclColour )
+{
+
+	Button *button = EclGetButton ( name );
+	char superhighlightname [128];
+	sprintf ( superhighlightname, "Ecl_superhighlight %s", name );
+
+	if ( !superhighlightedbuttons.LookupTree ( name ) && button ) {
+
+		// Needs to be added
+		superhighlightedbuttons.PutData ( name, 0 );
+
+		// Create the button itself
+		
+		int x = button->x - superhighlight_borderwidth;
+		int y = button->y - superhighlight_borderwidth;
+		int width = button->width + superhighlight_borderwidth * 2;
+		int height = button->height + superhighlight_borderwidth * 2;
+
+
+		EclRegisterButton ( x, y, width, height, "", "", superhighlightname );
+		EclRegisterButtonCallbacks ( superhighlightname, superhighlight_draw, NULL, NULL, NULL );
+
+		EclButtonSendToBack ( superhighlightname );
+	}
+
+	// We might just be changing colour, so try this anyway
+	Button *hbutton = EclGetButton ( superhighlightname );
+	if ( hbutton ) hbutton->shcolour = eclColour;
+
 
 }
 

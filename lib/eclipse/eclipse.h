@@ -34,6 +34,16 @@
 
 #define local static
 
+#define ECL_WHITE		"1.0 1.0 1.0"
+#define ECL_YELLOW		"1.0 1.0 0.5"
+#define ECL_RED			"1.0 0.0 0.0"
+#define ECL_GREEN		"0.0 1.0 0.0"
+#define ECL_BLUE		"0.0 0.0 1.0"
+#define ECL_CYAN		"0.5 1.0 1.0"
+#define ECL_MAGENTA		"1.0 0.5 1.0"
+#define ECL_ORANGE		"1.0 0.5 0.5"
+#define ECL_GREY		"0.5 0.5 0.5"
+
 
 
 // Initialisation functions ===================================================
@@ -97,6 +107,7 @@ bool EclIsClicked         ( char *name );
 void EclUnClickButton     ();
 
 void EclSuperHighlight        ( char *name );			
+void EclSuperHighlight        ( char *name, char *eclColour );			
 bool EclIsSuperHighlighted    ( char *name );
 void EclSuperUnHighlight      ( char *name );
 void EclSuperUnHighlightAll	  ();

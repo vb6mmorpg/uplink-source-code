@@ -24,6 +24,7 @@ public:
 	char *name;
 	char *tooltip;
 	int userinfo;								// Used to represent other program data about the button.
+	char *shcolour;								// Colour of superhighlight
 
 	bool dirty;
 
