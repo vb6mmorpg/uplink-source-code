@@ -311,7 +311,7 @@ void Compressor::Tick ( int n )
 							reduce = data->size - 1;
 						}
 						EclRegisterCaptionChange ( sprogress, "Finished" );			
-						newdata->SetDetails(data->TYPE,data->size - reduce, data->encrypted, reduce,
+						newdata->SetDetails(data->TYPE,data->size - reduce, data->encrypted, reduce+data->compressed,
 							data->version,data->softwareTYPE);
 						source->RemoveData(sourceindex);
 						source->PutData(newdata, sourceindex);
