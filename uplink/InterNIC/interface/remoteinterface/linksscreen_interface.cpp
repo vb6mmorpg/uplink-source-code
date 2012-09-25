@@ -798,7 +798,7 @@ void LinksScreenInterface::Create ( ComputerScreen *newcs )
 				{
 					VLocation *vl = locs->GetData (i);
 					Computer *comp = vl->GetComputer();
-					if ( vl->GetOBJECTID () != OID_VLOCATIONSPECIAL && comp->companyname == companyname )
+					if ( vl->GetOBJECTID () != OID_VLOCATIONSPECIAL && strcmp(comp->companyname,companyname) == 0 )
 					    alllinks.PutData ( locs->GetData (i)->ip );
 
 				}
