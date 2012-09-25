@@ -1,27 +1,27 @@
 prefix:=$(PWD)/install
 
 #FREETYPE_DIR=freetype-1.3.1
-FREETYPE_DIR=freetype-current
+#FREETYPE_DIR=freetype-current
 GLTT_DIR=gltt-2.5.2
 TCP4U_DIR=tcp4u.331
 IRCLIB_LINUX_DIR=irclib
-SDL_DIR=SDL-1.2.11_dev
-SDL_MIXER_DIR=SDL_mixer-1.2.7_patched
+SDL_DIR=SDL-1.2.15
+SDL_MIXER_DIR=SDL_mixer-1.2.12
 TIFF_DIR=tiff-3.7.2
 JPEG_DIR=libjpeg6b-6b
 ZLIB_DIR=zlib-1.2.2
 MIKMOD_DIR=libmikmod
-LOKI_SETUPDB_DIR=loki_setupdb
-LOKI_SETUP_DIR=loki_setup
+#LOKI_SETUPDB_DIR=loki_setupdb
+#LOKI_SETUP_DIR=loki_setup
 UNRAR_DIR=unrar
-FREETYPE2_DIR=freetype-2.2.1
+FREETYPE2_DIR=freetype-2.4.10
 FTGL_DIR=FTGL-2.1.2/unix
 
 X11_INC_DIR=/usr/include/X11
 X11_LIB_DIR=/usr/lib/X11
 
-export CC=apgcc
-export CXX=apg++
+export CC=gcc
+export CXX=g++
 
 all: 
 	$(MAKE) config
@@ -38,8 +38,8 @@ config:
 	$(MAKE) tiff-config
 #	$(MAKE) jpeg-config
 #	$(MAKE) zlib-config
-	$(MAKE) loki-setup-db
-	$(MAKE) loki-setup-config
+#	$(MAKE) loki-setup-db
+#	$(MAKE) loki-setup-config
 
 build:
 #	$(MAKE) gltt-build
@@ -52,7 +52,7 @@ build:
 	$(MAKE) tiff-build
 #	$(MAKE) jpeg-build
 #	$(MAKE) zlib-build
-	$(MAKE) loki-setup-build
+#	$(MAKE) loki-setup-build
 
 clean:
 #	$(MAKE) -C $(FREETYPE_DIR) clean
@@ -65,8 +65,8 @@ clean:
 	$(MAKE) -C $(TIFF_DIR) clean
 #	$(MAKE) -C $(JPEG_DIR) clean
 #	$(MAKE) -C $(ZLIB_DIR) clean
-	$(MAKE) -C $(LOKI_SETUP_DIR) clean
-	$(MAKE) -C $(LOKI_SETUPDB_DIR) clean
+#	$(MAKE) -C $(LOKI_SETUP_DIR) clean
+#	$(MAKE) -C $(LOKI_SETUPDB_DIR) clean
 	$(MAKE) -C $(IRCLIB_LINUX_DIR) clean
 	$(MAKE) -C $(UNRAR_DIR) clean
 	cd $(TCP4U_DIR)/src ; make -f ../Unix/Makefile clean

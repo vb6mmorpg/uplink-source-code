@@ -52,12 +52,13 @@ LIBS = \
 	-lfreetype \
 	-ltiff \
 	-ljpeg \
-	-lz 
+	-lz \
+	-lpthread 
 #	-lgltt \
 #	-lttf \
 
-CXX = apg++
-CC = apgcc
+CXX = g++
+CC = gcc
 LINK = $(CXX)
 
 CXXFLAGS += -O2 -g
