@@ -12,7 +12,6 @@
 
 #if defined(__WIN32__) || defined(_WIN32)
   #define _WIN_32
-  #define for if (0) ; else for
 #endif
 
 #ifdef _WIN32_WCE
