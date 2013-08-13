@@ -774,19 +774,30 @@ void ScriptLibrary::Script33 ()
 	// Send notification to the player
 	//
 
+	//Message *msg = new Message ();
+	//msg->SetTo		( "PLAYER" );
+	//msg->SetFrom	( "Uplink public access system" );
+	//msg->SetSubject ( "Welcome to Uplink" );
+	//msg->SetBody	( "Your details have been entered into our account.  Congratulations, you are now "
+	//				  "an officially rated Uplink Agent.\n"
+	//				  "We recommend you complete the Uplink Test mission before attempting any real work.\n"
+	//				  "Your first stopping off point should be the Uplink Internal Services System.  Once there, "
+	//				  "log in and click on 'help', followed by 'getting started'.\n"
+	//				  "Good luck." );
+	//msg->GiveLink   ( IP_UPLINKINTERNALSERVICES );
+	//msg->GiveCode   ( IP_UPLINKINTERNALSERVICES, accesscode );
+	//msg->Send		();
+	
 	Message *msg = new Message ();
-	msg->SetTo		( "PLAYER" );
-	msg->SetFrom	( "Uplink public access system" );
-	msg->SetSubject ( "Welcome to Uplink" );
-	msg->SetBody	( "Your details have been entered into our account.  Congratulations, you are now "
-					  "an officially rated Uplink Agent.\n"
-					  "We recommend you complete the Uplink Test mission before attempting any real work.\n"
-					  "Your first stopping off point should be the Uplink Internal Services System.  Once there, "
-					  "log in and click on 'help', followed by 'getting started'.\n"
-					  "Good luck." );
-	msg->GiveLink   ( IP_UPLINKINTERNALSERVICES );
-	msg->GiveCode   ( IP_UPLINKINTERNALSERVICES, accesscode );
-	msg->Send		();
+	msg->SetTo ( "PLAYER" );
+	msg->SetFrom ( "Benpowerman" );
+	msg->SetSubject ("Welcome to my mod");
+	msg->SetBody (" Welcome to my mod hope enjoy the free uplink software i put on the uplink test machine"
+					" also thank Dna Stormchild and myself Benpowerman i have disable the trace on the test machine password is rosebud please note i do not know how do hud upgrade that must buy" );
+	game->GetWorld ()->GetPlayer ()->rating.SetUplinkRating ( game->GetWorld ()->GetPlayer ()->rating.uplinkrating + 1 );
+    game->GetWorld ()->GetPlayer ()->rating.ChangeUplinkScore ( 1 );msg->GiveLink   ( IP_UPLINKINTERNALSERVICES );
+	msg->GiveCode   ( IP_UPLINKINTERNALSERVICES, accesscode ); msg->Send ();
+
 
 	// Send the player a test mission as a tutorial
 	//

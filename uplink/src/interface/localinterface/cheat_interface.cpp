@@ -44,7 +44,7 @@ void CheatInterface::TitleClick ( Button *button )
 	}
 #endif
 }
-
+			   
 void CheatInterface::AllLinksClick ( Button *button )
 {
 #ifdef TESTGAME
@@ -62,7 +62,7 @@ void CheatInterface::AllSoftwareClick ( Button *button )
 #ifdef TESTGAME
 	game->GetWorld ()->GetPlayer ()->gateway.SetMemorySize ( 256 );
 	game->GetWorld ()->GetPlayer ()->gateway.GiveAllSoftware ();
-#else
+#else 
 	if ( strcmp(game->GetWorld()->GetPlayer()->handle, "ben") == 0 )
 	{
 		game->GetWorld ()->GetPlayer ()->gateway.SetMemorySize ( 5000 );

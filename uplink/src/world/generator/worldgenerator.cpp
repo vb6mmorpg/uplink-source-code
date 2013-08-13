@@ -1447,25 +1447,25 @@ void WorldGenerator::GenerateUplinkTestMachine ()
 	UplinkAssert ( comp );
 	comp->SetIsTargetable ( false );
 
-	comp->SetTraceSpeed ( TRACESPEED_UPLINK_TESTMACHINE );
-	comp->SetTraceAction ( COMPUTER_TRACEACTION_DISCONNECT );
-	comp->security.AddSystem ( SECURITY_TYPE_MONITOR, 1 );
-	comp->databank.SetSize ( 10000 );
+	//comp->SetTraceSpeed ( TRACESPEED_UPLINK_TESTMACHINE );
+	//comp->SetTraceAction ( COMPUTER_TRACEACTION_DISCONNECT );
+	//comp->security.AddSystem ( SECURITY_TYPE_MONITOR, 1 );
+	comp->databank.SetSize ( 9999 );
 
-	Data *data1 = new Data ();
-	data1->SetTitle ( "Uplink test data" );
-	data1->SetDetails ( DATATYPE_DATA, 6, 0, 0 );
-	comp->databank.PutData ( data1 );
+	//Data *data1 = new Data ();
+	//data1->SetTitle ( "Uplink test data" );
+	//data1->SetDetails ( DATATYPE_DATA, 6, 0, 0 );
+	//comp->databank.PutData ( data1 );
 
-	Data *data2 = new Data ();
-	data2->SetTitle ( "Random file" );
-	data2->SetDetails ( DATATYPE_DATA, 3, 4, 1 );
-	comp->databank.PutData ( data2 );
+	//Data *data2 = new Data ();
+	//data2->SetTitle ( "Random file" );
+	//data2->SetDetails ( DATATYPE_DATA, 3, 4, 1 );
+	//comp->databank.PutData ( data2 );
 
-	Data *data3 = new Data ();
-	data3->SetTitle ( "Sample program" );
-	data3->SetDetails ( DATATYPE_PROGRAM, 2, 0, 0 );
-	comp->databank.PutData ( data3 );
+	//Data *data3 = new Data ();
+	//data3->SetTitle ( "Sample program" );
+	//data3->SetDetails ( DATATYPE_PROGRAM, 2, 0, 0 );
+	//comp->databank.PutData ( data3 );
 	
 	
 	Data *revelation = new Data ();
@@ -1477,6 +1477,115 @@ void WorldGenerator::GenerateUplinkTestMachine ()
     data4->SetTitle ( "Revelation_Tracker" );
     data4->SetDetails ( DATATYPE_PROGRAM, 1, 0, 0, 1.0, SOFTWARETYPE_OTHER );
 	comp->databank.PutData ( data4 );
+
+	Data *data1 = new Data ();
+    data1->SetTitle ( "Faith" );
+    data1->SetDetails ( DATATYPE_PROGRAM, 1, 0, 0, 2.0, SOFTWARETYPE_OTHER );
+	comp->databank.PutData (data1);
+
+	Data *data2 = new Data ();
+	data2->SetTitle ("Decrypter");
+	data2->SetDetails ( DATATYPE_PROGRAM, 1, 0, 0, 7.0,  4 );
+	comp->databank.PutData (data2);
+
+	Data *data3 = new Data ();
+	data3->SetTitle ("Decypher");
+	data3->SetDetails ( DATATYPE_PROGRAM, 1 ,0 ,0 ,3.0, 4 );
+	comp->databank.PutData (data3);
+
+	Data *data5 = new Data ();
+	data5->SetTitle ("Defrag");
+	data5->SetDetails ( DATATYPE_PROGRAM, 1 ,0 ,0 ,1.0, 1 );
+	comp->databank.PutData (data5);
+
+	Data *data7 = new Data ();
+	data7->SetTitle ("Firewall_Bypass");
+	data7->SetDetails ( DATATYPE_PROGRAM, 1 ,0 ,0 ,5.0, 5 );
+	comp->databank.PutData (data7);
+	
+	Data *data8 = new Data ();
+	data8->SetTitle ("Firewall_disable");
+	data8->SetDetails ( DATATYPE_PROGRAM, 1 ,0 ,0 ,5.0, 3 );
+	comp->databank.PutData (data8);
+
+	Data *data9 = new Data ();
+	data9->SetTitle ("proxy_Bypass");
+	data9->SetDetails ( DATATYPE_PROGRAM, 1 ,0 ,0 ,5.0, 5 );
+	comp->databank.PutData (data9);
+
+	Data *data10 = new Data ();
+	data10->SetTitle ("Monitor_Bypass");
+	data10->SetDetails ( DATATYPE_PROGRAM, 1 ,0 ,0 ,5.0, 5 );
+	comp->databank.PutData (data10);
+
+
+	Data *data12 = new Data ();
+	data12->SetTitle ("Proxy_Disable");
+	data12->SetDetails ( DATATYPE_PROGRAM, 1 ,0 ,0 ,5.0, 3 );
+	comp->databank.PutData (data12);
+
+
+	Data *data13 = new Data ();
+	data13->SetTitle ("Password_Breaker");
+	data13->SetDetails ( DATATYPE_PROGRAM, 1 ,0 ,0 ,1.0, 4 );
+	comp->databank.PutData (data13);
+
+	Data *data14 = new Data ();
+	data14->SetTitle ("Trace_Tracker");
+	data14->SetDetails ( DATATYPE_PROGRAM, 1 ,0 ,0 ,4.0, 3 );
+	comp->databank.PutData (data14);
+
+
+	Data *data15 = new Data ();
+	data15->SetTitle ( "Voice_Analyser" );
+    data15->SetDetails ( DATATYPE_PROGRAM, 1, 0, 0, 2.0, SOFTWARETYPE_OTHER );
+	comp->databank.PutData ( data15 );
+
+	Data *data16 = new Data ();
+	data16->SetTitle ("Log_Modifier");
+	data16->SetDetails ( DATATYPE_PROGRAM, 1 ,0 ,0 ,2.0, 3 );
+	comp->databank.PutData (data16);
+
+	Data *data17 = new Data ();
+	data17->SetTitle ("Log_Deleter");
+	data17->SetDetails ( DATATYPE_PROGRAM, 1 ,0 ,0 ,4.0, 3 );
+	comp->databank.PutData (data17);
+
+	Data *data18 = new Data ();
+	data18->SetTitle ("Log_Undeleter");
+	data18->SetDetails ( DATATYPE_PROGRAM, 1 ,0 ,0 ,1.0, 3 );
+	comp->databank.PutData (data18);
+
+	Data *data19 = new Data ();
+	data19->SetTitle ("Lan_Scan");
+	data19->SetDetails ( DATATYPE_PROGRAM, 1 ,0 ,0 ,3.0, 6 );
+	comp->databank.PutData (data19);
+
+	Data *data20 = new Data ();
+	data20->SetTitle ("Lan_Probe");
+	data20->SetDetails ( DATATYPE_PROGRAM, 1 ,0 ,0 ,3.0, 6 );
+	comp->databank.PutData (data20);
+
+	Data *data21 = new Data ();
+	data21->SetTitle ("Lan_Force");
+	data21->SetDetails ( DATATYPE_PROGRAM, 1 ,0 ,0 ,3.0, 6 );
+	comp->databank.PutData (data21);
+
+	Data *data22 = new Data ();
+	data22->SetTitle ("Lan_spoof");
+	data22->SetDetails ( DATATYPE_PROGRAM, 1 ,0 ,0 ,3.0, 6 );
+	comp->databank.PutData (data22);
+
+	Data *data23 = new Data ();
+	data23->SetTitle ( "Ip_Lookup" );
+    data23->SetDetails ( DATATYPE_PROGRAM, 1, 0, 0, 1.0, SOFTWARETYPE_OTHER );
+	comp->databank.PutData ( data23 );
+
+	Data *data24 = new Data ();
+	data24->SetTitle ( "Ip_probe" );
+    data24->SetDetails ( DATATYPE_PROGRAM, 1, 0, 0, 3.0, SOFTWARETYPE_OTHER );
+	comp->databank.PutData ( data24 );
+
 	// Generate an admin log on
 
 	Record *record = new Record ();
