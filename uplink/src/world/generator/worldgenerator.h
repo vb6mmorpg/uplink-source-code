@@ -74,6 +74,8 @@ public:
 	static void GenerateSimpleStartingMissionA ();
 	static void GenerateSimpleStartingMissionB ();
 
+	
+
 	// Low level functions for generating random items of data
 	// They all add the data into the World object automatically, and then return it
 

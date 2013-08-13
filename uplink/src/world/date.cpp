@@ -48,7 +48,6 @@ Date::Date()
 	updateme = false;
 
 }
-
 Date::Date ( int newsecond, int newminute, int newhour, int newday, int newmonth, int newyear )
 {
 

@@ -60,7 +60,7 @@
 //#define	DOCLABRELEASE									    // This version designed for DOC labs
 //#define	WAREZRELEASE                                        // Purity Control
 
-//#define	CHEATMODES_ENABLED									// Eg all-links, all-software, password-bypass etc
+#define	CHEATMODES_ENABLED									// Eg all-links, all-software, password-bypass etc
 #if defined(FULLGAME)
 // Remove code card check for all builds
 //#define     CODECARD_ENABLED                                    // Do the code card lookup thingy at the start

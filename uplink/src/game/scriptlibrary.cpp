@@ -122,7 +122,7 @@ void ScriptLibrary::RunScript ( int scriptindex )
 
         case 92         :           Script92 ();        break;
         case 93         :           Script93 ();        break;
-
+	
 		default:	
 			UplinkWarning ( "Unknown script index" );
 			break;
@@ -742,7 +742,7 @@ void ScriptLibrary::Script33 ()
 	}
 
 	game->GetWorld ()->GetPlayer ()->SetHandle ( name );
-
+	
 	// Open a new account with Uplink International Bank
 
     Computer *bank = game->GetWorld ()->GetComputer ( NameGenerator::GenerateInternationalBankName("Uplink") );
@@ -767,10 +767,10 @@ void ScriptLibrary::Script33 ()
 	RecordGenerator::GenerateRecords_Player ( name );
 
 	// Change his uplink rating to beginner
-
+	
 	game->GetWorld ()->GetPlayer ()->rating.SetUplinkRating ( 1 );
-
-
+	
+	
 	// Send notification to the player
 	//
 
@@ -791,21 +791,21 @@ void ScriptLibrary::Script33 ()
 	// Send the player a test mission as a tutorial
 	//
 
-	Mission *mission = new Mission ();
-	mission->SetTYPE ( MISSION_STEALFILE );
-	mission->SetCompletion ( IP_UPLINKINTERNALSERVICES, "Uplink test data", NULL, NULL, NULL );
-	mission->SetEmployer ( "Uplink" );
-	mission->SetContact ( "internal@Uplink.net" );
-	mission->SetPayment ( 0 );
-	mission->SetDifficulty ( 1 );
-	mission->SetDescription ( "Uplink Test Mission -\nSteal data from a file server" );
-	mission->SetFullDetails ( "Gain access to the Uplink Test Machine by breaking the outer security layer.\n"
-							  "Access the fileserver and download the target file 'Uplink Test Data'.\n"
-							  "Remove any traces of your hack.\n"
-							  "Return the data to us at address internal@Uplink.net" );
-	mission->GiveLink ( IP_UPLINKTESTMACHINE );
+	//Mission *mission = new Mission ();
+	//mission->SetTYPE ( MISSION_STEALFILE );
+	//mission->SetCompletion ( IP_UPLINKINTERNALSERVICES, "Uplink test data", NULL, NULL, NULL );
+	//mission->SetEmployer ( "Uplink" );
+	//mission->SetContact ( "internal@Uplink.net" );
+	//mission->SetPayment ( 0 );
+	//mission->SetDifficulty ( 1 );
+	//mission->SetDescription ( "Uplink Test Mission -\nSteal data from a file server" );
+	//mission->SetFullDetails ( "Gain access to the Uplink Test Machine by breaking the outer security layer.\n"
+	//						  "Access the fileserver and download the target file 'Uplink Test Data'.\n"
+	//						  "Remove any traces of your hack.\n"
+	//						  "Return the data to us at address internal@Uplink.net" );
+	//mission->GiveLink ( IP_UPLINKTESTMACHINE );
 						 
-	game->GetWorld ()->GetPlayer ()->GiveMission (mission);
+//	game->GetWorld ()->GetPlayer ()->GiveMission (mission);
 
 	// Run the next screen
 
@@ -1193,7 +1193,7 @@ void ScriptLibrary::Script43 ()
 	*/
 
 	game->GetInterface ()->GetTaskManager ()->RunSoftware ( "Tutorial", 1.0 );
-
+	;
 }
 
 void ScriptLibrary::Script45 ()
@@ -2178,6 +2178,7 @@ void ScriptLibrary::Script90 ()
 	game->NewGame ();
 	app->GetMainMenu ()->Remove ();
 
+	
 }
 
 void ScriptLibrary::Script91 ()

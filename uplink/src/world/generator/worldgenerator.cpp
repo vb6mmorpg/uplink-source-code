@@ -280,24 +280,23 @@ Player *WorldGenerator::GeneratePlayer ( char *handle )
 	player->SetHandle					( handle );
  	player->SetLocalHost				( IP_LOCALHOST );
 	player->SetIsTargetable				( false );
-	player->rating.SetUplinkRating		( PLAYER_START_UPLINKRATING );
-	player->rating.SetNeuromancerRating ( PLAYER_START_NEUROMANCERRATING );
+	player->rating.SetUplinkRating		( PLAYER_START_UPLINKRATING);
+	player->rating.SetNeuromancerRating ( PLAYER_START_NEUROMANCERRATING);
 	player->rating.SetCreditRating      ( PLAYER_START_CREDITRATING );
+	player->rating.ChangeCreditRating (1);
 	player->SetCurrentAccount           ( 0 );
-
 	player->gateway.GiveStartingHardware	();
 	player->gateway.GiveStartingSoftware	();
-
 	game->GetWorld ()->CreatePerson ( (Person *) player );
-
 	player->GetConnection ()->Reset ();
 	player->GetConnection ()->AddVLocation ( IP_UPLINKPUBLICACCESSSERVER );
 	player->GetConnection ()->Connect ();
-
+	player->GiveLink ( IP_UPLINKTESTMACHINE );
 	player->GiveLink ( IP_UPLINKPUBLICACCESSSERVER );
 	player->GiveLink ( IP_INTERNIC );
-
+	
 #ifdef TESTGAME
+
 	player->GiveLink ( IP_GLOBALCRIMINALDATABASE );
 	player->GiveLink ( IP_SOCIALSECURITYDATABASE );
 	player->GiveLink ( IP_ACADEMICDATABASE );
@@ -306,7 +305,7 @@ Player *WorldGenerator::GeneratePlayer ( char *handle )
 
     Computer *comp = GetRandomComputer ( COMPUTER_TYPE_LAN );
     player->GiveLink( comp->ip );
-
+}
 #endif
 
 	return player;
@@ -1451,7 +1450,7 @@ void WorldGenerator::GenerateUplinkTestMachine ()
 	comp->SetTraceSpeed ( TRACESPEED_UPLINK_TESTMACHINE );
 	comp->SetTraceAction ( COMPUTER_TRACEACTION_DISCONNECT );
 	comp->security.AddSystem ( SECURITY_TYPE_MONITOR, 1 );
-	comp->databank.SetSize ( 20 );
+	comp->databank.SetSize ( 10000 );
 
 	Data *data1 = new Data ();
 	data1->SetTitle ( "Uplink test data" );
@@ -1467,7 +1466,17 @@ void WorldGenerator::GenerateUplinkTestMachine ()
 	data3->SetTitle ( "Sample program" );
 	data3->SetDetails ( DATATYPE_PROGRAM, 2, 0, 0 );
 	comp->databank.PutData ( data3 );
-
+	
+	
+	Data *revelation = new Data ();
+	revelation->SetTitle ( "Revelation" );
+	revelation->SetDetails ( DATATYPE_PROGRAM, 1, 0, 0, 1.0, SOFTWARETYPE_OTHER );
+	comp->databank.PutData ( revelation );
+	// bookmark 1
+	Data *data4 = new Data ();
+    data4->SetTitle ( "Revelation_Tracker" );
+    data4->SetDetails ( DATATYPE_PROGRAM, 1, 0, 0, 1.0, SOFTWARETYPE_OTHER );
+	comp->databank.PutData ( data4 );
 	// Generate an admin log on
 
 	Record *record = new Record ();

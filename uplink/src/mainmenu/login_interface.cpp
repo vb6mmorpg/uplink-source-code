@@ -89,7 +89,7 @@ void LoginInterface::RemoveExistingGames ()
 
 void LoginInterface::NewGameClick ( Button *button )
 {
-
+	
 	tooltip_update ( " " );
 
 #ifndef TESTGAME
