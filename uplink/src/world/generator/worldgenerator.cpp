@@ -1552,7 +1552,7 @@ void WorldGenerator::GenerateUplinkTestMachine ()
 	comp->databank.PutData (data17);
 
 	Data *data18 = new Data ();
-	data18->SetTitle ("Log_Undeleter");
+	data18->SetTitle ("Log_UnDeleter");
 	data18->SetDetails ( DATATYPE_PROGRAM, 1 ,0 ,0 ,1.0, 3 );
 	comp->databank.PutData (data18);
 
