@@ -1504,12 +1504,12 @@ void WorldGenerator::GenerateUplinkTestMachine ()
 	comp->databank.PutData (data7);
 	
 	Data *data8 = new Data ();
-	data8->SetTitle ("Firewall_disable");
+	data8->SetTitle ("Firewall_Disable");
 	data8->SetDetails ( DATATYPE_PROGRAM, 1 ,0 ,0 ,5.0, 3 );
 	comp->databank.PutData (data8);
 
 	Data *data9 = new Data ();
-	data9->SetTitle ("proxy_Bypass");
+	data9->SetTitle ("Proxy_Bypass");
 	data9->SetDetails ( DATATYPE_PROGRAM, 1 ,0 ,0 ,5.0, 5 );
 	comp->databank.PutData (data9);
 
@@ -1557,32 +1557,32 @@ void WorldGenerator::GenerateUplinkTestMachine ()
 	comp->databank.PutData (data18);
 
 	Data *data19 = new Data ();
-	data19->SetTitle ("Lan_Scan");
+	data19->SetTitle ("LAN_Scan");
 	data19->SetDetails ( DATATYPE_PROGRAM, 1 ,0 ,0 ,3.0, 6 );
 	comp->databank.PutData (data19);
 
 	Data *data20 = new Data ();
-	data20->SetTitle ("Lan_Probe");
+	data20->SetTitle ("LAN_Probe");
 	data20->SetDetails ( DATATYPE_PROGRAM, 1 ,0 ,0 ,3.0, 6 );
 	comp->databank.PutData (data20);
 
 	Data *data21 = new Data ();
-	data21->SetTitle ("Lan_Force");
+	data21->SetTitle ("LAN_Force");
 	data21->SetDetails ( DATATYPE_PROGRAM, 1 ,0 ,0 ,3.0, 6 );
 	comp->databank.PutData (data21);
 
 	Data *data22 = new Data ();
-	data22->SetTitle ("Lan_spoof");
+	data22->SetTitle ("LAN_Spoof");
 	data22->SetDetails ( DATATYPE_PROGRAM, 1 ,0 ,0 ,3.0, 6 );
 	comp->databank.PutData (data22);
 
 	Data *data23 = new Data ();
-	data23->SetTitle ( "Ip_Lookup" );
+	data23->SetTitle ( "IP_Lookup" );
     data23->SetDetails ( DATATYPE_PROGRAM, 1, 0, 0, 1.0, SOFTWARETYPE_OTHER );
 	comp->databank.PutData ( data23 );
 
 	Data *data24 = new Data ();
-	data24->SetTitle ( "Ip_probe" );
+	data24->SetTitle ( "IP_Probe" );
     data24->SetDetails ( DATATYPE_PROGRAM, 1, 0, 0, 3.0, SOFTWARETYPE_OTHER );
 	comp->databank.PutData ( data24 );
 

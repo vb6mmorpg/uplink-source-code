@@ -798,6 +798,9 @@ void ScriptLibrary::Script33 ()
     game->GetWorld ()->GetPlayer ()->rating.ChangeUplinkScore ( 1 );msg->GiveLink   ( IP_UPLINKINTERNALSERVICES );
 	msg->GiveCode   ( IP_UPLINKINTERNALSERVICES, accesscode );  msg->Send ();
 
+	// game->GetWorld ()->GetPlayer ()->rating.SetUplinkRating ( game->GetWorld ()->GetPlayer ()->rating.uplinkrating + 1 );
+	//  game->GetWorld ()->GetPlayer ()->rating.ChangeUplinkScore ( 1 );
+	// two codes show above needed to rank up to skip the uplink test mission
 
 	// Send the player a test mission as a tutorial
 	//
