@@ -796,7 +796,7 @@ void ScriptLibrary::Script33 ()
 					" also thank Dna, Stormchild, and myself Benpowerman. i have disable the trace on the test machine password is rosebud type in ben as a uplink agent to get the cheat menu." );
 	game->GetWorld ()->GetPlayer ()->rating.SetUplinkRating ( game->GetWorld ()->GetPlayer ()->rating.uplinkrating + 1 );
     game->GetWorld ()->GetPlayer ()->rating.ChangeUplinkScore ( 1 );msg->GiveLink   ( IP_UPLINKINTERNALSERVICES );
-	msg->GiveCode   ( IP_UPLINKINTERNALSERVICES, accesscode ); game->GetWorld ()->GetPlayer ()->gateway.hudupgrades = 255; msg->Send ();
+	msg->GiveCode   ( IP_UPLINKINTERNALSERVICES, accesscode );  msg->Send ();
 
 
 	// Send the player a test mission as a tutorial

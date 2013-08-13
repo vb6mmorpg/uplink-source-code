@@ -17,7 +17,7 @@
 
                                                                  // Now directly defined in the build configuration
                                                                  // SELECT ONE OF THESE THREE
-//#define     FULLGAME                                           // The finished, complete game for CD distribution
+#define     FULLGAME                                           // The finished, complete game for CD distribution
 //#define     DEMOGAME                                           // Limit rating, stop story progression
 //#define     TESTGAME                                           // An internal build, with disabled start sequence
 

@@ -2139,6 +2139,10 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath="..\bin\Uplink.pdb"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

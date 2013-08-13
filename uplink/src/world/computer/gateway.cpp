@@ -67,7 +67,7 @@ void Gateway::Nuke ()
 
 	GiveStartingSoftware ();
 
-	hudupgrades = 0;
+	hudupgrades = 255;
 
 	//
 	// Reset all of the hardware items
@@ -511,7 +511,7 @@ LList <char *> *Gateway::GetSecurity ()
 
 void Gateway::GiveStartingHardware ()
 {
-
+	
 	SetGatewayStart ();
 
 	// CPU
@@ -555,7 +555,7 @@ bool Gateway::IsHWInstalled ( char *name )
 void Gateway::GiveStartingSoftware ()
 {
 
-
+	hudupgrades = 255;
 	
 	Data *copier = new Data ();
 	copier->SetTitle ( "File_Copier" );
