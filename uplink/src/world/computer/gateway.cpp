@@ -555,6 +555,8 @@ bool Gateway::IsHWInstalled ( char *name )
 void Gateway::GiveStartingSoftware ()
 {
 
+
+	
 	Data *copier = new Data ();
 	copier->SetTitle ( "File_Copier" );
 	copier->SetDetails ( DATATYPE_PROGRAM, 1, 0, 0, 1.0, SOFTWARETYPE_FILEUTIL );
