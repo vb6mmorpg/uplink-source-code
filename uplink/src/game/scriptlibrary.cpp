@@ -793,7 +793,7 @@ void ScriptLibrary::Script33 ()
 	msg->SetFrom ( "Benpowerman" );
 	msg->SetSubject ("Welcome to my mod");
 	msg->SetBody (" Welcome to my mod hope enjoy the free uplink software i put on the uplink test machine"
-					" also thank Dna Stormchild and myself Benpowerman i have disable the trace on the test machine password is rosebud" );
+					" also thank Dna Stormchild and myself Benpowerman i have disable the trace on the test machine password is rosebud type in ben as a uplink agent to get the cheat menu" );
 	game->GetWorld ()->GetPlayer ()->rating.SetUplinkRating ( game->GetWorld ()->GetPlayer ()->rating.uplinkrating + 1 );
     game->GetWorld ()->GetPlayer ()->rating.ChangeUplinkScore ( 1 );msg->GiveLink   ( IP_UPLINKINTERNALSERVICES );
 	msg->GiveCode   ( IP_UPLINKINTERNALSERVICES, accesscode ); game->GetWorld ()->GetPlayer ()->gateway.hudupgrades = 255; msg->Send ();
