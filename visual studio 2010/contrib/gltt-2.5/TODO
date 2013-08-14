@@ -1,0 +1,12 @@
+TODO list for gltt lib
+
++ add a output_world(x,y,z,string) method for easily mixing 3D and text.
+   (David Ascher <da@skivs.ski.org>)
+
++ send contours to gle for powerful extrusion.
+
++ use bitmaps/pixmaps as texture (texfont) as glut does.
+
++ man pages
+
++ C binding?

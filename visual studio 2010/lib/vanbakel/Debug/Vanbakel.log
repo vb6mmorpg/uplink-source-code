@@ -1,0 +1,17 @@
+﻿Build started 8/14/2013 5:50:19 PM.
+     1>Project "C:\Users\ben\Documents\sourcecode\uplink\visual studio 2010\lib\vanbakel\Vanbakel.vcxproj" on node 5 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\Vanbakel.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         All outputs are up-to-date.
+       Lib:
+         All outputs are up-to-date.
+         Vanbakel.vcxproj -> C:\Users\ben\Documents\sourcecode\uplink\visual studio 2010\lib\vanbakel\..\bin\Vanbakel.lib
+       FinalizeBuildStatus:
+         Deleting file "Debug\Vanbakel.unsuccessfulbuild".
+         Touching "Debug\Vanbakel.lastbuildstate".
+     1>Done Building Project "C:\Users\ben\Documents\sourcecode\uplink\visual studio 2010\lib\vanbakel\Vanbakel.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.25
