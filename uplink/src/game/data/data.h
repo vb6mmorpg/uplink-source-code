@@ -102,7 +102,8 @@
 #define		TICKSREQUIRED_SCANLANLINKS		100					// (For all 1024 ports to be scanned)
 #define		TICKSREQUIRED_SPOOFLANSYSTEM	100					
 #define     TICKSREQUIRED_FORCELANLOCK      100
-#define		TICKSREQUIRED_LANSCAN			300					// (To scan all LAN systems)
+#define		TICKSREQUIRED_LANSCAN			300	// (To scan all LAN systems)
+#define		TICKSREQUIRED_LAN_SPIKE			0.1  // lan spike 1 bookmark
 
 #define     TIMEREQUIRED_DELETEONELOG           300             // Used in ConsoleScreen
 #define     TIMEREQUIRED_DELETEONEGIGAQUAD      150             //
