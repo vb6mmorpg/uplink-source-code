@@ -1,0 +1,10 @@
+#include "irc.h"
+#include <stdio.h>
+
+//#include "mmgr.h"
+
+int main()
+{
+  printf("hello, world.\n");
+  return 0;
+}
