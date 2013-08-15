@@ -1,0 +1,5 @@
+Put here the gl.h and glu.h header files that come with Windows OpenGL.
+Rename gl.h in wingl.h
+Rename glu.h in winglu.h
+
+There are only needed for Cygnus-Win32 target.
