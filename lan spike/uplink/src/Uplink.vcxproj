@@ -1,0 +1,720 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DemoDebug|Win32">
+      <Configuration>DemoDebug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DemoRelease|Win32">
+      <Configuration>DemoRelease</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Unoptimised|Win32">
+      <Configuration>Unoptimised</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B212AE39-B67C-44FF-BD8B-B1E1C8AD799E}</ProjectGuid>
+    <RootNamespace>Uplink</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DemoDebug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DemoRelease|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Unoptimised|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DemoDebug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DemoRelease|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Unoptimised|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>11.0.50727.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\bin\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <EmbedManifest>true</EmbedManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\bin\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Unoptimised|Win32'">
+    <OutDir>..\bin\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DemoRelease|Win32'">
+    <OutDir>..\bin\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DemoDebug|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <EmbedManifest>true</EmbedManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <CustomBuildStep>
+      <Message>Performing Custom Build Step</Message>
+      <Command />
+    </CustomBuildStep>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.;..\..\lib\mmgr;..\..\lib\tosser;..\..\lib\eclipse;..\..\lib\bungle;..\..\lib\gucci;..\..\lib\redshirt;..\..\lib\soundgarden;..\..\lib\vanbakel;..\..\lib\common;..\..\contrib\tcp4u.331\include;..\..\contrib\irclib;..\..\contrib\XCrashReport;..\..\contrib\SDL-1.2.11\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>USE_SDL;WIN32;_CRT_SECURE_NO_DEPRECATE;FULLGAME;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DisableSpecificWarnings>4996; 4800;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>bungle.lib;eclipse.lib;gucci.lib;redshirt.lib;soundgarden.lib;vanbakel.lib;irclib.lib;sdl.lib;SDL_mixer.lib;tcp4w32.lib;libtiff.lib;gltt.lib;freetype.lib;dbghelp.lib;opengl32.lib;glu32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\lib\bin;..\..\contrib\bin;..\..\contrib\tcp4u.331\tcp4w32;..\..\contrib\tiff-3.7.2\libtiff;..\..\contrib\gltt-2.5;..\..\contrib\freetype-1.3.1;..\..\contrib\SDL-1.2.11_dev\VisualC\SDL\Release;..\..\contrib\SDL_mixer-1.2.7_patched\VisualC\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <ForceFileOutput>MultiplyDefinedSymbolOnly</ForceFileOutput>
+      <AdditionalOptions>/SAFESEH:NO %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <CustomBuildStep>
+      <Message>Performing Custom Build Step</Message>
+      <Command>xcopy "$(OutDir)$(TargetFileName)" "$(OutDir)$(Configuration)\" /Y /I
+xcopy "$(OutDir)$(TargetName).pdb" "$(OutDir)$(Configuration)\" /Y /I
+xcopy "$(OutDir)$(Configuration)\*.exe" "$(ProjectDir)\..\..\Installer\Data\" /Y /I
+"C:\Program Files\NSIS\makensis.exe" "$(ProjectDir)\..\..\Installer\Uplink-patch.nsi"
+"C:\Program Files\NSIS\makensis.exe" "$(ProjectDir)\..\..\Installer\Uplink-full.nsi"
+"C:\Program Files\NSIS\makensis.exe" "$(ProjectDir)\..\..\Installer\Uplink-download.nsi"
+</Command>
+      <Inputs>$(OutDir)$(TargetFileName);%(Inputs)</Inputs>
+      <Outputs>$(OutDir)$(Configuration)\$(TargetFileName);$(OutDir)$(Configuration)\$(TargetName).pdb;%(Outputs)</Outputs>
+    </CustomBuildStep>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>.;..\..\lib\mmgr;..\..\lib\tosser;..\..\lib\eclipse;..\..\lib\bungle;..\..\lib\gucci;..\..\lib\redshirt;..\..\lib\soundgarden;..\..\lib\vanbakel;..\..\lib\common;..\..\contrib\tcp4u.331\include;..\..\contrib\irclib;..\..\contrib\XCrashReport;..\..\contrib\SDL-1.2.11\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>USE_SDL;WIN32;_CRT_SECURE_NO_DEPRECATE;FULLGAME;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4996; 4800;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>bungle.lib;eclipse.lib;gucci.lib;redshirt.lib;soundgarden.lib;vanbakel.lib;irclib.lib;sdl.lib;SDL_mixer.lib;tcp4w32.lib;libtiff.lib;gltt.lib;freetype.lib;dbghelp.lib;opengl32.lib;glu32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\lib\bin;..\..\contrib\bin;..\..\contrib\tcp4u.331\tcp4w32;..\..\contrib\tiff-3.7.2\libtiff;..\..\contrib\gltt-2.5;..\..\contrib\freetype-1.3.1;..\..\contrib\SDL-1.2.11_dev\VisualC\SDL\Release;..\..\contrib\SDL_mixer-1.2.7_patched\VisualC\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Unoptimised|Win32'">
+    <CustomBuildStep>
+      <Message>Performing Custom Build Step</Message>
+      <Command />
+    </CustomBuildStep>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.;..\..\lib\tosser;..\..\lib\eclipse;..\..\lib\bungle;..\..\lib\gucci;..\..\lib\redshirt;..\..\lib\soundgarden;..\..\lib\vanbakel;..\..\lib\common;..\..\contrib\tcp4u.331\include;..\..\contrib\irclib;..\..\contrib\XCrashReport;..\..\contrib\SDL-1.2.11\include;..\..\lib\mmgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>USE_SDL;WIN32;_CRT_SECURE_NO_DEPRECATE;FULLGAME;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4996; 4800;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>bungle.lib;eclipse.lib;gucci.lib;redshirt.lib;soundgarden.lib;vanbakel.lib;irclib.lib;sdl.lib;SDL_mixer.lib;tcp4w32.lib;libtiff.lib;gltt.lib;freetype.lib;dbghelp.lib;opengl32.lib;glu32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\lib\bin;..\..\contrib\bin;..\..\contrib\tcp4u.331\tcp4w32;..\..\contrib\tiff-3.7.2\libtiff;..\..\contrib\gltt-2.5;..\..\contrib\freetype-1.3.1;..\..\contrib\SDL-1.2.11_dev\VisualC\SDL\Release;..\..\contrib\SDL_mixer-1.2.7_patched\VisualC\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DemoRelease|Win32'">
+    <CustomBuildStep>
+      <Message>Performing Custom Build Step</Message>
+      <Command>xcopy "$(OutDir)$(TargetFileName)" "$(OutDir)$(Configuration)\" /Y /I
+xcopy "$(OutDir)$(TargetName).pdb" "$(OutDir)$(Configuration)\" /Y /I
+xcopy "$(OutDir)$(Configuration)\*.exe" "$(ProjectDir)\..\..\Installer\Data\" /Y /I
+"C:\Program Files\NSIS\makensis.exe" "$(ProjectDir)\..\..\Installer\Uplink-demo.nsi"
+</Command>
+      <Inputs>$(OutDir)$(TargetFileName);%(Inputs)</Inputs>
+      <Outputs>$(OutDir)$(Configuration)\$(TargetFileName);$(OutDir)$(Configuration)\$(TargetName).pdb;%(Outputs)</Outputs>
+    </CustomBuildStep>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>.;..\..\lib\mmgr;..\..\lib\tosser;..\..\lib\eclipse;..\..\lib\bungle;..\..\lib\gucci;..\..\lib\redshirt;..\..\lib\soundgarden;..\..\lib\vanbakel;..\..\lib\common;..\..\contrib\tcp4u.331\include;..\..\contrib\irclib;..\..\contrib\XCrashReport;..\..\contrib\SDL-1.2.11\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>USE_SDL;WIN32;_CRT_SECURE_NO_DEPRECATE;DEMOGAME;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4996; 4800;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>bungle.lib;eclipse.lib;gucci.lib;redshirt.lib;soundgarden.lib;vanbakel.lib;irclib.lib;sdl.lib;SDL_mixer.lib;tcp4w32.lib;libtiff.lib;gltt.lib;freetype.lib;dbghelp.lib;opengl32.lib;glu32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\lib\bin;..\..\contrib\bin;..\..\contrib\tcp4u.331\tcp4w32;..\..\contrib\tiff-3.7.2\libtiff;..\..\contrib\gltt-2.5;..\..\contrib\freetype-1.3.1;..\..\contrib\SDL-1.2.11_dev\VisualC\SDL\Release;..\..\contrib\SDL_mixer-1.2.7_patched\VisualC\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DemoDebug|Win32'">
+    <CustomBuildStep>
+      <Message>Performing Custom Build Step</Message>
+      <Command />
+    </CustomBuildStep>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.;..\..\lib\mmgr;..\..\lib\tosser;..\..\lib\eclipse;..\..\lib\bungle;..\..\lib\gucci;..\..\lib\redshirt;..\..\lib\soundgarden;..\..\lib\vanbakel;..\..\lib\common;..\..\contrib\tcp4u.331\include;..\..\contrib\irclib;..\..\contrib\XCrashReport;..\..\contrib\SDL-1.2.11\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>USE_SDL;WIN32;_CRT_SECURE_NO_DEPRECATE;DEMOGAME;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DisableSpecificWarnings>4996; 4800;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>bungle.lib;eclipse.lib;gucci.lib;redshirt.lib;soundgarden.lib;vanbakel.lib;irclib.lib;sdl.lib;SDL_mixer.lib;tcp4w32.lib;libtiff.lib;gltt.lib;freetype.lib;dbghelp.lib;opengl32.lib;glu32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\lib\bin;..\..\contrib\bin;..\..\contrib\tcp4u.331\tcp4w32;..\..\contrib\tiff-3.7.2\libtiff;..\..\contrib\gltt-2.5;..\..\contrib\freetype-1.3.1;..\..\contrib\SDL-1.2.11_dev\VisualC\SDL\Release;..\..\contrib\SDL_mixer-1.2.7_patched\VisualC\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="interface\remoteinterface\academicscreen_interface.h" />
+    <ClInclude Include="interface\remoteinterface\accountscreen_interface.h" />
+    <ClInclude Include="world\agent.h" />
+    <ClInclude Include="interface\localinterface\analyser_interface.h" />
+    <ClInclude Include="app\app.h" />
+    <ClInclude Include="world\scheduler\arrestevent.h" />
+    <ClInclude Include="world\scheduler\attemptmissionevent.h" />
+    <ClInclude Include="world\computer\bankaccount.h" />
+    <ClInclude Include="world\computer\bankcomputer.h" />
+    <ClInclude Include="world\scheduler\bankrobberyevent.h" />
+    <ClInclude Include="world\computer\computerscreen\bbsscreen.h" />
+    <ClInclude Include="interface\remoteinterface\bbsscreen_interface.h" />
+    <ClInclude Include="app\binreloc.h" />
+    <ClInclude Include="world\scheduler\changegatewayevent.h" />
+    <ClInclude Include="interface\remoteinterface\changegatewayscreen_interface.h" />
+    <ClInclude Include="interface\localinterface\cheat_interface.h" />
+    <ClInclude Include="network\interfaces\clientcommsinterface.h" />
+    <ClInclude Include="network\clientconnection.h" />
+    <ClInclude Include="network\interfaces\clientstatusinterface.h" />
+    <ClInclude Include="mainmenu\closing_interface.h" />
+    <ClInclude Include="interface\remoteinterface\codecardscreen_interface.h" />
+    <ClInclude Include="world\company\company.h" />
+    <ClInclude Include="interface\remoteinterface\companyinfoscreen_interface.h" />
+    <ClInclude Include="world\company\companyuplink.h" />
+    <ClInclude Include="world\computer\computer.h" />
+    <ClInclude Include="world\computer\computerscreen\computerscreen.h" />
+    <ClInclude Include="world\connection.h" />
+    <ClInclude Include="mainmenu\connectionlost_interface.h" />
+    <ClInclude Include="world\generator\consequencegenerator.h" />
+    <ClInclude Include="interface\remoteinterface\consolescreen_interface.h" />
+    <ClInclude Include="interface\remoteinterface\contactscreen_interface.h" />
+    <ClInclude Include="interface\remoteinterface\criminalscreen_interface.h" />
+    <ClInclude Include="world\computer\computerscreen\cypherscreen.h" />
+    <ClInclude Include="interface\remoteinterface\cypherscreen_interface.h" />
+    <ClInclude Include="game\data\data.h" />
+    <ClInclude Include="world\computer\databank.h" />
+    <ClInclude Include="world\date.h" />
+    <ClInclude Include="interface\taskmanager\decrypter.h" />
+    <ClInclude Include="interface\taskmanager\decypher.h" />
+    <ClInclude Include="interface\taskmanager\defrag.h" />
+    <ClInclude Include="mainmenu\demogameover_interface.h" />
+    <ClInclude Include="world\generator\demoplotgenerator.h" />
+    <ClInclude Include="world\computer\computerscreen\dialogscreen.h" />
+    <ClInclude Include="interface\remoteinterface\dialogscreen_interface.h" />
+    <ClInclude Include="interface\taskmanager\dictionaryhacker.h" />
+    <ClInclude Include="mainmenu\disavowed_interface.h" />
+    <ClInclude Include="world\computer\computerscreen\disconnectedscreen.h" />
+    <ClInclude Include="interface\remoteinterface\disconnectedscreen_interface.h" />
+    <ClInclude Include="app\dos2unix.h" />
+    <ClInclude Include="interface\localinterface\email_interface.h" />
+    <ClInclude Include="world\scheduler\eventscheduler.h" />
+    <ClInclude Include="interface\localinterface\evtqueue_interface.h" />
+    <ClInclude Include="ExceptionHandler.h" />
+    <ClInclude Include="interface\taskmanager\faith.h" />
+    <ClInclude Include="interface\remoteinterface\faithscreen_interface.h" />
+    <ClInclude Include="interface\taskmanager\filecopier.h" />
+    <ClInclude Include="interface\taskmanager\filedeleter.h" />
+    <ClInclude Include="interface\remoteinterface\fileserverscreen_interface.h" />
+    <ClInclude Include="interface\localinterface\finance_interface.h" />
+    <ClInclude Include="interface\taskmanager\firewalldisable.h" />
+    <ClInclude Include="mainmenu\firsttimeloading_interface.h" />
+    <ClInclude Include="view\fps.h" />
+    <ClInclude Include="game\game.h" />
+    <ClInclude Include="game\gameobituary.h" />
+    <ClInclude Include="world\computer\gateway.h" />
+    <ClInclude Include="interface\localinterface\gateway_interface.h" />
+    <ClInclude Include="world\computer\gatewaydef.h" />
+    <ClInclude Include="interface\taskmanager\gatewaynuke.h" />
+    <ClInclude Include="mainmenu\genericoptions_interface.h" />
+    <ClInclude Include="world\computer\computerscreen\genericscreen.h" />
+    <ClInclude Include="GetWinVer.h" />
+    <ClInclude Include="app\globals.h" />
+    <ClInclude Include="app\globals_defines.h" />
+    <ClInclude Include="mainmenu\graphicoptions_interface.h" />
+    <ClInclude Include="world\computer\computerscreen\highsecurityscreen.h" />
+    <ClInclude Include="interface\remoteinterface\highsecurityscreen_interface.h" />
+    <ClInclude Include="interface\localinterface\hud_interface.h" />
+    <ClInclude Include="interface\localinterface\hw_interface.h" />
+    <ClInclude Include="interface\remoteinterface\hwsalesscreen_interface.h" />
+    <ClInclude Include="world\scheduler\installhardwareevent.h" />
+    <ClInclude Include="interface\interface.h" />
+    <ClInclude Include="interface\interfacescreen.h" />
+    <ClInclude Include="interface\taskmanager\iplookup.h" />
+    <ClInclude Include="interface\taskmanager\ipprobe.h" />
+    <ClInclude Include="interface\localinterface\irc_interface.h" />
+    <ClInclude Include="interface\localinterface\keyboardinterface.h" />
+    <ClInclude Include="interface\localinterface\lan_interface.h" />
+    <ClInclude Include="world\computer\lancomputer.h" />
+    <ClInclude Include="interface\taskmanager\lanforce.h" />
+    <ClInclude Include="world\generator\langenerator.h" />
+    <ClInclude Include="world\computer\lanmonitor.h" />
+    <ClInclude Include="interface\taskmanager\lanprobe.h" />
+    <ClInclude Include="interface\taskmanager\lanscan.h" />
+    <ClInclude Include="interface\taskmanager\lanspoof.h" />
+    <ClInclude Include="world\computer\computerscreen\linksscreen.h" />
+    <ClInclude Include="interface\remoteinterface\linksscreen_interface.h" />
+    <ClInclude Include="mainmenu\loading_interface.h" />
+    <ClInclude Include="interface\remoteinterface\loansscreen_interface.h" />
+    <ClInclude Include="interface\localinterface\localinterface.h" />
+    <ClInclude Include="interface\localinterface\localinterfacescreen.h" />
+    <ClInclude Include="world\computer\logbank.h" />
+    <ClInclude Include="interface\taskmanager\logdeleter.h" />
+    <ClInclude Include="mainmenu\login_interface.h" />
+    <ClInclude Include="interface\taskmanager\logmodifier.h" />
+    <ClInclude Include="world\computer\computerscreen\logscreen.h" />
+    <ClInclude Include="interface\remoteinterface\logscreen_interface.h" />
+    <ClInclude Include="interface\taskmanager\logundeleter.h" />
+    <ClInclude Include="mainmenu\mainmenu.h" />
+    <ClInclude Include="mainmenu\mainmenuscreen.h" />
+    <ClInclude Include="interface\localinterface\memory_interface.h" />
+    <ClInclude Include="world\computer\computerscreen\menuscreen.h" />
+    <ClInclude Include="interface\remoteinterface\menuscreen_interface.h" />
+    <ClInclude Include="world\message.h" />
+    <ClInclude Include="world\computer\computerscreen\messagescreen.h" />
+    <ClInclude Include="interface\remoteinterface\messagescreen_interface.h" />
+    <ClInclude Include="MiniVersion.h" />
+    <ClInclude Include="app\miscutils.h" />
+    <ClInclude Include="world\company\mission.h" />
+    <ClInclude Include="interface\localinterface\mission_interface.h" />
+    <ClInclude Include="world\generator\missiongenerator.h" />
+    <ClInclude Include="interface\taskmanager\motionsensor.h" />
+    <ClInclude Include="world\generator\namegenerator.h" />
+    <ClInclude Include="interface\remoteinterface\nearestgatewayscreen_interface.h" />
+    <ClInclude Include="network\network.h" />
+    <ClInclude Include="network\networkclient.h" />
+    <ClInclude Include="mainmenu\networkoptions_interface.h" />
+    <ClInclude Include="network\interfaces\networkscreen.h" />
+    <ClInclude Include="network\networkserver.h" />
+    <ClInclude Include="world\company\news.h" />
+    <ClInclude Include="world\generator\newsgenerator.h" />
+    <ClInclude Include="interface\remoteinterface\newsscreen_interface.h" />
+    <ClInclude Include="world\scheduler\notificationevent.h" />
+    <ClInclude Include="interface\remoteinterface\nuclearwarscreen_interface.h" />
+    <ClInclude Include="world\generator\numbergenerator.h" />
+    <ClInclude Include="mainmenu\obituary_interface.h" />
+    <ClInclude Include="app\opengl.h" />
+    <ClInclude Include="app\opengl_interface.h" />
+    <ClInclude Include="options\options.h" />
+    <ClInclude Include="mainmenu\options_interface.h" />
+    <ClInclude Include="interface\taskmanager\passwordbreaker.h" />
+    <ClInclude Include="world\computer\computerscreen\passwordscreen.h" />
+    <ClInclude Include="interface\remoteinterface\passwordscreen_interface.h" />
+    <ClInclude Include="world\person.h" />
+    <ClInclude Include="interface\localinterface\phonedialler.h" />
+    <ClInclude Include="world\player.h" />
+    <ClInclude Include="world\generator\plotgenerator.h" />
+    <ClInclude Include="app\probability.h" />
+    <ClInclude Include="interface\remoteinterface\protovisionscreen_interface.h" />
+    <ClInclude Include="interface\taskmanager\proxydisable.h" />
+    <ClInclude Include="interface\remoteinterface\radiotransmitterscreen_interface.h" />
+    <ClInclude Include="interface\remoteinterface\rankingscreen_interface.h" />
+    <ClInclude Include="world\rating.h" />
+    <ClInclude Include="world\computer\recordbank.h" />
+    <ClInclude Include="world\generator\recordgenerator.h" />
+    <ClInclude Include="interface\remoteinterface\recordscreen_interface.h" />
+    <ClInclude Include="interface\localinterface\worldmap\rectangle.h" />
+    <ClInclude Include="interface\remoteinterface\remoteinterface.h" />
+    <ClInclude Include="interface\remoteinterface\remoteinterfacescreen.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="interface\taskmanager\revelation.h" />
+    <ClInclude Include="mainmenu\revelationlost_interface.h" />
+    <ClInclude Include="interface\taskmanager\revelationtracker.h" />
+    <ClInclude Include="mainmenu\revelationwon_interface.h" />
+    <ClInclude Include="world\scheduler\runplotsceneevent.h" />
+    <ClInclude Include="world\company\sale.h" />
+    <ClInclude Include="game\scriptlibrary.h" />
+    <ClInclude Include="interface\scrollbox.h" />
+    <ClInclude Include="world\computer\security.h" />
+    <ClInclude Include="interface\taskmanager\securitybypass.h" />
+    <ClInclude Include="world\computer\securitymonitor.h" />
+    <ClInclude Include="interface\remoteinterface\securityscreen_interface.h" />
+    <ClInclude Include="world\computer\securitysystem.h" />
+    <ClInclude Include="world\scheduler\seizegatewayevent.h" />
+    <ClInclude Include="interface\localinterface\sendmail_interface.h" />
+    <ClInclude Include="app\serialise.h" />
+    <ClInclude Include="world\computer\computerscreen\shareslistscreen.h" />
+    <ClInclude Include="interface\remoteinterface\shareslistscreen_interface.h" />
+    <ClInclude Include="interface\remoteinterface\sharesviewscreen_interface.h" />
+    <ClInclude Include="world\scheduler\shotbyfedsevent.h" />
+    <ClInclude Include="interface\remoteinterface\socialsecurityscreen_interface.h" />
+    <ClInclude Include="interface\localinterface\status_interface.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="interface\localinterface\sw_interface.h" />
+    <ClInclude Include="interface\remoteinterface\swsalesscreen_interface.h" />
+    <ClInclude Include="interface\taskmanager\taskmanager.h" />
+    <ClInclude Include="interface\localinterface\template_interface.h" />
+    <ClInclude Include="mainmenu\theme_interface.h" />
+    <ClInclude Include="mainmenu\theteam_interface.h" />
+    <ClInclude Include="interface\taskmanager\tracetracker.h" />
+    <ClInclude Include="interface\taskmanager\tutorial.h" />
+    <ClInclude Include="interface\taskmanager\uplinkagentlist.h" />
+    <ClInclude Include="world\scheduler\uplinkevent.h" />
+    <ClInclude Include="app\uplinkobject.h" />
+    <ClInclude Include="interface\taskmanager\uplinktask.h" />
+    <ClInclude Include="world\computer\computerscreen\useridscreen.h" />
+    <ClInclude Include="interface\remoteinterface\useridscreen_interface.h" />
+    <ClInclude Include="view\view.h" />
+    <ClInclude Include="world\vlocation.h" />
+    <ClInclude Include="interface\taskmanager\voiceanalyser.h" />
+    <ClInclude Include="interface\remoteinterface\voiceanalysisscreen_interface.h" />
+    <ClInclude Include="interface\remoteinterface\voicephonescreen_interface.h" />
+    <ClInclude Include="mainmenu\warezgameover_interface.h" />
+    <ClInclude Include="world\scheduler\warningevent.h" />
+    <ClInclude Include="world\world.h" />
+    <ClInclude Include="world\generator\worldgenerator.h" />
+    <ClInclude Include="interface\localinterface\worldmap\worldmap_interface.h" />
+    <ClInclude Include="interface\localinterface\worldmap\worldmap_layout.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon3.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="interface\remoteinterface\academicscreen_interface.cpp" />
+    <ClCompile Include="interface\remoteinterface\accountscreen_interface.cpp" />
+    <ClCompile Include="world\agent.cpp" />
+    <ClCompile Include="interface\localinterface\analyser_interface.cpp" />
+    <ClCompile Include="app\app.cpp" />
+    <ClCompile Include="world\scheduler\arrestevent.cpp" />
+    <ClCompile Include="world\scheduler\attemptmissionevent.cpp" />
+    <ClCompile Include="world\computer\bankaccount.cpp" />
+    <ClCompile Include="world\computer\bankcomputer.cpp" />
+    <ClCompile Include="world\scheduler\bankrobberyevent.cpp" />
+    <ClCompile Include="world\computer\computerscreen\bbsscreen.cpp" />
+    <ClCompile Include="interface\remoteinterface\bbsscreen_interface.cpp" />
+    <ClCompile Include="app\binreloc.cpp" />
+    <ClCompile Include="world\scheduler\changegatewayevent.cpp" />
+    <ClCompile Include="interface\remoteinterface\changegatewayscreen_interface.cpp" />
+    <ClCompile Include="interface\localinterface\cheat_interface.cpp" />
+    <ClCompile Include="network\interfaces\clientcommsinterface.cpp" />
+    <ClCompile Include="network\clientconnection.cpp" />
+    <ClCompile Include="network\interfaces\clientstatusinterface.cpp" />
+    <ClCompile Include="mainmenu\closing_interface.cpp" />
+    <ClCompile Include="interface\remoteinterface\codecardscreen_interface.cpp" />
+    <ClCompile Include="world\company\company.cpp" />
+    <ClCompile Include="interface\remoteinterface\companyinfoscreen_interface.cpp" />
+    <ClCompile Include="world\company\companyuplink.cpp" />
+    <ClCompile Include="world\computer\computer.cpp" />
+    <ClCompile Include="world\computer\computerscreen\computerscreen.cpp" />
+    <ClCompile Include="world\connection.cpp" />
+    <ClCompile Include="mainmenu\connectionlost_interface.cpp" />
+    <ClCompile Include="world\generator\consequencegenerator.cpp" />
+    <ClCompile Include="interface\remoteinterface\consolescreen_interface.cpp" />
+    <ClCompile Include="interface\remoteinterface\contactscreen_interface.cpp" />
+    <ClCompile Include="interface\remoteinterface\criminalscreen_interface.cpp" />
+    <ClCompile Include="world\computer\computerscreen\cypherscreen.cpp" />
+    <ClCompile Include="interface\remoteinterface\cypherscreen_interface.cpp" />
+    <ClCompile Include="game\data\data.cpp" />
+    <ClCompile Include="world\computer\databank.cpp" />
+    <ClCompile Include="world\date.cpp" />
+    <ClCompile Include="app\decode.c" />
+    <ClCompile Include="interface\taskmanager\decrypter.cpp" />
+    <ClCompile Include="interface\taskmanager\decypher.cpp" />
+    <ClCompile Include="interface\taskmanager\defrag.cpp" />
+    <ClCompile Include="mainmenu\demogameover_interface.cpp" />
+    <ClCompile Include="world\generator\demoplotgenerator.cpp" />
+    <ClCompile Include="world\computer\computerscreen\dialogscreen.cpp" />
+    <ClCompile Include="interface\remoteinterface\dialogscreen_interface.cpp" />
+    <ClCompile Include="interface\taskmanager\dictionaryhacker.cpp" />
+    <ClCompile Include="mainmenu\disavowed_interface.cpp" />
+    <ClCompile Include="world\computer\computerscreen\disconnectedscreen.cpp" />
+    <ClCompile Include="interface\remoteinterface\disconnectedscreen_interface.cpp" />
+    <ClCompile Include="app\dos2unix.cpp" />
+    <ClCompile Include="interface\localinterface\email_interface.cpp" />
+    <ClCompile Include="world\scheduler\eventscheduler.cpp" />
+    <ClCompile Include="interface\localinterface\evtqueue_interface.cpp" />
+    <ClCompile Include="ExceptionHandler.cpp" />
+    <ClCompile Include="interface\taskmanager\faith.cpp" />
+    <ClCompile Include="interface\remoteinterface\faithscreen_interface.cpp" />
+    <ClCompile Include="interface\taskmanager\filecopier.cpp" />
+    <ClCompile Include="interface\taskmanager\filedeleter.cpp" />
+    <ClCompile Include="interface\remoteinterface\fileserverscreen_interface.cpp" />
+    <ClCompile Include="interface\localinterface\finance_interface.cpp" />
+    <ClCompile Include="interface\taskmanager\firewalldisable.cpp" />
+    <ClCompile Include="mainmenu\firsttimeloading_interface.cpp" />
+    <ClCompile Include="view\fps.cpp" />
+    <ClCompile Include="game\game.cpp" />
+    <ClCompile Include="game\gameobituary.cpp" />
+    <ClCompile Include="world\computer\gateway.cpp" />
+    <ClCompile Include="interface\localinterface\gateway_interface.cpp" />
+    <ClCompile Include="world\computer\gatewaydef.cpp" />
+    <ClCompile Include="interface\taskmanager\gatewaynuke.cpp" />
+    <ClCompile Include="mainmenu\genericoptions_interface.cpp" />
+    <ClCompile Include="world\computer\computerscreen\genericscreen.cpp" />
+    <ClCompile Include="GetWinVer.cpp" />
+    <ClCompile Include="mainmenu\graphicoptions_interface.cpp" />
+    <ClCompile Include="world\computer\computerscreen\highsecurityscreen.cpp" />
+    <ClCompile Include="interface\remoteinterface\highsecurityscreen_interface.cpp" />
+    <ClCompile Include="interface\localinterface\hud_interface.cpp" />
+    <ClCompile Include="interface\localinterface\hw_interface.cpp" />
+    <ClCompile Include="interface\remoteinterface\hwsalesscreen_interface.cpp" />
+    <ClCompile Include="world\scheduler\installhardwareevent.cpp" />
+    <ClCompile Include="interface\interface.cpp" />
+    <ClCompile Include="interface\interfacescreen.cpp" />
+    <ClCompile Include="interface\taskmanager\iplookup.cpp" />
+    <ClCompile Include="interface\taskmanager\ipprobe.cpp" />
+    <ClCompile Include="interface\localinterface\irc_interface.cpp" />
+    <ClCompile Include="interface\localinterface\keyboardinterface.cpp" />
+    <ClCompile Include="interface\localinterface\lan_interface.cpp" />
+    <ClCompile Include="world\computer\lancomputer.cpp" />
+    <ClCompile Include="interface\taskmanager\lanforce.cpp" />
+    <ClCompile Include="world\generator\langenerator.cpp" />
+    <ClCompile Include="world\computer\lanmonitor.cpp" />
+    <ClCompile Include="interface\taskmanager\lanprobe.cpp" />
+    <ClCompile Include="interface\taskmanager\lanscan.cpp" />
+    <ClCompile Include="interface\taskmanager\lanspoof.cpp" />
+    <ClCompile Include="world\computer\computerscreen\linksscreen.cpp" />
+    <ClCompile Include="interface\remoteinterface\linksscreen_interface.cpp" />
+    <ClCompile Include="mainmenu\loading_interface.cpp" />
+    <ClCompile Include="interface\remoteinterface\loansscreen_interface.cpp" />
+    <ClCompile Include="interface\localinterface\localinterface.cpp" />
+    <ClCompile Include="interface\localinterface\localinterfacescreen.cpp" />
+    <ClCompile Include="world\computer\logbank.cpp" />
+    <ClCompile Include="interface\taskmanager\logdeleter.cpp" />
+    <ClCompile Include="mainmenu\login_interface.cpp" />
+    <ClCompile Include="interface\taskmanager\logmodifier.cpp" />
+    <ClCompile Include="world\computer\computerscreen\logscreen.cpp" />
+    <ClCompile Include="interface\remoteinterface\logscreen_interface.cpp" />
+    <ClCompile Include="interface\taskmanager\logundeleter.cpp" />
+    <ClCompile Include="mainmenu\mainmenu.cpp" />
+    <ClCompile Include="mainmenu\mainmenuscreen.cpp" />
+    <ClCompile Include="interface\localinterface\memory_interface.cpp" />
+    <ClCompile Include="world\computer\computerscreen\menuscreen.cpp" />
+    <ClCompile Include="interface\remoteinterface\menuscreen_interface.cpp" />
+    <ClCompile Include="world\message.cpp" />
+    <ClCompile Include="world\computer\computerscreen\messagescreen.cpp" />
+    <ClCompile Include="interface\remoteinterface\messagescreen_interface.cpp" />
+    <ClCompile Include="MiniVersion.cpp" />
+    <ClCompile Include="app\miscutils.cpp" />
+    <ClCompile Include="world\company\mission.cpp" />
+    <ClCompile Include="interface\localinterface\mission_interface.cpp" />
+    <ClCompile Include="world\generator\missiongenerator.cpp" />
+    <ClCompile Include="interface\taskmanager\motionsensor.cpp" />
+    <ClCompile Include="world\generator\namegenerator.cpp" />
+    <ClCompile Include="interface\remoteinterface\nearestgatewayscreen_interface.cpp" />
+    <ClCompile Include="network\network.cpp" />
+    <ClCompile Include="network\networkclient.cpp" />
+    <ClCompile Include="mainmenu\networkoptions_interface.cpp" />
+    <ClCompile Include="network\interfaces\networkscreen.cpp" />
+    <ClCompile Include="network\networkserver.cpp" />
+    <ClCompile Include="world\company\news.cpp" />
+    <ClCompile Include="world\generator\newsgenerator.cpp" />
+    <ClCompile Include="interface\remoteinterface\newsscreen_interface.cpp" />
+    <ClCompile Include="world\scheduler\notificationevent.cpp" />
+    <ClCompile Include="interface\remoteinterface\nuclearwarscreen_interface.cpp" />
+    <ClCompile Include="world\generator\numbergenerator.cpp" />
+    <ClCompile Include="mainmenu\obituary_interface.cpp" />
+    <ClCompile Include="app\opengl.cpp" />
+    <ClCompile Include="app\opengl_interface.cpp" />
+    <ClCompile Include="options\options.cpp" />
+    <ClCompile Include="mainmenu\options_interface.cpp" />
+    <ClCompile Include="interface\taskmanager\passwordbreaker.cpp" />
+    <ClCompile Include="world\computer\computerscreen\passwordscreen.cpp" />
+    <ClCompile Include="interface\remoteinterface\passwordscreen_interface.cpp" />
+    <ClCompile Include="world\person.cpp" />
+    <ClCompile Include="interface\localinterface\phonedialler.cpp" />
+    <ClCompile Include="world\player.cpp" />
+    <ClCompile Include="world\generator\plotgenerator.cpp" />
+    <ClCompile Include="app\probability.cpp" />
+    <ClCompile Include="interface\remoteinterface\protovisionscreen_interface.cpp" />
+    <ClCompile Include="interface\taskmanager\proxydisable.cpp" />
+    <ClCompile Include="interface\remoteinterface\radiotransmitterscreen_interface.cpp" />
+    <ClCompile Include="interface\remoteinterface\rankingscreen_interface.cpp" />
+    <ClCompile Include="world\rating.cpp" />
+    <ClCompile Include="world\computer\recordbank.cpp" />
+    <ClCompile Include="world\generator\recordgenerator.cpp" />
+    <ClCompile Include="interface\remoteinterface\recordscreen_interface.cpp" />
+    <ClCompile Include="interface\remoteinterface\remoteinterface.cpp" />
+    <ClCompile Include="interface\remoteinterface\remoteinterfacescreen.cpp" />
+    <ClCompile Include="app\resizex.cpp" />
+    <ClCompile Include="interface\taskmanager\revelation.cpp" />
+    <ClCompile Include="mainmenu\revelationlost_interface.cpp" />
+    <ClCompile Include="interface\taskmanager\revelationtracker.cpp" />
+    <ClCompile Include="mainmenu\revelationwon_interface.cpp" />
+    <ClCompile Include="world\scheduler\runplotsceneevent.cpp" />
+    <ClCompile Include="world\company\sale.cpp" />
+    <ClCompile Include="game\scriptlibrary.cpp" />
+    <ClCompile Include="interface\scrollbox.cpp" />
+    <ClCompile Include="world\computer\security.cpp" />
+    <ClCompile Include="interface\taskmanager\securitybypass.cpp" />
+    <ClCompile Include="world\computer\securitymonitor.cpp" />
+    <ClCompile Include="interface\remoteinterface\securityscreen_interface.cpp" />
+    <ClCompile Include="world\computer\securitysystem.cpp" />
+    <ClCompile Include="world\scheduler\seizegatewayevent.cpp" />
+    <ClCompile Include="interface\localinterface\sendmail_interface.cpp" />
+    <ClCompile Include="app\serialise.cpp" />
+    <ClCompile Include="world\computer\computerscreen\shareslistscreen.cpp" />
+    <ClCompile Include="interface\remoteinterface\shareslistscreen_interface.cpp" />
+    <ClCompile Include="interface\remoteinterface\sharesviewscreen_interface.cpp" />
+    <ClCompile Include="world\scheduler\shotbyfedsevent.cpp" />
+    <ClCompile Include="interface\remoteinterface\socialsecurityscreen_interface.cpp" />
+    <ClCompile Include="interface\localinterface\status_interface.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DemoDebug|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="interface\localinterface\sw_interface.cpp" />
+    <ClCompile Include="interface\remoteinterface\swsalesscreen_interface.cpp" />
+    <ClCompile Include="interface\taskmanager\taskmanager.cpp" />
+    <ClCompile Include="interface\localinterface\template_interface.cpp" />
+    <ClCompile Include="mainmenu\theme_interface.cpp" />
+    <ClCompile Include="mainmenu\theteam_interface.cpp" />
+    <ClCompile Include="interface\taskmanager\tracetracker.cpp" />
+    <ClCompile Include="interface\taskmanager\tutorial.cpp" />
+    <ClCompile Include="uplink.cpp" />
+    <ClCompile Include="interface\taskmanager\uplinkagentlist.cpp" />
+    <ClCompile Include="world\scheduler\uplinkevent.cpp" />
+    <ClCompile Include="app\uplinkobject.cpp" />
+    <ClCompile Include="interface\taskmanager\uplinktask.cpp" />
+    <ClCompile Include="world\computer\computerscreen\useridscreen.cpp" />
+    <ClCompile Include="interface\remoteinterface\useridscreen_interface.cpp" />
+    <ClCompile Include="version.cpp" />
+    <ClCompile Include="view\view.cpp" />
+    <ClCompile Include="world\vlocation.cpp" />
+    <ClCompile Include="interface\taskmanager\voiceanalyser.cpp" />
+    <ClCompile Include="interface\remoteinterface\voiceanalysisscreen_interface.cpp" />
+    <ClCompile Include="interface\remoteinterface\voicephonescreen_interface.cpp" />
+    <ClCompile Include="mainmenu\warezgameover_interface.cpp" />
+    <ClCompile Include="world\scheduler\warningevent.cpp" />
+    <ClCompile Include="world\world.cpp" />
+    <ClCompile Include="world\generator\worldgenerator.cpp" />
+    <ClCompile Include="interface\localinterface\worldmap\worldmap_interface.cpp" />
+    <ClCompile Include="interface\localinterface\worldmap\worldmap_layout.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\contrib\irclib\IRCLib.vcxproj">
+      <Project>{934c5ed6-5329-4da5-a92b-7cc3d32d4e0a}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\lib\bungle\Bungle.vcxproj">
+      <Project>{4fad1047-2942-4a33-8ef4-3e245f7be21d}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\lib\eclipse\Eclipse.vcxproj">
+      <Project>{735cd5fa-2cc5-4b8d-a60d-fca14d1dd8c2}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\lib\gucci\Gucci.vcxproj">
+      <Project>{7e18a01e-4da0-4c6a-ab42-6ec44853098f}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\lib\mmgr\mmgr.vcxproj">
+      <Project>{ca23e288-c296-4daa-ae57-e4c3f7e15003}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\lib\redshirt\Redshirt.vcxproj">
+      <Project>{377251ca-d5b9-4098-abbf-da437f84bf5b}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\lib\soundgarden\Soundgarden.vcxproj">
+      <Project>{5dd449ce-19ff-43a0-b17c-d52b5655e214}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\lib\tosser\Tosser.vcxproj">
+      <Project>{523207a8-06fe-482b-ab56-6183d8c48f84}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\lib\vanbakel\Vanbakel.vcxproj">
+      <Project>{42249017-93d5-4566-afaa-a4c368ba2cea}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

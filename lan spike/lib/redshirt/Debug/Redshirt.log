@@ -1,0 +1,17 @@
+﻿Build started 8/14/2013 4:59:23 PM.
+     1>Project "C:\Users\ben\Documents\sourcecode\benpowerman uplink visual studio 2012 unmodify\lib\redshirt\Redshirt.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I..\mmgr /I..\bungle /I..\tosser /I..\..\contrib /ZI /nologo /W3 /WX- /Od /Oy- /D USE_SDL /D WIN32 /D _CRT_SECURE_NO_DEPRECATE /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /wd4996 /analyze- /errorReport:prompt hash.cpp redshirt.cpp
+         redshirt.cpp
+         hash.cpp
+         Generating Code...
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\Lib.exe /OUT:"..\bin\Redshirt.lib" unrar.lib /LIBPATH:..\..\contrib\bin /NOLOGO Debug\hash.obj
+         Debug\redshirt.obj
+     1>unrar.lib(rarvmtbl.obj) : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
+         Redshirt.vcxproj -> C:\Users\ben\Documents\sourcecode\benpowerman uplink visual studio 2012 unmodify\lib\redshirt\..\bin\Redshirt.lib
+     1>Done Building Project "C:\Users\ben\Documents\sourcecode\benpowerman uplink visual studio 2012 unmodify\lib\redshirt\Redshirt.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.58

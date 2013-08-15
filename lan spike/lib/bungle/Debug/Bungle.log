@@ -1,0 +1,13 @@
+﻿Build started 8/14/2013 4:57:21 PM.
+     1>Project "C:\Users\ben\Documents\sourcecode\benpowerman uplink visual studio 2012 unmodify\lib\bungle\Bungle.vcxproj" on node 4 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I..\mmgr /I..\tosser /I..\common /ZI /nologo /W3 /WX- /Od /Oy- /D USE_SDL /D WIN32 /D _CRT_SECURE_NO_DEPRECATE /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /wd4996 /analyze- /errorReport:prompt bungle.cpp
+         bungle.cpp
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\Lib.exe /OUT:"..\bin\Bungle.lib" /NOLOGO Debug\bungle.obj
+         Bungle.vcxproj -> C:\Users\ben\Documents\sourcecode\benpowerman uplink visual studio 2012 unmodify\lib\bungle\..\bin\Bungle.lib
+     1>Done Building Project "C:\Users\ben\Documents\sourcecode\benpowerman uplink visual studio 2012 unmodify\lib\bungle\Bungle.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:03.32

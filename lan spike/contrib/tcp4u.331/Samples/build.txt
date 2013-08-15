@@ -1,0 +1,41 @@
+
+Compile a sample :
+
+ 
+  - Unix
+        + You should have compiled the libarry libtcp4ux.a and
+          copied it into the Unix directory.
+        + use the following command
+              cc -o <file> <file>.c -I../../Include ../../Unix/libtcp4ux.a
+        + possibly add the socket standard library to this command (it
+          depends on your Unix).
+
+
+  - Windows 95/NT (Microsoft compiler)
+        + set the environment variable LIB
+              set LIB=<Standard lib path>;..\..\tcp4w32
+        + set the environment variable INCLUDE
+              set INCLUDE=<standard include path>;..\..\Include
+        + use the command
+              cl  -DWIN32 <file>.c tcp4w32.lib
+
+  - Windows 3.11 (Microsoft compiler)
+        + set the environment variable LIB
+              set LIB=<Standard lib path>;..\..\tcp4w16
+        + set the environment variable INCLUDE
+              set INCLUDE=<standard include path>;..\..\Include
+        + use the command
+              cl -D_WINDOWS -Mq -AL <file>.c tcp4w.lib winsock.lib
+
+  - Windows 95/NT (Borland Compiler)
+        + build a new lib file in the tcp4w32 directory with the command
+              implib tcp4w32.lib tcp4w32.dll
+        + use the command
+              bcc32 -DWIN32 -I..\..\Include ..\..\tcp4w32\tcp4w32.lib
+
+  - Windows 3.11 (Borland Compiler)
+        + build a new lib file in the tcp4w16 directory with the command
+              implib tcp4w.lib tcp4w.dll
+        + use the command
+              bcc -D_WINDOWS -I..\..\Include ..\..\tcp4w16\tcp4w.lib
+

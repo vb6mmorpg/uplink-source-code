@@ -1,0 +1,64 @@
+;
+;
+;         File: Tcp4w32.def
+;       System: MS-Windows 95
+;      Summary: Module definition file for Windows Sockets DLL.
+;
+; 
+LIBRARY     TCP4W32
+DESCRIPTION 'Tcp4w Version 3.31: Internet Library By Ph. Jounin <ph.jounin@computer.org>'
+
+CODE      MOVEABLE DISCARDABLE
+DATA      PRELOAD MOVEABLE SINGLE
+;
+EXPORTS
+          WEP                @1000 
+
+          Tcp4uInit          @1
+          Tcp4uCleanup       @2
+          Tcp4uVer           @10 
+          Tcp4uErrorString   @20
+          Tcp4uEnableLog     @23
+          ; Pour compataibilite
+          Tcp4wInit          @3
+          Tcp4wCleanup       @4
+          Tcp4wVer           @11 
+          Tcp4wErrorString   @21
+          
+          TcpConnect         @100
+          TcpGetListenSocket @101
+          TcpAccept          @102
+          TcpRecv            @110
+          TcpSend            @120
+          TcpClose           @130
+          TcpFlush           @131
+          TcpAbort           @132
+          TcpGetLocalID      @140
+          TcpGetRemoteID     @141
+          TcpIsDataAvail     @150
+          TcpIsOOBDataAvail  @151   
+          TcpPPRecv          @200
+          TcpPPSend          @210
+          TcpRecvUntilStr    @250
+
+          TnReadLine         @300
+          TnGetAnswerCode    @301
+          TnReadMultiLine    @302
+          TnSend             @310
+          TnProtoExchange    @320
+
+          HttpIsValidURL 	    @400
+          HttpGetFile		    @401
+          HttpGetFileEx		    @402
+          Http4uSetBufferSize	@403
+          Http4uSetTimeout	    @404
+          Http4uErrorString	    @405
+
+	      UdpInit		   @450
+	      UdpCleanup       @451
+	      UdpSend          @452
+		  UdpRecv          @453
+		  UdpBind          @454
+          Udp4uServiceToPort   @460
+
+          SmtpSendMessage   @500

@@ -1,0 +1,14 @@
+
+The following Samples are provided :
+
+    Tcp4/identify   UTILITY.      Gives host name and its IP address.
+    Tcp1/mFtp       FTP client.   Logs as anonymous then quits
+    Tcp2/FakeServ   HTTP server.  Waits for incoming requests.
+    Tcp3/mini_ftp   FTP client.   Logs to server, asks for helps, quit.
+    Http1/http_get  HTTP client.  Gets every URL listed in a file.
+    Http2/http_gs   HTTP Scanner. Returns type of remote HTTP server.
+    Udp1/secho      ECHO server.  Returns every datagram to its sender.
+    Udp1/recho      ECHO client.  Sends a datagram. Waits for its return.
+    Udp2/ntp        NTP client.  Returns server's time.
+    Smtp1/snd_mail  SMTP client.  Sends a mail to one or more addressees.
+

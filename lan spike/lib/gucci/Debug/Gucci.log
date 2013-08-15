@@ -1,0 +1,24 @@
+﻿Build started 8/14/2013 4:57:23 PM.
+     1>Project "C:\Users\ben\Documents\sourcecode\benpowerman uplink visual studio 2012 unmodify\lib\gucci\Gucci.vcxproj" on node 5 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I..\mmgr /I..\tosser /I..\common /I"..\..\contrib\gltt-2.5" /I"..\..\contrib\tiff-3.7.2\libtiff" /I"..\..\contrib\glut-3.7.6-bin" /I"..\..\contrib\SDL-1.2.11\include" /ZI /nologo /W3 /WX- /Od /Oy- /D USE_SDL /D WIN32 /D _CRT_SECURE_NO_DEPRECATE /D USE_GLTT /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /wd4996 /analyze- /errorReport:prompt gucci.cpp gucci_glut.cpp gucci_sdl.cpp image.cpp resize_unix.cpp resize_win32.cpp
+         resize_win32.cpp
+         resize_unix.cpp
+         image.cpp
+         gucci_sdl.cpp
+         gucci_glut.cpp
+         gucci.cpp
+         Generating Code...
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\Lib.exe /OUT:"..\bin\Gucci.lib" /NOLOGO Debug\gucci.obj
+         Debug\gucci_glut.obj
+         Debug\gucci_sdl.obj
+         Debug\image.obj
+         Debug\resize_unix.obj
+         Debug\resize_win32.obj
+         Gucci.vcxproj -> C:\Users\ben\Documents\sourcecode\benpowerman uplink visual studio 2012 unmodify\lib\gucci\..\bin\Gucci.lib
+     1>Done Building Project "C:\Users\ben\Documents\sourcecode\benpowerman uplink visual studio 2012 unmodify\lib\gucci\Gucci.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:07.25

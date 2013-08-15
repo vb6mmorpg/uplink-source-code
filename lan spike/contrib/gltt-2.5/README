@@ -1,0 +1,155 @@
+
+                                    gltt
+
+                     Copyright (C) 1998-1999 Stephane Rehel
+
+Last modified: March 5 1998
+
+----------------------------------------------------------------------------
+Official Site
+----------------------------------------------------------------------------
+
+  http://geoxel.org/gltt
+
+----------------------------------------------------------------------------
+Author
+----------------------------------------------------------------------------
+
+  Stephane Rehel, rehel@geoxel.org
+
+----------------------------------------------------------------------------
+What it does
+----------------------------------------------------------------------------
+
+  gltt is a library that allows you to read and draw TrueType fonts in
+  any OpenGL application.
+  It supports bitmapped and anti-aliased font drawing as well as
+  vectorized and polygonized drawing.
+
+----------------------------------------------------------------------------
+What you need
+----------------------------------------------------------------------------
+
+  You need the OpenGL library.
+  For more information about OpenGL, check out http://www.opengl.org
+  This library has been developed under Linux with Mesa.
+    (Mesa site: http://www.mesa3d.org)
+
+  You also need the FreeType library. The official site of FreeType
+  is: http://www.freetype.org
+
+----------------------------------------------------------------------------
+How to install it
+----------------------------------------------------------------------------
+
+  Untar the distribution file:
+
+    tar xfvz gltt-1.1.tar.gz
+
+  This will create the gltt-1.1/ directory.
+
+  Untar the freetype distribution, compile and install it.
+
+  Edit the FREETYPE variable in gltt-1.1/Makefile for specifying
+  the FreeType installation prefix. (default is /usr/local)
+
+  Run make:
+
+    make
+
+  This will build libgltt.a and the demos applications.
+  The demos applications need glut-3.6 and one TrueType sample font.
+
+----------------------------------------------------------------------------
+How to use it
+----------------------------------------------------------------------------
+
+  To create a bitmapped font:
+
+       FTFace face;
+       if( ! face.open("arial.ttf") )
+         fatal("unable to open ttf file");
+       GLTTBitmapFont font(&face);
+       int point_size= 20;
+       if( ! font.create(point_size) )
+         fatal("unable to create bitmapped font");
+       // ... OpenGL initialization commands...
+       glColor3f(1,1,1);
+       font.print( x, y, "hello bitmaped world" );
+
+  To create an anti-aliased pixmapped font:
+
+       FTFace face;
+       if( ! face.open("arial.ttf") )
+         fatal("unable to open ttf file");
+       GLTTPixmapFont font(&face);
+       int point_size= 20;
+       if( ! font.create(point_size) )
+         fatal("unable to create pixmapped font");
+       // ... OpenGL initialization commands...
+       glColor3f(1,1,1);
+       font.output( x, y, "hello anti-aliased world" );
+
+  To create an outline font (vectorized contours only):
+
+       FTFace face;
+       if( ! face.open("arial.ttf") )
+         fatal("unable to open ttf file");
+       GLTTOutlineFont font(&face);
+       int point_size= 20;
+       if( ! font.create(point_size) )
+         fatal("unable to create outline font");
+       // ... OpenGL initialization commands...
+       glColor3f(1,1,1);
+       font.print( x, y, "hello outlined world" );
+
+  To create an plain font (plain polygonized font):
+
+       FTFace face;
+       if( ! face.open("arial.ttf") )
+         fatal("unable to open ttf file");
+       GLTTFont font(&face);
+       int point_size= 20;
+       if( ! font.create(point_size) )
+         fatal("unable to create outline font");
+       // ... OpenGL initialization commands...
+       glColor3f(1,1,1);
+       font.print( x, y, "hello plain world" );
+
+----------------------------------------------------------------------------
+How it works
+----------------------------------------------------------------------------
+
+  Read the FreeType documentation files for more information about
+  the vocabulary used. (as glyph, contours, etc.)
+
+  gltt is written in C++.
+  The FT* classes don't depend on OpenGL but simply on FreeType.
+  The GLTT* classes do depend on OpenGL.
+
+  The GLTTBitmapFont, GLTTOutlineFont and GLTTFont classes act as
+  font servers: they internally render only requested glyphs and
+  cache them.
+  BTW, the requested glyphs are put into a GL display list by
+  GLTTOutlineFont and GLTTFont classes.
+
+  You have access to the outline contour vectorization, as well as
+  its tesselation. You have access to the trangles set generated
+  by the glyph tesselation. (see the source code and the demo)
+
+  No extrusion ability is provided since this feature could be
+  restrictive: it is not the goal of this library. The author lets
+  the user have imagination for nice extrusions!
+
+----------------------------------------------------------------------------
+Bugs.
+----------------------------------------------------------------------------
+
+  This piece of code has been written in less than one week.
+  This library is distributed under the terms of the GNU Library
+  General Public License, see the LICENSE file for details.
+
+  Enjoy!
+  /kepler
+
+----------------------------------------------------------------------------
