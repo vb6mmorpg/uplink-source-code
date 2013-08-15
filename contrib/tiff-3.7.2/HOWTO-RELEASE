@@ -1,0 +1,55 @@
+HOWTO-RELEASE: 
+
+Notes on releasing. You will need appropriate autoconf, automake and libtool
+utilities to release a package.
+
+1. Commit any unsaved changes. 
+
+2. "make clean"
+
+3. Create html/vX.X.html.  Take ChangeLog entries and html-ify in there. 
+   Easist thing to do is take html/vX.(X-1).html and use it as a template.
+   Add that file to the list of EXTRA_DIST files in the html/Makefile.am.
+
+3.5. Update html/index.html to refer to this new page as the current release.
+
+4. Increment version in configure.ac.  Put 'alpha' or 'beta' after
+   the version, if applicable. 
+
+   eg.
+   3.5.7
+    or
+   3.5.8beta
+
+   Version should be updated in two places: in the second argument of the
+   AC_INIT macro and in LIBTIFF_xxx_VERSION variables.
+
+5. sh configure
+
+6. make release -- this will update "RELEASE-DATE" and "VERSION" in the top
+   level dir, and libtiff/tiffvers.h.  
+
+7. Please verify that the version info in RELEASE-DATE, VERSION and
+   libtiff/tiffvers.h is right.
+
+8. make; make distcheck (to test). 
+
+9. make distclean
+
+10. cvs commit
+
+11. cvs tag Release-v3-5-7 (or the appropriate name for the release)
+
+12. make dist
+    Two files with names tiff-version.tar.gz and tiff-version.zip will
+    be created in the top level package directory.
+
+13. Copy to ftp.remotesensing.org ftp site. 
+    scp tiff-*.tar.gz ftp.remotesensing.org:/ftp/remotesensing/pub/libtiff
+    scp tiff-*.zip ftp.remotesensing.org:/ftp/remotesensing/pub/libtiff
+
+14. Announce to list, tiff@remotesensing.org]
+
+15. Update libtiff page on freshmeat with new version announcement.
+
+

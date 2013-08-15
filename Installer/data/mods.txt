@@ -1,0 +1,204 @@
+
+                  ==========================
+                  =                        =
+                  =    UPLINK MOD GUIDE    =
+                  =     By Chris Delay     =
+                  =                        =
+                  =       Version 1.2      =
+                  =                        =
+                  ==========================
+
+
+
+
+                       = INTRODUCTION =
+
+
+One of the many new features in the Version 1.1 patch for Uplink is the
+ability to make new 'mods' to the game, which can be released on the web
+for others to download and use.  There are three main areas which can
+now be modded.  You can make new skins which change the appearance of the
+game, you can add new gateways, and you can add new LANs.  This guide
+will show you how.
+
+Please note that you must have installed the 1.1 patch for all of this
+to work.  Please do not contact Introversion Software if you are having
+problems.  We are far too busy making the next game, and won't be replying
+to your email ;)
+
+It's also worth mentioning that we weren't planning on adding any MOD
+support to Uplink, until Icepick's website 'Modlink' went live.  We had no
+idea there we so many people who were willing to dedicate time to making
+mods for Uplink, despite the fact that it was such a hack.  Once we saw the
+amount of effort some people were making, we decided we had to help support
+that growing community with some new MOD features.  So you wouldn't be 
+reading this now if it wasn't for Modlink.  Cheers guys.
+Oh yeah, here's the site URL:
+http://modlink.cyberkotik.com
+
+On with it!
+
+
+
+
+                        = DAT FILES =
+
+We should start by explaining DAT files.  All of the data files for Uplink
+are stored in DAT files - eg graphics.dat, music.dat.  These are simply ZIP
+files.  You should begin by renaming them to zip files (eg graphics.zip,
+music.zip) and extracting them into your Uplink directory.  This will create
+a bunch of new subdirectories - Graphics, Sound etc.  This will give you
+access to the files you need.
+
+The exceptions are data.dat and world.dat, which are not ZIP files.  Don't
+bother trying to unzip them because it won't work.
+
+
+
+
+                          = SKINS =
+
+It is now possible to make new skins for Uplink, which totally replace the
+graphics and colours used in the game.  Bored of blue?  Join the club.
+
+New skins go in a directory of their own, and are essentially a replacement
+for everything in the Graphics directory.  Start by copying your graphics
+directory into a new folder - perhaps called 'MyNewTheme'.  
+
+You can now edit each of the .TIF files inside that folder so that they match
+your theme.  You can remove TIF files that you don't wish to edit - the 
+default .TIF file will be used in it's replacement.
+
+In order for Uplink to recognise it as a theme, you must have a theme.txt 
+file in the folder.  The theme.txt file for the default graphics is stored
+in patch.dat (remember it's just a ZIP file), so you could start by copying
+that into place.
+
+At the very least, your theme.txt file must include these lines at the top:
+
+NAME:       My New Uplink Theme
+AUTHOR:     My Name
+COMMENT:    A brand new theme to replace that damn boring blue thing
+
+Your theme.txt file can also override the default colours with lines
+that looks like this:
+
+ButtonNormalB               0.0     0.0	    0.4
+ButtonHighlightedA          0.5     0.5     1.0
+
+Those values represent Red-Green-Blue triplets.  A bit of experimentation
+should allow you to set the game colours to match your theme.
+
+Once you've finished, you can set the theme in game from the Options menu.
+When you're ready to go public with your new creation, you should include
+all the files in the new directory you created.  Remember, you don't need
+to include graphics that you haven't changed.  The graphics in the folder
+graphics/loading/ are particularly large, so you should remove them from
+your theme unless you have modified them.
+
+
+
+
+
+                          = GATEWAYS =
+
+It is now possible to make new Gateways and to distribute them.  In order to
+do this you must distribute three files - a gateway definition file (text),
+a thumbnail image (tif) and a full size image (tif).
+
+Lets say your gateway is called 'MyGateway'.  You should first create a text
+file in uplink/lib/data/gateways/mygateway.txt.  This needs to include the text
+definition of your gateway.  An example definition would be
+
+Gateway ALPHA       
+                15000   1       4       0       0       1       200     200     
+The standard starting gateway for all new agents. 
+No room for CPU upgrades and limited memory capacity.
+cpu             86  80  
+mem             33  142     57  142     81  142     105  142
+modem           137 49
+power           15  28
+
+
+That definition is used for the very first gateway you get in game.  
+The first line represents the Name of the gateway.
+The second line represents: Cost,   MaxCPU, MaxMemory, MaxUpgrades, 
+               MaxSecurity, Bandwidth, Width,  Height, Description.
+The next line represents the co-ordinates of all CPUs.
+The next line represents the co-ordinates of all Memory.
+The next line represents the co-ordinates of the Modem.
+The next line represents the co-ordinates of the Power Supply.
+
+You should now create your thumbnail image at this location:
+uplink/lib/graphics/gateway/MyGateway_t.tif 
+(the size must be 200x140 pixels).
+
+Then create the full size image at this location:
+uplink/lib/graphics/gateway/MyGateway.tif 
+(the size should be no larger than 400x300 pixels).
+
+Your gateway will now show up in the Gateway list in game.
+
+
+
+
+
+                            = LANS =
+
+It is now possible to build your own Local Area Networks and show them to 
+other players.
+We recommend you look at uplink/lib/data/lans/sample.txt 
+(after unzipping patch.dat) for a good example LAN network.
+ 
+= TYPES OF LAN SYSTEMS =
+
+LANSYSTEM_NONE                      (unused)
+LANSYSTEM_ROUTER            
+LANSYSTEM_HUB               
+LANSYSTEM_SWITCH                    (currently unused)
+LANSYSTEM_TERMINAL          
+LANSYSTEM_MAINSERVER
+LANSYSTEM_MAILSERVER                (currently unused)
+LANSYSTEM_FILESERVER        
+LANSYSTEM_AUTHENTICATION
+LANSYSTEM_LOCK          
+LANSYSTEM_ISOLATIONBRIDGE
+LANSYSTEM_MODEM                     
+LANSYSTEM_SESSIONKEYSERVER          (currently unused)            
+LANSYSTEM_RADIOTRANSMITTER                              
+LANSYSTEM_RADIORECEIVER  
+LANSYSTEM_FAXPRINTER                (currently unused)
+LANSYSTEM_LOGSERVER         
+
+
+= USES FOR DATA VALUES =
+
+- Authentication Server 
+    Data1 : Index of a Lock system that this Authentication Server controls,
+    Data2 : or -1 to represent "no system".
+    Data3 : All three Data values can be used - allowing you to control
+            three seperate locks.
+
+- Main Server
+    Data1 : Index of a lock that must be unlocked 
+            before this sytem can be accessed.
+    Data2 : Or -1 to represent "no system"
+    Data3 : All three Data values can be used.
+
+
+- Lock
+    Data1 : A value of 1 means "Locked"
+            A value of 0 means "Unlocked"
+
+- Isolation Bridge
+    Data1 : Index of first lock system
+    Data2 : Index of second lock system
+
+- Radio Receiver
+    Data1 : Frequency in Ghz
+    Data2 : Frequency in Mhz
+    eg if Data1 = 140, Data2 = 5, then frequency would be 140.5 Ghz
+
+- Modem
+    DataX : Phone number to use
+

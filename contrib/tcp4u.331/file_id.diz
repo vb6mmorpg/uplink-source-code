@@ -1,0 +1,13 @@
+Tcp4u (v3.31) - DLL/TCP/HTTP/Winsock/Unix
+TCP4U is a freeware developers package 
+featuring a series of DLLs and static 
+libraries providing TCP/IP runtime support. 
+Libraries are included for several varieties 
+Unix and for 16- and 32-bit Windows. 
+TCP, UDP, SMTP and HTTP protocols are 
+currently supported. Future development will 
+add additional protocols. Full source, HTML 
+documentation and sample code are provided.
+
+FREEWARE by Ph. Jounin (ph.jounin@computer.org)
+
