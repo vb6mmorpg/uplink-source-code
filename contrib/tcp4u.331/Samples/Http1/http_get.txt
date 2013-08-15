@@ -1,8 +1,0 @@
-; This is the data file used by http_get
-; URLs to be retrieved are listed in this file
-; Format of each line : 
-; <URL to be retrieved><TAB><URL of firewall>
-; or 
-; <URL to be retrieved> 
-http://www.magic.fr/~jounin-ph/
-http://www.magic.fr/~jounin-ph/welcome.htm	http://myproxy.net:8080/
