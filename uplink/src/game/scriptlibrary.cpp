@@ -776,36 +776,36 @@ void ScriptLibrary::Script33 ()
 
 	Message *msg = new Message ();
 	msg->SetTo		( "PLAYER" );
-	msg->SetFrom	( "Uplink public access system" );
-	msg->SetSubject ( "Welcome to Uplink" );
-	msg->SetBody	( "Your details have been entered into our account.  Congratulations, you are now "
-					  "an officially rated Uplink Agent.\n"
-					  "We recommend you complete the Uplink Test mission before attempting any real work.\n"
-					  "Your first stopping off point should be the Uplink Internal Services System.  Once there, "
-					  "log in and click on 'help', followed by 'getting started'.\n"
-					  "Good luck." );
+	msg->SetFrom	( "BENPOWERMAN" );
+	msg->SetSubject ( "WELCOME TO MY MOD" );
+	msg->SetBody	("welcome to my mod with help of stormchild and dna i made that mod if see on board tell them thank you also if use benpower"
+		" to created a account on the mod you get access to the cheat menu.");
 	msg->GiveLink   ( IP_UPLINKINTERNALSERVICES );
 	msg->GiveCode   ( IP_UPLINKINTERNALSERVICES, accesscode );
+	msg->GiveLink   ( IP_UPLINKTESTMACHINE );
+	msg->GiveCode   ( IP_UPLINKCREDITSMACHINE, accesscode );
+	game->GetWorld ()->GetPlayer ()->rating.SetUplinkRating ( game->GetWorld ()->GetPlayer ()->rating.uplinkrating + 1 );
+	game->GetWorld ()->GetPlayer ()->rating.ChangeUplinkScore ( 1 );
 	msg->Send		();
 
 	// Send the player a test mission as a tutorial
 	//
 
-	Mission *mission = new Mission ();
-	mission->SetTYPE ( MISSION_STEALFILE );
-	mission->SetCompletion ( IP_UPLINKINTERNALSERVICES, "Uplink test data", NULL, NULL, NULL );
-	mission->SetEmployer ( "Uplink" );
-	mission->SetContact ( "internal@Uplink.net" );
-	mission->SetPayment ( 0 );
-	mission->SetDifficulty ( 1 );
-	mission->SetDescription ( "Uplink Test Mission -\nSteal data from a file server" );
-	mission->SetFullDetails ( "Gain access to the Uplink Test Machine by breaking the outer security layer.\n"
-							  "Access the fileserver and download the target file 'Uplink Test Data'.\n"
-							  "Remove any traces of your hack.\n"
-							  "Return the data to us at address internal@Uplink.net" );
-	mission->GiveLink ( IP_UPLINKTESTMACHINE );
+	//Mission *mission = new Mission ();
+	//mission->SetTYPE ( MISSION_STEALFILE );
+	//mission->SetCompletion ( IP_UPLINKINTERNALSERVICES, "Uplink test data", NULL, NULL, NULL );
+	//mission->SetEmployer ( "Uplink" );
+	//mission->SetContact ( "internal@Uplink.net" );
+	//mission->SetPayment ( 0 );
+	//mission->SetDifficulty ( 1 );
+	//mission->SetDescription ( "Uplink Test Mission -\nSteal data from a file server" );
+	//mission->SetFullDetails ( "Gain access to the Uplink Test Machine by breaking the outer security layer.\n"
+							  //"Access the fileserver and download the target file 'Uplink Test Data'.\n"
+							  //"Remove any traces of your hack.\n"
+							  //"Return the data to us at address internal@Uplink.net" );
+//	mission->GiveLink ( IP_UPLINKTESTMACHINE );
 						 
-	game->GetWorld ()->GetPlayer ()->GiveMission (mission);
+	//game->GetWorld ()->GetPlayer ()->GiveMission (mission);
 
 	// Run the next screen
 

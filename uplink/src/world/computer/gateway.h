@@ -36,8 +36,8 @@
 
 class Gateway : public UplinkObject
 {
-
-protected:
+	// charge to public for mod to work
+public:
 
 	unsigned char hudupgrades;						// Bitfield - see above
 

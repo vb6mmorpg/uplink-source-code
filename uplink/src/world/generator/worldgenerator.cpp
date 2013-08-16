@@ -1449,24 +1449,13 @@ void WorldGenerator::GenerateUplinkTestMachine ()
 	comp->SetIsTargetable ( false );
 
 	comp->SetTraceSpeed ( TRACESPEED_UPLINK_TESTMACHINE );
-	comp->SetTraceAction ( COMPUTER_TRACEACTION_DISCONNECT );
-	comp->security.AddSystem ( SECURITY_TYPE_MONITOR, 1 );
-	comp->databank.SetSize ( 20 );
+	comp->databank.SetSize ( 9999 );
 
 	Data *data1 = new Data ();
-	data1->SetTitle ( "Uplink test data" );
-	data1->SetDetails ( DATATYPE_DATA, 6, 0, 0 );
+	data1->SetTitle ( "revelation" );
+	data1->SetDetails ( DATATYPE_PROGRAM, 1, 0, 1.0,10	 );
 	comp->databank.PutData ( data1 );
 
-	Data *data2 = new Data ();
-	data2->SetTitle ( "Random file" );
-	data2->SetDetails ( DATATYPE_DATA, 3, 4, 1 );
-	comp->databank.PutData ( data2 );
-
-	Data *data3 = new Data ();
-	data3->SetTitle ( "Sample program" );
-	data3->SetDetails ( DATATYPE_PROGRAM, 2, 0, 0 );
-	comp->databank.PutData ( data3 );
 
 	// Generate an admin log on
 
