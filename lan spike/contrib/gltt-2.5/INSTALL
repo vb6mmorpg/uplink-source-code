@@ -1,0 +1,16 @@
+Compiling:
+
+  ./configure
+
+and
+
+  make
+
+Installing the library:
+
+  make install
+
+Installing the demos:
+
+  make install-demos
+

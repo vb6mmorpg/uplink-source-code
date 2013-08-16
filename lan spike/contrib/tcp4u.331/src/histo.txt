@@ -1,0 +1,50 @@
+/* Version 1.0    ---------------------------------------------------------- */
+/*                Le 30 Mars 95    Tcp4w for Windows 3.1                     */
+/*                                                                           */
+/* DLL Version    Le  4 Avril 95                                             */
+/*                Le 12 Avril 95 : Ajout d'un parametre de Log au fonctions  */
+/*                Le 14 Avril 95 : Memorisation des sockets ouvertes         */
+/*                Le 18 avril 95 : Libiration des sockets non utilisies sur  */
+/*                                 TcpConnect/Liste/accept                   */
+/*                Le 26 Avril 95 : Ajout du retour TCP4U_CANCELLED           */
+/*                Le 29 Mai 95   : Ajout de la fonction TcpIsDataAvail       */
+/*                Le 1er Juin 95 : Remplacement de .tv_usec=1 par tv_usec=0  */
+/*                Le 16 Juin 95  : Suppression de la ligne                   */
+/*                                        if (Rc==OK) WSACleanup             */
+/*                                 Dans Tcp4wCleanup                         */
+/*                Le 4 Juillet 95: Compilation statique                      */
+/* Version 1.21   Le 12 oct 95   : Supression du shutdown et ajout d'une     */
+/*                                 petite pause lors d'un TcpClose           */
+/* Version 1.5    Le 10 aout 95  : Compilation/Livraison Pour le SDIP        */
+/* Version 1.51   Le 30 Nov 95   : Deplacement du setsock SO_LINGER de       */
+/*                                 TcpGetListenSocket a TcpAccept            */
+/*                                 Ajout des fichiers port32.h et port32.c   */
+/* Version 2.0    ---------------------------------------------------------- */
+/*                Le 10 Avril 96 : Tcp4u offers the same APIs for both unix  */
+/*                                 and Windows                               */
+/*                                 The Tcp4wXXX calls are replaced by        */
+/*                                 Tcp4uXXX                                  */
+/*                                 Tcp4uErrorString added                    */ 
+/* Version 2.01   Le 7 Juin 96   : TcpClose modified                         */
+/* Version 2.10   Le 10 Fev 97     International release                     */
+/* Version 3.0    ---------------------------------------------------------- */
+/*                Le 30 Mai 97     The headers files are now grouped into    */
+/*                                 build.h                                   */
+/*                                 HTTP APIs - thanks to Laurent Le Bras     */
+/*                Le 27 Juin 97  : htp4u_url.c has been rewritten            */
+/*                                 Rupture de connexion si les headers seuls */
+/*                                 doivent etre ramenes                      */
+/* Version 3.1    Le 10 Juil 97 :  UDP APIs                                  */
+/* Version 3.2    Le 8 Dec 97 :    LOGS API                                  */
+/*                                 (OutputDebugString / fprint stderr,)      */
+/*                Le 12 dec 97 :   UdpInit rewritten                         */
+/*                                 New API Udp4uServiceToPort                */
+/* Version 3.21   Le 26 Fev 98 :   TnReadMultiLine corrected (bug discovered */
+/*                                 by Sergej Semenov) and adapted to NT 5.0  */
+/*                                 FTP server                                */
+/*                                 Some comments are rewritten in english    */
+/* Version 3.30   Le 27 Fev 98 :   Smtp4u module added                       */
+/*                                 compilation Warnings eliminated           */
+/* Version 3.31   Le 9 Mars 98 :   bug fixed into Tcp4uLog()                 */
+/* ------------------------------------------------------------------------- */
+
