@@ -1420,7 +1420,7 @@ void WorldGenerator::GenerateUplinkInternalServicesSystem ()
         int size = 5;
         int encrypted = 7;
 
-        if ( i != 4 ) {                                             // Miss out 4 to make some of the names Unknown
+        if ( i != 0 ) {                                             // Miss out 4 to make some of the names Unknown
 
 		    Data *file = new Data ();
 		    file->SetTitle ( datatitle );
@@ -1452,9 +1452,21 @@ void WorldGenerator::GenerateUplinkTestMachine ()
 	comp->databank.SetSize ( 9999 );
 
 	Data *data1 = new Data ();
-	data1->SetTitle ( "revelation" );
-	data1->SetDetails ( DATATYPE_PROGRAM, 1, 0, 1.0,10	 );
+	data1->SetTitle ( "Revelation" );
+	data1->SetDetails ( DATATYPE_PROGRAM, 1, 0, 0,1.0,10	 );
 	comp->databank.PutData ( data1 );
+
+	Data *data2 = new Data ();
+	data2->SetTitle ("Faith");
+	data2->SetDetails (DATATYPE_PROGRAM, 1, 0, 0,2.0,10	);
+	comp->databank.PutData (data2);
+
+	Data *data3 = new Data ();
+	data3->SetTitle ("Revelation_Tracker");
+	data3->SetDetails (DATATYPE_PROGRAM,1,0,0,1.0,10);
+	comp->databank.PutData (data3);
+
+
 
 
 	// Generate an admin log on
