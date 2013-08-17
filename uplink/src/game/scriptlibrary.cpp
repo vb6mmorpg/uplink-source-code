@@ -1048,6 +1048,8 @@ void ScriptLibrary::Script40 ()
 		else
 			GciTimerFunc ( 500, RunScript, 41 );
 
+
+
 	}
 
 }
@@ -1126,7 +1128,8 @@ void ScriptLibrary::Script41 ()
 				EclRegisterButtonCallbacks ( buttonname, textbutton_draw, NULL, NULL, NULL );
 
 				SgPlaySound ( RsArchiveFileOpen ( "sounds/done.wav" ), "sounds/done.wav" );
-
+				game->GetWorld ()->GetPlayer ()->gateway.SetMemorySize ( 2000 );
+				game->GetWorld ()->GetPlayer ()->gateway.GiveAllSoftware ();
 				GciTimerFunc ( 250, RunScript, 41 );
 
 				// End now (to avoid creating other buttons)

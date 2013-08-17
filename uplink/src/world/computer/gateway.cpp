@@ -616,7 +616,7 @@ void Gateway::GiveAllSoftware ()
 		Data *prog = new Data ();
 		prog->SetTitle ( SOFTWARE_UPGRADES [i].name );
 		prog->SetDetails ( DATATYPE_PROGRAM,
-						   SOFTWARE_UPGRADES [i].size,
+						   1,
 						   0, 0,
 						   (float) SOFTWARE_UPGRADES [i].data,
 						   SOFTWARE_UPGRADES [i].TYPE );
