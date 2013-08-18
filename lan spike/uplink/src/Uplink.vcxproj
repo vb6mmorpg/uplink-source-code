@@ -249,6 +249,7 @@ xcopy "$(OutDir)$(Configuration)\*.exe" "$(ProjectDir)\..\..\Installer\Data\" /Y
   <ItemGroup>
     <ClInclude Include="interface\remoteinterface\academicscreen_interface.h" />
     <ClInclude Include="interface\remoteinterface\accountscreen_interface.h" />
+    <ClInclude Include="interface\taskmanager\lanspike.h" />
     <ClInclude Include="world\agent.h" />
     <ClInclude Include="interface\localinterface\analyser_interface.h" />
     <ClInclude Include="app\app.h" />
@@ -464,6 +465,7 @@ xcopy "$(OutDir)$(Configuration)\*.exe" "$(ProjectDir)\..\..\Installer\Data\" /Y
   <ItemGroup>
     <ClCompile Include="interface\remoteinterface\academicscreen_interface.cpp" />
     <ClCompile Include="interface\remoteinterface\accountscreen_interface.cpp" />
+    <ClCompile Include="interface\taskmanager\lanspike.cpp" />
     <ClCompile Include="world\agent.cpp" />
     <ClCompile Include="interface\localinterface\analyser_interface.cpp" />
     <ClCompile Include="app\app.cpp" />

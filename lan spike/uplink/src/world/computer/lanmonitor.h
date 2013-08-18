@@ -19,6 +19,7 @@ class LanComputer;
 #define SYSADMIN_CURIOUS            1
 #define SYSADMIN_SEARCHING          2
 #define SYSADMIN_FOUNDYOU           3
+#define SYSADMIN_SPIKE				4
 
 
 class LanMonitor

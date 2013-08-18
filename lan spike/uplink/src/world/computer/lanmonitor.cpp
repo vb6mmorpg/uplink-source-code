@@ -28,6 +28,9 @@
 #include "interface/interface.h"
 #include "interface/remoteinterface/remoteinterface.h"
 
+#include "interface/taskmanager/lanspike.h"
+#include "interface/taskmanager/lanspike.cpp"
+
 #include "mmgr.h"
 
 
@@ -485,7 +488,8 @@ void LanMonitor::Update ()
 
             //
             // Dump the player out
-
+			
+			
 			game->GetWorld ()->GetPlayer ()->GetConnection ()->Disconnect ();
 			game->GetWorld ()->GetPlayer ()->GetConnection ()->Reset ();
 			game->GetInterface ()->GetRemoteInterface ()->RunNewLocation ();

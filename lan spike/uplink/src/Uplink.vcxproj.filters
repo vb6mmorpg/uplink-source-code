@@ -636,6 +636,9 @@
     <ClInclude Include="interface\localinterface\worldmap\worldmap_layout.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="interface\taskmanager\lanspike.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon3.ico">
@@ -1267,6 +1270,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="interface\localinterface\worldmap\worldmap_layout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\taskmanager\lanspike.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

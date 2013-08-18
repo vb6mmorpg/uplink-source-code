@@ -381,6 +381,9 @@ SOFTWARE_UPGRADES [] = {
                                                                                         "This tool will force open any lock system you might\n"
                                                                                         "encounter on a LAN system.\n"
                                                                                         "The sys Admin will probably notice this.",
+							"lanspike",					6,		25000, 1,		1,		"lan spike v1.0\n"
+																						"use on main server on lan and admin cannot kick you off\n",
+
                                                                                         
                             "Log_Deleter",				3,		500,	1,		1,  	"LOG DELETER V1.0\n"
                                                                                         "TYPE: software.Security\n\n"
