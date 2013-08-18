@@ -488,14 +488,15 @@ void LanMonitor::Update ()
 
             //
             // Dump the player out
-			
+			if (lanspike_FINISHED) {SysAdminSleep;}
+			else 
 			
 			game->GetWorld ()->GetPlayer ()->GetConnection ()->Disconnect ();
 			game->GetWorld ()->GetPlayer ()->GetConnection ()->Reset ();
 			game->GetInterface ()->GetRemoteInterface ()->RunNewLocation ();
 			game->GetInterface ()->GetRemoteInterface ()->RunScreen ( 2);		
-            
-        }
+			};
+        
         break;
 
     }
