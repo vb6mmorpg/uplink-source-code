@@ -122,7 +122,7 @@ void TaskManager::RunSoftware ( char *name, float version )
                                                                 task->SetFollowMouse ( true ); }
     else if ( strcmp ( name, "LAN_Force" ) == 0 ) {             task = new LanForce ();
                                                                 task->SetFollowMouse ( true ); }
-	else if ( strcmp ( name, "lanspike" ) == 0)	{				task = new lanspike ();
+	else if ( strcmp ( name, "LAN_Spike" ) == 0)	{				task = new lanspike ();
 																task->SetFollowMouse ( true ); }
 
 	

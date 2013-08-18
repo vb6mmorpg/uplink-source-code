@@ -488,7 +488,10 @@ void LanMonitor::Update ()
 
             //
             // Dump the player out
-			if (lanspike_FINISHED) {SysAdminSleep;}
+			if (SYSADMIN_SPIKE	) {int timeToDiscover = (int) NumberGenerator::RandomNormalNumber( 10, 5 );
+                sysAdminTimer = (int) ( EclGetAccurateTime() + timeToDiscover * 9000000 );
+                game->GetWorld ()->GetPlayer ()->GetConnection ()->BeginTrace ();}
+
 			else 
 			
 			game->GetWorld ()->GetPlayer ()->GetConnection ()->Disconnect ();
