@@ -39,6 +39,7 @@
 #include "interface/taskmanager/lanprobe.h"
 #include "interface/taskmanager/lanspoof.h"
 #include "interface/taskmanager/lanforce.h"
+#include "interface/taskmanager/lanspike.h"
 
 // ============================================================================
 
@@ -121,6 +122,8 @@ void TaskManager::RunSoftware ( char *name, float version )
                                                                 task->SetFollowMouse ( true ); }
     else if ( strcmp ( name, "LAN_Force" ) == 0 ) {             task = new LanForce ();
                                                                 task->SetFollowMouse ( true ); }
+	else if ( strcmp ( name, "lanspike" ) == 0)	{				task = new lanspike ();
+																task->SetFollowMouse ( true ); }
 
 	
 	else {
