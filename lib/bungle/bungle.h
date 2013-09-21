@@ -14,7 +14,7 @@
 
 #include <stdio.h>
 
-#include "tosser.h"
+#include "tosser/tosser.h"
 
 //#ifdef _DEBUG
 //#include "slasher.h"

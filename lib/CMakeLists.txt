@@ -4,3 +4,4 @@ include_directories(./)
 
 add_subdirectory(mmgr)
 add_subdirectory(tosser)
+add_subdirectory(bungle)
