@@ -12,7 +12,7 @@
 #include <iostream>
 using namespace std;
 
-#include "mmgr.h"
+#include "mmgr/mmgr.h"
 
 /*
 #ifdef _DEBUG
@@ -196,6 +196,6 @@ public :
 #include "darray.cpp"
 #include "btree.cpp"
 
-#include "nommgr.h"
+#include "mmgr/nommgr.h"
 
 #endif
