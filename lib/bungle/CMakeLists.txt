@@ -4,4 +4,3 @@ set(BUNGLE_SOURCES
     "bungle.h"
     "bungle.cpp")
 add_library(bungle STATIC ${BUNGLE_SOURCES})
-target_link_libraries(bungle tosser mmgr)

@@ -12,7 +12,7 @@
 #include <iostream>
 using namespace std;
 
-#include "mmgr/mmgr.h"
+#include "mmgr.h"
 
 /*
 #ifdef _DEBUG

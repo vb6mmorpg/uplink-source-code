@@ -3,6 +3,7 @@
 
 #include "errhnd.h"
 #include "rardefs.h"
+#include <cstring>
 
 extern ErrorHandler ErrHandler;
 
@@ -111,7 +112,7 @@ template <class T> void Array<T>::operator =(Array<T> &Src)
   Reset();
   Alloc(Src.BufSize);
   if (Src.BufSize!=0)
-    memcpy((void *)Buffer,(void *)Src.Buffer,Src.BufSize*sizeof(T));
+    std::memcpy((void *)Buffer,(void *)Src.Buffer,Src.BufSize*sizeof(T));
 }
 
 

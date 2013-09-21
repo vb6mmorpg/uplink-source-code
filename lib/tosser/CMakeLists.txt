@@ -1,9 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 
 set(TOSSER_SOURCES
-    "llist.cpp"
-    "darray.cpp"
+    "tosser.h"
     "btree.cpp"
-    "tosser.h")
+    "darray.cpp"
+    "llist.cpp")
 add_library(tosser STATIC ${TOSSER_SOURCES})
-target_link_libraries(tosser mmgr)

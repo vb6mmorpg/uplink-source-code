@@ -1,11 +1,11 @@
 
 #include <assert.h>
 
-#include "tosser/tosser.h"
+#include "tosser.h"
 
 #include "bungle.h"
 
-#include "mmgr/mmgr.h"
+#include "mmgr.h"
 
 //#include "debug.h"
 
