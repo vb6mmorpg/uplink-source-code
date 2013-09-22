@@ -10,8 +10,11 @@ set(UPLINK_CONTRIB ${CMAKE_SOURCE_DIR}/contrib)
 set(UPLINK_LIB ${CMAKE_SOURCE_DIR}/lib)
 
 include_directories(${CMAKE_BINARY_DIR}/contrib/SDL2-2.0.0/include
+    ${CMAKE_BINARY_DIR}/contrib/libmikmod-3.3.1/include
+    ${CMAKE_BINARY_DIR}/contrib/zlib-1.2.8
     ${UPLINK_CONTRIB}
     ${UPLINK_CONTRIB}/SDL2-2.0.0/include
+    ${UPLINK_CONTRIB}/zlib-1.2.8
     ${UPLINK_LIB}/mmgr
     ${UPLINK_LIB}/tosser
     ${UPLINK_LIB}/bungle)

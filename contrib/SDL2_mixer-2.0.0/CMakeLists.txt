@@ -46,4 +46,5 @@ set(SDL_MIXER_SOURCES
     "wavestream.c"
     "version.rc")
 add_library(SDL2_mixer SHARED ${SDL_MIXER_SOURCES})
-target_link_libraries(SDL2_mixer SDL2main SDL2)
+target_compile_definitions(SDL2_mixer PRIVATE -DMOD_MUSIC)
+target_link_libraries(SDL2_mixer SDL2main SDL2 mikmod)
