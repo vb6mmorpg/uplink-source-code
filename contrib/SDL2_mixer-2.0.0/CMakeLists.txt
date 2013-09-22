@@ -43,8 +43,10 @@ set(SDL_MIXER_SOURCES
     "music_mod.c"
     "music_modplug.c"
     "music_ogg.c"
-    "wavestream.c"
-    "version.rc")
+    "wavestream.c")
+if(WIN32)
+    set(SDL_MIXER_SOURCES ${SDL_MIXER_SOURCES} "version.rc")
+endif(WIN32)
 add_library(SDL2_mixer SHARED ${SDL_MIXER_SOURCES})
 target_compile_definitions(SDL2_mixer PRIVATE -DMOD_MUSIC)
 target_link_libraries(SDL2_mixer SDL2main SDL2 mikmod)
