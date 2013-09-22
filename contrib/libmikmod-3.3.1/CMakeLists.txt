@@ -93,25 +93,28 @@ SET(CPACK_SOURCE_IGNORE_FILES
     "/autom4te.cache/"
 )
 
-IF(WIN32 AND NOT UNIX)
-    # There is a bug in NSI that does not handle full unix paths properly. Make
-    # sure there is at least one set of four (4) backlasshes.
-    SET(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}\\\\dondorf-king.bmp")
-    SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\fc-solve.exe")
-    SET(CPACK_NSIS_HELP_LINK "http:\\\\\\\\mikmod.shlomifish.org")
-    SET(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\mikmod.shlomifish.org")
-    SET(CPACK_NSIS_DISPLAY_NAME "libmikmod")
-    SET(CPACK_NSIS_CONTACT "shlomif@cpan.org")
-    SET(CPACK_NSIS_MODIFY_PATH ON)
-    # Setting for NSIS :
-    SET(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\fc-solve.ico")
-    SET(CPACK_NSIS_MUI_UNIICON ${CPACK_NSIS_MUI_ICON})
-    SET(CPACK_PACKAGE_ICON ${CPACK_NSIS_MUI_ICON})
-    SET(CPACK_NSIS_MODIFY_PATH "ON")
-ELSE(WIN32 AND NOT UNIX)
-    # SET(CPACK_STRIP_FILES "fc-solve")
-    # SET(CPACK_SOURCE_STRIP_FILES "")
-ENDIF(WIN32 AND NOT UNIX)
+IF(WIN32)
+    ADD_DEFINITIONS(-DDLL_EXPORTS)
+    IF(NOT UNIX)
+        # There is a bug in NSI that does not handle full unix paths properly. Make
+        # sure there is at least one set of four (4) backlasshes.
+        SET(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}\\\\dondorf-king.bmp")
+        SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\fc-solve.exe")
+        SET(CPACK_NSIS_HELP_LINK "http:\\\\\\\\mikmod.shlomifish.org")
+        SET(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\mikmod.shlomifish.org")
+        SET(CPACK_NSIS_DISPLAY_NAME "libmikmod")
+        SET(CPACK_NSIS_CONTACT "shlomif@cpan.org")
+        SET(CPACK_NSIS_MODIFY_PATH ON)
+        # Setting for NSIS :
+        SET(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\fc-solve.ico")
+        SET(CPACK_NSIS_MUI_UNIICON ${CPACK_NSIS_MUI_ICON})
+        SET(CPACK_PACKAGE_ICON ${CPACK_NSIS_MUI_ICON})
+        SET(CPACK_NSIS_MODIFY_PATH "ON")
+    ELSE(NOT UNIX)
+        # SET(CPACK_STRIP_FILES "fc-solve")
+        # SET(CPACK_SOURCE_STRIP_FILES "")
+    ENDIF(NOT UNIX)
+ENDIF(WIN32)
 
 ### This is to set the RPATH correctly, so when installed under a prefix
 ### the executables will find the libraries.
