@@ -16,13 +16,14 @@ include_directories(${CMAKE_BINARY_DIR}/contrib/SDL2-2.0.0/include
     ${CMAKE_BINARY_DIR}/contrib/tiff-4.0.3/libtiff
     ${CMAKE_BINARY_DIR}/contrib/zlib-1.2.8
     ${UPLINK_CONTRIB}
+    ${UPLINK_CONTRIB}/SDL2-2.0.0/include
+    ${UPLINK_CONTRIB}/SDL2_image-2.0.0/include
+    ${UPLINK_CONTRIB}/SDL2_mixer-2.0.0/include
+    ${UPLINK_CONTRIB}/SDL2_ttf-2.0.12/include
     ${UPLINK_CONTRIB}/freetype-2.5.0.1/include
     ${UPLINK_CONTRIB}/freetype-2.5.0.1/include/freetype
     ${UPLINK_CONTRIB}/tiff-4.0.3/libtiff
     ${UPLINK_CONTRIB}/zlib-1.2.8
-    ${UPLINK_CONTRIB}/SDL2-2.0.0/include
-    ${UPLINK_CONTRIB}/SDL2_mixer-2.0.0/include
-    ${UPLINK_CONTRIB}/SDL2_ttf-2.0.12/include
     ${UPLINK_LIB}/mmgr
     ${UPLINK_LIB}/tosser
     ${UPLINK_LIB}/bungle)
