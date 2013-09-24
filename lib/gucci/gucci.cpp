@@ -1,3 +1,4 @@
+#include <map>
 #include <stdexcept>
 #include <vector>
 
@@ -9,6 +10,7 @@
 static SDL_Window   *window;
 static SDL_Renderer *renderer;
 
+static std::vector<GciDisplayCallback>     disp_callbacks;
 static std::vector<GciKeyboardCallback>    kb_callbacks;
 static std::vector<GciTextInputCallback>   ti_callbacks;
 static std::vector<GciTextEditingCallback> te_callbacks;
@@ -16,7 +18,8 @@ static std::vector<GciMouseMotionCallback> mm_callbacks;
 static std::vector<GciMouseWheelCallback>  mw_callbacks;
 static std::vector<GciMouseButtonCallback> mb_callbacks;
 
-static std::vector<TTF_Font *> fonts;
+static std::map<std::string, TTF_Font *> fonts;
+static std::map<std::string, TTF_Font *>::iterator default_font = fonts.end();
 
 void GciInit(const std::string& window_title, int width, int height, bool fullscreen, bool debug) {
     if (IMG_Init(IMG_INIT_TIF) != 0)
@@ -26,15 +29,15 @@ void GciInit(const std::string& window_title, int width, int height, bool fullsc
         throw std::runtime_error(std::string("SDL2_ttf initialisation failed: ") + std::string(SDL_GetError()));
     
     Uint32 fs = fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0;
-    if ((window = SDL_CreateWindow(window_title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, fs)) == nullptr)
+    if ((window = SDL_CreateWindow(window_title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_RESIZABLE | fs)) == nullptr)
         throw std::runtime_error(std::string("Window creation failed: ") + std::string(SDL_GetError()));
     if ((renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE)) == nullptr)
         throw std::runtime_error(std::string("Renderer creation failed: ") + std::string(SDL_GetError()));
 }
 
 void GciQuit() {
-    for (std::vector<TTF_Font *>::iterator it = fonts.begin(); it != fonts.end(); it++)
-        TTF_CloseFont(*it);
+    for (std::map<std::string, TTF_Font *>::iterator it = fonts.begin(); it != fonts.end(); it++)
+        TTF_CloseFont(it->second);
     IMG_Quit();
     if (TTF_WasInit())
         TTF_Quit();
@@ -46,6 +49,9 @@ void GciQuit() {
 
 void GciMainLoop() {
     while (true) {
+        for (std::vector<GciDisplayCallback>::iterator it = disp_callbacks.begin(); it != disp_callbacks.end(); it++)
+            (*it)(renderer);
+        
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
             switch(event.type) {
@@ -83,6 +89,9 @@ void GciMainLoop() {
     }
 }
 
+void GciRegisterDisplayCallback(const GciDisplayCallback cb) {
+    disp_callbacks.push_back(cb);
+}
 void GciRegisterKeyboardCallback(const GciKeyboardCallback cb) {
     kb_callbacks.push_back(cb);
 }
@@ -102,6 +111,14 @@ void GciRegisterMouseButtonCallback(const GciMouseButtonCallback cb) {
     mb_callbacks.push_back(cb);
 }
 
+void GciDeregisterDisplayCallback(const GciDisplayCallback cb) {
+    for (std::vector<GciDisplayCallback>::iterator it = disp_callbacks.begin(); it != disp_callbacks.end(); it++) {
+        if (*it == cb) {
+            disp_callbacks.erase(it);
+            return;
+        }
+    }
+}
 void GciDeregisterKeyboardCallback(const GciKeyboardCallback cb) {
     for (std::vector<GciKeyboardCallback>::iterator it = kb_callbacks.begin(); it != kb_callbacks.end(); it++) {
         if (*it == cb) {
@@ -151,20 +168,72 @@ void GciDeregisterMouseButtonCallback(const GciMouseButtonCallback cb) {
     }
 }
 
-bool GciLoadTrueTypeFont(const std::string &file, int ptsize, int index) {
+bool GciLoadTrueTypeFont(const std::string &file, const std::string &font_name, int ptsize, int index) {
     TTF_Font *f = TTF_OpenFontIndex(file.c_str(), ptsize, index);
     if (f == nullptr)
         return false;
-    fonts.push_back(f);
+    fonts.emplace(font_name, f);
     return true;
 }
 
-void GciUnloadTrueTypeFont(const std::string &family_name) {
-    for (std::vector<TTF_Font *>::iterator it = fonts.begin(); it != fonts.end(); it++) {
-        if (family_name == TTF_FontFaceFamilyName(*it)) {
-            TTF_CloseFont(*it);
+void GciUnloadTrueTypeFont(const std::string &font_name) {
+    for (std::map<std::string, TTF_Font *>::iterator it = fonts.begin(); it != fonts.end(); it++) {
+        if (font_name == it->first) {
+            TTF_CloseFont(it->second);
             fonts.erase(it);
             return;
         }
     }
+}
+
+bool GciSetDefaultFont(const std::string &font_name) {
+    std::map<std::string, TTF_Font *>::iterator it = fonts.find(font_name);
+    if (it == fonts.end())
+        return false;
+    default_font = it;
+    return true;
+}
+
+static bool GciDrawText(int x, int y, const std::string &text, const std::map<std::string, TTF_Font *>::iterator font, const SDL_Color *fg, int style) {
+    if (font == fonts.end())
+        return false;
+    
+    TTF_SetFontStyle(font->second, style);
+    
+    SDL_Color c;
+    if (fg == nullptr) {
+        c.r = 255;
+        c.g = 255;
+        c.b = 255;
+        c.a = 255;
+    } else
+        c = *fg;
+        
+    SDL_Surface *rendered_text = TTF_RenderUTF8_Blended(font->second, text.c_str(), c);
+    
+    SDL_Rect dest;
+    dest.x = x;
+    dest.y = y;
+    dest.w = rendered_text->w;
+    dest.h = rendered_text->h;
+    
+    SDL_Texture *text_texture = SDL_CreateTextureFromSurface(renderer, rendered_text);
+    
+    SDL_RenderCopy(renderer, text_texture, nullptr, &dest);
+    
+    SDL_DestroyTexture(text_texture);
+    SDL_FreeSurface(rendered_text);
+    
+    return true;
+}
+
+bool GciDrawText(int x, int y, const std::string &text, const SDL_Color *fg, int style) {
+    return GciDrawText(x, y, text, default_font, fg, style);
+}
+
+bool GciDrawText(int x, int y, const std::string &text, const std::string &font_name, const SDL_Color *fg, int style) {
+    std::map<std::string, TTF_Font *>::iterator it = fonts.find(font_name);
+    if (it == fonts.end())
+        return false;
+    return GciDrawText(x, y, text, it, fg, style);
 }
