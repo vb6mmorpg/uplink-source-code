@@ -1,5 +1,4 @@
 #include <stdexcept>
-#include <string>
 #include <vector>
 
 #include "SDL_image.h"
@@ -17,6 +16,8 @@ static std::vector<GciMouseMotionCallback> mm_callbacks;
 static std::vector<GciMouseWheelCallback>  mw_callbacks;
 static std::vector<GciMouseButtonCallback> mb_callbacks;
 
+static std::vector<TTF_Font *> fonts;
+
 void GciInit(const std::string& window_title, int width, int height, bool fullscreen, bool debug) {
     if (IMG_Init(IMG_INIT_TIF) != 0)
         throw std::runtime_error(std::string("SDL2_image initialisation failed: ") + std::string(SDL_GetError()));
@@ -32,6 +33,8 @@ void GciInit(const std::string& window_title, int width, int height, bool fullsc
 }
 
 void GciQuit() {
+    for (std::vector<TTF_Font *>::iterator it = fonts.begin(); it != fonts.end(); it++)
+        TTF_CloseFont(*it);
     IMG_Quit();
     if (TTF_WasInit())
         TTF_Quit();
@@ -47,6 +50,7 @@ void GciMainLoop() {
         while (SDL_PollEvent(&event)) {
             switch(event.type) {
                 case SDL_QUIT:
+                    GciQuit();
                     return;
                 case SDL_KEYDOWN:
                 case SDL_KEYUP:
@@ -142,6 +146,24 @@ void GciDeregisterMouseButtonCallback(const GciMouseButtonCallback cb) {
     for (std::vector<GciMouseButtonCallback>::iterator it = mb_callbacks.begin(); it != mb_callbacks.end(); it++) {
         if (*it == cb) {
             mb_callbacks.erase(it);
+            return;
+        }
+    }
+}
+
+bool GciLoadTrueTypeFont(const std::string &file, int ptsize, int index) {
+    TTF_Font *f = TTF_OpenFontIndex(file.c_str(), ptsize, index);
+    if (f == nullptr)
+        return false;
+    fonts.push_back(f);
+    return true;
+}
+
+void GciUnloadTrueTypeFont(const std::string &family_name) {
+    for (std::vector<TTF_Font *>::iterator it = fonts.begin(); it != fonts.end(); it++) {
+        if (family_name == TTF_FontFaceFamilyName(*it)) {
+            TTF_CloseFont(*it);
+            fonts.erase(it);
             return;
         }
     }

@@ -1,5 +1,7 @@
-#ifndef GUCCI_GCI_HPP
-#define GUCCI_GCI_HPP
+#ifndef GUCCI_HPP
+#define GUCCI_HPP
+
+#include <string>
 
 #include "SDL.h"
 
@@ -27,5 +29,8 @@ void GciDeregisterTextEditingCallback(const GciTextEditingCallback cb);
 void GciDeregisterMouseMotionCallback(const GciMouseMotionCallback cb);
 void GciDeregisterMouseWheelCallback(const GciMouseWheelCallback cb);
 void GciDeregisterMouseButtonCallback(const GciMouseButtonCallback cb);
+
+bool GciLoadTrueTypeFont(const std::string &file, int ptsize, int index = 0);
+void GciUnloadTrueTypeFont(const std::string &family_name);
 
 #endif
