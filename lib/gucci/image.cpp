@@ -16,7 +16,7 @@
 #include "tiff.h"
 #include "tiffio.h"
 
-#include "image.h"
+#include "image.hpp"
 
 #include "mmgr.h"
 

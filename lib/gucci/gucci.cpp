@@ -1,266 +1,148 @@
-#ifdef WIN32
-#include <windows.h>
-#endif
+#include <stdexcept>
+#include <string>
+#include <vector>
 
-#include <stdio.h>
+#include "SDL_image.h"
+#include "SDL_ttf.h"
 
-#include <GL/gl.h>
+#include "gucci.hpp"
 
-//#define USE_FTGL
-//#define USE_GLTT
+static SDL_Window   *window;
+static SDL_Renderer *renderer;
 
-#include <map>
+static std::vector<GciKeyboardCallback>    kb_callbacks;
+static std::vector<GciTextInputCallback>   ti_callbacks;
+static std::vector<GciTextEditingCallback> te_callbacks;
+static std::vector<GciMouseMotionCallback> mm_callbacks;
+static std::vector<GciMouseWheelCallback>  mw_callbacks;
+static std::vector<GciMouseButtonCallback> mb_callbacks;
 
-#include "gucci.h"
-#include "gucci_internal.h"
-#include "tosser.h"
-
-#ifdef USE_FTGL
-#  ifdef WIN32
-#include <FTFace.h>
-#include <FTGLBitmapFont.h>
-//#include <FTGLPixmapFont.h>
-#  else
-#include <ftgl/FTFace.h>
-#include <ftgl/FTGLBitmapFont.h>
-//#include <ftgl/FTGLPixmapFont.h>
-#  endif
-
-static std::map<int, FTGLBitmapFont *> fonts;
-//static std::map<int, FTGLPixmapFont *> fonts;
-#endif // USE_FTGL
-
-#ifdef USE_GLTT
-#  ifdef WIN32
-#include <FTFace.h>
-#include <FTEngine.h>
-#include <GLTTBitmapFont.h>
-#  else
-#include <gltt/FTFace.h>
-#include <gltt/FTEngine.h>
-#include <gltt/GLTTBitmapFont.h>
-#  endif
-
-static std::map<int, GLTTBitmapFont *> fonts;
-#endif // USE_GLTT
-
-#include <math.h>
-
-using namespace std;
-
-#include "mmgr.h"
-
-static BTree<FTFace *> faces;
-
-int  gci_defaultfont = HELVETICA_12;
-bool gci_truetypeenabled = false;
-
-void GciSetDefaultFont ( int STYLE )
-{
-
-	gci_defaultfont = STYLE;
-
-}
-
-void GciDrawText ( int x, int y, char *text )
-{
-
-	GciDrawText ( x, y, text, gci_defaultfont );
-
-}
-
-int GciTextWidth ( char *text )
-{
-	
-	return GciTextWidth ( text, gci_defaultfont );
-
-}
-
-void GciEnableTrueTypeSupport ()
-{
-
-	gci_truetypeenabled = true;
-
-}
-
-void GciDisableTrueTypeSupport ()
-{
-
-	gci_truetypeenabled = false;
-
-}
-
-bool GciRegisterTrueTypeFont( const char *filename )
-{
-    return true;
-}
-
-bool GciUnregisterTrueTypeFont( const char *filename )
-{
-    return true;
-}
-
-static FTFace * RegisterFace( const char *familyname, const char *filename )
-{
-    if (faces.GetData(familyname))
-        return faces.GetData(familyname);
+void GciInit(const std::string& window_title, int width, int height, bool fullscreen, bool debug) {
+    if (IMG_Init(IMG_INIT_TIF) != 0)
+        throw std::runtime_error(std::string("SDL2_image initialisation failed: ") + std::string(SDL_GetError()));
     
-    FTFace *face;
-#ifdef USE_GLTT
-	face = new FTFace();
-    if (!face->open(filename)) {
-        delete face;
-        return NULL;
-    }
-#endif // USE_GLTT
-#ifdef USE_FTGL
-	face = new FTFace(filename);
-    if (face->Error() != 0) {
-        delete face;
-        return NULL;
-    }
-#endif // USE_GLTT
-    faces.PutData(familyname, face);
-    return face;
-}
-
-static void UnregisterFace( const char *familyname )
-{
-    FTFace *face = faces.GetData(familyname);
-    if (face) {
-        faces.RemoveData(familyname);
-        delete face;
-    }
-}
-
-
-void GciDrawText ( int x, int y, char *text, int STYLE )
-{
-
-    if ( gci_truetypeenabled && fonts[STYLE] ) {
-            
-        // Use true type fonts
-#ifdef USE_GLTT        
-        GLTTBitmapFont *font = fonts[STYLE];
-        font->output( x, y, text );
-#endif // USE_GLTT
-#ifdef USE_FTGL
-		FTGLBitmapFont *font = fonts[STYLE];
-		//FTGLPixmapFont *font = fonts[STYLE];
-        glRasterPos2i(x, y);
-		font->Render(text);
-#endif // USE_FTGL
-
-        }
-    else {
-      GciFallbackDrawText( x, y, text, STYLE );
-    }
-}
-
-int GciTextWidth ( char *text, int STYLE )
-{
-  if (fonts[STYLE]) {
-#ifdef USE_GLTT
-        return fonts[STYLE]->getWidth(text);
-#endif
-#ifdef USE_FTGL
-    float llx, lly, llz, urx, ury, urz;
-    fonts[STYLE]->BBox( text, llx, lly, llz, urx, ury, urz );
-    return (int)(fabs(llx - urx) + 0.5);
-#endif
-  }
-    else 
-    return GciFallbackTextWidth( text, STYLE );
-}
-
-bool GciLoadTrueTypeFont ( int index, char *fontname, char *filename, int size )
-{
-
-    if (gci_truetypeenabled) {
-        FTFace *face = RegisterFace( fontname, filename );
-        
-        if (!face)
-            return false;
-        
-#ifdef USE_GLTT
-        int pointSize = int (size * 72.0 / 96.0 + 0.5);
-        
-        GLTTBitmapFont *font = new GLTTBitmapFont(face);
-
-        if (!font->create(pointSize)) {
-            delete font;
-            return false;
-        }
-#endif // USE_GLTT
-#ifdef USE_FTGL
-        int pointSize = int (size * 72.0 / 96.0 + 0.5);
-        
-        FTGLBitmapFont *font = new FTGLBitmapFont(filename);
-        //FTGLPixmapFont *font = new FTGLPixmapFont(filename);
-        if (font->Error() != 0 || !font->FaceSize(pointSize, 96)) {
-            delete font;
-            return false;
-        }
-#endif // USE_FTGL
-            
-        GciDeleteTrueTypeFont(index);
-        fonts[index] = font;
-
-        return true;
-    }
-    else {
-        printf ( "GciLoadTrueTypeFont called, but truetypes are not enabled\n" );
-        return false;
-    }
-}
-
-void GciDeleteTrueTypeFont ( int index )
-{
-#ifdef USE_FTGL
-    if (fonts[index]) 
-        delete fonts[index];
-#endif
-
-#ifdef USE_GLTT
-  // FTGL's destructor hangs, for some reason!
-    delete fonts[index];
-#endif
-    fonts[index] = NULL;
-}
-
-void GciDeleteAllTrueTypeFonts ()
-{
-    // Delete all the frickin' fonts
-#ifdef USE_GLTT    
-    for (map<int, GLTTBitmapFont *>::iterator x = fonts.begin(); x != fonts.end(); x++)
-        GciDeleteTrueTypeFont(x->first);
-#else
-    for (map<int, FTGLBitmapFont *>::iterator x = fonts.begin(); x != fonts.end(); x++)
-    //for (map<int, FTGLPixmapFont *>::iterator x = fonts.begin(); x != fonts.end(); x++)
-        GciDeleteTrueTypeFont(x->first);
-#endif
-    // Delete all the frickin' faces
-
-    DArray <FTFace *> *thefaces = faces.ConvertToDArray ();
+    if (TTF_Init() != 0)
+        throw std::runtime_error(std::string("SDL2_ttf initialisation failed: ") + std::string(SDL_GetError()));
     
-    for ( int id = 0; id < thefaces->Size (); ++id ) {
-        if ( thefaces->ValidIndex (id) ) {
+    Uint32 fs = fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0;
+    if ((window = SDL_CreateWindow(window_title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, fs)) == nullptr)
+        throw std::runtime_error(std::string("Window creation failed: ") + std::string(SDL_GetError()));
+    if ((renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE)) == nullptr)
+        throw std::runtime_error(std::string("Renderer creation failed: ") + std::string(SDL_GetError()));
+}
 
-            FTFace *theface = thefaces->GetData (id);
-            delete theface;
+void GciQuit() {
+    IMG_Quit();
+    if (TTF_WasInit())
+        TTF_Quit();
+    if (window)
+        SDL_DestroyWindow(window);
+    if (renderer)
+        SDL_DestroyRenderer(renderer);
+}
 
+void GciMainLoop() {
+    while (true) {
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            switch(event.type) {
+                case SDL_QUIT:
+                    return;
+                case SDL_KEYDOWN:
+                case SDL_KEYUP:
+                    for (std::vector<GciKeyboardCallback>::iterator it = kb_callbacks.begin(); it != kb_callbacks.end(); it++)
+                        (*it)(&(event.key));
+                    break;
+                case SDL_TEXTINPUT:
+                    for (std::vector<GciTextInputCallback>::iterator it = ti_callbacks.begin(); it != ti_callbacks.end(); it++)
+                        (*it)(&(event.text));
+                    break;
+                case SDL_TEXTEDITING:
+                    for (std::vector<GciTextEditingCallback>::iterator it = te_callbacks.begin(); it != te_callbacks.end(); it++)
+                        (*it)(&(event.edit));
+                    break;
+                case SDL_MOUSEMOTION:
+                    for (std::vector<GciMouseMotionCallback>::iterator it = mm_callbacks.begin(); it != mm_callbacks.end(); it++)
+                        (*it)(&(event.motion));
+                    break;
+                case SDL_MOUSEWHEEL:
+                    for (std::vector<GciMouseWheelCallback>::iterator it = mw_callbacks.begin(); it != mw_callbacks.end(); it++)
+                        (*it)(&(event.wheel));
+                    break;
+                case SDL_MOUSEBUTTONDOWN:
+                case SDL_MOUSEBUTTONUP:
+                    for (std::vector<GciMouseButtonCallback>::iterator it = mb_callbacks.begin(); it != mb_callbacks.end(); it++)
+                        (*it)(&(event.button));
+                    break;
+            }
         }
     }
+}
 
-    // Delete the structures
+void GciRegisterKeyboardCallback(const GciKeyboardCallback cb) {
+    kb_callbacks.push_back(cb);
+}
+void GciRegisterTextInputCallback(const GciTextInputCallback cb) {
+    ti_callbacks.push_back(cb);
+}
+void GciRegisterTextEditingCallback(const GciTextEditingCallback cb) {
+    te_callbacks.push_back(cb);
+}
+void GciRegisterMouseMotionCallback(const GciMouseMotionCallback cb) {
+    mm_callbacks.push_back(cb);
+}
+void GciRegisterMouseWheelCallback(const GciMouseWheelCallback cb) {
+    mw_callbacks.push_back(cb);
+}
+void GciRegisterMouseButtonCallback(const GciMouseButtonCallback cb) {
+    mb_callbacks.push_back(cb);
+}
 
-    delete thefaces;
-    faces.Empty ();
-    fonts.clear ();
-
-#ifdef USE_GLTT
-	// Added to kill the remaining memory leaks, not needed, could be removed if a updated library come and this function is not in.
-	//FTEngine::destroyStaticEngine();
-#endif
-
+void GciDeregisterKeyboardCallback(const GciKeyboardCallback cb) {
+    for (std::vector<GciKeyboardCallback>::iterator it = kb_callbacks.begin(); it != kb_callbacks.end(); it++) {
+        if (*it == cb) {
+            kb_callbacks.erase(it);
+            return;
+        }
+    }
+}
+void GciDeregisterTextInputCallback(const GciTextInputCallback cb) {
+    for (std::vector<GciTextInputCallback>::iterator it = ti_callbacks.begin(); it != ti_callbacks.end(); it++) {
+        if (*it == cb) {
+            ti_callbacks.erase(it);
+            return;
+        }
+    }
+}
+void GciDeregisterTextEditingCallback(const GciTextEditingCallback cb) {
+    for (std::vector<GciTextEditingCallback>::iterator it = te_callbacks.begin(); it != te_callbacks.end(); it++) {
+        if (*it == cb) {
+            te_callbacks.erase(it);
+            return;
+        }
+    }
+}
+void GciDeregisterMouseMotionCallback(const GciMouseMotionCallback cb) {
+    for (std::vector<GciMouseMotionCallback>::iterator it = mm_callbacks.begin(); it != mm_callbacks.end(); it++) {
+        if (*it == cb) {
+            mm_callbacks.erase(it);
+            return;
+        }
+    }
+}
+void GciDeregisterMouseWheelCallback(const GciMouseWheelCallback cb) {
+    for (std::vector<GciMouseWheelCallback>::iterator it = mw_callbacks.begin(); it != mw_callbacks.end(); it++) {
+        if (*it == cb) {
+            mw_callbacks.erase(it);
+            return;
+        }
+    }
+}
+void GciDeregisterMouseButtonCallback(const GciMouseButtonCallback cb) {
+    for (std::vector<GciMouseButtonCallback>::iterator it = mb_callbacks.begin(); it != mb_callbacks.end(); it++) {
+        if (*it == cb) {
+            mb_callbacks.erase(it);
+            return;
+        }
+    }
 }
