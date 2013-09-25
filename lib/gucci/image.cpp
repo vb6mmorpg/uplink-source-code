@@ -6,12 +6,13 @@
 
 #include "SDL_image.h"
 
-#include "gucci.hpp"
 #include "image.hpp"
 
 #include "mmgr.h"
 
 namespace Gucci {
+    extern SDL_Texture *CreateTextureFromSurface(const SDL_Surface *surface);
+    
     void Image::SetAlphaBorderRec(int x, int y, Uint8 a, Uint8 r, Uint8 g, Uint8 b) {
         if (x >= 0 && x < this->base->w && y >= 0 && y < this->base->h) {
             Uint32 *pixel = reinterpret_cast<Uint32 *>(this->base->pixels) + (y * this->base->w + x);
@@ -50,7 +51,7 @@ namespace Gucci {
             this->CreateErrorBitmap();
     }
 
-    Uint8 Image::GetAlphaMod() {
+    Uint8 Image::GetAlphaMod() const {
         Uint8 alpha;
         SDL_GetTextureAlphaMod(this->texture, &alpha);
         return alpha;
@@ -69,6 +70,7 @@ namespace Gucci {
             this->SetAlphaBorderRec(0, y, a, r, g, b );
             this->SetAlphaBorderRec(this->base->w - 1, y, a, r, g, b);
         }
+        SDL_DestroyTexture(texture);
         if ((this->texture = CreateTextureFromSurface(this->base)) == nullptr)
             this->CreateErrorBitmap();
     }

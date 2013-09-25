@@ -1,3 +1,6 @@
+#ifndef GUCCI_DRAWABLE_HPP
+#define GUCCI_DRAWABLE_HPP
+
 #include "SDL.h"
 
 namespace Gucci {
@@ -15,13 +18,13 @@ namespace Gucci {
             Drawable();
             virtual ~Drawable() = 0;
             
-            int GetOriginalWidth();
-            int GetOriginalHeight();
-            const SDL_Rect &GetGeometry();
-            double GetRotation();
-            const SDL_Point &GetRotationOrigin();
-            bool IsFlippedHorizontal();
-            bool IsFlippedVertical();
+            int GetOriginalWidth() const;
+            int GetOriginalHeight() const;
+            const SDL_Rect &GetGeometry() const;
+            double GetRotation() const;
+            const SDL_Point &GetRotationOrigin() const;
+            bool IsFlippedHorizontal() const;
+            bool IsFlippedVertical() const;
             
             void SetGeometry(int x, int y, int w, int h);
             void Move(int x, int y);
@@ -33,3 +36,5 @@ namespace Gucci {
             void FlipDiagonal();
     };
 }
+
+#endif

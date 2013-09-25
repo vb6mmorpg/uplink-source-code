@@ -23,31 +23,31 @@ namespace Gucci {
             SDL_DestroyTexture(this->texture);
     }
     
-    int Drawable::GetOriginalWidth() {
+    int Drawable::GetOriginalWidth() const {
         return this->base->w;
     }
     
-    int Drawable::GetOriginalHeight() {
+    int Drawable::GetOriginalHeight() const {
         return this->base->h;
     }
     
-    const SDL_Rect &Drawable::GetGeometry() {
+    const SDL_Rect &Drawable::GetGeometry() const {
         return this->geometry;
     }
     
-    double Drawable::GetRotation() {
+    double Drawable::GetRotation() const {
         return this->rotation;
     }
     
-    const SDL_Point &Drawable::GetRotationOrigin() {
+    const SDL_Point &Drawable::GetRotationOrigin() const {
         return this->rot_origin;
     }
     
-    bool Drawable::IsFlippedHorizontal() {
+    bool Drawable::IsFlippedHorizontal() const {
         return this->flip_h;
     }
     
-    bool Drawable::IsFlippedVertical() {
+    bool Drawable::IsFlippedVertical() const {
         return this->flip_v;
     }
     

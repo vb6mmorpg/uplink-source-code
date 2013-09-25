@@ -22,7 +22,7 @@ namespace Gucci {
             
             void Load(const std::string &filename);
             
-            Uint8 GetAlphaMod();
+            Uint8 GetAlphaMod() const;
             void SetAlphaMod(Uint8 alpha);
             void SetAlphaBorder(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
             

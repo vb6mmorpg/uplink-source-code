@@ -10,7 +10,7 @@
 namespace Gucci {
     static SDL_Window   *window;
     static SDL_Renderer *renderer;
-
+    
     static std::vector<DisplayCallback>     disp_callbacks;
     static std::vector<KeyboardCallback>    kb_callbacks;
     static std::vector<TextInputCallback>   ti_callbacks;
@@ -18,10 +18,10 @@ namespace Gucci {
     static std::vector<MouseMotionCallback> mm_callbacks;
     static std::vector<MouseWheelCallback>  mw_callbacks;
     static std::vector<MouseButtonCallback> mb_callbacks;
-
+    
     static std::map<std::string, TTF_Font *> fonts;
     static std::map<std::string, TTF_Font *>::iterator default_font = fonts.end();
-
+    
     void Init(const std::string& window_title, int width, int height, bool fullscreen, bool debug) {
         if (IMG_Init(IMG_INIT_TIF) != 0)
             throw std::runtime_error(std::string("SDL2_image initialisation failed: ") + std::string(SDL_GetError()));
@@ -35,7 +35,7 @@ namespace Gucci {
         if ((renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE)) == nullptr)
             throw std::runtime_error(std::string("Renderer creation failed: ") + std::string(SDL_GetError()));
     }
-
+    
     void Quit() {
         for (std::map<std::string, TTF_Font *>::iterator it = fonts.begin(); it != fonts.end(); it++)
             TTF_CloseFont(it->second);
@@ -44,7 +44,7 @@ namespace Gucci {
         SDL_DestroyWindow(window);
         SDL_DestroyRenderer(renderer);
     }
-
+    
     void MainLoop() {
         while (true) {
             for (std::vector<DisplayCallback>::iterator it = disp_callbacks.begin(); it != disp_callbacks.end(); it++)
@@ -86,7 +86,7 @@ namespace Gucci {
             }
         }
     }
-
+    
     void RegisterDisplayCallback(const DisplayCallback cb) {
         disp_callbacks.push_back(cb);
     }
@@ -108,7 +108,7 @@ namespace Gucci {
     void RegisterMouseButtonCallback(const MouseButtonCallback cb) {
         mb_callbacks.push_back(cb);
     }
-
+    
     void DeregisterDisplayCallback(const DisplayCallback cb) {
         for (std::vector<DisplayCallback>::iterator it = disp_callbacks.begin(); it != disp_callbacks.end(); it++) {
             if (*it == cb) {
@@ -165,7 +165,7 @@ namespace Gucci {
             }
         }
     }
-
+    
     bool LoadTrueTypeFont(const std::string &file, const std::string &font_name, int ptsize, int index) {
         TTF_Font *f = TTF_OpenFontIndex(file.c_str(), ptsize, index);
         if (f == nullptr)
@@ -173,7 +173,7 @@ namespace Gucci {
         fonts.emplace(font_name, f);
         return true;
     }
-
+    
     void UnloadTrueTypeFont(const std::string &font_name) {
         for (std::map<std::string, TTF_Font *>::iterator it = fonts.begin(); it != fonts.end(); it++) {
             if (font_name == it->first) {
@@ -183,7 +183,15 @@ namespace Gucci {
             }
         }
     }
-
+    
+    bool FontLoaded(const std::string &font_name) {
+        return fonts.find(font_name) != fonts.end();
+    }
+    
+    const std::string &GetDefaultFont() {
+        return default_font->first;;
+    }
+    
     bool SetDefaultFont(const std::string &font_name) {
         std::map<std::string, TTF_Font *>::iterator it = fonts.find(font_name);
         if (it == fonts.end())
@@ -192,10 +200,35 @@ namespace Gucci {
         return true;
     }
     
+    static TTF_Font *GetFont(const std::string &font_name) {
+        std::map<std::string, TTF_Font *>::iterator it = fonts.find(font_name);
+        if (it == fonts.end())
+            return nullptr;
+        return it->second;
+    }
+    
     SDL_Texture *CreateTextureFromSurface(SDL_Surface *surface) {
         return SDL_CreateTextureFromSurface(renderer, surface);
     }
-
+    
+    bool RenderText(Text &t) {
+        if (t.text.empty() || (!FontLoaded(t.font_name) && GetDefaultFont().empty()))
+            return false;
+        
+        if (t.base)
+            SDL_FreeSurface(t.base);
+        if (t.texture)
+            SDL_DestroyTexture(t.texture);
+        
+        if ((t.base = TTF_RenderUTF8_Blended(GetFont(t.font_name), t.text.c_str(), t.color)) == nullptr)
+            throw std::runtime_error(std::string("Text rendering failed: ") + std::string(SDL_GetError()));
+        
+        if ((t.texture = CreateTextureFromSurface(t.base)) == nullptr)
+            throw std::runtime_error(std::string("Text texture creation failed: ") + std::string(SDL_GetError()));
+        
+        return true;
+    }
+    
     static bool DrawText(int x, int y, const std::string &text, const std::map<std::string, TTF_Font *>::iterator font, const SDL_Color *fg, int style) {
         if (font == fonts.end())
             return false;
@@ -214,7 +247,7 @@ namespace Gucci {
             c.b = fg->g;
             c.a = fg->a;
         }
-            
+        
         SDL_Surface *rendered_text = TTF_RenderUTF8_Blended(font->second, text.c_str(), c);
         
         SDL_Rect dest;
@@ -232,11 +265,11 @@ namespace Gucci {
         
         return true;
     }
-
+    
     bool DrawText(int x, int y, const std::string &text, const SDL_Color *fg, int style) {
         return DrawText(x, y, text, default_font, fg, style);
     }
-
+    
     bool DrawText(int x, int y, const std::string &text, const std::string &font_name, const SDL_Color *fg, int style) {
         std::map<std::string, TTF_Font *>::iterator it = fonts.find(font_name);
         if (it == fonts.end())
@@ -254,7 +287,7 @@ namespace Gucci {
             flip_flags = SDL_FLIP_HORIZONTAL;
         else if (img.flip_v)
                 flip_flags = SDL_FLIP_VERTICAL;
-                
+        
         return SDL_RenderCopyEx(renderer, img.texture, nullptr, &(img.geometry), img.rotation + flip_correct, &(img.rot_origin), flip_flags) == 0;
     }
 }

@@ -6,6 +6,7 @@
 #include "SDL_ttf.h"
 
 #include "image.hpp"
+#include "text.hpp"
 
 namespace Gucci {
     typedef void (*DisplayCallback)();
@@ -38,12 +39,12 @@ namespace Gucci {
 
     bool LoadTrueTypeFont(const std::string &file, const std::string &font_name, int ptsize, int index = 0);
     void UnloadTrueTypeFont(const std::string &font_name);
+    bool FontLoaded(const std::string &font_name);
+    const std::string &GetDefaultFont();
     bool SetDefaultFont(const std::string &font_name);
-    
-    SDL_Texture *CreateTextureFromSurface(const SDL_Surface *surface);
 
-    bool DrawText(int x, int y, const std::string &text, const SDL_Color *fg = nullptr, int style = TTF_STYLE_NORMAL);
-    bool DrawText(int x, int y, const std::string &text, const std::string &font_name, const SDL_Color *fg = nullptr, int style = TTF_STYLE_NORMAL);
+    bool RenderText(Text &t);
+    bool DrawText(const Text &t);
     bool DrawImage(const Image &img);
 }
 
