@@ -3,41 +3,48 @@
 
 #include <string>
 
-#include "SDL.h"
+#include "SDL_ttf.h"
 
-typedef void (*GciDisplayCallback)(SDL_Renderer *renderer);
-typedef void (*GciKeyboardCallback)(const SDL_KeyboardEvent *event_data);
-typedef void (*GciTextInputCallback)(const SDL_TextInputEvent *event_data);
-typedef void (*GciTextEditingCallback)(const SDL_TextEditingEvent *event_data);
-typedef void (*GciMouseMotionCallback)(const SDL_MouseMotionEvent *event_data);
-typedef void (*GciMouseWheelCallback)(const SDL_MouseWheelEvent *event_data);
-typedef void (*GciMouseButtonCallback)(const SDL_MouseButtonEvent *event_data);
+#include "image.hpp"
 
-void GciInit(const std::string& window_title, int width, int height, bool fullscreen = true, bool debug = false);
-void GciQuit();
-void GciMainLoop();
+namespace Gucci {
+    typedef void (*DisplayCallback)();
+    typedef void (*KeyboardCallback)(const SDL_KeyboardEvent &event_data);
+    typedef void (*TextInputCallback)(const SDL_TextInputEvent &event_data);
+    typedef void (*TextEditingCallback)(const SDL_TextEditingEvent &event_data);
+    typedef void (*MouseMotionCallback)(const SDL_MouseMotionEvent &event_data);
+    typedef void (*MouseWheelCallback)(const SDL_MouseWheelEvent &event_data);
+    typedef void (*MouseButtonCallback)(const SDL_MouseButtonEvent &event_data);
 
-void GciRegisterDisplayCallback(const GciDisplayCallback cb);
-void GciRegisterKeyboardCallback(const GciKeyboardCallback cb);
-void GciRegisterTextInputCallback(const GciTextInputCallback cb);
-void GciRegisterTextEditingCallback(const GciTextEditingCallback cb);
-void GciRegisterMouseMotionCallback(const GciMouseMotionCallback cb);
-void GciRegisterMouseWheelCallback(const GciMouseWheelCallback cb);
-void GciRegisterMouseButtonCallback(const GciMouseButtonCallback cb);
+    void Init(const std::string& window_title, int width, int height, bool fullscreen = true, bool debug = false);
+    void Quit();
+    void MainLoop();
 
-void GciDeregisterDisplayCallback(const GciDisplayCallback cb);
-void GciDeregisterKeyboardCallback(const GciKeyboardCallback cb);
-void GciDeregisterTextInputCallback(const GciTextInputCallback cb);
-void GciDeregisterTextEditingCallback(const GciTextEditingCallback cb);
-void GciDeregisterMouseMotionCallback(const GciMouseMotionCallback cb);
-void GciDeregisterMouseWheelCallback(const GciMouseWheelCallback cb);
-void GciDeregisterMouseButtonCallback(const GciMouseButtonCallback cb);
+    void RegisterDisplayCallback(const DisplayCallback cb);
+    void RegisterKeyboardCallback(const KeyboardCallback cb);
+    void RegisterTextInputCallback(const TextInputCallback cb);
+    void RegisterTextEditingCallback(const TextEditingCallback cb);
+    void RegisterMouseMotionCallback(const MouseMotionCallback cb);
+    void RegisterMouseWheelCallback(const MouseWheelCallback cb);
+    void RegisterMouseButtonCallback(const MouseButtonCallback cb);
 
-bool GciLoadTrueTypeFont(const std::string &file, const std::string &font_name, int ptsize, int index = 0);
-void GciUnloadTrueTypeFont(const std::string &font_name);
-bool GciSetDefaultFont(const std::string &font_name);
+    void DeregisterDisplayCallback(const DisplayCallback cb);
+    void DeregisterKeyboardCallback(const KeyboardCallback cb);
+    void DeregisterTextInputCallback(const TextInputCallback cb);
+    void DeregisterTextEditingCallback(const TextEditingCallback cb);
+    void DeregisterMouseMotionCallback(const MouseMotionCallback cb);
+    void DeregisterMouseWheelCallback(const MouseWheelCallback cb);
+    void DeregisterMouseButtonCallback(const MouseButtonCallback cb);
 
-bool GciDrawText(int x, int y, const std::string &text, const SDL_Color *fg = nullptr, int style = TTF_STYLE_NORMAL);
-bool GciDrawText(int x, int y, const std::string &text, const std::string &font_name, const SDL_Color *fg = nullptr, int style = TTF_STYLE_NORMAL);
+    bool LoadTrueTypeFont(const std::string &file, const std::string &font_name, int ptsize, int index = 0);
+    void UnloadTrueTypeFont(const std::string &font_name);
+    bool SetDefaultFont(const std::string &font_name);
+    
+    SDL_Texture *CreateTextureFromSurface(const SDL_Surface *surface);
+
+    bool DrawText(int x, int y, const std::string &text, const SDL_Color *fg = nullptr, int style = TTF_STYLE_NORMAL);
+    bool DrawText(int x, int y, const std::string &text, const std::string &font_name, const SDL_Color *fg = nullptr, int style = TTF_STYLE_NORMAL);
+    bool DrawImage(const Image &img);
+}
 
 #endif
