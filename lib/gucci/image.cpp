@@ -26,7 +26,6 @@ namespace Gucci {
     }
 
     Image::Image(const std::string &filename) {
-        this->pixels = nullptr;
         this->geometry.x = 0;
         this->geometry.y = 0;
         this->rotation = 0.0;
@@ -36,19 +35,22 @@ namespace Gucci {
     }
 
     void Image::Load(const std::string &filename) {
-        // Forcing a conversion to a 32-bit ARGB format simplifies SetAlphaBorderRec(),
-        // because now we don't have to worry about handling esoteric formats.
-        this->base = SDL_ConvertSurfaceFormat(IMG_Load(filename.c_str()), SDL_PIXELFORMAT_ARGB8888, 0);
-        if (this->base == nullptr) {
-            this->CreateErrorBitmap();
-            return;
+        // You shouldn't be re-using the same object over and over. It's *SLOW*.
+        // Just load each image separately and apply transformations accordingly.
+        if (!(this->base || this->texture)) {
+            // Forcing a conversion to a 32-bit ARGB format simplifies SetAlphaBorderRec(),
+            // because now we don't have to worry about handling esoteric formats.
+            if ((this->base = SDL_ConvertSurfaceFormat(IMG_Load(filename.c_str()), SDL_PIXELFORMAT_ARGB8888, 0)) == nullptr) {
+                this->CreateErrorBitmap();
+                return;
+            }
+            this->geometry.w = this->base->w;
+            this->geometry.h = this->base->h;
+            this->rot_origin.x = (int)(this->geometry.w / 2);
+            this->rot_origin.y = (int)(this->geometry.h / 2);
+            if ((this->texture = CreateTextureFromSurface(this->base)) == nullptr)
+                this->CreateErrorBitmap();
         }
-        this->geometry.w = this->geometry.w;
-        this->geometry.h = this->geometry.h;
-        this->rot_origin.x = (int)(this->geometry.w / 2);
-        this->rot_origin.y = (int)(this->geometry.h / 2);
-        if ((this->texture = CreateTextureFromSurface(this->base)) == nullptr)
-            this->CreateErrorBitmap();
     }
 
     Uint8 Image::GetAlphaMod() const {

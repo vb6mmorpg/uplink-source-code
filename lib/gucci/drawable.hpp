@@ -6,7 +6,6 @@
 namespace Gucci {
     class Drawable {
         protected:
-            Uint8 *pixels;
             SDL_Surface *base;
             SDL_Texture *texture;
             SDL_Rect geometry;

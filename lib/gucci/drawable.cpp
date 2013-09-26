@@ -2,7 +2,6 @@
 
 namespace Gucci {
     Drawable::Drawable() {
-        this->pixels = nullptr;
         this->base = nullptr;
         this->texture = nullptr;
         this->geometry.x = 0;
