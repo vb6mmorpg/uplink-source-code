@@ -170,7 +170,8 @@ namespace Gucci {
         TTF_Font *f = TTF_OpenFontIndex(file.c_str(), ptsize, index);
         if (f == nullptr)
             return false;
-        fonts.emplace(font_name, f);
+        if (fonts.insert(std::pair<std::string, TTF_Font *>(font_name, f)).second == false)
+            TTF_CloseFont(f);
         return true;
     }
     
@@ -189,7 +190,7 @@ namespace Gucci {
     }
     
     const std::string &GetDefaultFont() {
-        return default_font->first;;
+        return default_font->first;
     }
     
     bool SetDefaultFont(const std::string &font_name) {
