@@ -68,7 +68,7 @@
 				AdditionalDependencies="bungle.lib eclipse.lib gucci.lib redshirt.lib soundgarden.lib vanbakel.lib irclib.lib sdl.lib SDL_mixer.lib tcp4w32.lib libtiff.lib gltt.lib freetype.lib dbghelp.lib opengl32.lib glu32.lib winmm.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\lib\bin;..\..\contrib\bin;..\..\contrib\tcp4u.331\tcp4w32;&quot;..\..\contrib\tiff-3.7.2\libtiff&quot;;&quot;..\..\contrib\gltt-2.5&quot;;&quot;..\..\contrib\freetype-1.3.1&quot;;&quot;..\..\contrib\SDL-1.2.11_dev\VisualC\SDL\Release&quot;;&quot;..\..\contrib\SDL_mixer-1.2.7_patched\VisualC\Release&quot;"
-				IgnoreDefaultLibraryNames="libcd.lib,libc.lib"
+				IgnoreDefaultLibraryNames="libcd.lib,libc.lib,LIBCMT"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -475,6 +475,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\interface\remoteinterface\auxgatewayscreen_interface.h"
+				>
+			</File>
+			<File
 				RelativePath=".\world\computer\bankaccount.h"
 				>
 			</File>
@@ -496,6 +500,10 @@
 			</File>
 			<File
 				RelativePath=".\app\binreloc.h"
+				>
+			</File>
+			<File
+				RelativePath=".\interface\remoteinterface\buygatewayscreen_interface.h"
 				>
 			</File>
 			<File
@@ -1323,6 +1331,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\interface\remoteinterface\auxgatewayscreen_interface.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\world\computer\bankaccount.cpp"
 				>
 			</File>
@@ -1344,6 +1356,10 @@
 			</File>
 			<File
 				RelativePath=".\app\binreloc.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\interface\remoteinterface\buygatewayscreen_interface.cpp"
 				>
 			</File>
 			<File

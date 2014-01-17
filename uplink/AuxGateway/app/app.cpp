@@ -37,6 +37,7 @@
 #include "world/world.h"
 #include "world/player.h"
 #include "world/generator/worldgenerator.h"
+#include "world/computer/computer.h"
 
 #include "interface/interface.h"
 #include "interface/localinterface/localinterface.h"
@@ -315,6 +316,29 @@ void App::LoadGame ( char *username )
 		}
 		else if ( game->GetWorld ()->GetPlayer ()->gateway.nuked ) {
 
+			int count = 0;
+			DArray <Computer *> *computers = game->GetWorld ()->computers.ConvertToDArray ();
+			UplinkAssert (computers);
+
+			for ( int i = 0; i < computers->Size (); ++i ) {
+
+				if ( computers->ValidIndex ( i ) ) {
+
+					Computer *computer = computers->GetData (i);
+					UplinkAssert (computer);
+
+					if ( strcmp ( computer->companyname, "Player" ) == 0 &&
+						strcmp ( computer->ip, game->GetWorld ()->GetPlayer ()->localhost ) != 0 ) {
+
+						count++;
+
+					}
+				}
+
+			}
+
+			delete computers;
+
 			// The player has nuked his gateway, so set him up
 			// with a new one           
             game->GetWorld ()->GetPlayer ()->gateway.nuked = false;
@@ -326,7 +350,11 @@ void App::LoadGame ( char *username )
             EclReset ( app->GetOptions ()->GetOptionValue ("graphics_screenwidth"),
 				       app->GetOptions ()->GetOptionValue ("graphics_screenheight") );
 			game->GetInterface ()->GetRemoteInterface ()->RunNewLocation ();
-			game->GetInterface ()->GetRemoteInterface ()->RunScreen ( 10 );
+
+			if ( count )
+				game->GetInterface ()->GetRemoteInterface ()->RunScreen ( 11 );
+			else
+				game->GetInterface ()->GetRemoteInterface ()->RunScreen ( 10 );
 
 		}
 		else {

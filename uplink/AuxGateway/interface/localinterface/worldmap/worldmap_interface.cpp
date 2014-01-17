@@ -231,8 +231,8 @@ void WorldMapInterface::CancelClick ( Button *button )
 	//
 	// Close the screen if we are at home without any half set up connection
 
-	if ( strcmp ( game->GetWorld ()->GetPlayer ()->GetRemoteHost ()->ip, IP_LOCALHOST ) == 0 &&
-		 strcmp ( game->GetWorld ()->GetPlayer ()->GetConnection ()->GetTarget (), IP_LOCALHOST ) == 0 ) 
+	if ( strcmp ( game->GetWorld ()->GetPlayer ()->GetRemoteHost ()->ip, game->GetWorld ()->GetPlayer ()->localhost ) == 0 &&
+		 strcmp ( game->GetWorld ()->GetPlayer ()->GetConnection ()->GetTarget (), game->GetWorld ()->GetPlayer ()->localhost ) == 0 ) 
 	
 		 CloseClick ( NULL );
 
@@ -1166,10 +1166,12 @@ void WorldMapInterface::CreateWorldMapInterface_Large ()
     
     VLocation *vl = game->GetWorld ()->GetVLocation ( game->GetWorld ()->GetPlayer ()->localhost );
     UplinkAssert ( vl );
+	char localbutton[64];
+	UplinkSnprintf(localbutton, sizeof(localbutton), "worldmap %s", game->GetWorld ()->GetPlayer ()->localhost);
     //EclRegisterButton ( GetScaledX ( vl->x, WORLDMAP_LARGE ) + x1 - 3, GetScaledY ( vl->y, WORLDMAP_LARGE ) + y1 - 3, 7, 7, "Localhost", "Your physical location", "worldmap 127.0.0.1 0" );
-    EclRegisterButton ( GetScaledX ( vl->x, WORLDMAP_LARGE ) + x1 - 3, GetScaledY ( vl->y, WORLDMAP_LARGE ) + y1 - 3, 7, 7, "Localhost", "Your physical location", "worldmap 127.0.0.1" );
+    EclRegisterButton ( GetScaledX ( vl->x, WORLDMAP_LARGE ) + x1 - 3, GetScaledY ( vl->y, WORLDMAP_LARGE ) + y1 - 3, 7, 7, "Localhost", "Your physical location", localbutton );
     //EclRegisterButtonCallbacks ( "worldmap 127.0.0.1 0", DrawLocation, NULL, NULL, button_highlight );
-    EclRegisterButtonCallbacks ( "worldmap 127.0.0.1", DrawLocation, NULL, NULL, button_highlight );
+    EclRegisterButtonCallbacks ( localbutton, DrawLocation, NULL, NULL, button_highlight );
 
     // Create a text box for help messages
 

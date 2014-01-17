@@ -36,6 +36,7 @@
 #include "world/generator/namegenerator.h"
 #include "world/generator/numbergenerator.h"
 #include "world/generator/langenerator.h"
+#include "world/company/company.h"
 #include "world/company/companyuplink.h"
 #include "world/company/sale.h"
 #include "world/company/mission.h"
@@ -215,7 +216,6 @@ void WorldGenerator::GenerateRandomWorld ()
 	}
 
     delete companies;
-
 }
 
 void WorldGenerator::GenerateSimpleStartingMissionA ()
@@ -799,6 +799,36 @@ void WorldGenerator::GenerateUplinkPublicAccessServer ()
 	dlg10->AddWidget ( "no", WIDGET_SCRIPTBUTTON, 300, 380, 100, 20, "NO", "Click here to log out", 51, -1, NULL, NULL );
 	comp->AddComputerScreen ( dlg10, 10 );
 
+	// Screen 11					Your Gateway is Gone!
+
+	DialogScreen *dlg11 = new DialogScreen ();
+	dlg11->SetMainTitle ( "Uplink" );
+	dlg11->SetSubTitle ( "Gateway connection failed" );
+	dlg11->AddWidget ( "caption1", WIDGET_CAPTION, 100, 130, 400, 270,
+							"We have been unable to connect you to your Gateway computer.\n\n"
+							"This may be due to a fault in out communications lines, and if this is the case then we "
+							"apologise and ask you to try again later.\n\n"
+							"We are aware that Uplink Agents occasionally suffer 'difficulties' with their Gateway "
+							"systems and sometimes require a new one as a result.  If this is the case, click YES below "
+							"and we will attempt to redirect your connection to one of your auxiliary gateways.  (There "
+							"will be an administrative charge of 500 credits if you take this action.)  Otherwise, "
+							"click NO to log off and try again later.\n\n"
+							"Rent a new Gateway computer?", "", 0, 0, NULL, NULL );
+	dlg11->AddWidget ( "yes", WIDGET_SCRIPTBUTTON, 170, 380, 100, 20, "YES", "Click here to rent a new Gateway", 52, 12, NULL, NULL );
+	dlg11->AddWidget ( "no", WIDGET_SCRIPTBUTTON, 300, 380, 100, 20, "NO", "Click here to log out", 51, -1, NULL, NULL );
+	comp->AddComputerScreen ( dlg11, 11 );
+
+	// Screen 12						World map - select nearby gateway
+
+	GenericScreen *gs12 = new GenericScreen ();
+	gs12->SetMainTitle ( "Uplink" );
+	gs12->SetSubTitle ( "Local gateway selection" );
+	gs12->SetScreenType ( SCREEN_AUXGATEWAY );
+
+	gs12->SetNextPage ( 9 );        // code card id
+
+	comp->AddComputerScreen ( gs12, 12 );
+
 }
 
 void WorldGenerator::GenerateUplinkInternalServicesSystem ()
@@ -839,6 +869,7 @@ void WorldGenerator::GenerateUplinkInternalServicesSystem ()
 	menu2->AddOption ( "Software upgrades", "Buy new Software", 6 );
 	menu2->AddOption ( "Hardware upgrades", "Buy new Hardware", 7 );
 	menu2->AddOption ( "Gateway upgrades",  "Exchange your gateway for a better model", 8 );
+	menu2->AddOption ( "Auxiliary gateways",  "Purchase an additional gateway server", 15 );
 	menu2->AddOption ( "Rankings",			"View the scores of the finest Uplink agents", 12 );
 	menu2->AddOption ( "Help",				"Read documents on a wide range of skills", 20 );
 	menu2->AddOption ( "Admin",				"Access Administrator services (security level 1 required)", 13, 1 );
@@ -950,6 +981,14 @@ void WorldGenerator::GenerateUplinkInternalServicesSystem ()
 	fss14->SetNextPage ( 2 );
 	comp->AddComputerScreen ( fss14, 14 );
 
+	// Screen 15		( Aux Gateway )
+
+	GenericScreen *gs15 = new GenericScreen ();
+	gs15->SetScreenType ( SCREEN_NEWGATEWAY );
+	gs15->SetMainTitle ( "Uplink" );
+	gs15->SetSubTitle ( "Auxiliary gateway" );
+	gs15->SetNextPage ( 1 );
+	comp->AddComputerScreen ( gs15, 15 );
 
 	// Screen 20		( Help menu )
 
@@ -3576,6 +3615,103 @@ Computer *WorldGenerator::GenerateEmptyFileServer ( char *companyname )
 
 }
 
+Computer *WorldGenerator::GenerateAuxGateway ( char *gatewaydef )
+{
+
+    //char *computername = strdup( NameGenerator::GenerateFileServerName( companyname ) );
+
+	char computername[SIZE_COMPUTER_NAME];
+	UplinkSnprintf(computername,sizeof(computername),"Gateway %d (%s)",NumberGenerator::RandomNumber(1000),gatewaydef);
+
+    Computer *existing = game->GetWorld ()->GetComputer ( computername );
+	while ( existing )
+	{
+		UplinkSnprintf(computername,sizeof(computername),"Gateway %d (%s)",NumberGenerator::RandomNumber(1000),gatewaydef);
+	}
+
+	VLocation *vl = GenerateLocation ();
+	vl->SetListed ( false );
+
+	Computer *comp = new Computer ();
+	comp->SetTYPE ( COMPUTER_TYPE_UNKNOWN );
+	comp->SetName ( computername );
+	comp->SetCompanyName ( "Player" );
+	comp->SetTraceSpeed ( 0 );
+	comp->SetTraceAction ( COMPUTER_TRACEACTION_NONE );
+	comp->SetIsTargetable ( false );
+	comp->SetIP ( vl->ip );
+	comp->databank.SetSize ( game->GetWorld ()->GetGatewayDef ( gatewaydef )->maxmemory * 8 );
+
+    //delete computername;
+
+	// Screen 0			User ID
+
+	UserIDScreen *uid0 = new UserIDScreen ();
+	uid0->SetMainTitle ( "Uplink" );
+	uid0->SetSubTitle ( computername );
+	uid0->SetNextPage ( 1 );
+	comp->AddComputerScreen ( uid0, 0 );
+
+	// Screen 1			Main Menu
+
+	MenuScreen *ms1 = new MenuScreen ();
+	ms1->SetMainTitle ( "Uplink" );
+	ms1->SetSubTitle ( "Main menu" );
+	ms1->AddOption ( "Files", "Click here to view the file server", 2 );
+	ms1->AddOption ( "Logs", "Click here to view the access logs", 3 );
+	comp->AddComputerScreen  ( ms1, 1 );
+
+	// Screen 2			File Server
+
+	GenericScreen *gs2 = new GenericScreen ();
+	gs2->SetMainTitle ( "Uplink" );
+	gs2->SetSubTitle ( "File Server" );
+	gs2->SetScreenType ( SCREEN_FILESERVERSCREEN );
+	gs2->SetNextPage ( 1 );
+	comp->AddComputerScreen ( gs2, 2 );
+
+	// Screen 3			File Server
+
+	LogScreen *ls3 = new LogScreen ();
+	ls3->SetMainTitle ( "Uplink" );
+	ls3->SetSubTitle ( "Log Screen" );
+	ls3->SetTARGET ( LOGSCREEN_TARGET_ACCESSLOGS );
+	ls3->SetNextPage ( 1 );
+	comp->AddComputerScreen ( ls3, 3 );
+
+
+	game->GetWorld ()->CreateComputer ( comp );
+
+	Computer *ism = game->GetWorld ()->GetComputer ( NAME_UPLINKINTERNALSERVICES );
+	UplinkAssert(ism);
+
+	Record *oldrecord = ism->recordbank.GetRecordFromName(game->GetWorld ()->GetPlayer ()->handle);
+	Record *record = new Record();
+	record->AddField(RECORDBANK_NAME, oldrecord->GetField(RECORDBANK_NAME));
+	record->AddField(RECORDBANK_PASSWORD, oldrecord->GetField(RECORDBANK_PASSWORD));
+	record->AddField(RECORDBANK_SECURITY, oldrecord->GetField(RECORDBANK_SECURITY));
+	comp->recordbank.AddRecord(record);
+
+	Data *copier = new Data ();
+	copier->SetTitle ( "File_Copier" );
+	copier->SetDetails ( DATATYPE_PROGRAM, 1, 0, 0, 1.0, SOFTWARETYPE_FILEUTIL );
+	comp->databank.PutData ( copier, 14 );
+
+	Data *deleter = new Data ();
+	deleter->SetTitle ( "File_Deleter" );
+	deleter->SetDetails ( DATATYPE_PROGRAM, 1, 0, 0, 1.0, SOFTWARETYPE_FILEUTIL );
+	comp->databank.PutData ( deleter, 15 );
+
+	Data *tutorial = new Data ();
+	tutorial->SetTitle ( "Tutorial" );
+	tutorial->SetDetails ( DATATYPE_PROGRAM, 4, 0, 0, 1.0, SOFTWARETYPE_OTHER );
+	comp->databank.PutData ( tutorial, 17 );
+
+	return comp;
+
+}
+
+
 Computer  *WorldGenerator::GenerateLAN ( char *companyname )
 {
 
@@ -3775,9 +3911,6 @@ void WorldGenerator::UpdateSoftwareUpgrades ( )
 {
 
 	CompanyUplink *cu = (CompanyUplink *) game->GetWorld ()->GetCompany ( "Uplink" );
-
-	if ( !cu )
-		return;
 
 	// Update the software items for sale
 

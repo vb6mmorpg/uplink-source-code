@@ -97,10 +97,12 @@ public:
 	LList <char *> *GetSecurity ();
 
 	void GiveStartingHardware ();
+	void GiveStartingHardware ( char *newgateway );
 	void GiveHardware  ( char *newhardware );
 	bool IsHWInstalled ( char *name );
 
 	void GiveStartingSoftware ();
+	void GiveStartingSoftware ( char *newgateway );
 
 	void GiveAllSoftware ();
 	void GiveAllHardware ();

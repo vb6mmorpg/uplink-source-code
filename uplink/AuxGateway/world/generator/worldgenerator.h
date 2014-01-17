@@ -94,6 +94,7 @@ public:
 	static Computer  *GeneratePersonalComputer		  ( char *personname );
 	static Computer  *GenerateVoicePhoneSystem		  ( char *personname );
 	
+	static Computer	 *GenerateAuxGateway			  ( char *gatewaydef );
 
 	// Low level functions for "fleshing out" specific items of data
 

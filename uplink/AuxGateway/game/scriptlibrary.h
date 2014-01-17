@@ -64,6 +64,7 @@ public:
 
 	static void Script50 ();						// Bill the player for renting another gateway
 	static void Script51 ();						// Player decides not to rent a new Gateway
+	static void Script52 ();						// Bill the player for connecting to an aux gateway
 
 	static void Script60 ();						// Stop Act1Scene4agents first email from being sent (subscription)
 	static void Script61 ();						// Stop Act1Scene4agents second email from being sent (ARC warning)

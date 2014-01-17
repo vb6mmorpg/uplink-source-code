@@ -13,6 +13,7 @@
 
 #include "world/world.h"
 #include "world/message.h"
+#include "world/computer/computer.h"
 #include "world/computer/gateway.h"
 #include "world/computer/gatewaydef.h"
 
@@ -530,6 +531,40 @@ void Gateway::GiveStartingHardware ()
 
 }
 
+void Gateway::GiveStartingHardware ( char *newgateway )
+{
+
+	char gatewaytype[128];
+	char unused[128];
+	int idnum;
+	sscanf(newgateway,"%s %d (%[^)]", unused, &idnum, gatewaytype);
+
+	GatewayDef *gatewaydef = game->GetWorld ()->GetGatewayDef(gatewaytype);
+	//UplinkAssert(gatewaydef);
+
+	SetGateway( gatewaydef );
+
+	DeleteLListData ( &hardware );
+	hardware.Empty ();
+
+	// CPU
+
+	for ( int i = 0; i < gatewaydef->maxcpus; i++ )
+		GiveCPU ( PLAYER_START_CPUTYPE );
+
+
+	// Modem
+
+	char modemname [64];
+	UplinkSnprintf ( modemname, sizeof ( modemname ), "Modem (%d Ghz)", gatewaydef->bandwidth );
+	SetModemType  ( modemname, gatewaydef->bandwidth );
+
+	// Memory
+
+	SetMemorySize ( gatewaydef->maxmemory * 8 );
+
+}
+
 void Gateway::GiveHardware ( char *newhardware )
 {
 
@@ -579,6 +614,24 @@ void Gateway::GiveStartingSoftware ()
 
 }
 
+void Gateway::GiveStartingSoftware ( char *newgateway )
+{
+	databank.Format();
+	databank.formatted = false;
+
+	Computer *comp = game->GetWorld ()->GetComputer (newgateway);
+	UplinkAssert(comp);
+
+	for ( int i = 0; i < comp->databank.NumDataFiles(); i++ )
+	{
+		Data *data = comp->databank.GetDataFile(i);
+		if ( data )
+		{
+			Data *newdata = new Data(data);
+			databank.PutData(newdata, comp->databank.GetMemoryIndex(i));
+		}
+	}
+}
 void Gateway::GiveAllHardware ()
 {
 

@@ -204,7 +204,7 @@ void Agent::GiveLink ( char *newip )
         // Update it now
 
         if ( strcmp ( name, "PLAYER" ) == 0 &&
-             strcmp ( game->GetWorld ()->GetPlayer ()->remotehost, IP_LOCALHOST ) == 0 &&
+             strcmp ( game->GetWorld ()->GetPlayer ()->remotehost, game->GetWorld ()->GetPlayer ()->localhost ) == 0 &&
              game->GetInterface ()->GetRemoteInterface ()->currentscreenindex == 0 ) {
 
             ((LinksScreenInterface *) game->GetInterface ()->GetRemoteInterface ()->GetInterfaceScreen ())->SetFullList ( &links );
