@@ -193,6 +193,11 @@ void SpamGenerator::GenerateSpam_BankScam ( Person *person, bool infected )
 	BankAccount *destaccount = dest->GetRandomAccount ();
 	UplinkAssert(destaccount);
 
+	char sourceaccno[128];
+	UplinkSnprintf(sourceaccno, sizeof(sourceaccno), "%d", sourceaccount->accountnumber);
+	char destaccno[128];
+	UplinkSnprintf(destaccno, sizeof(destaccno), "%d", destaccount->accountnumber);
+
 	int title_choice = NumberGenerator::RandomNumber(spamtitles.Size());
 	int name_choice = NumberGenerator::RandomNumber(spammers.Size());
 
@@ -210,6 +215,30 @@ void SpamGenerator::GenerateSpam_BankScam ( Person *person, bool infected )
 	int value = NumberGenerator::RandomNumber(10) * 1000000;
 	int percent = 10*(NumberGenerator::RandomNumber(4)+2);
 	int payment = (value/100) * percent;
+
+	// 10% chance of there actually being money here
+	if ( NumberGenerator::RandomNumber(100) <= 10 )
+	{
+		Person *hacker = (Person *)WorldGenerator::GetRandomAgent();
+		char *hackeracc = hacker->accounts.GetData(0);
+
+		char hackerip[256];
+		char hackeraccno[256];
+		sscanf(hackeracc,"%s %s",hackerip, hackeraccno);
+
+		sourceaccount->SetBalance(sourceaccount->balance+value, sourceaccount->loan);
+
+		// 50/50 chance of it being out of reach, or stolen by another hacker
+		if ( NumberGenerator::RandomNumber(100) < 50 )
+		{
+			sourceaccount->TransferMoney(source->ip,sourceaccno,dest->ip,destaccno,value,hacker);
+			destaccount->TransferMoney(dest->ip, destaccno, hackerip, hackeraccno,payment,hacker);
+			destaccount->ChangeBalance(-(value-payment),"Withdrawal");
+		} else {
+			sourceaccount->TransferMoney(source->ip,sourceaccno,hackerip, hackeraccno,value,hacker);
+		}
+		
+	}
 
 	std::ostrstream body;
 
@@ -235,8 +264,8 @@ void SpamGenerator::GenerateSpam_BankScam ( Person *person, bool infected )
 			<< "   " << dest->name << "\n"
 			<< "   IP: " << dest->ip << "\n"
 			<< "   Account: " << destaccount->accountnumber << "\n\n"
-			<< "Remove all trace of the transfer and reply to this email on your success, and I shall transfer"
-			<< "10% of the balance (" << payment << " credits) as thanks for your efforts.\n\n"
+			<< "Remove all trace of the transfer and reply to this email on your success, and I shall transfer " << percent
+			<< "% of the balance (" << payment << " credits) as thanks for your efforts.\n\n"
 			<< "Time is of the essence, so please make the transfer as soon as possible.";
 
 	body << '\x0';
