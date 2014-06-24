@@ -3,8 +3,8 @@
 
 #include "raros.h"
 
-#define false 0
-#define true  1
+//#define false 0
+//#define true  1
 
 #ifdef __EMX__
   #define INCL_BASE
