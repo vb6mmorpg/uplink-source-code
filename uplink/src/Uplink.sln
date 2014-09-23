@@ -1,41 +1,27 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Uplink", "Uplink.vcproj", "{B212AE39-B67C-44FF-BD8B-B1E1C8AD799E}"
-	ProjectSection(ProjectDependencies) = postProject
-		{735CD5FA-2CC5-4B8D-A60D-FCA14D1DD8C2} = {735CD5FA-2CC5-4B8D-A60D-FCA14D1DD8C2}
-		{934C5ED6-5329-4DA5-A92B-7CC3D32D4E0A} = {934C5ED6-5329-4DA5-A92B-7CC3D32D4E0A}
-		{5DD449CE-19FF-43A0-B17C-D52B5655E214} = {5DD449CE-19FF-43A0-B17C-D52B5655E214}
-		{377251CA-D5B9-4098-ABBF-DA437F84BF5B} = {377251CA-D5B9-4098-ABBF-DA437F84BF5B}
-		{523207A8-06FE-482B-AB56-6183D8C48F84} = {523207A8-06FE-482B-AB56-6183D8C48F84}
-		{CA23E288-C296-4DAA-AE57-E4C3F7E15003} = {CA23E288-C296-4DAA-AE57-E4C3F7E15003}
-		{4FAD1047-2942-4A33-8EF4-3E245F7BE21D} = {4FAD1047-2942-4A33-8EF4-3E245F7BE21D}
-		{7E18A01E-4DA0-4C6A-AB42-6EC44853098F} = {7E18A01E-4DA0-4C6A-AB42-6EC44853098F}
-		{42249017-93D5-4566-AFAA-A4C368BA2CEA} = {42249017-93D5-4566-AFAA-A4C368BA2CEA}
-	EndProjectSection
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Uplink", "Uplink.vcxproj", "{B212AE39-B67C-44FF-BD8B-B1E1C8AD799E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Bungle", "..\..\lib\bungle\Bungle.vcproj", "{4FAD1047-2942-4A33-8EF4-3E245F7BE21D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Bungle", "..\..\lib\bungle\Bungle.vcxproj", "{4FAD1047-2942-4A33-8EF4-3E245F7BE21D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Eclipse", "..\..\lib\eclipse\Eclipse.vcproj", "{735CD5FA-2CC5-4B8D-A60D-FCA14D1DD8C2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Eclipse", "..\..\lib\eclipse\Eclipse.vcxproj", "{735CD5FA-2CC5-4B8D-A60D-FCA14D1DD8C2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Gucci", "..\..\lib\gucci\Gucci.vcproj", "{7E18A01E-4DA0-4C6A-AB42-6EC44853098F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Gucci", "..\..\lib\gucci\Gucci.vcxproj", "{7E18A01E-4DA0-4C6A-AB42-6EC44853098F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Redshirt", "..\..\lib\redshirt\Redshirt.vcproj", "{377251CA-D5B9-4098-ABBF-DA437F84BF5B}"
-	ProjectSection(ProjectDependencies) = postProject
-		{6516E247-BDAE-4F13-B0A5-14E634C22ED0} = {6516E247-BDAE-4F13-B0A5-14E634C22ED0}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Redshirt", "..\..\lib\redshirt\Redshirt.vcxproj", "{377251CA-D5B9-4098-ABBF-DA437F84BF5B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Soundgarden", "..\..\lib\soundgarden\Soundgarden.vcproj", "{5DD449CE-19FF-43A0-B17C-D52B5655E214}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Soundgarden", "..\..\lib\soundgarden\Soundgarden.vcxproj", "{5DD449CE-19FF-43A0-B17C-D52B5655E214}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tosser", "..\..\lib\tosser\Tosser.vcproj", "{523207A8-06FE-482B-AB56-6183D8C48F84}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tosser", "..\..\lib\tosser\Tosser.vcxproj", "{523207A8-06FE-482B-AB56-6183D8C48F84}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vanbakel", "..\..\lib\vanbakel\Vanbakel.vcproj", "{42249017-93D5-4566-AFAA-A4C368BA2CEA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Vanbakel", "..\..\lib\vanbakel\Vanbakel.vcxproj", "{42249017-93D5-4566-AFAA-A4C368BA2CEA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IRCLib", "..\..\contrib\irclib\IRCLib.vcproj", "{934C5ED6-5329-4DA5-A92B-7CC3D32D4E0A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IRCLib", "..\..\contrib\irclib\IRCLib.vcxproj", "{934C5ED6-5329-4DA5-A92B-7CC3D32D4E0A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mmgr", "..\..\lib\mmgr\mmgr.vcproj", "{CA23E288-C296-4DAA-AE57-E4C3F7E15003}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mmgr", "..\..\lib\mmgr\mmgr.vcxproj", "{CA23E288-C296-4DAA-AE57-E4C3F7E15003}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Unrar", "..\..\contrib\unrar\Unrar.vcproj", "{6516E247-BDAE-4F13-B0A5-14E634C22ED0}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Unrar", "..\..\contrib\unrar\Unrar.vcxproj", "{6516E247-BDAE-4F13-B0A5-14E634C22ED0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
