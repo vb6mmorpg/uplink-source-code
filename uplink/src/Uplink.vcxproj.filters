@@ -636,6 +636,21 @@
     <ClInclude Include="interface\localinterface\worldmap\worldmap_layout.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Layouts\HD_UI_Layout.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Objects\HD_UI_GraphicsObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Objects\HD_UI_Object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\HD_Resources.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\HD_Screen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon3.ico">
@@ -1267,6 +1282,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="interface\localinterface\worldmap\worldmap_layout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Layouts\HD_UI_Layout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Objects\HD_UI_GraphicsObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Objects\HD_UI_Object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\HD_Resources.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\HD_Screen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

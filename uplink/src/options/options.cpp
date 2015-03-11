@@ -204,11 +204,11 @@ void Options::CreateDefaultOptions ()
 
 	// Graphics
 
-	if ( !GetOption ( "graphics_screenwidth" ) )		SetOptionValue ( "graphics_screenwidth", 1024, "Sets the width of the screen", false, false );
-	if ( !GetOption ( "graphics_screenheight" ) )		SetOptionValue ( "graphics_screenheight", 768, "Sets the height of the screen", false, false );
+	if ( !GetOption ( "graphics_screenwidth" ) )		SetOptionValue ( "graphics_screenwidth", 1280, "Sets the width of the screen", false, false );
+	if ( !GetOption ( "graphics_screenheight" ) )		SetOptionValue ( "graphics_screenheight", 720, "Sets the height of the screen", false, false );
     if ( !GetOption ( "graphics_screendepth" ) )        SetOptionValue ( "graphics_screendepth", -1, "Sets the colour depth. -1 Means use desktop colour depth.", false, false );
     if ( !GetOption ( "graphics_screenrefresh" ) )      SetOptionValue ( "graphics_screenrefresh", -1, "Sets the refresh rate. -1 Means use desktop refresh.", false, false );
-	if ( !GetOption ( "graphics_fullscreen" ) )			SetOptionValue ( "graphics_fullscreen", 1, "Sets the game to run fullscreen or in a window", true, true );
+	if ( !GetOption ( "graphics_fullscreen" ) )			SetOptionValue ( "graphics_fullscreen", 0, "Sets the game to run fullscreen or in a window", true, true );
 	if ( !GetOption ( "graphics_buttonanimations" ) )	SetOptionValue ( "graphics_buttonanimations", 1, "Enables or disables button animations", true, true );
 	if ( !GetOption ( "graphics_safemode" ) )			SetOptionValue ( "graphics_safemode", 0, "Enables graphical safemode for troubleshooting", true, true );
 	if ( !GetOption ( "graphics_softwaremouse" ) )		SetOptionValue ( "graphics_softwaremouse", 0, "Render a software mouse.  Use to correct mouse problems.", true, true );
