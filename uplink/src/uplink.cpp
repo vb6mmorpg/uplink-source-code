@@ -15,7 +15,10 @@
   */
 
 #define CRASH_REPORTS
+
+//====================
 #define UPLINK_HD		//weather to enable or disable Uplink HD. Comment to disable :(
+//====================
 
 #if defined(WIN32) && defined(CRASH_REPORTS)
 #define _WIN32_WINDOWS 0x0500	// for IsDebuggerPresent
@@ -77,6 +80,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_native_dialog.h>
 #include "uplinkHD/HD_Screen.h"
+#include "uplinkHD/HD_Resources.h"
 
 // ============================================================================
 // Initialisation functions
@@ -101,7 +105,7 @@ void Run_Game      ();
 void Cleanup_Uplink();
 
 //Uplink HD Prototypes
-void Start_UplinkHD();
+void Init_UplinkHD();
 void Cleanup_UplinkHD();
 //END HD Prototypes
 
@@ -450,7 +454,8 @@ void RunUplink ( int argc, char **argv )
 
 		// Run everything
 		Run_MainMenu  ();
-		Start_UplinkHD();
+		Init_UplinkHD();
+		HDScreen->HD_StartMainLoop();
 		//Run_Game      ();
 
 		// Clean up
@@ -462,9 +467,6 @@ void RunUplink ( int argc, char **argv )
 		Init_Fonts	  ();
 		Init_Sound    ();
 		Init_Music    ();
-
-		HD_Init_Allegro(argc, argv);
-		HD_Init_Allegro_Modules();
 
 		// Run everything
 
@@ -1354,17 +1356,17 @@ void Cleanup_Uplink() {
 //UPLINK HD INITS
 //===============
 
-void Start_UplinkHD()
+void Init_UplinkHD()
 {
-	//UplinkHDScreen = new HD_Screen();
-	HD_Screen::HD_GetScreen(); //inits the Mod
+	//Initializes Allegro and what-not
+	HDScreen = new HD_Screen();
+	HDResources = new HD_Resources();
 }
 
 void Cleanup_UplinkHD()
 {
 	//cleans up the HD stuff and then cleans up the normal uplink stuff
-	//UplinkHDScreen->HD_Dispose();
-	HD_Screen::HD_GetScreen()->HD_Dispose();
+	HDScreen->HD_Dispose();
 
 	Cleanup_Uplink();
 }

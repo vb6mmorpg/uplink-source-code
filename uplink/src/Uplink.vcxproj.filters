@@ -636,9 +636,6 @@
     <ClInclude Include="interface\localinterface\worldmap\worldmap_layout.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="uplinkHD\UI_Layouts\HD_UI_Layout.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="uplinkHD\UI_Objects\HD_UI_GraphicsObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -649,6 +646,27 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="uplinkHD\HD_Screen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\tinyxml2\tinyxml2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Objects\HD_UI_TextObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Objects\HD_UI_Button.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Layouts\HD_UI_TestLayout.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Objects\HD_UI_Container.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\dbtweener\dbtweener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\HD_ColorPalettes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1284,9 +1302,6 @@
     <ClCompile Include="interface\localinterface\worldmap\worldmap_layout.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="uplinkHD\UI_Layouts\HD_UI_Layout.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="uplinkHD\UI_Objects\HD_UI_GraphicsObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1297,6 +1312,24 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="uplinkHD\HD_Screen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\tinyxml2\tinyxml2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Objects\HD_UI_TextObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Objects\HD_UI_Button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Layouts\HD_UI_TestLayout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Objects\HD_UI_Container.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\dbtweener\dbtweener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

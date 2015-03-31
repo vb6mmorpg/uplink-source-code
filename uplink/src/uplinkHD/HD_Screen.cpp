@@ -13,6 +13,7 @@
 #include "app/app.h"
 
 #include "HD_Resources.h"
+#include "UI_Layouts/HD_UI_TestLayout.h"
 
 //=======================================================
 //Private:
@@ -28,8 +29,8 @@ void HD_Screen:: HD_Init_Allegro()
 	bFullscreen = false;
 
 	//For the first run, set the maximum available resolution and fullscreen windowed
-	//if not, get the settings in options:
-	if (app->GetOptions()->IsOptionEqualTo("game_firsttime", 1))
+	//if not, get the settings in options
+	if (app->GetOptions()->IsOptionEqualTo("game_firsttime", 0)) //DON'T FORGET TO REPLACE WITH 1!!!
 	{
 		nScreenW = display_modes.width;
 		nScreenH = display_modes.height;
@@ -38,6 +39,7 @@ void HD_Screen:: HD_Init_Allegro()
 		app->GetOptions()->SetOptionValue("graphics_screenwidth", nScreenW);
 		app->GetOptions()->SetOptionValue("graphics_screenheight", nScreenH);
 		app->GetOptions()->SetOptionValue("graphics_fullscreen", bFullscreen);
+		app->GetOptions()->SetOptionValue("game_firsttime", 0);
 	}
 	else
 	{
@@ -57,12 +59,14 @@ void HD_Screen:: HD_Init_Allegro()
 	//multisampling
 	al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
 	al_set_new_display_option(ALLEGRO_SAMPLES, 4, ALLEGRO_SUGGEST);
+	//al_set_new_display_option(ALLEGRO_RENDER_METHOD, 2, ALLEGRO_REQUIRE);
 
 	//creating the display
 	hdDisplay = al_create_display(nScreenW, nScreenH);
 	if (!hdDisplay)
 	{
-		al_show_native_message_box(NULL, "Warning!", "", "Could not create the Display!", NULL, ALLEGRO_MESSAGEBOX_ERROR);
+		al_show_native_message_box(hdDisplay, "Warning!", "",
+			"Could not create the Display!", NULL, ALLEGRO_MESSAGEBOX_ERROR);
 	}
 
 	al_set_window_position(hdDisplay, 0, 0);
@@ -86,9 +90,6 @@ void HD_Screen:: HD_Init_Allegro_Modules()
 
 	al_install_mouse();
 	al_install_keyboard();
-
-	//inits resources
-	HD_Resources::HD_GetResources();
 }
 
 //====================================
@@ -97,15 +98,25 @@ void HD_Screen:: HD_Init_Allegro_Modules()
 int HD_Screen:: HD_Main_Loop()
 {
 	bool bFinished = false;
+	bool redraw = false;
+
+	//SetUp the mouse!
+	HDResources->hd_loadImage("graphics/mousePointer.png");
+	mouseCursor = al_create_mouse_cursor(HDResources->hd_getImage("graphics/mousePointer.png"), 0, 0);
+	al_set_mouse_cursor(hdDisplay, mouseCursor);
 
 	ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
 	ALLEGRO_TIMER *timer = al_create_timer(1.0 / fps);
+	ALLEGRO_MOUSE_STATE mouseState;
 
 	al_register_event_source(event_queue, al_get_display_event_source(hdDisplay));
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
-	al_register_event_source(event_queue, al_get_mouse_event_source());
+	//al_register_event_source(event_queue, al_get_mouse_event_source());
 
 	al_start_timer(timer);
+
+	HD_UI_TestLayout *testLayout = new HD_UI_TestLayout();
+	hd_setNewLayout(testLayout);
 
 	while (!bFinished)
 	{
@@ -114,29 +125,29 @@ int HD_Screen:: HD_Main_Loop()
 
 		if (ev.type == ALLEGRO_EVENT_TIMER)
 		{
+			redraw = true;
+
+			al_get_mouse_state(&mouseState);
 			//update current layout
-			//if (currentLayout)
-			//	currentLayout->Update();
-			//else
-				//bFinished = true;
+			if (currentLayout)
+				currentLayout->Update(&mouseState, al_get_timer_speed(timer));
+			
 		}
-		else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 		{
 			bFinished = true;
 		}
-		else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
-		{
-			//for testing stuff:
-			//hd_setFullscreen(!bFullscreen);
-		}
 
-		if (al_is_event_queue_empty(event_queue))
+		if (redraw && al_is_event_queue_empty(event_queue))
 		{
+			redraw = false;
 			//redraw current layout
-//			if (currentLayout)
-//				currentLayout->Draw();
-
-			al_draw_line(0, 0, hd_screenAnchor.br[0], hd_screenAnchor.br[1], al_map_rgb(255, 255, 255), 1);
+			if (currentLayout)
+				currentLayout->Draw();
+			else {
+				al_draw_line(0, 0, hd_screenAnchor.br[0], hd_screenAnchor.br[1], al_map_rgb(255, 255, 255), 1);
+				al_draw_text(HDResources->font18, al_map_rgb(255, 255, 255), nScreenW / 2, nScreenH / 2, ALLEGRO_ALIGN_CENTER, "GREAT SUCCESS! But there's no layout...");
+			}
 
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -146,41 +157,41 @@ int HD_Screen:: HD_Main_Loop()
 	return 0;
 }
 
+//=======================================================
+//Public:
+//=======================================================
+
 //Construction/Destruction
 HD_Screen::HD_Screen()
 {
 	HD_Init_Allegro();
 	HD_Init_Allegro_Modules();
-
-	HD_Main_Loop();
 }
 
 HD_Screen::~HD_Screen()
 {
-	screen = NULL;
+	HDScreen = NULL;
+	al_destroy_display(hdDisplay);
 }
 
-//=======================================================
-//Public:
-//=======================================================
-
-HD_Screen* HD_Screen::screen = NULL;
-HD_Screen* HD_Screen::HD_GetScreen()
+bool HD_Screen::bHD_Started = false;
+void HD_Screen::HD_StartMainLoop()
 {
-	if (!screen)
+	if (!bHD_Started)
 	{
-		screen = new HD_Screen();
-		return screen;
+		bHD_Started = true;
+		HD_Main_Loop();
 	}
 	else
 	{
-		return screen;
+		al_show_native_message_box(hdDisplay, "Warning!", "",
+			"You're trying to start the main loop again! Won't do that.", NULL, ALLEGRO_MESSAGEBOX_ERROR);
 	}
 }
 
 void HD_Screen::HD_Dispose()
 {
-	delete HD_Resources::HD_GetResources();
+	delete HDResources;
 
 	al_shutdown_font_addon();
 	al_shutdown_ttf_addon();
@@ -190,10 +201,12 @@ void HD_Screen::HD_Dispose()
 	al_uninstall_mouse();
 	al_uninstall_keyboard();
 
-	al_destroy_display(hdDisplay);
-
 	delete this;
 }
+
+//=================
+// Common functions
+//=================
 
 void HD_Screen:: hd_setResolution(int width, int height)
 {
@@ -224,20 +237,22 @@ void HD_Screen:: hd_setFullscreen(bool bIsFullscreen)
 }
 
 //scaling functions
-void HD_Screen::hd_scaleByWidth(float &value)
+float HD_Screen::hd_scaleByWidth(float value)
 {
 	float origW = 1920; //the base W resolution of the UI
 	value = (value / origW) * nScreenW;
+	return value;
 }
 
-void HD_Screen::hd_scaleByHeight(float &value)
+float HD_Screen::hd_scaleByHeight(float value)
 {
 	float origH = 1080; //the base H resolution of the UI
 	value = (value / origH) * nScreenH;
+	return value;
 }
 
 //layout functions
-void HD_Screen::hd_setNewLayout(HD_UI_Layout *newLayout)
+void HD_Screen::hd_setNewLayout(HD_UI_Container *newLayout)
 {
 	if (currentLayout)
 		currentLayout->Clear();
@@ -246,7 +261,7 @@ void HD_Screen::hd_setNewLayout(HD_UI_Layout *newLayout)
 	currentLayout->Create();
 }
 
-HD_UI_Layout* HD_Screen::hd_getCurrentLayout()
+HD_UI_Container* HD_Screen::hd_getCurrentLayout()
 {
 	return currentLayout;
 }
@@ -291,4 +306,4 @@ void HD_Screen::hd_initAnchors()
 	hd_screenAnchor.h23 = (nScreenH * 2) / 3;
 }
 
-//HD_Screen *UplinkHDScreen = NULL;
+HD_Screen *HDScreen;

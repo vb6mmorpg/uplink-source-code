@@ -1,6 +1,6 @@
 //=========================================
 // The meat of the MOD.
-// Contains the Renderer and main loop,
+// Contains the Init and main loop,
 // the screen, its properties and functions
 // for manipulating its layout.
 //
@@ -13,7 +13,8 @@
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
-#include "UI_Layouts/HD_UI_Layout.h"
+
+#include "UI_Objects\HD_UI_Container.h"
 
 class HD_Screen
 {
@@ -42,13 +43,13 @@ private:
 
 	//screen
 	ALLEGRO_DISPLAY *hdDisplay;
-	static HD_Screen* screen;	//singleton
 
 	//update/render fps
 	int fps;
 
 	//current layout to update
-	HD_UI_Layout *currentLayout;	//the current layout to update
+	HD_UI_Container *currentLayout;		//the current layout to update
+	ALLEGRO_MOUSE_CURSOR *mouseCursor;
 
 	//Allegro Inits. Called on start of game
 	void HD_Init_Allegro();
@@ -56,10 +57,7 @@ private:
 
 	//The Main Loop
 	int  HD_Main_Loop();
-
-	//construction/destruction
-	HD_Screen();
-	~HD_Screen();
+	static bool bHD_Started;
 
 public:
 
@@ -72,26 +70,28 @@ public:
 	HD_ANCHORS hd_screenAnchor;
 
 	//construction/destruction
-	//HD_Screen();
-	//~HD_Screen();
+	HD_Screen();
+	~HD_Screen();
 
-	static HD_Screen* HD_GetScreen();
+	void HD_StartMainLoop();
+
 	void HD_Dispose();	//used to uninstall Allegro and destroy the display
 
 	//screen functions
+	//ALLEGRO_DISPLAY* hd_getDisplay(){ return hdDisplay; }
 	void hd_setResolution(int width, int height);
 	void hd_setFullscreen(bool bIsFullscreen);
 	void hd_initAnchors();
 
 	//scaling functions
-	void hd_scaleByWidth(float &value);		//scales a value by the Width difference
-	void hd_scaleByHeight(float &value);	//scales a value by the Height difference
+	float hd_scaleByWidth(float value);		//scales a value by the Width difference
+	float hd_scaleByHeight(float value);	//scales a value by the Height difference
 
 	//layout functions
-	void hd_setNewLayout(HD_UI_Layout *newLayout);		//set a layout for the screen
-	HD_UI_Layout* hd_getCurrentLayout();
+	void hd_setNewLayout(HD_UI_Container *newLayout);		//set a layout for the screen
+	HD_UI_Container* hd_getCurrentLayout();
 };
 
-//extern HD_Screen *UplinkHDScreen;
+extern HD_Screen *HDScreen;
 
 #endif

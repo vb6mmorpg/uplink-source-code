@@ -12,6 +12,7 @@
 #include <functional>
 
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
 #include "HD_UI_Object.h"
 
 enum ShavedRectCornerLoc
@@ -29,71 +30,71 @@ private:
 	ALLEGRO_COLOR color1 = al_map_rgba(255, 0, 255, 255);		//colors used for primitives
 	ALLEGRO_COLOR color2 = al_map_rgba(255, 0, 255, 255);
 
-	HD_UI_GraphicsObject() { }			//don't want this to get created without parameters!
+	ALLEGRO_VERTEX shavedRectVerts[5];
+	ALLEGRO_VERTEX gradientRectVerts[12];
 
 protected:
 	//Graphics drawing functions
-	std::function<void()>drawFunction;
+	std::function<void()>drawGraphicObject;
 	
 	void DrawImageGfx();
 	
-	void DrawStrokedRectGfx(int nThickness);
+	void DrawRectGfx(float fThickness);
+
+	void DrawStrokedFillRectGFX(float fThickness);
 	
-	void DrawFillRectGfx();
+	void DrawShavedRectGfx(bool isFilled, float fCornerWidth, ShavedRectCornerLoc corner);
 	
-	void DrawShavedStrokedRectGfx(float nThickness, ShavedRectCornerLoc corner, float nCornerWidth);
+	void DrawLineGfx(int nThickness);
 	
-	void DrawShavedFillRectGfx(ShavedRectCornerLoc corner, float nCornerWidth);
+	void DrawFillRectLineHeaderFooterGfx(bool bIsLineHeader, float fLineThickness);
 	
-	void DrawLineGfx(float nThickness);
-	
-	void DrawFillRectLineHeaderFooterGfx(bool bIsLineHeader, float nLineThickness);
-	
-	void DrawGradientRectGFX(bool bIsVertical, float gradMidPoint);
+	void DrawGradientRectGFX(bool bIsVertical, float fStartGrad);
 
 public:
 	// Creation functions
+	//Construction
+	HD_UI_GraphicsObject();
 
 	//Image Object
-	HD_UI_GraphicsObject(char *objectName, int nIndex, char *imageName, char *atlasName,
-		float nX, float nY, float nWidth, float nHeight, HD_UI_Layout *newParent);
+	HD_UI_GraphicsObject(char *objectName, int index, char *imageName, char *atlasName,
+		float fX, float fY, HD_UI_Container *newParent);
 
-	//Stroked Rect object
-	HD_UI_GraphicsObject(char *objectName, int nIndex, float nX, float nY, float nWidth, float nHeight,
-		int nThickness, ALLEGRO_COLOR color, HD_UI_Layout *newParent);
+	//Stroked/Filled Rect object
+	HD_UI_GraphicsObject(char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
+		float fThickness, ALLEGRO_COLOR color, HD_UI_Container *newParent);
 
-	//Filled Rect object
-	HD_UI_GraphicsObject(char *objectName, int nIndex, float nX, float nY, float nWidth, float nHeight,
-		ALLEGRO_COLOR color, HD_UI_Layout *newParent);
+	//Filled & Stroked Rect object
+	HD_UI_GraphicsObject(char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
+		float fThickness, ALLEGRO_COLOR fillColor, ALLEGRO_COLOR lineColor, HD_UI_Container *newParent);
 
-	//Shaved Stroked Rect object
-	HD_UI_GraphicsObject(char *objectName, int nIndex, float nX, float nY, float nWidth, float nHeight,
-		float nThickness, ShavedRectCornerLoc corner, float nCornerWidth, ALLEGRO_COLOR color, HD_UI_Layout *newParent);
-
-	//Shaved Filled Rect object
-	HD_UI_GraphicsObject(char *objectName, int nIndex, float nX, float nY, float nWidth, float nHeight,
-		ShavedRectCornerLoc corner, float nCornerWidth, ALLEGRO_COLOR color, HD_UI_Layout *newParent);
+	//Shaved Stroked/Filled Rect object
+	HD_UI_GraphicsObject(char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
+		bool isFilled, ShavedRectCornerLoc corner, float fCornerWidth, ALLEGRO_COLOR color, HD_UI_Container *newParent);
 	
 	//Line object
-	HD_UI_GraphicsObject(char *objectName, int nIndex, float nX, float nY, float nX2, float nY2,
-		float nThickness, ALLEGRO_COLOR color, HD_UI_Layout *newParent);
+	HD_UI_GraphicsObject(char *objectName, int index, float fX, float fY, float fX2, float fY2,
+		int nThickness, ALLEGRO_COLOR color, HD_UI_Container *newParent);
 	
 	//Filled Rect with Line Header/Footer object
-	HD_UI_GraphicsObject(char *objectName, int nIndex, float nX, float nY, float nWidth, float nHeight,
-		ALLEGRO_COLOR rectColor, bool bIsLineHeader, float nLineThickness, ALLEGRO_COLOR lineColor, HD_UI_Layout *newParent);
+	HD_UI_GraphicsObject(char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
+		ALLEGRO_COLOR rectColor, bool bIsLineHeader, float fLineThickness, ALLEGRO_COLOR lineColor, HD_UI_Container *newParent);
 	
 	//Gradient Rect object
-	HD_UI_GraphicsObject(char *objectName, int nIndex, float nX, float nY, float nWidth, float nHeight,
-		bool bIsVertical, float gradMidPoint, ALLEGRO_COLOR color1, ALLEGRO_COLOR color2, HD_UI_Layout *newParent);
+	HD_UI_GraphicsObject(char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
+		bool bIsVertical, float fStartGrad, ALLEGRO_COLOR color01, ALLEGRO_COLOR color02, HD_UI_Container *newParent);
 
-	//destruction
-	~HD_UI_GraphicsObject();
+	//Destruction
+	~HD_UI_GraphicsObject() { al_destroy_bitmap(gfxImage); }
 
+	//Property setters
+	void setGfxImage(ALLEGRO_BITMAP *newImage) { gfxImage = newImage; }
+	void setColors(ALLEGRO_COLOR newColor1, ALLEGRO_COLOR newColor2)
+		{ color1 = newColor1; color2 = newColor2; }
 
-	//general functions
-	void virtual Update();
-	void virtual Draw();
-	void virtual Clear();
+	//General object functions
+	void Draw();
+	void Clear();
 
 };
 
