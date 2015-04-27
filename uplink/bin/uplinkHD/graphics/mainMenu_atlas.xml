@@ -1,0 +1,18 @@
+<TextureAtlas imagePath="mainMenu_atlas.png">
+	<SubTexture name="btnExit_c" x="0" y="907" width="64" height="64"/>
+	<SubTexture name="btnExit_h" x="0" y="775" width="64" height="64"/>
+	<SubTexture name="btnExit_s" x="0" y="841" width="64" height="64"/>
+	<SubTexture name="btnOptions_c" x="66" y="775" width="64" height="64"/>
+	<SubTexture name="btnOptions_h" x="66" y="907" width="64" height="64"/>
+	<SubTexture name="btnOptions_s" x="66" y="841" width="64" height="64"/>
+	<SubTexture name="btnSubmit_c" x="0" y="973" width="40" height="40"/>
+	<SubTexture name="btnSubmit_h" x="126" y="973" width="40" height="40"/>
+	<SubTexture name="btnSubmit_s" x="132" y="817" width="40" height="40"/>
+	<SubTexture name="btnUserDelete_c" x="132" y="775" width="40" height="40"/>
+	<SubTexture name="btnUserDelete_h" x="42" y="973" width="40" height="40"/>
+	<SubTexture name="btnUserDelete_s" x="84" y="973" width="40" height="40"/>
+	<SubTexture name="logo" x="0" y="66" width="696" height="529"/>
+	<SubTexture name="logoTitle" x="0" y="0" width="960" height="64"/>
+	<SubTexture name="userPhoto_big" x="0" y="597" width="176" height="176"/>
+	<SubTexture name="userPhoto_small" x="132" y="859" width="39" height="39"/>
+</TextureAtlas>

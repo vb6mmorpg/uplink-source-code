@@ -669,6 +669,30 @@
     <ClInclude Include="uplinkHD\HD_ColorPalettes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="uplinkHD\HD_Mouse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Layouts\HD_UI_MainMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Objects\HD_UI_Tooltip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Objects\HD_UI_PopUp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Objects\HD_UI_ButtonInput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Objects\HD_UI_ButtonSwitch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Objects\HD_UI_ButtonDropdown.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Objects\HD_UI_ButtonMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon3.ico">
@@ -1330,6 +1354,30 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\lib\dbtweener\dbtweener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\HD_ColorPalettes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\HD_Mouse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Layouts\HD_UI_MainMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Objects\HD_UI_Tooltip.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Objects\HD_UI_PopUp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Objects\HD_UI_ButtonInput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Objects\HD_UI_ButtonSwitch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Objects\HD_UI_ButtonMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

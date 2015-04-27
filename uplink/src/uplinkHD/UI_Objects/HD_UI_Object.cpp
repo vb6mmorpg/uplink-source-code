@@ -20,36 +20,37 @@ HD_UI_Object::~HD_UI_Object()
 }
 
 //functions
-void HD_UI_Object::Update(ALLEGRO_MOUSE_STATE *mouseState, double timeSpeed)
+void HD_UI_Object::Update()
 {
-	//animations update
-	tweensContainer.step(timeSpeed);
+	if (parent)
+		isVisible = parent->isVisible && visible;
+	else
+		isVisible = visible;
 
-	//Update according to parent
-	if (parent != NULL)
+	if (parent != NULL && isVisible)
 	{
-		if (parent->x != lastParentX)
-			x = x + (parent->x - lastParentX);
-		if (parent->y != lastParentY)
-			y = y + (parent->y - lastParentY);
+		//Child object
 
-		lastParentX = parent->x;
-		lastParentY = parent->y;
+		//animations update
+		tweensContainer.step(HDScreen->deltaTime);
 
-		//local coordinates update
-		if (_x != last_x)
-			x = _x + parent->x;
-		if (_y != last_y)
-			y = _y + parent->y;
+		//Update according to parent
+		globalX = parent->globalX + x;
+		globalY = parent->globalY + y;
 
-		last_x = _x;
-		last_y = _y;
+		globalScaleX = parent->globalScaleX * scaleX;
+		globalScaleY = parent->globalScaleY * scaleY;
 
-		//scaleX = parent->scaleX;
-		//scaleY = parent->scaleY;
+		drawWidth = width * globalScaleX;
+		drawHeight = height * globalScaleY;
 
-		width = createW * scaleX;
-		height = createH * scaleY;
+		drawAlpha = alpha * parent->drawAlpha;
+		if (drawAlpha > 1.0f) drawAlpha = 1.0f;
+		else if (drawAlpha <= 0.0f) drawAlpha = 0.0f;
+
+		if (alpha <= 0.0f) visible = false;
+
+		redraw = true;
 	}
 }
 
@@ -70,23 +71,18 @@ void HD_UI_Object::setObjectProperties(char *objectName, float fX, float fY, flo
 
 	name = objectName;
 
-	//To-DO: these values get scaled and are relative to the parent!
-	lastParentX = parent->x;
-	lastParentY = parent->y;
-	x = fX + lastParentX;
-	y = fY + lastParentY;
+	x = fX;
+	y = fY;
+	globalX = parent->globalX + x;
+	globalY = parent->globalScaleY + y;
 
-	//local
-	_x = fX;
-	_y = fY;
-	last_x = _x;
-	last_y = _y;
-
-	createW = width = fWidth;
-	createH = height = fHeight;
+	drawWidth = width = fWidth;
+	drawHeight = height = fHeight;
 
 	scaleX = 1.0f;
 	scaleY = 1.0f;
+
+	alpha = 1.0f;
 }
 
 //parent functions

@@ -24,19 +24,23 @@ protected:
 	HD_UI_Container();
 
 public:
+	HD_UI_Container(char* name, int nIndex, float fX, float fY, HD_UI_Container *newParent);	//Create an empty container
 	~HD_UI_Container();
 
 	virtual void Create();
-	virtual void Update(ALLEGRO_MOUSE_STATE *mouseState, double timeSpeed);
+	virtual void Update();
 	virtual void Draw();
 	virtual void Clear();
 
 	void addChild(HD_UI_Object *child);
 	void addChildAt(HD_UI_Object *child, unsigned index);
 
+	HD_UI_Object* getChildByIndex(unsigned int index);
+	HD_UI_Object* getChildByName(char *name);
+
 	void removeChild(HD_UI_Object *child);
 	void removeChildByName(char *childName);
-	void removeChildFromIndex(int index);
+	void removeChildFromIndex(unsigned int index);
 	void removeAllChildren();
 };
 

@@ -13,7 +13,8 @@
 #include "app/app.h"
 
 #include "HD_Resources.h"
-#include "UI_Layouts/HD_UI_TestLayout.h"
+#include "HD_Mouse.h"
+#include "UI_Layouts\HD_UI_MainMenu.h"
 
 //=======================================================
 //Private:
@@ -27,25 +28,31 @@ void HD_Screen:: HD_Init_Allegro()
 	nScreenW = 0;
 	nScreenH = 0;
 	bFullscreen = false;
+	refreshRate = 0;
 
 	//For the first run, set the maximum available resolution and fullscreen windowed
 	//if not, get the settings in options
-	if (app->GetOptions()->IsOptionEqualTo("game_firsttime", 0)) //DON'T FORGET TO REPLACE WITH 1!!!
+	if (app->GetOptions()->IsOptionEqualTo("game_firsttime", 1))
 	{
 		nScreenW = display_modes.width;
 		nScreenH = display_modes.height;
 		bFullscreen = true;
+		refreshRate = display_modes.refresh_rate;
 
 		app->GetOptions()->SetOptionValue("graphics_screenwidth", nScreenW);
 		app->GetOptions()->SetOptionValue("graphics_screenheight", nScreenH);
 		app->GetOptions()->SetOptionValue("graphics_fullscreen", bFullscreen);
+		app->GetOptions()->SetOptionValue("graphics_screenrefresh", refreshRate);
 		app->GetOptions()->SetOptionValue("game_firsttime", 0);
+
+		app->GetOptions()->Save(NULL);
 	}
 	else
 	{
 		nScreenW = app->GetOptions()->GetOptionValue("graphics_screenwidth");
 		nScreenH = app->GetOptions()->GetOptionValue("graphics_screenheight");
 		bFullscreen = app->GetOptions()->GetOptionValue("graphics_fullscreen");
+		refreshRate = app->GetOptions()->GetOptionValue("graphics_screenrefresh");
 	}
 
 	//set fullscreen/windowed mode 
@@ -56,10 +63,14 @@ void HD_Screen:: HD_Init_Allegro()
 	}
 	else al_set_new_display_flags(ALLEGRO_WINDOWED);
 
+	al_set_new_display_refresh_rate(refreshRate);
+
 	//multisampling
 	al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
 	al_set_new_display_option(ALLEGRO_SAMPLES, 4, ALLEGRO_SUGGEST);
-	//al_set_new_display_option(ALLEGRO_RENDER_METHOD, 2, ALLEGRO_REQUIRE);
+	al_set_new_display_option(ALLEGRO_COLOR_SIZE, 32, ALLEGRO_REQUIRE);
+	//al_set_new_bitmap_flags(ALLEGRO_MAG_LINEAR | ALLEGRO_MIN_LINEAR);
+	al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_INVERSE_ALPHA);
 
 	//creating the display
 	hdDisplay = al_create_display(nScreenW, nScreenH);
@@ -74,7 +85,7 @@ void HD_Screen:: HD_Init_Allegro()
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
 
-	fps = 35;
+	fps = 60;
 
 	hd_initAnchors();	//reset anchors
 	currentLayout = NULL;
@@ -97,57 +108,75 @@ void HD_Screen:: HD_Init_Allegro_Modules()
 //====================================
 int HD_Screen:: HD_Main_Loop()
 {
-	bool bFinished = false;
+	isRunning = true;
 	bool redraw = false;
-
-	//SetUp the mouse!
-	HDResources->hd_loadImage("graphics/mousePointer.png");
-	mouseCursor = al_create_mouse_cursor(HDResources->hd_getImage("graphics/mousePointer.png"), 0, 0);
-	al_set_mouse_cursor(hdDisplay, mouseCursor);
 
 	ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
 	ALLEGRO_TIMER *timer = al_create_timer(1.0 / fps);
-	ALLEGRO_MOUSE_STATE mouseState;
 
 	al_register_event_source(event_queue, al_get_display_event_source(hdDisplay));
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
-	//al_register_event_source(event_queue, al_get_mouse_event_source());
+	al_register_event_source(event_queue, al_get_keyboard_event_source());
 
 	al_start_timer(timer);
 
-	HD_UI_TestLayout *testLayout = new HD_UI_TestLayout();
-	hd_setNewLayout(testLayout);
+	//Last call to arms before loop
+	al_hide_mouse_cursor(hdDisplay);
+	mouse = new HD_Mouse();
 
-	while (!bFinished)
+	//First Screen:
+	HD_UI_MainMenu *mainMenu = new HD_UI_MainMenu();
+	hd_setNewLayout(mainMenu);
+
+	while (isRunning)
 	{
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
 
+		//Close if closed from the window button!
+		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+		{
+			isRunning = false;
+		}
+
+		//Update everything!
 		if (ev.type == ALLEGRO_EVENT_TIMER)
 		{
 			redraw = true;
 
-			al_get_mouse_state(&mouseState);
+			//update members
+			mouse->Update();
+			deltaTime = al_get_timer_speed(timer);
+
 			//update current layout
 			if (currentLayout)
-				currentLayout->Update(&mouseState, al_get_timer_speed(timer));
-			
-		}
-		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-		{
-			bFinished = true;
+				currentLayout->Update();
+
 		}
 
+		//Keyboard functionality
+		if (ev.type == ALLEGRO_EVENT_KEY_CHAR)
+		{
+			keyboard.key = ev.keyboard.keycode;
+			keyboard.uniKey = ev.keyboard.unichar;
+			keyboard.modifiers = ev.keyboard.modifiers;
+		}
+		else
+		{
+			keyboard.key = 0;
+			keyboard.uniKey = 0;
+			keyboard.modifiers = 0;
+		}
+
+		//Rendering
 		if (redraw && al_is_event_queue_empty(event_queue))
 		{
 			redraw = false;
 			//redraw current layout
 			if (currentLayout)
 				currentLayout->Draw();
-			else {
-				al_draw_line(0, 0, hd_screenAnchor.br[0], hd_screenAnchor.br[1], al_map_rgb(255, 255, 255), 1);
-				al_draw_text(HDResources->font18, al_map_rgb(255, 255, 255), nScreenW / 2, nScreenH / 2, ALLEGRO_ALIGN_CENTER, "GREAT SUCCESS! But there's no layout...");
-			}
+
+			mouse->Draw();
 
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -272,38 +301,38 @@ HD_UI_Container* HD_Screen::hd_getCurrentLayout()
 //=============================================
 void HD_Screen::hd_initAnchors()
 {
-	hd_screenAnchor.tl[0] = 0;	//x
-	hd_screenAnchor.tl[1] = 0;	//y
+	anchors.tl.x = 0;	//x
+	anchors.tl.y = 0;	//y
 
-	hd_screenAnchor.tc[0] = nScreenW / 2;
-	hd_screenAnchor.tc[1] = 0;
+	anchors.tc.x = nScreenW / 2;
+	anchors.tc.y = 0;
 
-	hd_screenAnchor.tr[0] = nScreenW;
-	hd_screenAnchor.tr[1] = 0;
+	anchors.tr.x = nScreenW;
+	anchors.tr.y = 0;
 
-	hd_screenAnchor.bl[0] = 0;
-	hd_screenAnchor.bl[1] = nScreenH;
+	anchors.bl.x = 0;
+	anchors.bl.y = nScreenH;
 
-	hd_screenAnchor.bc[0] = nScreenW / 2;
-	hd_screenAnchor.bc[1] = nScreenH;
+	anchors.bc.x = nScreenW / 2;
+	anchors.bc.y = nScreenH;
 
-	hd_screenAnchor.br[0] = nScreenW;
-	hd_screenAnchor.br[1] = nScreenH;
+	anchors.br.x = nScreenW;
+	anchors.br.y = nScreenH;
 
-	hd_screenAnchor.lc[0] = 0;
-	hd_screenAnchor.lc[1] = nScreenH / 2;
+	anchors.lc.x = 0;
+	anchors.lc.y = nScreenH / 2;
 
-	hd_screenAnchor.c[0] = nScreenW / 2;
-	hd_screenAnchor.c[1] = nScreenH / 2;
+	anchors.c.x = nScreenW / 2;
+	anchors.c.y = nScreenH / 2;
 
-	hd_screenAnchor.rc[0] = nScreenW;
-	hd_screenAnchor.rc[1] = nScreenH / 2;
+	anchors.rc.x = nScreenW;
+	anchors.rc.y = nScreenH / 2;
 
-	hd_screenAnchor.w13 = nScreenW / 3;
-	hd_screenAnchor.w23 = (nScreenW * 2) / 3;
+	anchors.w13 = nScreenW / 3;
+	anchors.w23 = (nScreenW * 2) / 3;
 
-	hd_screenAnchor.h13 = nScreenH / 3;
-	hd_screenAnchor.h23 = (nScreenH * 2) / 3;
+	anchors.h13 = nScreenH / 3;
+	anchors.h23 = (nScreenH * 2) / 3;
 }
 
 HD_Screen *HDScreen;

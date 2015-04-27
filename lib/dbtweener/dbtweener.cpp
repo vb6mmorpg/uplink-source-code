@@ -162,6 +162,22 @@ void CDBTweener::removeTween(CTween *pTween)
 	}
 }
 
+//Added in Uplink HD by Tudor Stamate
+void CDBTweener::removeAllTweens()
+{
+	if (!m_sTweens.empty())
+	{
+		for (TTweenPts::iterator it = m_sTweens.begin(); it != m_sTweens.end();)
+		{
+			CTween *pTween = *it;
+
+			m_sTweens.erase(it++);
+			delete pTween;
+		}
+	}
+}
+//END
+
 void CDBTweener::step(float fDeltaTimeSec)
 {
 	for (TTweenPts::iterator i = m_sTweens.begin(); i != m_sTweens.end();)

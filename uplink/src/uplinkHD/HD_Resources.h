@@ -8,10 +8,12 @@
 #define HD_RESOURCES_H
 
 #define MAX_IMAGES 8
-//#define DEBUGHD
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
+
+#include <vector>
+#include <string>
 
 class HD_Resources
 {
@@ -20,9 +22,24 @@ private:
 
 	// Image files
 	//================
-	ALLEGRO_BITMAP *imageFiles[MAX_IMAGES];	//loaded image files
-	int currentImageFilesIndex = 0;
-	const char *imageFilesNames[MAX_IMAGES];
+	struct Bitmap
+	{
+		ALLEGRO_BITMAP *image;
+		std::string name;
+
+		Bitmap()
+		{
+			image = NULL;
+		}
+
+		~Bitmap()
+		{
+			al_destroy_bitmap(image);
+			image = NULL;
+		}
+	};
+
+	std::vector<Bitmap*> imageFiles;
 
 	// Font files
 	//=================
@@ -46,7 +63,7 @@ public:
 	ALLEGRO_FONT *font30;
 
 	//resource loading functions
-	void hd_loadImage(const char *imageName);
+	bool hd_loadImage(const char *imageName);
 
 	ALLEGRO_BITMAP* hd_getImage(const char *imageName);
 	ALLEGRO_BITMAP* hd_getSubImage(const char *subImageName, const char *atlasName);

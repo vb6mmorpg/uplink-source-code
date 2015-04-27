@@ -26,12 +26,12 @@ enum ShavedRectCornerLoc
 class HD_UI_GraphicsObject : public HD_UI_Object
 {
 private:
-	ALLEGRO_BITMAP *gfxImage = NULL;							//the image that will get drawn in DrawImageGfx();
-	ALLEGRO_COLOR color1 = al_map_rgba(255, 0, 255, 255);		//colors used for primitives
-	ALLEGRO_COLOR color2 = al_map_rgba(255, 0, 255, 255);
+	ALLEGRO_BITMAP *gfxImage = NULL;								//the image that will get drawn in DrawImageGfx();
+	ALLEGRO_COLOR color1 = al_map_rgba_f(1.0f, 0.0f, 1.0f, 1.0f);	//colors used for primitives
+	ALLEGRO_COLOR color2 = al_map_rgba_f(1.0f, 0.0f, 1.0f, 1.0f);
 
-	ALLEGRO_VERTEX shavedRectVerts[5];
-	ALLEGRO_VERTEX gradientRectVerts[12];
+	//ALLEGRO_VERTEX shavedRectVerts[5];		//vertex array used by shaved rectangles
+	//ALLEGRO_VERTEX gradientRectVerts[12];	//vertex array used by gradient rectangles
 
 protected:
 	//Graphics drawing functions
@@ -40,6 +40,8 @@ protected:
 	void DrawImageGfx();
 	
 	void DrawRectGfx(float fThickness);
+
+	void DrawDiamondGfx(bool isFilled);
 
 	void DrawStrokedFillRectGFX(float fThickness);
 	
@@ -63,6 +65,10 @@ public:
 	//Stroked/Filled Rect object
 	HD_UI_GraphicsObject(char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
 		float fThickness, ALLEGRO_COLOR color, HD_UI_Container *newParent);
+
+	//Stroked/Filled Diamond object
+	HD_UI_GraphicsObject(char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
+		bool isFilled, ALLEGRO_COLOR color, HD_UI_Container *newParent);
 
 	//Filled & Stroked Rect object
 	HD_UI_GraphicsObject(char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
@@ -89,7 +95,7 @@ public:
 
 	//Property setters
 	void setGfxImage(ALLEGRO_BITMAP *newImage) { gfxImage = newImage; }
-	void setColors(ALLEGRO_COLOR newColor1, ALLEGRO_COLOR newColor2)
+	void setColors(ALLEGRO_COLOR newColor1, ALLEGRO_COLOR newColor2 = al_map_rgb_f(1.0f, 0, 1.0f))
 		{ color1 = newColor1; color2 = newColor2; }
 
 	//General object functions

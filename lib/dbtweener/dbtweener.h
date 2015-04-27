@@ -169,6 +169,7 @@ public:
 		SValue(float *fpValue, float fTarget)
 		{
 			m_fpValue = fpValue;
+			m_fValueStart = *fpValue;
 			m_fTarget = fTarget;
 
 			// the start value is only initialized at the very last moment to make sure
@@ -177,6 +178,7 @@ public:
 			m_fStart = 0.0f;
 		}
 		float *m_fpValue;
+		float m_fValueStart;
 		float m_fTarget;
 		float m_fStart;
 	};
@@ -240,6 +242,8 @@ public:
 	void addTween(CTween *pTween);		// transferring ownership; tween will be deleted by CDBTweener
 	void addTween(CEquation *pEquation, EEasing eEasing, float fDuration, float *fpValue, float fTarget);
 	void removeTween(CTween *pTween);
+	
+	void removeAllTweens();	//Added in Uplink HD by Tudor Stamate
 
 	const TTweenPts &getTweens() const { return m_sTweens; }
 
@@ -262,7 +266,30 @@ private:
 			}
 		}
 		TListenerPts m_sListeners;
-	} m_oTweenRelay;	
+	} m_oTweenRelay;
+
+	//Added in Uplink HD by Tudor Stamate TO-DO
+	/*class CLoop : public IListener
+	{
+	public:
+		void onTweenFinished(CTween *pTween)
+		{
+			SValue *values = pTween->getValues()[0];
+			values->m_fpValue = &values->m_fValueStart;
+			CTween *bTween = new CDBTweener::CTween(pTween->getEquation(), pTween->getEasing(), pTween->getDurationSec(), values->m_fpValue, values->m_fTarget);
+			pTween->addListener(this);
+		}
+	} m_oTweenLoop;
+
+	class CPingPong : public IListener
+	{
+	public:
+		void onTweenFinished(CTween *pTween)
+		{
+
+		}
+	} m_oTweenPingPong;*/
+	//END UHD
 	
 	TTweenPts m_sTweens;
 };

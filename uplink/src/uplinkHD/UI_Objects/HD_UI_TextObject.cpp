@@ -8,8 +8,10 @@
 #include <allegro5/allegro_primitives.h>
 
 #include "../HD_Resources.h"
+#include "../HD_ColorPalettes.h"
 
 #include "HD_UI_TextObject.h"
+#include "HD_UI_Container.h"
 
 
 //============================
@@ -20,20 +22,18 @@
 void HD_UI_TextObject::DrawTextGfx()
 {
 	//Just a single line
-	al_draw_text(textFont, textColor, x, y, alignment, textString.c_str());
+	ALLEGRO_COLOR c = palette->addAlphaToColor(textColor, drawAlpha);
+	al_draw_text(textFont, c, globalX, globalY, alignment, textString.c_str());
 }
 
 void HD_UI_TextObject::DrawMultilineTextGfx()
 {
 	//Multiline text
+	ALLEGRO_COLOR c = palette->addAlphaToColor(textColor, drawAlpha);
 	for (unsigned int ii = 0; ii < multilineStrings.size(); ii++)
 	{
-		al_draw_text(textFont, textColor, x, y + ii * (lineHeight + lineOffset), alignment, multilineStrings[ii].c_str());
+		al_draw_text(textFont, c, globalX, globalY + ii * (lineHeight + lineOffset), alignment, multilineStrings[ii].c_str());
 	}
-
-#ifdef DEBUGHD
-	al_draw_rectangle(x, y, x + width, y + multilineStrings.size() * (lineHeight + lineOffset), al_map_rgb(120, 120, 120), 0.0f);
-#endif
 }
 
 //============================
@@ -147,10 +147,60 @@ void HD_UI_TextObject::setTextColor(ALLEGRO_COLOR newColor)
 	textColor = newColor;
 }
 
+void HD_UI_TextObject::setText(const char *newText)
+{
+	textString = newText;
+}
+
+void HD_UI_TextObject::setText(const char *newText, float maxWidth)
+{
+	textString = newText;
+	breakString(textString, textFont, maxWidth);
+	textString.clear();
+}
+
+float HD_UI_TextObject::getTextWidth()
+{
+	float width = 0.0f;
+
+	//Singleline
+	if (!textString.empty())
+		width = al_get_text_width(textFont, textString.c_str());
+
+	//Multiline
+	if (!multilineStrings.empty())
+		for (unsigned int ii = 0; ii < multilineStrings.size(); ii++)
+		{
+			float w = al_get_text_width(textFont, multilineStrings[ii].c_str());
+			width < w ? w : width;
+		}
+
+	return width;
+}
+
+float HD_UI_TextObject::getTextWidth(int charsNo)
+{
+	float width = 0.0f;
+
+	//Singleline
+	if (!textString.empty())
+	{
+		std::string part = textString.substr(0, charsNo);
+		width = al_get_text_width(textFont, part.c_str());
+	}
+
+	//Multiline To-Do
+
+	return width;
+}
+
 void HD_UI_TextObject::Draw()
 {
-	if (isVisible)
+	if (isVisible && redraw)
+	{
 		drawTextObject();
+		redraw = false;
+	}
 }
 
 void HD_UI_TextObject::Clear()

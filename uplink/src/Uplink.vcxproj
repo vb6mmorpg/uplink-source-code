@@ -119,7 +119,7 @@
       <AdditionalLibraryDirectories>..\..\lib\allegro-5.0.10-msvc-11.0\lib;..\..\lib\bin;..\..\contrib\bin;..\..\contrib\tcp4u.331\tcp4w32;..\..\contrib\tiff-3.7.2\libtiff;..\..\contrib\gltt-2.5;..\..\contrib\freetype-1.3.1;..\..\contrib\SDL-1.2.11_dev\VisualC\SDL\Release;..\..\contrib\SDL_mixer-1.2.7_patched\VisualC\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
       <ForceFileOutput>MultiplyDefinedSymbolOnly</ForceFileOutput>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
@@ -253,14 +253,22 @@ xcopy "$(OutDir)$(Configuration)\*.exe" "$(ProjectDir)\..\..\Installer\Data\" /Y
     <ClInclude Include="interface\remoteinterface\academicscreen_interface.h" />
     <ClInclude Include="interface\remoteinterface\accountscreen_interface.h" />
     <ClInclude Include="uplinkHD\HD_ColorPalettes.h" />
+    <ClInclude Include="uplinkHD\HD_Mouse.h" />
     <ClInclude Include="uplinkHD\HD_Resources.h" />
     <ClInclude Include="uplinkHD\HD_Screen.h" />
+    <ClInclude Include="uplinkHD\UI_Layouts\HD_UI_MainMenu.h" />
     <ClInclude Include="uplinkHD\UI_Layouts\HD_UI_TestLayout.h" />
     <ClInclude Include="uplinkHD\UI_Objects\HD_UI_Button.h" />
+    <ClInclude Include="uplinkHD\UI_Objects\HD_UI_ButtonDropdown.h" />
+    <ClInclude Include="uplinkHD\UI_Objects\HD_UI_ButtonMenu.h" />
+    <ClInclude Include="uplinkHD\UI_Objects\HD_UI_ButtonSwitch.h" />
     <ClInclude Include="uplinkHD\UI_Objects\HD_UI_Container.h" />
     <ClInclude Include="uplinkHD\UI_Objects\HD_UI_GraphicsObject.h" />
     <ClInclude Include="uplinkHD\UI_Objects\HD_UI_Object.h" />
+    <ClInclude Include="uplinkHD\UI_Objects\HD_UI_PopUp.h" />
+    <ClInclude Include="uplinkHD\UI_Objects\HD_UI_ButtonInput.h" />
     <ClInclude Include="uplinkHD\UI_Objects\HD_UI_TextObject.h" />
+    <ClInclude Include="uplinkHD\UI_Objects\HD_UI_Tooltip.h" />
     <ClInclude Include="world\agent.h" />
     <ClInclude Include="interface\localinterface\analyser_interface.h" />
     <ClInclude Include="app\app.h" />
@@ -478,14 +486,22 @@ xcopy "$(OutDir)$(Configuration)\*.exe" "$(ProjectDir)\..\..\Installer\Data\" /Y
     <ClCompile Include="..\..\lib\tinyxml2\tinyxml2.cpp" />
     <ClCompile Include="interface\remoteinterface\academicscreen_interface.cpp" />
     <ClCompile Include="interface\remoteinterface\accountscreen_interface.cpp" />
+    <ClCompile Include="uplinkHD\HD_ColorPalettes.cpp" />
+    <ClCompile Include="uplinkHD\HD_Mouse.cpp" />
     <ClCompile Include="uplinkHD\HD_Resources.cpp" />
     <ClCompile Include="uplinkHD\HD_Screen.cpp" />
+    <ClCompile Include="uplinkHD\UI_Layouts\HD_UI_MainMenu.cpp" />
     <ClCompile Include="uplinkHD\UI_Layouts\HD_UI_TestLayout.cpp" />
     <ClCompile Include="uplinkHD\UI_Objects\HD_UI_Button.cpp" />
+    <ClCompile Include="uplinkHD\UI_Objects\HD_UI_ButtonMenu.cpp" />
+    <ClCompile Include="uplinkHD\UI_Objects\HD_UI_ButtonSwitch.cpp" />
     <ClCompile Include="uplinkHD\UI_Objects\HD_UI_Container.cpp" />
     <ClCompile Include="uplinkHD\UI_Objects\HD_UI_GraphicsObject.cpp" />
     <ClCompile Include="uplinkHD\UI_Objects\HD_UI_Object.cpp" />
+    <ClCompile Include="uplinkHD\UI_Objects\HD_UI_PopUp.cpp" />
+    <ClCompile Include="uplinkHD\UI_Objects\HD_UI_ButtonInput.cpp" />
     <ClCompile Include="uplinkHD\UI_Objects\HD_UI_TextObject.cpp" />
+    <ClCompile Include="uplinkHD\UI_Objects\HD_UI_Tooltip.cpp" />
     <ClCompile Include="world\agent.cpp" />
     <ClCompile Include="interface\localinterface\analyser_interface.cpp" />
     <ClCompile Include="app\app.cpp" />

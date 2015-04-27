@@ -14,25 +14,38 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
 
-#include "UI_Objects\HD_UI_Container.h"
+#include "UI_Objects/HD_UI_Container.h"
+#include "HD_Mouse.h"
 
 class HD_Screen
 {
-private:
+	struct Keyboard
+	{
+		int uniKey = 0;							//unicode char key; used for typing
+		//bool key[ALLEGRO_KEY_MAX];				//normal AL keycode; used by various objects for input
+		int key = 0;
+		unsigned int modifiers = 0;				//AL bitfields; maybe it's gonna be used
+	};
 
 	//screen anchors
+	struct AnchorPoint
+	{
+		int x;
+		int y;
+	};
+
 	struct HD_ANCHORS
 	{
-		int tl[2];		//top-left
-		int tc[2];		//top-center
-		int tr[2];		//top-right
-		int bl[2];		//bottom-left
-		int bc[2];		//bottom-center
-		int br[2];		//bottom-right
+		AnchorPoint tl;		//top-left
+		AnchorPoint tc;		//top-center
+		AnchorPoint tr;		//top-right
+		AnchorPoint bl;		//bottom-left
+		AnchorPoint bc;		//bottom-center
+		AnchorPoint br;		//bottom-right
 
-		int lc[2];		//left-center
-		int c[2];		//center
-		int rc[2];		//right-center
+		AnchorPoint lc;		//left-center
+		AnchorPoint c;		//center
+		AnchorPoint rc;		//right-center
 
 		int w13;		//width 1/3
 		int w23;		//width 2/3
@@ -40,6 +53,8 @@ private:
 		int h13;		//height 1/3
 		int h23;		//height 2/3
 	};
+
+private:
 
 	//screen
 	ALLEGRO_DISPLAY *hdDisplay;
@@ -49,13 +64,13 @@ private:
 
 	//current layout to update
 	HD_UI_Container *currentLayout;		//the current layout to update
-	ALLEGRO_MOUSE_CURSOR *mouseCursor;
 
 	//Allegro Inits. Called on start of game
 	void HD_Init_Allegro();
 	void HD_Init_Allegro_Modules();
 
 	//The Main Loop
+	bool isRunning;
 	int  HD_Main_Loop();
 	static bool bHD_Started;
 
@@ -64,10 +79,16 @@ public:
 	//screen info
 	int  nScreenW;
 	int  nScreenH;
+	int  refreshRate;
 	bool bFullscreen;
 	ALLEGRO_DISPLAY_MODE display_modes;
 
-	HD_ANCHORS hd_screenAnchor;
+	HD_ANCHORS anchors;
+
+	//updated members
+	HD_Mouse *mouse;
+	Keyboard keyboard;
+	double deltaTime;
 
 	//construction/destruction
 	HD_Screen();
@@ -75,10 +96,10 @@ public:
 
 	void HD_StartMainLoop();
 
+	void HD_Quit() { isRunning = false; }
 	void HD_Dispose();	//used to uninstall Allegro and destroy the display
 
 	//screen functions
-	//ALLEGRO_DISPLAY* hd_getDisplay(){ return hdDisplay; }
 	void hd_setResolution(int width, int height);
 	void hd_setFullscreen(bool bIsFullscreen);
 	void hd_initAnchors();

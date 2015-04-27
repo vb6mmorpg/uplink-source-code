@@ -35,6 +35,10 @@ protected:
 	void DrawTextGfx();
 	void DrawMultilineTextGfx();
 
+	//Breaks a given string into multiple lines if its width > maxWidth
+	//Returns NumLines
+	int breakString(std::string text, ALLEGRO_FONT *font, float maxWidth);
+
 public:
 
 	//Creation functions
@@ -48,14 +52,20 @@ public:
 	HD_UI_TextObject(char *objectName, int index, float fX, float fY, char *text,
 		ALLEGRO_FONT *font, ALLEGRO_COLOR color, int align, float maxWidth, float lineHeight, HD_UI_Container *newParent);
 
-	//Breaks a given string into multiple lines if its width > maxWidth
-	//Returns NumLines
-	int breakString(std::string text, ALLEGRO_FONT *font, float maxWidth);
-
 	//Destruction
 	~HD_UI_TextObject() { }
 
+	//Text object helper functions
+	//Sets the text color
 	void setTextColor(ALLEGRO_COLOR newColor);
+	//Sets a new singleline text
+	void setText(const char *newText);
+	//Sets a new multiline text
+	void setText(const char *newText, float maxWidth);
+	//Gets the whole width of the text
+	float getTextWidth();
+	//Gets the width of the first charsNo characters. Starts from 0. Used by TextInput obj mainly.
+	float getTextWidth(int charsNo);
 
 	//general functions
 	void Draw();
