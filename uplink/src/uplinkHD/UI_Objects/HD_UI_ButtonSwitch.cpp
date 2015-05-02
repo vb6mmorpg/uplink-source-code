@@ -68,8 +68,8 @@ HD_UI_ButtonSwitch::HD_UI_ButtonSwitch(char *objectName, int index, float fX, fl
 	else
 		switchObject = new HD_UI_GraphicsObject("switchGFX", -1, gfxObject->width - 80.0f, 0.0f, 40.0f, gfxObject->height, -1.0f, colors[6], this);
 
-	onText = new HD_UI_TextObject("onTxt", -1, gfxObject->width - switchObject->width * 1.5f, 0.0f, "On", captionFont, colors[5], ALLEGRO_ALIGN_CENTER, this);
-	offText = new HD_UI_TextObject("offTxt", -1, gfxObject->width - switchObject->width / 2.0f, 0.0f, "Off", captionFont, colors[6], ALLEGRO_ALIGN_CENTER, this);
+	onText = new HD_UI_TextObject("onTxt", switchObject->index - 1, gfxObject->width - switchObject->width * 1.5f, 0.0f, "On", captionFont, colors[5], ALLEGRO_ALIGN_CENTER, this);
+	offText = new HD_UI_TextObject("offTxt", switchObject->index - 1, gfxObject->width - switchObject->width / 2.0f, 0.0f, "Off", captionFont, colors[6], ALLEGRO_ALIGN_CENTER, this);
 	onText->y = height / 2 - onText->height / 2;
 	offText->y = height / 2 - offText->height / 2;
 

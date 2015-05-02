@@ -55,7 +55,7 @@ void HD_UI_ButtonInput::mouseRelease()
 	else
 		textObject->setTextColor(stateColors[5]);
 
-	btnState = standard;
+	btnState = over;
 
 	textCaret->visible = false;
 
@@ -193,11 +193,11 @@ HD_UI_ButtonInput::HD_UI_ButtonInput(char *objectName, int index, char *caption,
 void HD_UI_ButtonInput::Update()
 {
 	HD_UI_Container::Update();
-	
-	if (checkMouseOver() && btnState == standard)
+
+	if (isMouseTarget() && btnState == standard)
 		mouseOver();
 
-	else if (!checkMouseOver() && btnState == over)
+	if (!isMouseTarget() && btnState == over)
 		mouseOut();
 
 	bool isPrimaryDown = (HDScreen->mouse->GetState()->buttons & 1);
@@ -226,16 +226,19 @@ void HD_UI_ButtonInput::Update()
 		mouseRelease();
 
 	//If the user clicks anywhere else or hits Escape: exit input
-	if (isPrimaryDown && btnState == clicked && !checkMouseOver() ||
+	if (isPrimaryDown && btnState == clicked && !isMouseTarget() ||
 		HDScreen->keyboard.key == ALLEGRO_KEY_ESCAPE && btnState == clicked)
 		mouseOut();
 
 	//Tooltip
-	if (tooltipTimer > 1.5f && !tooltipObject->visible)
-		tooltipObject->ShowTooltip(true);
+	if (tooltipObject != NULL)
+	{
+		if (tooltipTimer > 1.5f && !tooltipObject->visible)
+			tooltipObject->ShowTooltip(true);
 
-	if (btnState == over)
-		tooltipTimer += HDScreen->deltaTime;
+		if (btnState == over)
+			tooltipTimer += HDScreen->deltaTime;
+	}
 }
 
 void HD_UI_ButtonInput::Clear()

@@ -41,7 +41,7 @@ void HD_UI_TextObject::DrawMultilineTextGfx()
 //============================
 
 //Singleline text object
-HD_UI_TextObject::HD_UI_TextObject(char *objectName, int index, float fX, float fY, char *text,
+HD_UI_TextObject::HD_UI_TextObject(const char *objectName, int index, float fX, float fY, const char *text,
 	ALLEGRO_FONT *font, ALLEGRO_COLOR color, int align, HD_UI_Container *newParent)
 {
 	float fWidth = al_get_text_width(font, text);
@@ -59,7 +59,7 @@ HD_UI_TextObject::HD_UI_TextObject(char *objectName, int index, float fX, float 
 }
 
 //Multiline text with MAX width object
-HD_UI_TextObject::HD_UI_TextObject(char *objectName, int index, float fX, float fY, char *text,
+HD_UI_TextObject::HD_UI_TextObject(const char *objectName, int index, float fX, float fY, const char *text,
 	ALLEGRO_FONT *font, ALLEGRO_COLOR color, int align, float maxWidth, float lineOffset, HD_UI_Container *newParent)
 {
 	textString = text;
@@ -75,8 +75,6 @@ HD_UI_TextObject::HD_UI_TextObject(char *objectName, int index, float fX, float 
 	textFont = font;
 	textColor = color;
 	alignment = align;
-
-	textString.clear();
 
 	drawTextObject = std::bind(&HD_UI_TextObject::DrawMultilineTextGfx, this);
 }
@@ -156,7 +154,6 @@ void HD_UI_TextObject::setText(const char *newText, float maxWidth)
 {
 	textString = newText;
 	breakString(textString, textFont, maxWidth);
-	textString.clear();
 }
 
 float HD_UI_TextObject::getTextWidth()

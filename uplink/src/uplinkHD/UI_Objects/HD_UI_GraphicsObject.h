@@ -59,35 +59,35 @@ public:
 	HD_UI_GraphicsObject();
 
 	//Image Object
-	HD_UI_GraphicsObject(char *objectName, int index, char *imageName, char *atlasName,
+	HD_UI_GraphicsObject(const char *objectName, int index, const char *imageName, const char *atlasName,
 		float fX, float fY, HD_UI_Container *newParent);
 
 	//Stroked/Filled Rect object
-	HD_UI_GraphicsObject(char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
+	HD_UI_GraphicsObject(const char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
 		float fThickness, ALLEGRO_COLOR color, HD_UI_Container *newParent);
 
 	//Stroked/Filled Diamond object
-	HD_UI_GraphicsObject(char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
+	HD_UI_GraphicsObject(const char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
 		bool isFilled, ALLEGRO_COLOR color, HD_UI_Container *newParent);
 
 	//Filled & Stroked Rect object
-	HD_UI_GraphicsObject(char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
+	HD_UI_GraphicsObject(const char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
 		float fThickness, ALLEGRO_COLOR fillColor, ALLEGRO_COLOR lineColor, HD_UI_Container *newParent);
 
 	//Shaved Stroked/Filled Rect object
-	HD_UI_GraphicsObject(char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
+	HD_UI_GraphicsObject(const char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
 		bool isFilled, ShavedRectCornerLoc corner, float fCornerWidth, ALLEGRO_COLOR color, HD_UI_Container *newParent);
 	
 	//Line object
-	HD_UI_GraphicsObject(char *objectName, int index, float fX, float fY, float fX2, float fY2,
+	HD_UI_GraphicsObject(const char *objectName, int index, float fX, float fY, float fX2, float fY2,
 		int nThickness, ALLEGRO_COLOR color, HD_UI_Container *newParent);
 	
 	//Filled Rect with Line Header/Footer object
-	HD_UI_GraphicsObject(char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
+	HD_UI_GraphicsObject(const char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
 		ALLEGRO_COLOR rectColor, bool bIsLineHeader, float fLineThickness, ALLEGRO_COLOR lineColor, HD_UI_Container *newParent);
 	
 	//Gradient Rect object
-	HD_UI_GraphicsObject(char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
+	HD_UI_GraphicsObject(const char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
 		bool bIsVertical, float fStartGrad, ALLEGRO_COLOR color01, ALLEGRO_COLOR color02, HD_UI_Container *newParent);
 
 	//Destruction

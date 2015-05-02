@@ -23,6 +23,9 @@ protected:
 
 	HD_UI_Container();
 
+	bool setMouseOver();
+	bool isMouseTarget();
+
 public:
 	HD_UI_Container(char* name, int nIndex, float fX, float fY, HD_UI_Container *newParent);	//Create an empty container
 	~HD_UI_Container();
@@ -36,7 +39,7 @@ public:
 	void addChildAt(HD_UI_Object *child, unsigned index);
 
 	HD_UI_Object* getChildByIndex(unsigned int index);
-	HD_UI_Object* getChildByName(char *name);
+	HD_UI_Object* getChildByName(const char *name);
 
 	void removeChild(HD_UI_Object *child);
 	void removeChildByName(char *childName);

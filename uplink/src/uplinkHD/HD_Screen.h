@@ -80,7 +80,7 @@ public:
 	int  nScreenW;
 	int  nScreenH;
 	int  refreshRate;
-	bool bFullscreen;
+	bool bFrameless;
 	ALLEGRO_DISPLAY_MODE display_modes;
 
 	HD_ANCHORS anchors;
@@ -101,7 +101,7 @@ public:
 
 	//screen functions
 	void hd_setResolution(int width, int height);
-	void hd_setFullscreen(bool bIsFullscreen);
+	void hd_setFrameless(bool bIsFrameless);
 	void hd_initAnchors();
 
 	//scaling functions

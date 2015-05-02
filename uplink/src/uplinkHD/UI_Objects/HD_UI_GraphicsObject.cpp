@@ -201,7 +201,7 @@ void HD_UI_GraphicsObject::DrawGradientRectGFX(bool bIsVertical, float fStartGra
 //============================
 
 //Image Object
-HD_UI_GraphicsObject::HD_UI_GraphicsObject(char *objectName, int index, char *imageName, char *atlasName,
+HD_UI_GraphicsObject::HD_UI_GraphicsObject(const char *objectName, int index, const char *imageName, const char *atlasName,
 	float fX, float fY, HD_UI_Container *newParent)
 {
 	if (atlasName)
@@ -224,7 +224,7 @@ HD_UI_GraphicsObject::HD_UI_GraphicsObject(char *objectName, int index, char *im
 }
 
 //Stroked/Filled Rect object
-HD_UI_GraphicsObject::HD_UI_GraphicsObject(char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
+HD_UI_GraphicsObject::HD_UI_GraphicsObject(const char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
 	float fThickness, ALLEGRO_COLOR color, HD_UI_Container *newParent)
 {
 	if (fThickness > 0.0f)
@@ -241,7 +241,7 @@ HD_UI_GraphicsObject::HD_UI_GraphicsObject(char *objectName, int index, float fX
 }
 
 //Stroked/Filled Diamond object
-HD_UI_GraphicsObject::HD_UI_GraphicsObject(char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
+HD_UI_GraphicsObject::HD_UI_GraphicsObject(const char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
 	bool isFilled, ALLEGRO_COLOR color, HD_UI_Container *newParent)
 {
 	setObjectProperties(objectName, fX, fY, fWidth, fHeight, newParent, index);
@@ -252,7 +252,7 @@ HD_UI_GraphicsObject::HD_UI_GraphicsObject(char *objectName, int index, float fX
 }
 
 //Filled & Stroked Rect object
-HD_UI_GraphicsObject::HD_UI_GraphicsObject(char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
+HD_UI_GraphicsObject::HD_UI_GraphicsObject(const char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
 	float fThickness, ALLEGRO_COLOR fillColor, ALLEGRO_COLOR lineColor, HD_UI_Container *newParent)
 {
 	fX += fThickness / 2.0f;
@@ -267,7 +267,7 @@ HD_UI_GraphicsObject::HD_UI_GraphicsObject(char *objectName, int index, float fX
 }
 
 //Shaved Stroked/Filled Rect object
-HD_UI_GraphicsObject::HD_UI_GraphicsObject(char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
+HD_UI_GraphicsObject::HD_UI_GraphicsObject(const char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
 	bool isFilled, ShavedRectCornerLoc corner, float fCornerWidth, ALLEGRO_COLOR color, HD_UI_Container *newParent)
 {
 	if (!isFilled)
@@ -284,11 +284,11 @@ HD_UI_GraphicsObject::HD_UI_GraphicsObject(char *objectName, int index, float fX
 }
 
 //Line object
-HD_UI_GraphicsObject::HD_UI_GraphicsObject(char *objectName, int index, float fX, float fY, float fX2, float fY2,
+HD_UI_GraphicsObject::HD_UI_GraphicsObject(const char *objectName, int index, float fX, float fY, float fX2, float fY2,
 	int nThickness, ALLEGRO_COLOR color, HD_UI_Container *newParent)
 {
-	fX += float(nThickness) / 2.0f;
-	fY += float(nThickness) / 2.0f;
+	//fX += float(nThickness) / 2.0f;
+	//fY += float(nThickness) / 2.0f;
 
 	setObjectProperties(objectName, fX, fY, fX2, fY2, newParent, index);
 
@@ -298,7 +298,7 @@ HD_UI_GraphicsObject::HD_UI_GraphicsObject(char *objectName, int index, float fX
 }
 
 //Filled Rect with Line Header/Footer object
-HD_UI_GraphicsObject::HD_UI_GraphicsObject(char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
+HD_UI_GraphicsObject::HD_UI_GraphicsObject(const char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
 	ALLEGRO_COLOR rectColor, bool bIsLineHeader, float fLineThickness, ALLEGRO_COLOR lineColor, HD_UI_Container *newParent)
 {
 	setObjectProperties(objectName, fX, fY, fWidth, fHeight, newParent, index);
@@ -311,7 +311,7 @@ HD_UI_GraphicsObject::HD_UI_GraphicsObject(char *objectName, int index, float fX
 }
 
 //Gradient Rect object
-HD_UI_GraphicsObject::HD_UI_GraphicsObject(char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
+HD_UI_GraphicsObject::HD_UI_GraphicsObject(const char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
 	bool bIsVertical, float fStartGrad, ALLEGRO_COLOR color01, ALLEGRO_COLOR color02, HD_UI_Container *newParent)
 {
 	setObjectProperties(objectName, fX, fY, fWidth, fHeight, newParent, index);

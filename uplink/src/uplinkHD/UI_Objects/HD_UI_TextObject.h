@@ -45,17 +45,20 @@ public:
 	HD_UI_TextObject();
 
 	//Singleline text object
-	HD_UI_TextObject(char *objectName, int index, float fX, float fY, char *text,
+	HD_UI_TextObject(const char *objectName, int index, float fX, float fY, const char *text,
 		ALLEGRO_FONT *font, ALLEGRO_COLOR color, int align, HD_UI_Container *newParent);
 
 	//Multiline text with MAX width object
-	HD_UI_TextObject(char *objectName, int index, float fX, float fY, char *text,
+	HD_UI_TextObject(const char *objectName, int index, float fX, float fY, const char *text,
 		ALLEGRO_FONT *font, ALLEGRO_COLOR color, int align, float maxWidth, float lineHeight, HD_UI_Container *newParent);
 
 	//Destruction
 	~HD_UI_TextObject() { }
 
 	//Text object helper functions
+
+	//Gets the full text
+	const char* getText() { return textString.c_str(); }
 	//Sets the text color
 	void setTextColor(ALLEGRO_COLOR newColor);
 	//Sets a new singleline text

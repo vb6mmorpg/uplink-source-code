@@ -14,7 +14,7 @@
 
 #include "HD_Resources.h"
 #include "HD_Mouse.h"
-#include "UI_Layouts\HD_UI_MainMenu.h"
+#include "UI_Layouts\HD_MainMenu.h"
 
 //=======================================================
 //Private:
@@ -27,7 +27,7 @@ void HD_Screen:: HD_Init_Allegro()
 
 	nScreenW = 0;
 	nScreenH = 0;
-	bFullscreen = false;
+	bFrameless = false;
 	refreshRate = 0;
 
 	//For the first run, set the maximum available resolution and fullscreen windowed
@@ -36,12 +36,12 @@ void HD_Screen:: HD_Init_Allegro()
 	{
 		nScreenW = display_modes.width;
 		nScreenH = display_modes.height;
-		bFullscreen = true;
+		bFrameless = true;
 		refreshRate = display_modes.refresh_rate;
 
 		app->GetOptions()->SetOptionValue("graphics_screenwidth", nScreenW);
 		app->GetOptions()->SetOptionValue("graphics_screenheight", nScreenH);
-		app->GetOptions()->SetOptionValue("graphics_fullscreen", bFullscreen);
+		app->GetOptions()->SetOptionValue("graphics_fullscreen", bFrameless);
 		app->GetOptions()->SetOptionValue("graphics_screenrefresh", refreshRate);
 		app->GetOptions()->SetOptionValue("game_firsttime", 0);
 
@@ -51,12 +51,13 @@ void HD_Screen:: HD_Init_Allegro()
 	{
 		nScreenW = app->GetOptions()->GetOptionValue("graphics_screenwidth");
 		nScreenH = app->GetOptions()->GetOptionValue("graphics_screenheight");
-		bFullscreen = app->GetOptions()->GetOptionValue("graphics_fullscreen");
+		bFrameless = app->GetOptions()->GetOptionValue("graphics_fullscreen");
 		refreshRate = app->GetOptions()->GetOptionValue("graphics_screenrefresh");
+		if (refreshRate == -1) refreshRate = display_modes.refresh_rate;
 	}
 
 	//set fullscreen/windowed mode 
-	if (bFullscreen)
+	if (bFrameless)
 	{
 		al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
 		al_set_new_display_flags(ALLEGRO_FRAMELESS);
@@ -125,7 +126,7 @@ int HD_Screen:: HD_Main_Loop()
 	mouse = new HD_Mouse();
 
 	//First Screen:
-	HD_UI_MainMenu *mainMenu = new HD_UI_MainMenu();
+	HD_MainMenu *mainMenu = new HD_MainMenu();
 	hd_setNewLayout(mainMenu);
 
 	while (isRunning)
@@ -243,22 +244,19 @@ void HD_Screen:: hd_setResolution(int width, int height)
 	nScreenH = height;
 	app->GetOptions()->SetOptionValue("graphics_screenwidth", nScreenW);
 	app->GetOptions()->SetOptionValue("graphics_screenheight", nScreenH);
+	app->GetOptions()->Save(NULL);
 
 	al_resize_display(hdDisplay, nScreenW, nScreenH);
 }
 
-void HD_Screen:: hd_setFullscreen(bool bIsFullscreen)
+void HD_Screen::hd_setFrameless(bool bIsFrameless)
 {
-	bFullscreen = bIsFullscreen;
-	app->GetOptions()->SetOptionValue("graphics_fullscreen", bFullscreen);
+	bFrameless = bIsFrameless;
+	app->GetOptions()->SetOptionValue("graphics_fullscreen", bIsFrameless);
+	app->GetOptions()->Save(NULL);
 
-	al_set_display_flag(hdDisplay, ALLEGRO_FRAMELESS, bIsFullscreen);
-	al_set_display_flag(hdDisplay, ALLEGRO_FULLSCREEN_WINDOW, bIsFullscreen);
-
-	if (!bFullscreen)
-	{
-		hd_setResolution(1920, 1080);
-	}
+	al_set_display_flag(hdDisplay, ALLEGRO_FRAMELESS, bIsFrameless);
+	al_set_display_flag(hdDisplay, ALLEGRO_FULLSCREEN_WINDOW, bIsFrameless);
 
 	al_set_window_position(hdDisplay, 0, 0);
 

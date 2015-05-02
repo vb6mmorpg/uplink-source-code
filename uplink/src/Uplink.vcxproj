@@ -256,8 +256,9 @@ xcopy "$(OutDir)$(Configuration)\*.exe" "$(ProjectDir)\..\..\Installer\Data\" /Y
     <ClInclude Include="uplinkHD\HD_Mouse.h" />
     <ClInclude Include="uplinkHD\HD_Resources.h" />
     <ClInclude Include="uplinkHD\HD_Screen.h" />
-    <ClInclude Include="uplinkHD\UI_Layouts\HD_UI_MainMenu.h" />
-    <ClInclude Include="uplinkHD\UI_Layouts\HD_UI_TestLayout.h" />
+    <ClInclude Include="uplinkHD\UI_Layouts\HD_MainMenu.h" />
+    <ClInclude Include="uplinkHD\UI_Layouts\HD_MMOptions.h" />
+    <ClInclude Include="uplinkHD\UI_Layouts\HD_TestLayout.h" />
     <ClInclude Include="uplinkHD\UI_Objects\HD_UI_Button.h" />
     <ClInclude Include="uplinkHD\UI_Objects\HD_UI_ButtonDropdown.h" />
     <ClInclude Include="uplinkHD\UI_Objects\HD_UI_ButtonMenu.h" />
@@ -490,9 +491,11 @@ xcopy "$(OutDir)$(Configuration)\*.exe" "$(ProjectDir)\..\..\Installer\Data\" /Y
     <ClCompile Include="uplinkHD\HD_Mouse.cpp" />
     <ClCompile Include="uplinkHD\HD_Resources.cpp" />
     <ClCompile Include="uplinkHD\HD_Screen.cpp" />
-    <ClCompile Include="uplinkHD\UI_Layouts\HD_UI_MainMenu.cpp" />
-    <ClCompile Include="uplinkHD\UI_Layouts\HD_UI_TestLayout.cpp" />
+    <ClCompile Include="uplinkHD\UI_Layouts\HD_MainMenu.cpp" />
+    <ClCompile Include="uplinkHD\UI_Layouts\HD_MMOptions.cpp" />
+    <ClCompile Include="uplinkHD\UI_Layouts\HD_TestLayout.cpp" />
     <ClCompile Include="uplinkHD\UI_Objects\HD_UI_Button.cpp" />
+    <ClCompile Include="uplinkHD\UI_Objects\HD_UI_ButtonDropdown.cpp" />
     <ClCompile Include="uplinkHD\UI_Objects\HD_UI_ButtonMenu.cpp" />
     <ClCompile Include="uplinkHD\UI_Objects\HD_UI_ButtonSwitch.cpp" />
     <ClCompile Include="uplinkHD\UI_Objects\HD_UI_Container.cpp" />

@@ -657,9 +657,6 @@
     <ClInclude Include="uplinkHD\UI_Objects\HD_UI_Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="uplinkHD\UI_Layouts\HD_UI_TestLayout.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="uplinkHD\UI_Objects\HD_UI_Container.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -670,9 +667,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="uplinkHD\HD_Mouse.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="uplinkHD\UI_Layouts\HD_UI_MainMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="uplinkHD\UI_Objects\HD_UI_Tooltip.h">
@@ -691,6 +685,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="uplinkHD\UI_Objects\HD_UI_ButtonMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Layouts\HD_MainMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Layouts\HD_TestLayout.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Layouts\HD_MMOptions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1347,9 +1350,6 @@
     <ClCompile Include="uplinkHD\UI_Objects\HD_UI_Button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="uplinkHD\UI_Layouts\HD_UI_TestLayout.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="uplinkHD\UI_Objects\HD_UI_Container.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1360,9 +1360,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="uplinkHD\HD_Mouse.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="uplinkHD\UI_Layouts\HD_UI_MainMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="uplinkHD\UI_Objects\HD_UI_Tooltip.cpp">
@@ -1378,6 +1375,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="uplinkHD\UI_Objects\HD_UI_ButtonMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Objects\HD_UI_ButtonDropdown.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Layouts\HD_MainMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Layouts\HD_TestLayout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Layouts\HD_MMOptions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

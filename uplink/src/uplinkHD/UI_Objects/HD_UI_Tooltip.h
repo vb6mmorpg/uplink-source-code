@@ -18,7 +18,7 @@ private:
 	HD_UI_Tooltip() {}
 
 public:
-	HD_UI_Tooltip(char *tooltip, HD_UI_Container *newParent);
+	HD_UI_Tooltip(const char *tooltip, HD_UI_Container *newParent);
 	~HD_UI_Tooltip() {}
 
 	void ShowTooltip(bool show);

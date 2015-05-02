@@ -30,7 +30,10 @@ void HD_UI_Container::Update()
 	//If it' a child, update normally.
 	//If not, it's the root object.
 	if (parent)
+	{
 		HD_UI_Object::Update();
+		setMouseOver();
+	}
 	else if (parent == NULL && isVisible)
 	{
 		tweensContainer.step(HDScreen->deltaTime);
@@ -50,10 +53,12 @@ void HD_UI_Container::Update()
 
 		if (alpha <= 0.0f) visible = false;
 
+		setMouseOver();
+
 		redraw = true;
 	}
 
-	//base update function
+	//update children
 	for (unsigned int ii = 0; ii < children.size(); ii++)
 	{
 		children[ii]->Update();
@@ -76,13 +81,57 @@ void HD_UI_Container::Clear()
 	delete this;
 }
 
+bool HD_UI_Container::setMouseOver()
+{
+	int mX = HDScreen->mouse->GetState()->x;
+	int mY = HDScreen->mouse->GetState()->y;
+
+	if (!isVisible)
+	{
+		if (HDScreen->mouse->GetTarget() == this)
+			HDScreen->mouse->SetTarget(NULL);
+		return false;
+	}
+
+	if (mX > globalX && mX < globalX + width &&
+		mY > globalY && mY < globalY + height)
+	{
+		//the mouse is over this
+		//set it's target to this
+		//if it succeeds, we have contact!
+		if (HDScreen->mouse->SetTarget(this))
+			return true;
+		else
+			return false;
+
+	}
+	else
+	{
+		//the mouse is out
+		//reset the target if it has been set by this
+		if (HDScreen->mouse->GetTarget() == this)
+			HDScreen->mouse->SetTarget(NULL);
+		return false;
+	}
+}
+
+bool HD_UI_Container::isMouseTarget()
+{
+	HD_UI_Object *mouseTarget = HDScreen->mouse->GetTarget();
+
+	if (mouseTarget == this)
+		return true;
+	else
+		return false;
+}
+
 void HD_UI_Container::addChild(HD_UI_Object *child)
 {
 	children.push_back(child);
 
 	//Set the index
 	child->index = children.size() - 1;
-	child->gIndex = child->index + this->index;
+	child->gIndex = child->index + this->gIndex;
 }
 
 void HD_UI_Container::addChildAt(HD_UI_Object *child, unsigned index)
@@ -93,7 +142,7 @@ void HD_UI_Container::addChildAt(HD_UI_Object *child, unsigned index)
 
 	//child->setParent(this);
 	child->index = index;
-	child->gIndex = child->index + this->index;
+	child->gIndex = child->index + this->gIndex;
 }
 
 //Child retreaval!
@@ -104,7 +153,7 @@ HD_UI_Object* HD_UI_Container::getChildByIndex(unsigned int index)
 	return child;
 }
 
-HD_UI_Object* HD_UI_Container::getChildByName(char *name)
+HD_UI_Object* HD_UI_Container::getChildByName(const char *name)
 {
 	HD_UI_Object *child = NULL;
 

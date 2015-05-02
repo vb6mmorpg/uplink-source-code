@@ -47,9 +47,12 @@ void HD_UI_Button::mouseOut()
 	else
 		gfxObject->setGfxImage(standardImage);
 
-	if (tooltipObject->visible)
-		tooltipObject->ShowTooltip(false);
-	tooltipTimer = 0.0f;
+	if (tooltipObject != NULL)
+	{
+		if (tooltipObject->visible)
+			tooltipObject->ShowTooltip(false);
+		tooltipTimer = 0.0f;
+	}
 
 	btnState = standard;
 }
@@ -64,9 +67,12 @@ void HD_UI_Button::mouseClick()
 	else
 		gfxObject->setGfxImage(clickImage);
 
-	if (tooltipObject->visible)
-		tooltipObject->ShowTooltip(false);
-	tooltipTimer = 0.0f;
+	if (tooltipObject != NULL)
+	{
+		if (tooltipObject->visible)
+			tooltipObject->ShowTooltip(false);
+		tooltipTimer = 0.0f;
+	}
 
 	btnState = clicked;
 }
@@ -81,19 +87,19 @@ void HD_UI_Button::mouseRelease()
 	else
 		gfxObject->setGfxImage(hoverImage);
 
-	btnState = standard;
+	btnState = over;
 
 	if (buttonCallback != NULL)
 		buttonCallback();
 }
 
-bool HD_UI_Button::checkMouseOver()
+/*bool HD_UI_Button::checkMouseOver()
 {
 	int mX = HDScreen->mouse->GetState()->x;
 	int mY = HDScreen->mouse->GetState()->y;
 
-	if (mX > x && mX < x + width &&
-		mY > y && mY < y + height)
+	if (mX > globalX && mX < globalX + width &&
+		mY > globalY && mY < globalY + height)
 	{
 		//the mouse is over this
 		//set it's target to this
@@ -112,6 +118,15 @@ bool HD_UI_Button::checkMouseOver()
 			HDScreen->mouse->SetTarget(NULL);
 		return false;
 	}
+}*/
+
+void HD_UI_Button::setTooltip(const char* tooltip)
+{
+	if (strcmp(tooltip, "") != 0)
+	{
+		tooltipObject = new HD_UI_Tooltip(tooltip, this);
+		tooltipObject->visible = false;
+	}
 }
 
 void HD_UI_Button::defaultCallback()
@@ -126,7 +141,7 @@ void HD_UI_Button::defaultCallback()
 //============================
 
 //Image button
-HD_UI_Button::HD_UI_Button(char *objectName, int index, char *standardImageName, char *atlasName, char *tooltip,
+HD_UI_Button::HD_UI_Button(const char *objectName, int index, const char *standardImageName, const char *atlasName, const char *tooltip,
 	float fX, float fY, HD_UI_Container *newParent)
 {
 	std::string stndImgName = standardImageName;
@@ -154,13 +169,11 @@ HD_UI_Button::HD_UI_Button(char *objectName, int index, char *standardImageName,
 
 	buttonCallback = std::bind(&HD_UI_Button::defaultCallback, this);
 
-	tooltipText = tooltip;
-	tooltipObject = new HD_UI_Tooltip(tooltip, this);
-	tooltipObject->visible = false;
+	setTooltip(tooltip);
 }
 
 //Filled Rect or Filled & Stroked Rect button; has a text caption
-HD_UI_Button::HD_UI_Button(char *objectName, int index, char *caption, char *tooltip,
+HD_UI_Button::HD_UI_Button(const char *objectName, int index, const char *caption, const char *tooltip,
 	float fX, float fY, float fWidth, float fHeight, ALLEGRO_COLOR colors[6], bool isFilled, ALLEGRO_FONT *captionFont,
 	int captionAlign, HD_UI_Container *newParent)
 {
@@ -187,14 +200,12 @@ HD_UI_Button::HD_UI_Button(char *objectName, int index, char *caption, char *too
 
 	buttonCallback = std::bind(&HD_UI_Button::defaultCallback, this);
 
-	tooltipText = tooltip;
-	tooltipObject = new HD_UI_Tooltip(tooltip, this);
-	tooltipObject->visible = false;
+	setTooltip(tooltip);
 }
 
 //Like the one above, only this one has an icon
-HD_UI_Button::HD_UI_Button(char *objectName, int index, char *caption, char *tooltip, float fX, float fY, float fWidth, float fHeight,
-	ALLEGRO_COLOR colors[6], bool isFilled, ALLEGRO_FONT *captionFont, char* iconName, char *atlasName, HD_UI_Container *newParent)
+HD_UI_Button::HD_UI_Button(const char *objectName, int index, const char *caption, const char *tooltip, float fX, float fY, float fWidth, float fHeight,
+	ALLEGRO_COLOR colors[6], bool isFilled, ALLEGRO_FONT *captionFont, const char* iconName, const char *atlasName, HD_UI_Container *newParent)
 {
 	setObjectProperties(objectName, fX, fY, fWidth, fHeight, newParent, index);
 
@@ -215,9 +226,7 @@ HD_UI_Button::HD_UI_Button(char *objectName, int index, char *caption, char *too
 
 	buttonCallback = std::bind(&HD_UI_Button::defaultCallback, this);
 
-	tooltipText = tooltip;
-	tooltipObject = new HD_UI_Tooltip(tooltip, this);
-	tooltipObject->visible = false;
+	setTooltip(tooltip);
 }
 
 //============================
@@ -236,28 +245,29 @@ void HD_UI_Button::Update()
 {
 	HD_UI_Container::Update();
 
-	if (!isVisible) return;
-	
-	if (checkMouseOver() && btnState == standard)
+	if (isMouseTarget() && btnState == standard)
 		mouseOver();
 
-	else if (!checkMouseOver() && (btnState == over || btnState == clicked))
+	if (!isMouseTarget() && (btnState == over || btnState == clicked))
 		mouseOut();
 
 	bool isPrimaryDown = (HDScreen->mouse->GetState()->buttons & 1);
 	bool isPrimaryReleased = !isPrimaryDown;
 
 	if (isPrimaryDown && btnState == over)
-			mouseClick();
-	if (isPrimaryReleased && btnState == clicked )
-			mouseRelease();
+		mouseClick();
+	if (isPrimaryReleased && btnState == clicked)
+		mouseRelease();
 
 	//Tooltip
-	if (tooltipTimer > 1.5f && !tooltipObject->visible)
-		tooltipObject->ShowTooltip(true);
+	if (tooltipObject != NULL)
+	{
+		if (tooltipTimer > 1.5f && !tooltipObject->visible)
+			tooltipObject->ShowTooltip(true);
 
-	if (btnState == over)
-		tooltipTimer += HDScreen->deltaTime;
+		if (btnState == over)
+			tooltipTimer += HDScreen->deltaTime;
+	}
 }
 
 void HD_UI_Button::Clear()

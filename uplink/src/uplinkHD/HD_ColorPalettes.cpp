@@ -48,10 +48,10 @@ HD_ColorPalettes::HD_ColorPalettes(){
 	btnSwitchColors_blueSat[0] = addAlphaToColor(bluesSat.cBlue2, 0);	//base standard
 	btnSwitchColors_blueSat[1] = addAlphaToColor(bluesSat.cBlue2, 0.5f);//base hover
 	btnSwitchColors_blueSat[2] = bluesSat.cBlue2;						//base clicked
-	btnSwitchColors_blueSat[3] = blues.cBlue3;							//text standard
+	btnSwitchColors_blueSat[3] = bluesSat.cBlue2;						//text standard
 	btnSwitchColors_blueSat[4] = warmGreys.cGrey3;						//text clicked
 	btnSwitchColors_blueSat[5] = bluesSat.cBlue2;						//stroke & text input
-	btnSwitchColors_blueSat[6] = bluesSat.cBlue2;						//stroke & text input
+	btnSwitchColors_blueSat[6] = blues.cBlue3;							//stroke & text input
 }
 
 // Helpful Functions

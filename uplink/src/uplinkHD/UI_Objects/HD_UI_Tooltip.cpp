@@ -6,7 +6,7 @@
 
 #include <math.h>
 
-HD_UI_Tooltip::HD_UI_Tooltip(char *tooltip, HD_UI_Container *newParent)
+HD_UI_Tooltip::HD_UI_Tooltip(const char *tooltip, HD_UI_Container *newParent)
 {
 	setObjectProperties("tooltip", 0.0f, 0.0f, 0.0f, 0.0f, newParent, -1);
 

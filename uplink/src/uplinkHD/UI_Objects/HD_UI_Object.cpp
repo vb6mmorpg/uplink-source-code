@@ -65,7 +65,7 @@ void HD_UI_Object::Clear()
 	delete this;
 }
 
-void HD_UI_Object::setObjectProperties(char *objectName, float fX, float fY, float fWidth, float fHeight, HD_UI_Container *newParent, int nIndex)
+void HD_UI_Object::setObjectProperties(const char *objectName, float fX, float fY, float fWidth, float fHeight, HD_UI_Container *newParent, int nIndex)
 {
 	setParent(newParent, nIndex);
 
@@ -74,7 +74,7 @@ void HD_UI_Object::setObjectProperties(char *objectName, float fX, float fY, flo
 	x = fX;
 	y = fY;
 	globalX = parent->globalX + x;
-	globalY = parent->globalScaleY + y;
+	globalY = parent->globalY + y;
 
 	drawWidth = width = fWidth;
 	drawHeight = height = fHeight;

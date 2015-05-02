@@ -18,13 +18,14 @@ class HD_UI_Object
 {
 protected:
 	//global members - used in updating/drawing
+	//composed between parent & child
 	float globalX = 0.0f;
 	float globalY = 0.0f;
 	float drawWidth = 0.0f;
 	float drawHeight = 0.0f;
 	float globalScaleX = 1.0f;
 	float globalScaleY = 1.0f;
-	float drawAlpha = 1.0f; //composed alpha between parent & child; used for drawing
+	float drawAlpha = 1.0f;
 	bool redraw = false;
 	bool isVisible = true;
 
@@ -32,7 +33,7 @@ protected:
 	CDBTweener tweensContainer;
 
 	//Sets up the normal values and its parent
-	void virtual setObjectProperties(char *objectName, float fX, float fY,
+	void virtual setObjectProperties(const char *objectName, float fX, float fY,
 		float fWidth, float fHeight, HD_UI_Container *newParent, int nIndex);
 
 public:
@@ -51,11 +52,11 @@ public:
 	bool visible = true;
 
 	//object identifiers
-	char *name;	//the name of this object
+	const char *name;	//the name of this object
 	int index;	//the index this object has
 	int gIndex; //the global index of this object
 
-	//functions
+	//Object update functions
 	virtual void Update();
 	virtual void Draw();
 	virtual void Clear();
@@ -63,6 +64,12 @@ public:
 	//parent/child functions
 	HD_UI_Container* getParent() { return parent; }
 	void setParent(HD_UI_Container *newParent, int index);
+
+	//protected members getters
+	float getGlobalX() { return globalX; }
+	float getGlobalY() { return globalY; }
+	float getScaledWidth() { return drawWidth; }
+	float getScaledHeight() { return drawHeight; }
 
 	//animations
 	void addAnimation(CDBTweener::CTween *newTween, bool removeAnims = false);

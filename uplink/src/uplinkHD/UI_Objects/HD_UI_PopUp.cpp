@@ -16,7 +16,7 @@ void HD_UI_PopUp::defaultCallback()
 	//Just closes the PopUp
 
 	alpha = 1.0f;
-	CDBTweener::CTween *tween = new CDBTweener::CTween(&CDBTweener::TWEQ_CUBIC, CDBTweener::TWEA_OUT, 0.5f, &alpha, 0);
+	CDBTweener::CTween *tween = new CDBTweener::CTween(&CDBTweener::TWEQ_CUBIC, CDBTweener::TWEA_OUT, 0.35f, &alpha, 0);
 	addAnimation(tween, true);
 }
 

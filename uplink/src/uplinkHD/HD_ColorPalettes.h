@@ -120,6 +120,9 @@ public:
 	const Oranges oranges = Oranges(); //the colors not the fruits
 	const ALLEGRO_COLOR cRed = al_map_rgba_f(0.82f, 0.1f, 0.1f, 1.0f); //al_map_rgba(211, 26, 26, 255);
 
+	const ALLEGRO_COLOR cBg1 = warmGreys.cGrey0;
+	const ALLEGRO_COLOR cBg2 = blues.cBlue1;
+
 	//Color Sets - Used in Buttons mostly
 	ALLEGRO_COLOR btnColors_white[6];
 	ALLEGRO_COLOR btnColors_red[6];
