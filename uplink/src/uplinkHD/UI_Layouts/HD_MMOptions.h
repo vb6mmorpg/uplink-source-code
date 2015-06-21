@@ -15,9 +15,9 @@ class HD_MMOptions : public HD_UI_Container
 private:
 	std::vector<std::string> getScreenModesStrings();
 
-	HD_UI_ButtonSwitch *btnFrameless;
-	HD_UI_ButtonDropdown*btnResolution;
-	HD_UI_ButtonSwitch *btnMusic;
+	std::shared_ptr<HD_UI_ButtonSwitch> btnFrameless = nullptr;
+	std::shared_ptr<HD_UI_ButtonDropdown> btnResolution = nullptr;
+	std::shared_ptr<HD_UI_ButtonSwitch> btnMusic = nullptr;
 
 protected:
 	//callback functions
@@ -25,7 +25,7 @@ protected:
 
 public:
 	//creation
-	HD_MMOptions();
+	HD_MMOptions() {}
 	~HD_MMOptions() {}
 
 	void Create();

@@ -6,26 +6,19 @@
 #define RIGHTPADDING 5.0f
 
 #include "../HD_Screen.h"
+#include "../UI_Layouts/HD_Root.h"
+
 #include "HD_UI_ButtonInput.h"
 
 //============================
 // Protected Functions
 //============================
-
-HD_UI_ButtonInput::~HD_UI_ButtonInput()
-{
-	al_destroy_bitmap(standardImage);
-	al_destroy_bitmap(hoverImage);
-	al_destroy_bitmap(clickImage);
-	al_destroy_bitmap(iconImage);
-}
-
 void HD_UI_ButtonInput::mouseOut()
 {
 	HD_UI_Button::mouseOut();
 
-	if (inputString.empty())
-		textObject->setText(caption.c_str());
+	if (sInput.empty())
+		textObject->setText(sCaption.c_str());
 	else
 		textObject->setTextColor(stateColors[5]);
 
@@ -36,10 +29,10 @@ void HD_UI_ButtonInput::mouseClick()
 {
 	HD_UI_Button::mouseClick();
 
-	if (inputString.empty())
-		textObject->setText(inputString.c_str());
+	if (sInput.empty())
+		textObject->setText(sInput.c_str());
 		
-	caretIndex = inputString.size();
+	caretIndex = sInput.size();
 	textCaret->x = textObject->x + textObject->getTextWidth(caretIndex);
 }
 
@@ -47,9 +40,9 @@ void HD_UI_ButtonInput::mouseRelease()
 {
 	gfxObject->setColors(stateColors[0], stateColors[5]);
 
-	if (inputString.empty())
+	if (sInput.empty())
 	{
-		textObject->setText(caption.c_str());
+		textObject->setText(sCaption.c_str());
 		textObject->setTextColor(stateColors[3]);
 	}
 	else
@@ -59,7 +52,7 @@ void HD_UI_ButtonInput::mouseRelease()
 
 	textCaret->visible = false;
 
-	if (buttonCallback != NULL && !inputString.empty())
+	if (buttonCallback != NULL && !sInput.empty())
 		buttonCallback();
 }
 
@@ -71,11 +64,17 @@ void HD_UI_ButtonInput::getInput()
 	if (uniKey >= 32 && uniKey <= 126)
 	{
 		if (isPassword)
-			inputString.insert(inputString.begin() + caretIndex, '*');
-		else
-			inputString.insert(inputString.begin() + caretIndex, uniKey);
+			sPassword.insert(sPassword.begin() + caretIndex, '*');
+		
+		sInput.insert(sInput.begin() + caretIndex, uniKey);
 
-		textObject->setText(inputString.c_str());
+		//if (isPassword)
+		//	textObject->setText(sPassword.c_str());
+		//else
+		//	textObject->setText(sInput.c_str());
+
+		textObject->setText(isPassword ? sPassword.c_str() : sInput.c_str());
+
 		caretIndex++;
 		textCaret->visible = true;
 	}
@@ -83,27 +82,35 @@ void HD_UI_ButtonInput::getInput()
 	//Special Keys
 	if (key == ALLEGRO_KEY_BACKSPACE)
 	{
-		if (!inputString.empty() && caretIndex > 0)
+		if (!sInput.empty() && caretIndex > 0)
 		{
-			inputString.erase(inputString.begin() + caretIndex - 1);
+			if (isPassword)
+				sPassword.erase(sPassword.begin() + caretIndex - 1);
+
+			sInput.erase(sInput.begin() + caretIndex - 1);
 			caretIndex--;
 		}
 			
-		textObject->setText(inputString.c_str());
+		textObject->setText(isPassword ? sPassword.c_str() : sInput.c_str());
 		textCaret->visible = true;
 	}
 
 	if (key == ALLEGRO_KEY_DELETE)
 	{
-		if (!inputString.empty() && caretIndex < inputString.size())
-			inputString.erase(inputString.begin() + caretIndex);
+		if (!sInput.empty() && caretIndex < sInput.size())
+		{
+			if (isPassword)
+				sPassword.erase(sPassword.begin() + caretIndex);
 
-		textObject->setText(inputString.c_str());
+			sInput.erase(sInput.begin() + caretIndex);
+		}
+
+		textObject->setText(isPassword ? sPassword.c_str() : sInput.c_str());
 		textCaret->visible = true;
 	}
 
 	if (key == ALLEGRO_KEY_END)
-		caretIndex = inputString.size();
+		caretIndex = sInput.size();
 	if (key == ALLEGRO_KEY_HOME)
 		caretIndex = 0;
 
@@ -114,7 +121,7 @@ void HD_UI_ButtonInput::getInput()
 		caretIndex--;
 		textCaret->visible = true;
 	}
-	else if (key == ALLEGRO_KEY_RIGHT && caretIndex < inputString.size())
+	else if (key == ALLEGRO_KEY_RIGHT && caretIndex < sInput.size())
 	{
 		caretIndex++;
 		textCaret->visible = true;
@@ -128,61 +135,73 @@ void HD_UI_ButtonInput::getInput()
 //============================
 
 //Singleline input
-HD_UI_ButtonInput::HD_UI_ButtonInput(char *objectName, int index, char *caption, char *tooltip, float fX, float fY,
-	float fWidth, float fHeight, bool isShaved, ALLEGRO_COLOR colors[6], ALLEGRO_FONT *captionFont, HD_UI_Container *newParent)
+void HD_UI_ButtonInput::CreateSinglelineInput(const char *objectName, const char *caption, const char *tooltip, float fX, float fY,
+	float fWidth, float fHeight, bool isShaved, ALLEGRO_COLOR colors[6], ALLEGRO_FONT *captionFont)
 {
-	setObjectProperties(objectName, fX, fY, fWidth, fHeight, newParent, index);
+	setObjectProperties(objectName, fX, fY, fWidth, fHeight);
+
+	gfxObject = std::make_shared<HD_UI_GraphicsObject>();
 
 	if (isShaved)
 	{
-		gfxObject = new HD_UI_GraphicsObject("baseGFX", -1, 0.0f, 0.0f, fWidth, fHeight, true, bottomRight, fHeight / 2, colors[0], this);
-		shavedStrokeObject = new HD_UI_GraphicsObject("strokeGFX", -1, 0.0f, 0.0f, fWidth, fHeight, false, bottomRight, fHeight / 2, colors[5], this);
+		gfxObject->CreateShavedSFRectangleObject("baseGFX", 0.0f, 0.0f, fWidth, fHeight, bottomRight, fHeight / 2, colors[0], colors[5]);
 	}
 	else
-		gfxObject = new HD_UI_GraphicsObject("baseGFX", -1, 0.0f, 0.0f, fWidth, fHeight, 1.0f, colors[0], colors[5], this);
+		gfxObject->CreateSFRectangleObject("baseGFX", 0.0f, 0.0f, fWidth, fHeight, 1.0f, colors[0], colors[5]);
 
-	textObject = new HD_UI_TextObject("caption", -1, 0.0f, 0.0f, caption, captionFont, colors[3], ALLEGRO_ALIGN_LEFT, this);
+	addChild(gfxObject);
+
+	textObject = std::make_shared<HD_UI_TextObject>();
+	textObject->CreateSinglelineText("caption", 0.0f, 0.0f, caption, colors[3], captionFont, ALLEGRO_ALIGN_LEFT);
 	textObject->x = LEFTPADDING;
 	textObject->y = height / 2 - textObject->height / 2;
+	addChild(textObject);
 
 	for (unsigned int ii = 0; ii < 6; ii++)
 		stateColors[ii] = colors[ii];
 
 	buttonCallback = std::bind(&HD_UI_Button::defaultCallback, this);
 
-	HD_UI_ButtonInput::caption = caption;
-	tooltipText = tooltip;
-	tooltipObject = new HD_UI_Tooltip(tooltip, this);
-	tooltipObject->visible = false;
+	sCaption = caption;
+	sTooltip = tooltip;
+	//setTooltip(tooltip);
 
-	textCaret = new HD_UI_GraphicsObject("caret", -1, 0.0f, 0.0f, 0.0f, textObject->height, 2.0f, colors[4], this);
+	textCaret = std::make_shared<HD_UI_GraphicsObject>();
+	textCaret->CreateLineObject("caret", 0.0f, 0.0f, 0.0f, textObject->height, 2.0f, colors[4]);
 	textCaret->y = textObject->y;
+	addChild(textCaret);
 	textCaret->visible = false;
 }
 
 //Multiline input
-HD_UI_ButtonInput::HD_UI_ButtonInput(char *objectName, int index, char *caption, char *tooltip, float fX, float fY,
-	float fWidth, float fHeight, ALLEGRO_COLOR colors[6], ALLEGRO_FONT *captionFont, HD_UI_Container *newParent)
+void HD_UI_ButtonInput::CreateMultilineInput(const char *objectName, const char *caption, const char *tooltip, float fX, float fY,
+	float fWidth, float fHeight, ALLEGRO_COLOR colors[6], ALLEGRO_FONT *captionFont)
 {
-	setObjectProperties(objectName, fX, fY, fWidth, fHeight, newParent, index);
+	setObjectProperties(objectName, fX, fY, fWidth, fHeight);
 
-	gfxObject = new HD_UI_GraphicsObject("baseGFX", -1, 0.0f, 0.0f, fWidth, fHeight, 1.0f, colors[0], colors[5], this);
-	textObject = new HD_UI_TextObject("caption", -1, 0.0f, 0.0f, caption, captionFont, colors[3], ALLEGRO_ALIGN_LEFT, fWidth - RIGHTPADDING, 0.0f, this);
+	gfxObject = std::make_shared<HD_UI_GraphicsObject>();
+	gfxObject->CreateSFRectangleObject("baseGFX", 0.0f, 0.0f, fWidth, fHeight, 1.0f, colors[0], colors[5]);
+	addChild(gfxObject);
+
+	textObject = std::make_shared<HD_UI_TextObject>();
+	textObject->CreateMultilineText("caption", 0.0f, 0.0f, caption, colors[3], fWidth - RIGHTPADDING, 0.0f, 0, captionFont);
 	textObject->x = LEFTPADDING;
 	textObject->y = TOPPADDING;
+	addChild(textObject);
 
 	for (unsigned int ii = 0; ii < 6; ii++)
 		stateColors[ii] = colors[ii];
 
 	buttonCallback = std::bind(&HD_UI_Button::defaultCallback, this);
 
-	HD_UI_ButtonInput::caption = caption;
-	tooltipText = tooltip;
-	tooltipObject = new HD_UI_Tooltip(tooltip, this);
-	tooltipObject->visible = false;
+	sCaption = caption;
+	sTooltip = tooltip;
+	//setTooltip(tooltip);
 
-	textCaret = new HD_UI_GraphicsObject("caret", -1, 0.0f, 0.0f, 0.0f, textObject->height, 2.0f, colors[4], this);
+	textCaret = std::make_shared<HD_UI_GraphicsObject>();
+	textCaret->CreateLineObject("caret", 0.0f, 0.0f, 0.0f, textObject->height, 2.0f, colors[4]);
 	textCaret->y = textObject->y;
+	addChild(textCaret);
 	textCaret->visible = false;
 }
 
@@ -231,20 +250,40 @@ void HD_UI_ButtonInput::Update()
 		mouseOut();
 
 	//Tooltip
-	if (tooltipObject != NULL)
+	if (!sTooltip.empty())
 	{
-		if (tooltipTimer > 1.5f && !tooltipObject->visible)
-			tooltipObject->ShowTooltip(true);
+		if (tooltipTimer > 1.5f)// && !tooltipObject->visible)
+			root->ShowTooltip(true);
 
 		if (btnState == over)
 			tooltipTimer += HDScreen->deltaTime;
 	}
 }
 
-void HD_UI_ButtonInput::Clear()
+void HD_UI_ButtonInput::setCaption(const char* newCaption)
 {
-	HD_UI_Container::Clear();
+	sCaption = newCaption;
+	sInput.clear();
+	textObject->setText(sCaption.c_str());
+	mouseOut();
+}
 
-	caption.clear();
-	inputString.clear();
+void HD_UI_ButtonInput::setInputText(const char* newInput)
+{
+	sInput.clear();
+	sPassword.clear();
+
+	sInput = newInput;
+
+	if (isPassword)
+	{
+		for (unsigned ii = 0; ii < sInput.length(); ii++)
+			sPassword += '*';
+
+		textObject->setText(sPassword.c_str());
+	}
+	else
+		textObject->setText(sInput.c_str());
+
+	mouseOut();
 }

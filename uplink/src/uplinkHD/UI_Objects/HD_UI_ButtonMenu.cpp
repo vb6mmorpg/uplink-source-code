@@ -34,7 +34,7 @@ void HD_UI_ButtonMenu::setCorrectPosition()
 	}
 	else
 	{
-		x = 20.0f;
+		x = 10.0f;
 		anchorPos.isOnRight = false;
 
 		if (globalY + parent->height + height > HDScreen->nScreenH - height - 20.0f)
@@ -52,48 +52,28 @@ void HD_UI_ButtonMenu::setCorrectPosition()
 
 void HD_UI_ButtonMenu::createAnchorGfx()
 {
-	HD_UI_GraphicsObject *anchorGfx = NULL;
+	std::shared_ptr<HD_UI_GraphicsObject> anchorGfx = std::make_shared<HD_UI_GraphicsObject>();
 
 	if (isHorizontal)
 	{
 		if (anchorPos.isOnRight && anchorPos.isOnTop)			//top-right
-			anchorGfx = new HD_UI_GraphicsObject("anchorGfx", -1, width - 10.0f, 5.0f, 20.0f, 20.0f, true, palette->bluesSat.cBlue2, this);
+			anchorGfx->CreateDiamondObject("anchorGfx", width - 10.0f, 0.0f, 20.0f, 20.0f, true, palette->bluesSat.cBlue2);
 		else if (!anchorPos.isOnRight && !anchorPos.isOnTop)	//bottom-left
-			anchorGfx = new HD_UI_GraphicsObject("anchorGfx", -1, -10.0f, height - 25.0f, 20.0f, 20.0f, true, palette->bluesSat.cBlue2, this);
+			anchorGfx->CreateDiamondObject("anchorGfx", -10.0f, height - 20.0f, 20.0f, 20.0f, true, palette->bluesSat.cBlue2);
 		else if (anchorPos.isOnRight && !anchorPos.isOnTop)		//bottom-right
-			anchorGfx = new HD_UI_GraphicsObject("anchorGfx", -1, width - 10.0f, height - 25.0f, 20.0f, 20.0f, true, palette->bluesSat.cBlue2, this);
+			anchorGfx->CreateDiamondObject("anchorGfx", width - 10.0f, height - 20.0f, 20.0f, 20.0f, true, palette->bluesSat.cBlue2);
 		else if (!anchorPos.isOnRight && anchorPos.isOnTop)		//top-left
-			anchorGfx = new HD_UI_GraphicsObject("anchorGfx", -1, 10.0f, 5.0f, 20.0f, 20.0f, true, palette->bluesSat.cBlue2, this);
+			anchorGfx->CreateDiamondObject("anchorGfx", 10.0f, 0.0f, 20.0f, 20.0f, true, palette->bluesSat.cBlue2);
 	}
 	else
 	{
 		if (anchorPos.isOnTop)
-			anchorGfx = new HD_UI_GraphicsObject("anchorGfx", -1, 5.0f, -10.0f, 20.0f, 20.0f, true, palette->bluesSat.cBlue2, this);
+			anchorGfx->CreateDiamondObject("anchorGfx", 0.0f, -10.0f, 20.0f, 20.0f, true, palette->bluesSat.cBlue2);
 		else
-			anchorGfx = new HD_UI_GraphicsObject("anchorGfx", -1, 5.0f, height - 10.0f, 20.0f, 20.0f, true, palette->bluesSat.cBlue2, this);
-	}
-}
-
-void HD_UI_ButtonMenu::createBgGfx()
-{
-	//create the bg based on the y position
-	//error prone if the bg is modified :( let's hope not
-	if (globalY + height > HDScreen->nScreenH * 0.6f)
-	{
-		//create it with a gradient
-		float pos1 = (globalY - HDScreen->nScreenH * 0.6f) / (HDScreen->nScreenH * 0.4f);
-		float pos2 = ((globalY + height) - HDScreen->nScreenH * 0.6f) / (HDScreen->nScreenH * 0.4f);
-		ALLEGRO_COLOR c1 = palette->getColorFromRange(palette->cBg1, palette->cBg2, pos1);
-		ALLEGRO_COLOR c2 = palette->getColorFromRange(palette->cBg1, palette->cBg2, pos2);
-
-		HD_UI_GraphicsObject *bgGfx = new HD_UI_GraphicsObject("bgGfx", -1, 0.0f, 0.0f, width, height, true, 0.0f, c1, c2, this);
-	}
-	else
-	{
-		HD_UI_GraphicsObject *bgGfx = new HD_UI_GraphicsObject("bgGfx", -1, 0.0f, 0.0f, width, height, -1.0f, palette->cBg1, this);
+			anchorGfx->CreateDiamondObject("anchorGfx", 0.0f, height - 10.0f, 20.0f, 20.0f, true, palette->bluesSat.cBlue2);
 	}
 
-	HD_UI_GraphicsObject *bgStroke = new HD_UI_GraphicsObject("bgStroke", -1, -1.0f, -1.0f, width + 1.0f, height, 1.0f, palette->bluesSat.cBlue2, this);
+	addChild(anchorGfx);
 }
 
 // Public methods
@@ -101,38 +81,44 @@ void HD_UI_ButtonMenu::createBgGfx()
 
 //Creates a Button Menu with only captions and no anchor; the font and buttonHeight are standard!
 //Used by dropdown buttons
-HD_UI_ButtonMenu::HD_UI_ButtonMenu(const char* objectName, int index, std::vector<std::string> captions, HD_UI_Container *newParent)
+void HD_UI_ButtonMenu::CreateButtonMenu(const char* objectName, float fX, float fY, float maxWidth, std::vector<std::string> captions)
 {
-	float maxWidth = newParent->width;
 	float maxHeight = 30.0f * captions.size();
 
-	setObjectProperties(objectName, 0.0f, newParent->height + 1.0f, maxWidth, maxHeight, newParent, index);
+	setObjectProperties(objectName, fX, fY, maxWidth, maxHeight);
 
 	//GFX
 	//BG
-	createBgGfx();
+	std::shared_ptr<HD_UI_GraphicsObject> baseGfx = std::make_shared<HD_UI_GraphicsObject>();
+	baseGfx->CreateBGGradientRectangleObject("baseGfx", 0.0f, 0.0f, width, height, true, palette->bluesSat.cBlue2);
+	addChild(baseGfx);
 
 	//Top Line
-	HD_UI_GraphicsObject *line = new HD_UI_GraphicsObject("lineGfx", -1, -1.0f, -1.0f, width + 1.0f, -1.0f, 1.0f, palette->bluesSat.cBlue2, this);
+	std::shared_ptr<HD_UI_GraphicsObject> line = std::make_shared<HD_UI_GraphicsObject>();
+	line->CreateLineObject("lineGfx", 0.0f, -0.5f, width, 0.0f, 1.0f, palette->bluesSat.cBlue2);
+	addChild(line);
 
 	//buttons!
 	for (unsigned int ii = 0; ii < captions.size(); ii++)
 	{
-		std::string btnName = "button";
-		btnName.append(std::to_string(ii));
+		std::string *btnName = new std::string("button");
+		btnName->append(std::to_string(ii));
 
-		HD_UI_Button *btn = new HD_UI_Button(btnName.c_str(), -1, captions[ii].c_str(), "", 0.0f, ii * 30.0f, width, 30.0f, palette->btnColors_blueSat, true,
-			HDResources->font24, ALLEGRO_ALIGN_LEFT, this);
-		btn->setCallback(std::bind(&HD_UI_ButtonMenu::defaultCallback, this));
+		std::shared_ptr<HD_UI_Button> btn = std::make_shared<HD_UI_Button>();
+		btn->CreateRectangleButton(btnName->c_str(), captions[ii].c_str(), "", 0.0f, ii * 30.0f, width, 30.0f, palette->btnColors_blueSat, true,
+			HDResources->font24, ALLEGRO_ALIGN_LEFT);
 
 		buttons.push_back(btn);
+		buttons[buttons.size() - 1]->setCallback(std::bind(&HD_UI_ButtonMenu::defaultCallback, this, ii));
+		addChild(btn);
 	}
 
 	visible = false; //no need to show it after creation
 }
 
 //Creates a Button Menu with only captions; the font is 24 by standard
-HD_UI_ButtonMenu::HD_UI_ButtonMenu(const char* objectName, int index, float buttonHeight, std::vector<std::string> captions, bool isAnchorHorizontal, HD_UI_Container *newParent)
+void HD_UI_ButtonMenu::CreateAnchoredButtonMenu(const char* objectName, float buttonHeight, std::vector<std::string> captions,
+	bool isAnchorHorizontal)
 {
 	//first get the maximum size
 	float maxWidth = 0.0f;
@@ -147,7 +133,7 @@ HD_UI_ButtonMenu::HD_UI_ButtonMenu(const char* objectName, int index, float butt
 	//add some padding
 	maxWidth += 25.0f;
 
-	setObjectProperties(objectName, 0.0f, 0.0f, maxWidth, maxHeight, newParent, index);
+	setObjectProperties(objectName, 0.0f, 0.0f, maxWidth, maxHeight);
 
 	//position it where there's enough space
 	isHorizontal = isAnchorHorizontal;
@@ -159,18 +145,23 @@ HD_UI_ButtonMenu::HD_UI_ButtonMenu(const char* objectName, int index, float butt
 	createAnchorGfx();
 
 	//BG
-	createBgGfx();
+	std::shared_ptr<HD_UI_GraphicsObject> baseGfx = std::make_shared<HD_UI_GraphicsObject>();
+	baseGfx->CreateBGGradientRectangleObject("baseGfx", 0.0f, 0.0f, width, height, true, palette->bluesSat.cBlue2);
+	addChild(baseGfx);
 
 	//buttons!
 	for (unsigned int ii = 0; ii < captions.size(); ii++)
 	{
-		std::string btnName = "button";
-		btnName.append(std::to_string(ii));
+		std::string *btnName = new std::string("button");
+		btnName->append(std::to_string(ii));
 
-		HD_UI_Button *btn = new HD_UI_Button(btnName.c_str(), -1, captions[ii].c_str(), "", 0.0f, ii * buttonHeight, width, buttonHeight, palette->btnColors_blueSat, true,
-			HDResources->font24, ALLEGRO_ALIGN_LEFT, this);
+		std::shared_ptr<HD_UI_Button> btn = std::make_shared<HD_UI_Button>();
+		btn->CreateRectangleButton(btnName->c_str(), captions[ii].c_str(), "", 0.0f, ii * buttonHeight, width, buttonHeight, palette->btnColors_blueSat, true,
+			HDResources->font24, ALLEGRO_ALIGN_LEFT);
 
 		buttons.push_back(btn);
+		buttons[buttons.size() - 1]->setCallback(std::bind(&HD_UI_ButtonMenu::defaultCallback, this, ii));
+		addChild(btn);
 	}
 
 	visible = false; //no need to show it after creation
@@ -178,8 +169,8 @@ HD_UI_ButtonMenu::HD_UI_ButtonMenu(const char* objectName, int index, float butt
 
 //Creates a Button Menu with icons & captions on the buttons; the font is 24 by standard
 //The first element of the icons vector is the atlas!
-HD_UI_ButtonMenu::HD_UI_ButtonMenu(const char* objectName, int index, float buttonHeight, std::vector<std::string> captions, std::vector<std::string> iconNames,
-	bool isAnchorHorizontal, HD_UI_Container *newParent)
+void HD_UI_ButtonMenu::CreateAnchoredButtonWIconMenu(const char* objectName, float buttonHeight, std::vector<std::string> captions, std::vector<std::string> iconNames,
+	bool isAnchorHorizontal)
 {
 	float maxWidth = 0.0f;
 	float maxHeight = buttonHeight * captions.size();
@@ -192,7 +183,7 @@ HD_UI_ButtonMenu::HD_UI_ButtonMenu(const char* objectName, int index, float butt
 
 	maxWidth += 25.0f;
 
-	setObjectProperties(objectName, 0.0f, 0.0f, maxWidth, maxHeight, newParent, index);
+	setObjectProperties(objectName, 0.0f, 0.0f, maxWidth, maxHeight);
 
 	isHorizontal = isAnchorHorizontal;
 	setCorrectPosition();
@@ -200,17 +191,22 @@ HD_UI_ButtonMenu::HD_UI_ButtonMenu(const char* objectName, int index, float butt
 	//GFX
 	createAnchorGfx();
 
-	createBgGfx();
+	std::shared_ptr<HD_UI_GraphicsObject> baseGfx = std::make_shared<HD_UI_GraphicsObject>();
+	baseGfx->CreateBGGradientRectangleObject("baseGfx", 0.0f, 0.0f, width, height, true, palette->bluesSat.cBlue2);
+	addChild(baseGfx);
 
 	for (unsigned int ii = 0; ii < captions.size(); ii++)
 	{
-		std::string btnName = "button";
-		btnName.append(std::to_string(ii));
+		std::string *btnName = new std::string("button");
+		btnName->append(std::to_string(ii));
 
-		HD_UI_Button *btn = new HD_UI_Button(btnName.c_str(), -1, captions[ii].c_str(), "", 0.0f, ii * buttonHeight, width, height, palette->btnColors_blueSat, true,
-			HDResources->font24, iconNames[ii + 1].c_str(), iconNames[0].c_str(), this);
+		std::shared_ptr<HD_UI_Button> btn = std::make_shared<HD_UI_Button>();
+		btn->CreateRectangleButton(btnName->c_str(), captions[ii].c_str(), "", 0.0f, ii * buttonHeight, width, buttonHeight, palette->btnColors_blueSat, true,
+			HDResources->font24, ALLEGRO_ALIGN_LEFT);
 
 		buttons.push_back(btn);
+		buttons[buttons.size() - 1]->setCallback(std::bind(&HD_UI_ButtonMenu::defaultCallback, this, ii));
+		addChild(btn);
 	}
 
 	visible = false;
@@ -221,19 +217,19 @@ void HD_UI_ButtonMenu::Update()
 {
 	HD_UI_Container::Update();
 
-	if (HDScreen->mouse->GetTarget() != this &&
-		HDScreen->mouse->GetState()->buttons & 1)
+	if (!isMouseTarget() &&	HDScreen->mouse->GetState()->buttons & 1)
 		showMenu(false);
 }
 
-void HD_UI_ButtonMenu::defaultCallback()
+void HD_UI_ButtonMenu::defaultCallback(unsigned int id)
 {
 	//keeps track of the pressed button in the selection
 	//then hides the message
-	lastSelection = name;
+	lastSelectionName = buttons[id]->name;
+	lastSelectionID = id;
 	showMenu(false);
 
-	std::string debug = lastSelection;
+	std::string debug = lastSelectionName;
 	debug.append(" was the last selection.\n");
 	OutputDebugStringA(debug.c_str());
 }

@@ -11,15 +11,14 @@
 
 class HD_UI_Tooltip : public HD_UI_Container
 {
-private:
-	HD_UI_GraphicsObject *bgObject[3];
-	HD_UI_TextObject *txtObject = NULL;
-
-	HD_UI_Tooltip() {}
+protected:
+	void resize();
 
 public:
-	HD_UI_Tooltip(const char *tooltip, HD_UI_Container *newParent);
+	HD_UI_Tooltip() {}
 	~HD_UI_Tooltip() {}
+
+	void Create(const char *tooltip, float fX, float fY);
 
 	void ShowTooltip(bool show);
 };

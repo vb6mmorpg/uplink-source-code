@@ -13,23 +13,21 @@
 class HD_UI_ButtonDropdown : public HD_UI_Container
 {
 private:
-	HD_UI_Button *button = NULL;
-	HD_UI_ButtonMenu *buttonList = NULL;
+	std::shared_ptr<HD_UI_Button> button = nullptr;
+	std::shared_ptr<HD_UI_ButtonMenu> buttonList = nullptr;
 	int selectionID = -1;
-	const char* selectionCaption;
-
-protected:
-	HD_UI_ButtonDropdown(){}
+	std::string selectionCaption;
 
 public:
+	HD_UI_ButtonDropdown(){}
 	~HD_UI_ButtonDropdown(){}
 
 	//button creation; the first caption in the vector is the initial one on the button
-	HD_UI_ButtonDropdown(const char *objectName, int index, std::vector<std::string> captions, const char *tooltip, float fX, float fY,
-		float fWidth, float fHeight, ALLEGRO_COLOR colors[6], bool isFilled, ALLEGRO_FONT *captionFont, HD_UI_Container *newParent);
+	void CreateDropdownButton(const char *objectName, std::vector<std::string> captions, const char* tooltip, float fX, float fY, float fWidth, float fHeight,
+		ALLEGRO_COLOR colors[6], bool isFilled, ALLEGRO_FONT *captionFont = HDResources->font24);
 
 	int getSelectionID() { return selectionID; }
-	const char* getSelectionCaption() { return selectionCaption; }
+	const char* getSelectionCaption() { return selectionCaption.c_str(); }
 
 	//Callbacks
 	void buttonClick();

@@ -16,10 +16,6 @@
 
 #define CRASH_REPORTS
 
-//====================
-#define UPLINK_HD		//weather to enable or disable Uplink HD. Comment to disable :(
-//====================
-
 #if defined(WIN32) && defined(CRASH_REPORTS)
 #define _WIN32_WINDOWS 0x0500	// for IsDebuggerPresent
 #endif
@@ -76,11 +72,19 @@
 
 #include "mmgr.h"
 
+//====================
+#define UPLINK_HD		//weather to enable or disable Uplink HD. Comment to disable :(
+//====================
+
 //Uplink HD Includes
+#ifdef UPLINK_HD
+
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_native_dialog.h>
 #include "uplinkHD/HD_Screen.h"
 #include "uplinkHD/HD_Resources.h"
+
+#endif
 
 // ============================================================================
 // Initialisation functions
@@ -448,12 +452,12 @@ void RunUplink ( int argc, char **argv )
 
 #ifdef UPLINK_HD
 		Init_Game();
-		//Init_Graphics ();
-		Init_Sound    ();
-		Init_Music    ();
+		Init_Fonts(); //game crashes if fonts aren't initialized
+		Init_Sound();
+		Init_Music();
 
 		// Run everything
-		Run_MainMenu  ();
+		Run_MainMenu();
 		Init_UplinkHD();
 		HDScreen->HD_StartMainLoop();
 		//Run_Game      ();
@@ -1356,11 +1360,12 @@ void Cleanup_Uplink() {
 //UPLINK HD INITS
 //===============
 
+#ifdef UPLINK_HD
 void Init_UplinkHD()
 {
 	//Initializes Allegro and what-not
-	HDScreen = new HD_Screen();
-	HDResources = new HD_Resources();
+	HDScreen = std::make_unique<HD_Screen>();
+	HDResources = std::make_unique<HD_Resources>();
 }
 
 void Cleanup_UplinkHD()
@@ -1370,3 +1375,4 @@ void Cleanup_UplinkHD()
 
 	Cleanup_Uplink();
 }
+#endif

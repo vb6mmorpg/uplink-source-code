@@ -2,6 +2,7 @@
 //===========================
 
 #include "HD_MMOptions.h"
+#include "HD_Root.h"
 
 #include "options/options.h"
 #include "app/app.h"
@@ -76,46 +77,60 @@ void HD_MMOptions::applyClick()
 
 //Public
 //=================
-
-HD_MMOptions::HD_MMOptions()
-{
-	setObjectProperties("MMOptions", 0.0f, 0.0f, 320.0f, 1200.0f, NULL, -1);
-}
-
 void HD_MMOptions::Create()
 {
+	setObjectProperties("MMOptions", 0.0f, 0.0f, 320.0f, 1200.0f);
+
+	std::shared_ptr<HD_UI_GraphicsObject> bgGfx = std::make_shared<HD_UI_GraphicsObject>();
+	std::shared_ptr<HD_UI_GraphicsObject> bgStroke = std::make_shared<HD_UI_GraphicsObject>();
+	std::shared_ptr<HD_UI_TextObject> settingsTitle = std::make_shared<HD_UI_TextObject>();
+	std::shared_ptr<HD_UI_TextObject> displayTitle = std::make_shared<HD_UI_TextObject>();
+	std::shared_ptr<HD_UI_TextObject> soundsTitle = std::make_shared<HD_UI_TextObject>();
+	std::shared_ptr<HD_UI_Button> btnApply = std::make_shared<HD_UI_Button>();
+	btnMusic = std::make_shared<HD_UI_ButtonSwitch>();
+	btnFrameless = std::make_shared<HD_UI_ButtonSwitch>();
+	btnResolution = std::make_shared<HD_UI_ButtonDropdown>();
+
 	//BG
-	HD_UI_GraphicsObject *bgGfx = new HD_UI_GraphicsObject("bgGfx", -1, 0.0f, 0.0f, width, height, true, 0.6f, palette->cBg1, palette->cBg2, this);
-	HD_UI_GraphicsObject *bgStroke = new HD_UI_GraphicsObject("bgStroke", -1, -1.0f, -1.0f, width + 1.0f, height + 1.0f, 1.0f, palette->bluesSat.cBlue2, this);
+	bgGfx->CreateGradientRectangleObject("bgGfx", 0.0f, 0.0f, width, height, true, 0.6f, palette->cBg1, palette->cBg2);
+	bgStroke->CreateRectangleObject("bgStroke", -1.0f, -1.0f, width + 1.0f, height + 1.0f, 1.0f, palette->bluesSat.cBlue2);
+	addChild(bgGfx);
+	addChild(bgStroke);
 
 	//Titles
-	HD_UI_TextObject *settingsTitle = new HD_UI_TextObject("settingsTitle", -1, 20.0f, 63.0f, "Settings", HDResources->font30, palette->bluesSat.cBlue2, ALLEGRO_ALIGN_LEFT, this);
-	HD_UI_TextObject *displayTitle = new HD_UI_TextObject("displayTitle", -1, 20.0f, 154.0f, "Display", HDResources->font30, palette->bluesSat.cBlue2, ALLEGRO_ALIGN_LEFT, this);
-	HD_UI_TextObject *soundsTitle = new HD_UI_TextObject("soundsTitle", -1, 20.0f, 424.0f, "Sounds", HDResources->font30, palette->bluesSat.cBlue2, ALLEGRO_ALIGN_LEFT, this);
+	settingsTitle->CreateSinglelineText("settingsTitle", 20.0f, 63.0f, "Settings", palette->bluesSat.cBlue2, HDResources->font30, ALLEGRO_ALIGN_LEFT);
+	displayTitle->CreateSinglelineText("displayTitle", 20.0f, 154.0f, "Display", palette->bluesSat.cBlue2, HDResources->font30, ALLEGRO_ALIGN_LEFT);
+	soundsTitle->CreateSinglelineText("soundsTitle", 20.0f, 424.0f, "Sounds", palette->bluesSat.cBlue2, HDResources->font30, ALLEGRO_ALIGN_LEFT);
+	addChild(settingsTitle);
+	addChild(displayTitle);
+	addChild(soundsTitle);
 
 	//Buttons
 	bool isMusicOn = app->GetOptions()->IsOptionEqualTo("sound_musicenabled", 1);
-	btnMusic = new HD_UI_ButtonSwitch("btnMusic", -1, 20.0f, 478.0f, 275.0f, 30.0f, palette->btnSwitchColors_blueSat, "Music", "Turn Music On or Off",
-		HDResources->font24, true, isMusicOn, this);
+	btnMusic->CreateSwitchButton("btnMusic", 20.0f, 478.0f, 275.0f, 30.0f, palette->btnSwitchColors_blueSat, "Music", "Turn Music On or Off",
+		true, HDResources->font24, isMusicOn);
+	addChild(btnMusic);
 
 	bool isFrameless = app->GetOptions()->IsOptionEqualTo("graphics_fullscreen", 1);
-	btnFrameless = new HD_UI_ButtonSwitch("btnFrameless", -1, 20.0f, 270.0f, 275.0f, 30.0f, palette->btnSwitchColors_blueSat, "Frameless", "Frameless display?",
-		HDResources->font24, true, isFrameless, this);
+	btnFrameless->CreateSwitchButton("btnFrameless", 20.0f, 270.0f, 275.0f, 30.0f, palette->btnSwitchColors_blueSat, "Frameless", "Frameless display?",
+		true, HDResources->font24, isFrameless);
+	addChild(btnFrameless);
 
-	btnResolution = new HD_UI_ButtonDropdown("btnResolution", -1, getScreenModesStrings(), "Display Resolution.", 20.0f, 210.0f,
-		275.0f, 30.0f, palette->btnColors_blueSat, true, HDResources->font24, this);
+	btnResolution->CreateDropdownButton("btnResolution", getScreenModesStrings(), "Display Resolution.", 20.0f, 210.0f,
+		275.0f, 30.0f, palette->btnColors_blueSat, true, HDResources->font24);
+	addChild(btnResolution);
 
-	HD_UI_Button *btnApply = new HD_UI_Button("btnApply", -1, "Apply", "Apply selected settings.", 79.0f, 927.0f, 160.0f, 30.0f, palette->btnColors_blueSat, false,
-		HDResources->font24, ALLEGRO_ALIGN_CENTER, this);
+	btnApply->CreateRectangleButton("btnApply", "Apply", "Apply selected settings.", 79.0f, 927.0f, 160.0f, 30.0f, palette->btnColors_blueSat, false,
+		HDResources->font24, ALLEGRO_ALIGN_CENTER);
 	btnApply->setCallback(std::bind(&HD_MMOptions::applyClick, this));
+	addChild(btnApply);
 }
 
 void HD_MMOptions::Update()
 {
 	HD_UI_Container::Update();
 	
-	if (HDScreen->mouse->GetTarget() == HDScreen->hd_getCurrentLayout() &&
-		HDScreen->mouse->GetState()->buttons & 1)
+	if (rootIsMouseTarget() && HDScreen->mouse->GetState()->buttons & 1)
 		ShowScreen(false);
 }
 

@@ -690,10 +690,67 @@
     <ClInclude Include="uplinkHD\UI_Layouts\HD_MainMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="uplinkHD\UI_Layouts\HD_TestLayout.h">
+    <ClInclude Include="uplinkHD\UI_Layouts\HD_MMOptions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="uplinkHD\UI_Layouts\HD_MMOptions.h">
+    <ClInclude Include="uplinkHD\UI_Layouts\HD_Root.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Layouts\HUD\HD_HUD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Layouts\HD_Loading.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Layouts\HUD\Elements\HD_HUD_TopBar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Layouts\HUD\Elements\HD_HUD_BottomBar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Layouts\HUD\Elements\HD_HUD_EmailNotif.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Layouts\HUD\Interfaces\HD_HUD_MainWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Layouts\HUD\Interfaces\HD_HUD_LinksScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Layouts\HUD\Elements\HD_HUD_LinkObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Objects\HD_UI_ScrollableContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Objects\HD_UI_Scrollbar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Layouts\HUD\Interfaces\HD_HUD_MessageScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Layouts\HUD\Interfaces\HD_HUD_MenuScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Layouts\HUD\Interfaces\HD_HUD_DialogScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Layouts\HUD\Interfaces\HD_HUD_DisconnectScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Layouts\HUD\Interfaces\HD_HUD_PasswordScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Layouts\HUD\Interfaces\HD_HUD_UseridScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Layouts\HUD\Interfaces\HD_HUD_LogsScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Layouts\HUD\Elements\HD_HUD_LogObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="uplinkHD\UI_Layouts\HUD\Interfaces\HD_HUD_HighSecurityScreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1383,10 +1440,67 @@
     <ClCompile Include="uplinkHD\UI_Layouts\HD_MainMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="uplinkHD\UI_Layouts\HD_TestLayout.cpp">
+    <ClCompile Include="uplinkHD\UI_Layouts\HD_MMOptions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="uplinkHD\UI_Layouts\HD_MMOptions.cpp">
+    <ClCompile Include="uplinkHD\UI_Layouts\HD_Root.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Layouts\HUD\HD_HUD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Layouts\HD_Loading.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Layouts\HUD\Elements\HD_HUD_TopBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Layouts\HUD\Elements\HD_HUD_BottomBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Layouts\HUD\Elements\HD_HUD_EmailNotif.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Layouts\HUD\Interfaces\HD_HUD_MainWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Layouts\HUD\Interfaces\HD_HUD_LinksScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Layouts\HUD\Elements\HD_HUD_LinkObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Objects\HD_UI_ScrollableContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Objects\HD_UI_Scrollbar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Layouts\HUD\Interfaces\HD_HUD_MessageScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Layouts\HUD\Interfaces\HD_HUD_MenuScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Layouts\HUD\Interfaces\HD_HUD_DialogScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Layouts\HUD\Interfaces\HD_HUD_DisconnectScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Layouts\HUD\Interfaces\HD_HUD_PasswordScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Layouts\HUD\Interfaces\HD_HUD_UseridScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Layouts\HUD\Interfaces\HD_HUD_LogsScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Layouts\HUD\Elements\HD_HUD_LogObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uplinkHD\UI_Layouts\HUD\Interfaces\HD_HUD_HighSecurityScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

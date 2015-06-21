@@ -7,6 +7,7 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_primitives.h>
 
+#include "../HD_Screen.h"
 #include "../HD_Resources.h"
 #include "../HD_ColorPalettes.h"
 
@@ -21,6 +22,15 @@
 //Drawing Functions
 void HD_UI_TextObject::DrawTextGfx()
 {
+	/*float imageW = al_get_bitmap_width(glyphTexture);
+	float imageH = al_get_bitmap_height(glyphTexture);
+
+	ALLEGRO_COLOR c = palette->addAlphaToColor(al_map_rgb_f(1.0f, 1.0f, 1.0f), drawAlpha);
+	float r = (rotation * ALLEGRO_PI) / 180.0f;
+
+	//Images get scaled by the X scale!
+	al_draw_tinted_scaled_rotated_bitmap(glyphTexture, c, imageW / 2.0f, imageH / 2.0f, globalX + drawWidth / 2.0f, globalY + drawHeight / 2.0f, globalScaleX, globalScaleX, r, 0);*/
+
 	//Just a single line
 	ALLEGRO_COLOR c = palette->addAlphaToColor(textColor, drawAlpha);
 	al_draw_text(textFont, c, globalX, globalY, alignment, textString.c_str());
@@ -41,13 +51,38 @@ void HD_UI_TextObject::DrawMultilineTextGfx()
 //============================
 
 //Singleline text object
-HD_UI_TextObject::HD_UI_TextObject(const char *objectName, int index, float fX, float fY, const char *text,
-	ALLEGRO_FONT *font, ALLEGRO_COLOR color, int align, HD_UI_Container *newParent)
+//HD_UI_TextObject::HD_UI_TextObject(const char *objectName, int index, float fX, float fY, const char *text,
+//	ALLEGRO_FONT *font, ALLEGRO_COLOR color, int align, HD_UI_Container *newParent)
+void HD_UI_TextObject::CreateSinglelineText(const char *objectName, float fX, float fY, const char *text,
+	ALLEGRO_COLOR color, ALLEGRO_FONT *font, int align)
 {
 	float fWidth = al_get_text_width(font, text);
 	float fHeight = al_get_font_line_height(font);
 
-	setObjectProperties(objectName, fX, fY, fWidth, fHeight, newParent, index);
+	//create the texture
+	/*glyphTexture = al_create_bitmap(fWidth, fHeight);
+	al_set_target_bitmap(glyphTexture);
+	al_draw_text(font, color, 0.0f, 0.0f, 0, text);
+	al_set_target_backbuffer(al_get_current_display());
+
+	float alignX = 0.0f;
+
+	switch (align)
+	{
+	case 0:
+		alignX = fX;	//left align
+		break;
+
+	case 1:
+		alignX = fX - fWidth / 2.0f;	//center align
+		break;
+	
+	case 2:
+		alignX = fX - fWidth;	//right align
+		break;
+	}*/
+
+	setObjectProperties(objectName, fX, fY, fWidth, fHeight);
 
 	textString = text;
 
@@ -59,18 +94,20 @@ HD_UI_TextObject::HD_UI_TextObject(const char *objectName, int index, float fX, 
 }
 
 //Multiline text with MAX width object
-HD_UI_TextObject::HD_UI_TextObject(const char *objectName, int index, float fX, float fY, const char *text,
-	ALLEGRO_FONT *font, ALLEGRO_COLOR color, int align, float maxWidth, float lineOffset, HD_UI_Container *newParent)
+//HD_UI_TextObject::HD_UI_TextObject(const char *objectName, int index, float fX, float fY, const char *text,
+//	ALLEGRO_FONT *font, ALLEGRO_COLOR color, int align, float maxWidth, float lineOffset, HD_UI_Container *newParent)
+void HD_UI_TextObject::CreateMultilineText(const char *objectName, float fX, float fY, const char *text,
+	ALLEGRO_COLOR color, float maxWidth, int maxLines, float lineOffset, ALLEGRO_FONT *font, int align)
 {
 	textString = text;
 	HD_UI_TextObject::lineOffset = lineOffset;
 	lineHeight = al_get_font_line_height(font);
-	breakString(textString, font, maxWidth);
+	breakString(textString, font, maxWidth, maxLines);
 
 	float fWidth = maxWidth;
 	float fHeight = multilineStrings.size() * lineHeight + (lineOffset * (multilineStrings.size() - 1));
 
-	setObjectProperties(objectName, fX, fY, fWidth, fHeight, newParent, index);
+	setObjectProperties(objectName, fX, fY, fWidth, fHeight);
 
 	textFont = font;
 	textColor = color;
@@ -80,7 +117,7 @@ HD_UI_TextObject::HD_UI_TextObject(const char *objectName, int index, float fX, 
 }
 
 //Breaks a given string into multiple lines if its width > maxWidth
-int HD_UI_TextObject::breakString(std::string text, ALLEGRO_FONT *font, float maxWidth)
+int HD_UI_TextObject::breakString(std::string text, ALLEGRO_FONT *font, float maxWidth, int maxLines)
 {
 	unsigned int numLines = 0;
 	unsigned int textLength = text.length();
@@ -89,16 +126,15 @@ int HD_UI_TextObject::breakString(std::string text, ALLEGRO_FONT *font, float ma
 	unsigned int prevBreakIndex = 0;
 	std::string stringLine;
 
-	//TO-DO: This isn't working! :(
 	for (unsigned int ii = 0; ii < textLength; ii++)
 	{
 		const char character = text[ii];
 		textSize += al_get_text_width(font, &character);
 
-		if (text[ii] == ' ')
+		if (text[ii] == ' ' || text[ii] == '\n')
 			lastSpaceIndex = ii;
 		
-		if (textSize > maxWidth)
+		if (textSize > maxWidth || text[ii] == '\n')
 		{
 			//if maxWidth is too small for the whole word, break in the middle of the word
 			//if not, break it at the lastSpaceIndex
@@ -131,6 +167,13 @@ int HD_UI_TextObject::breakString(std::string text, ALLEGRO_FONT *font, float ma
 			stringLine.clear();
 			numLines++;
 		}
+
+		//cap it at maxLines if it's != 0
+		if (maxLines > 0 && numLines == maxLines)
+		{
+			multilineStrings[numLines - 1].append("...");
+			break;
+		}
 	}
 
 	return numLines;
@@ -150,10 +193,11 @@ void HD_UI_TextObject::setText(const char *newText)
 	textString = newText;
 }
 
-void HD_UI_TextObject::setText(const char *newText, float maxWidth)
+void HD_UI_TextObject::setText(const char *newText, float maxWidth, int maxLines)
 {
 	textString = newText;
-	breakString(textString, textFont, maxWidth);
+	multilineStrings.clear();
+	breakString(textString, textFont, maxWidth, maxLines);
 }
 
 float HD_UI_TextObject::getTextWidth()
@@ -193,16 +237,24 @@ float HD_UI_TextObject::getTextWidth(int charsNo)
 
 void HD_UI_TextObject::Draw()
 {
-	if (isVisible && redraw)
+	if (isVisible && redraw && isInClippingMask())
 	{
 		drawTextObject();
 		redraw = false;
+	}
+
+	if (HDScreen->DebugInfo && isVisible)
+	{
+		al_draw_rectangle(globalX, globalY, globalX + width, globalY + height, al_map_rgb_f(1.0f, 0.0f, 1.0f), 1.0f);
+		std::string sName = "name:" + name;
+		al_draw_text(HDResources->debugFont, al_map_rgb_f(1.0f, 0.0f, 1.0f), globalX, globalY + height + 2.0f, 0, sName.c_str());
 	}
 }
 
 void HD_UI_TextObject::Clear()
 {
-	multilineStrings.clear();
-	textString.clear();
-	delete this;
+	//if (glyphTexture)
+	//	al_destroy_bitmap(glyphTexture);
+
+	HD_UI_Object::Clear();
 }

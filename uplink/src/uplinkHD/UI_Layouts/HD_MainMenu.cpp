@@ -5,6 +5,7 @@
 //======================================
 
 #include "HD_MainMenu.h"
+#include "HD_Root.h"
 
 #include "../HD_Screen.h"
 #include "../HD_ColorPalettes.h"
@@ -12,10 +13,10 @@
 #include "../UI_Objects/HD_UI_GraphicsObject.h"
 #include "../UI_Objects/HD_UI_Button.h"
 #include "../UI_Objects/HD_UI_TextObject.h"
-#include "../UI_Objects/HD_UI_ButtonInput.h"
 #include "../UI_Objects/HD_UI_PopUp.h"
 #include "../UI_Objects/HD_UI_ButtonSwitch.h"
 #include "../UI_Objects/HD_UI_ButtonDropdown.h"
+#include "HD_Loading.h"
 
 #include "../../app/app.h"
 #include "../../game/game.h"
@@ -23,16 +24,37 @@
 
 //Callback Functions
 //==================
+void HD_MainMenu::registerClicked()
+{
+	//To-Do when intro gets done
+}
+
+void HD_MainMenu::submitClicked(HD_UI_ButtonInput *btnInUser)
+{
+	std::string inputUser = btnInUser->getCaption();
+
+	if (userExists(inputUser.c_str()))
+	{
+		app->SetNextLoadGame(btnInUser->getCaption());
+		root->SetNewLayout("HUD", true, "Connecting to Gateway");
+	}
+	else
+	{
+		btnInUser->setCaption("Invalid Username");
+		btnInUser->getTextObjectByName("caption")->setTextColor(palette->cRed);
+	}
+}
+
 void HD_MainMenu::optionsClicked()
 {
 	options->ShowScreen(true);
 }
+
 void HD_MainMenu::exitClicked()
 {
-	HD_UI_Object *popQuit = HDScreen->hd_getCurrentLayout()->getChildByName("quitPopup");
-	popQuit->visible = true;
-	popQuit->alpha = 1.0f;
+	getPopUpByName("quitPopup")->ShowPopUp(true);
 }
+
 void HD_MainMenu::Quit()
 {
 	app->Close();
@@ -44,81 +66,126 @@ void HD_MainMenu::Quit()
 
 HD_MainMenu::HD_MainMenu()
 {
-	name = "MainMenu";
-	parent = NULL;
-	index = 0;
+	setObjectProperties("MainMenu", 0.0f, 0.0f, root->width, root->height);
+	index = gIndex = 0;
+	HDResources->hd_loadAtlasImage("mainMenu_atlas.png");
+}
 
-	x = 0.0f;
-	y = 0.0f;
-	globalX = 0.0f;
-	globalY = 0.0f;
-
-	drawWidth = width = HDScreen->nScreenW;
-	drawHeight = height = HDScreen->nScreenH;
-
-	globalScaleX = scaleX = 1.0f;
-	globalScaleY = scaleY = 1.0f;
-
-	drawAlpha = alpha = 1.0f;
-	isVisible = visible = true;
+HD_MainMenu::~HD_MainMenu()
+{
+	HDResources->hd_removeImage("mainMenu_atlas.png");
 }
 
 void HD_MainMenu::Create()
 {
 	//Background
-	HD_UI_GraphicsObject *bgGFX = new HD_UI_GraphicsObject("background", -1, 0.0f, 0.0f, HDScreen->nScreenW, HDScreen->nScreenH,
-		true, 0.6f, palette->cBg1, palette->cBg2, this);
+	std::shared_ptr<HD_UI_GraphicsObject> bgGfx = std::make_shared<HD_UI_GraphicsObject>();
+	bgGfx->CreateGradientRectangleObject("background", 0.0f, 0.0f, width, height, true, 0.6f, palette->cBg1, palette->cBg2);
+	addChild(bgGfx);
 
 	//Title & logo
-	HD_UI_GraphicsObject *logo = new HD_UI_GraphicsObject("logo", -1, "logo", "mainMenu_atlas.xml", HDScreen->anchors.tc.x, 0.0f, this);
-	HD_UI_GraphicsObject *title = new HD_UI_GraphicsObject("title", -1, "logoTitle", "mainMenu_atlas.xml", HDScreen->anchors.tc.x, 0.0f, this);
-	logo->x = HDScreen->anchors.tc.x - logo->width / 2;
-	title->x = HDScreen->anchors.tc.x - title->width / 2;
-	title->y = HDScreen->nScreenH * 0.32f;
+	std::shared_ptr<HD_UI_GraphicsObject> logo = std::make_shared<HD_UI_GraphicsObject>();
+	std::shared_ptr<HD_UI_GraphicsObject> title = std::make_shared<HD_UI_GraphicsObject>();
+	logo->CreateImageObject("logo", "logo", "mainMenu_atlas.png", width / 2.0f, 0.0f);
+	title->CreateImageObject("title", "logoTitle", "mainMenu_atlas.png", width / 2.0f, height * 0.32f);
+	logo->x -= logo->width / 2;
+	title->x -= title->width / 2;
+	addChild(logo);
+	addChild(title);
 
 	//Quit & Options buttons
-	HD_UI_Button *btnExit = new HD_UI_Button("btnExit", -1, "btnExit_s", "mainMenu_atlas.xml",
-		"Quit Uplink.", HDScreen->nScreenW * 0.05f, HDScreen->nScreenH * 0.05f, this);
+	std::shared_ptr<HD_UI_Button> btnExit = std::make_shared<HD_UI_Button>();
+	std::shared_ptr<HD_UI_Button> btnOptions = std::make_shared<HD_UI_Button>();
+	btnExit->CreateImageButton("btnExit", "btnExit_s", "mainMenu_atlas.png", "Quit Uplink.", width * 0.05f, height * 0.05f);
 	btnExit->setCallback(std::bind(&HD_MainMenu::exitClicked, this));
+	addChild(btnExit);
 
-	HD_UI_Button *btnOptions = new HD_UI_Button("btnOptions", -1, "btnOptions_s", "mainMenu_atlas.xml",
-		"Interface options.", btnExit->x + btnExit->width + 2.0f, btnExit->y, this);
+	btnOptions->CreateImageButton("btnOptions", "btnOptions_s", "mainMenu_atlas.png", "Interface options.", btnExit->x + btnExit->width + 2.0f, btnExit->y);
 	btnOptions->setCallback(std::bind(&HD_MainMenu::optionsClicked, this));
+	addChild(btnOptions);
 
 	//Password objects
-	HD_UI_GraphicsObject *userPhoto = new HD_UI_GraphicsObject("userPhoto", -1, "userPhoto_big", "mainMenu_atlas.xml",
-		HDScreen->nScreenW * 0.37f, HDScreen->nScreenH * 0.42f, this);
+	std::shared_ptr<HD_UI_GraphicsObject> userPhoto = std::make_shared<HD_UI_GraphicsObject>();
+	userPhoto->CreateImageObject("userPhoto", "userPhoto_big", "mainMenu_atlas.png", width * 0.37f, height * 0.42f);
+	addChild(userPhoto);
 
-	HD_UI_ButtonInput *btnInUser = new HD_UI_ButtonInput("btnInUser", -1, "Username", "Enter your Username.",
-		HDScreen->anchors.c.x, HDScreen->nScreenH * 0.43f, 248.0f, 45.0f, true, palette->btnInputColors_blueSat, HDResources->font30, this);
+	std::shared_ptr<HD_UI_ButtonInput> btnInUser = std::make_shared<HD_UI_ButtonInput>();
+	btnInUser->CreateSinglelineInput("btnInUser", "Username", "Enter your Username.",
+		width / 2.0f, height * 0.43f, 248.0f, 45.0f, true, palette->btnInputColors_blueSat, HDResources->font30);
+	btnInUser->setCallback(std::bind(&HD_MainMenu::submitClicked, this, btnInUser.get()));
+	addChild(btnInUser);
 
-	HD_UI_ButtonInput *btnInPass = new HD_UI_ButtonInput("btnInPass", -1, "Password", "Enter your Password.", HDScreen->anchors.c.x,
-		HDScreen->nScreenH * 0.52f, 248.0f, 45.0f, true, palette->btnInputColors_blueSat, HDResources->font30, this);
-
-	HD_UI_Button *btnRegister = new HD_UI_Button("btnRegister", -1, "Register", "Register a new User.", btnInUser->x, HDScreen->nScreenH * 0.61f,
-		160.0f, 30.0f, palette->btnColors_blueSat, false, HDResources->font24, ALLEGRO_ALIGN_CENTER, this);
-
-	HD_UI_Button *btnSubmit = new HD_UI_Button("btnSubmit", -1, "btnSubmit_s", "mainMenu_atlas.xml", "Submit.", HDScreen->nScreenW * 0.61f, HDScreen->nScreenH * 0.605f, this);
+	std::shared_ptr<HD_UI_ButtonInput> btnInPass = std::make_shared<HD_UI_ButtonInput>();
+	btnInPass->CreateSinglelineInput("btnInPass", "Password", "Enter your Password.", width / 2.0f,
+		height * 0.52f, 248.0f, 45.0f, true, palette->btnInputColors_blueSat, HDResources->font30);
 	btnInPass->isPassword = true;
+	btnInPass->setCallback(std::bind(&HD_MainMenu::submitClicked, this, btnInUser.get()));
+	addChild(btnInPass);
+
+	std::shared_ptr<HD_UI_Button> btnRegister = std::make_shared<HD_UI_Button>();
+	btnRegister->CreateRectangleButton("btnRegister", "Register", "Register a new User.", btnInUser->x, height * 0.61f,
+		160.0f, 30.0f, palette->btnColors_blueSat, false, HDResources->font24, ALLEGRO_ALIGN_CENTER);
+	btnRegister->setCallback(std::bind(&HD_MainMenu::registerClicked, this));
+	addChild(btnRegister);
+
+	std::shared_ptr<HD_UI_Button> btnSubmit = std::make_shared<HD_UI_Button>();
+	btnSubmit->CreateImageButton("btnSubmit", "btnSubmit_s", "mainMenu_atlas.png", "Submit.", width * 0.61f, height * 0.605f);
+	btnSubmit->setCallback(std::bind(&HD_MainMenu::submitClicked, this, btnInUser.get()));
+	addChild(btnSubmit);
 
 	//Previous users title
-	HD_UI_GraphicsObject *lines = new HD_UI_GraphicsObject("lines", -1, -2.0f, HDScreen->nScreenH * 0.69, HDScreen->nScreenW + 4.0f, 60.0f, 1.0f, palette->bluesSat.cBlue2, this);
+	std::shared_ptr<HD_UI_GraphicsObject> lines = std::make_shared<HD_UI_GraphicsObject>();
+	lines->CreateRectangleObject("lines", -2.0f, height * 0.69, width + 4.0f, 60.0f, 1.0f, palette->bluesSat.cBlue2);
+	addChild(lines);
 
-	HD_UI_TextObject *usersDesc = new HD_UI_TextObject("usersDescription", -1, HDScreen->nScreenW / 2.0f, lines->y + lines->height / 2.0f, "Other users from this Terminal:",
-		HDResources->font30, palette->bluesSat.cBlue2, ALLEGRO_ALIGN_CENTER, this);
+	std::shared_ptr<HD_UI_TextObject> usersDesc = std::make_shared<HD_UI_TextObject>();
+	usersDesc->CreateSinglelineText("usersDescription", width / 2.0f, lines->y + lines->height / 2.0f, "Other users from this Terminal:",
+		palette->bluesSat.cBlue2, HDResources->font30, ALLEGRO_ALIGN_CENTER);
 	usersDesc->y -= usersDesc->height / 2.0f;
+	addChild(usersDesc);
 
 	//User buttons; 4 maximum
 	if (App::ListExistingGames()->ValidIndex(0))
-		HD_UI_TextObject *usr0 = new HD_UI_TextObject("user0", -1, HDScreen->nScreenW / 2.0f, 900.0f, App::ListExistingGames()->GetData(0),
-			HDResources->font30, palette->bluesSat.cBlue2, ALLEGRO_ALIGN_CENTER, this);
+	{
+		std::shared_ptr<HD_UI_TextObject> usr0 = std::make_shared<HD_UI_TextObject>();
+		usr0->CreateSinglelineText("user0", width / 2.0f, 900.0f, App::ListExistingGames()->GetData(0),
+			palette->bluesSat.cBlue2, HDResources->font30, ALLEGRO_ALIGN_CENTER);
+		addChild(usr0);
+	}
 
 	//Options
-	options = new HD_MMOptions();
+	options = std::make_shared<HD_MMOptions>();
 	options->Create();
 	options->x = 0.0f - options->width - 5.0f;
+	addChild(options);
 
 	//PopUps
-	HD_UI_PopUp *popQuit = new HD_UI_PopUp("quitPopup", YESNO, "Shutdown", "Are you sure you want to shutdown Uplink?", std::bind(&HD_MainMenu::Quit, this));
-	popQuit->visible = false;
+	std::shared_ptr<HD_UI_PopUp> popQuit = std::make_shared<HD_UI_PopUp>();
+	popQuit->Create("quitPopup", YESNO, "Shutdown", "Are you sure you want to shutdown Uplink?", std::bind(&HD_MainMenu::Quit, this));
+	addChild(popQuit);
+}
+
+//general functions
+void HD_MainMenu::Clear()
+{
+	HD_UI_Container::Clear();
+	HDResources->hd_removeImage("mainMenu_atlas.png");
+}
+
+bool HD_MainMenu::userExists(const char* user)
+{
+	int length = App::ListExistingGames()->Size();
+
+	if (length == 0) return false;
+
+	for (int ii = 0; ii < length; ii++)
+	{
+		if (App::ListExistingGames()->ValidIndex(ii))
+		{
+			if (strcmp(user, App::ListExistingGames()->GetData(ii)) == 0)
+				return true;
+		}
+	}
+
+	return false;
 }

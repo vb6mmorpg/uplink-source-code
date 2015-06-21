@@ -16,11 +16,11 @@
 class HD_UI_ButtonInput : public HD_UI_Button
 {
 protected:
-	HD_UI_GraphicsObject *shavedStrokeObject = NULL;
-	HD_UI_GraphicsObject *textCaret = NULL;
+	std::shared_ptr<HD_UI_GraphicsObject> textCaret = nullptr;
 	unsigned int caretIndex = 0;
-	std::string caption;
-	std::string inputString;
+	std::string sCaption;
+	std::string sInput;
+	std::string sPassword;
 
 	//Button functions
 	void mouseOut();
@@ -30,27 +30,32 @@ protected:
 	//Text input
 	void getInput();
 
-	//Construction/destruction
-	HD_UI_ButtonInput();
-	~HD_UI_ButtonInput();
-
 public:
+	//Construction/destruction
+	HD_UI_ButtonInput() {}
+	~HD_UI_ButtonInput() {}
+
 	bool isPassword = false; //hides the text with * symbols
 
 	//Singleline input
 	//Creates a normal or bottom-right shaved box as GFX
-	HD_UI_ButtonInput(char *objectName, int index, char *caption, char *tooltip, float fX, float fY,
-		float fWidth, float fHeight, bool isShaved, ALLEGRO_COLOR colors[6], ALLEGRO_FONT *captionFont, HD_UI_Container *newParent);
+	//HD_UI_ButtonInput(char *objectName, int index, char *caption, char *tooltip, float fX, float fY,
+	//	float fWidth, float fHeight, bool isShaved, ALLEGRO_COLOR colors[6], ALLEGRO_FONT *captionFont, HD_UI_Container *newParent);
+	void CreateSinglelineInput(const char *objectName, const char *caption, const char *tooltip, float fX, float fY,
+		float fWidth, float fHeight, bool isShaved, ALLEGRO_COLOR colors[6], ALLEGRO_FONT *captionFont = HDResources->font24);
 
 	//Multiline input
-	HD_UI_ButtonInput(char *objectName, int index, char *caption, char *tooltip, float fX, float fY,
-		float fWidth, float fHeight, ALLEGRO_COLOR colors[6], ALLEGRO_FONT *captionFont, HD_UI_Container *newParent);
+	//HD_UI_ButtonInput(char *objectName, int index, char *caption, char *tooltip, float fX, float fY,
+	//	float fWidth, float fHeight, ALLEGRO_COLOR colors[6], ALLEGRO_FONT *captionFont, HD_UI_Container *newParent);
+	void CreateMultilineInput(const char *objectName, const char *caption, const char *tooltip, float fX, float fY,
+		float fWidth, float fHeight, ALLEGRO_COLOR colors[6], ALLEGRO_FONT *captionFont = HDResources->font24);
 
 	//general functions
 	void Update();
-	void Clear();
 
-	const char* getInputText() { return inputString.c_str(); }
+	const char* getInputText() { return sInput.c_str(); }
+	void setCaption(const char* newCaption);
+	void setInputText(const char* newInput);
 
 };
 

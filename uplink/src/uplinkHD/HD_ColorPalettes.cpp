@@ -1,5 +1,6 @@
 #include <allegro5/allegro.h>
 #include "HD_ColorPalettes.h"
+#include <memory>
 
 HD_ColorPalettes::HD_ColorPalettes(){
 	//Color Sets - Used in Buttons mostly
@@ -83,7 +84,12 @@ ALLEGRO_COLOR HD_ColorPalettes::getColorFromRange(ALLEGRO_COLOR c1, ALLEGRO_COLO
 {
 	ALLEGRO_COLOR c = al_map_rgba_f(1.0f, 0.0f, 1.0f, 1.0f);
 
-	if (position > 1.0f) return c; //position should be in the range of 0-1; return TEH HORROR
+	//clamp it then just return one of the colors
+	//if the pos is the start/end
+	if (position > 1.0f) position = 1.0f;
+	if (position < 0.0f) position = 0.0f;
+	if (position == 0.0f) return c1;
+	if (position == 1.0f) return c2;
 
 	c.r = c1.r > c2.r ? c2.r + ((c1.r - c2.r) * position) : c1.r + ((c2.r - c1.r) * position);
 
@@ -96,4 +102,4 @@ ALLEGRO_COLOR HD_ColorPalettes::getColorFromRange(ALLEGRO_COLOR c1, ALLEGRO_COLO
 	return c;
 }
 
-HD_ColorPalettes *palette = NULL;
+std::unique_ptr<HD_ColorPalettes> palette = nullptr;

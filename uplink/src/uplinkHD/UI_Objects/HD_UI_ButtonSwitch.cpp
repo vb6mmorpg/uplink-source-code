@@ -7,15 +7,6 @@
 // Protected Functions
 //============================
 
-//Destruction
-HD_UI_ButtonSwitch::~HD_UI_ButtonSwitch()
-{
-	al_destroy_bitmap(standardImage);
-	al_destroy_bitmap(hoverImage);
-	al_destroy_bitmap(clickImage);
-	al_destroy_bitmap(iconImage);
-}
-
 void HD_UI_ButtonSwitch::mouseRelease()
 {
 	gfxObject->setColors(stateColors[1], stateColors[5]);
@@ -48,39 +39,55 @@ void HD_UI_ButtonSwitch::mouseRelease()
 // Public Creation Functions
 //============================
 
-HD_UI_ButtonSwitch::HD_UI_ButtonSwitch(char *objectName, int index, float fX, float fY, float fWidth, float fHeight, ALLEGRO_COLOR colors[7],
-	char *caption, char *tooltip, ALLEGRO_FONT *captionFont, bool isFilled, bool initState, HD_UI_Container *newParent)
+//HD_UI_ButtonSwitch::HD_UI_ButtonSwitch(char *objectName, int index, float fX, float fY, float fWidth, float fHeight, ALLEGRO_COLOR colors[7],
+//	char *caption, char *tooltip, ALLEGRO_FONT *captionFont, bool isFilled, bool initState, HD_UI_Container *newParent)
+void HD_UI_ButtonSwitch::CreateSwitchButton(const char *objectName, float fX, float fY, float fWidth, float fHeight, ALLEGRO_COLOR colors[7],
+	const char *caption, const char *tooltip, bool isFilled, ALLEGRO_FONT *captionFont,	bool initState)
 {
-	setObjectProperties(objectName, fX, fY, fWidth, fHeight, newParent, index);
+	setObjectProperties(objectName, fX, fY, fWidth, fHeight);
+
+	gfxObject = std::make_shared<HD_UI_GraphicsObject>();
 
 	if (isFilled)
-		gfxObject = new HD_UI_GraphicsObject("baseGFX", -1, 0.0f, 0.0f, fWidth, fHeight, -1.0f, colors[0], this);
+		gfxObject->CreateRectangleObject("baseGFX", 0.0f, 0.0f, fWidth, fHeight, -1.0f, colors[0]);
 	else
-		gfxObject = new HD_UI_GraphicsObject("baseGFX", -1, 0.0f, 0.0f, fWidth, fHeight, 1.0f, colors[0], colors[5], this);
+		gfxObject->CreateSFRectangleObject("baseGFX", 0.0f, 0.0f, fWidth, fHeight, 1.0f, colors[0], colors[5]);
 
-	textObject = new HD_UI_TextObject("caption", -1, 5.0f, 0.0f, caption, captionFont, colors[3], ALLEGRO_ALIGN_LEFT, this);
+	addChild(gfxObject);
+
+	textObject = std::make_shared<HD_UI_TextObject>();
+	textObject->CreateSinglelineText("caption", 5.0f, 0.0f, caption, colors[3], captionFont, ALLEGRO_ALIGN_LEFT);
 	textObject->y = height / 2 - textObject->height / 2;
+	addChild(textObject);
 
 	isOn = initState;
+	switchObject = std::make_shared<HD_UI_GraphicsObject>();
 
 	if (isOn)
-		switchObject = new HD_UI_GraphicsObject("switchGFX", -1, gfxObject->width - 40.0f, 0.0f, 40.0f, gfxObject->height, -1.0f, colors[5], this);
+		switchObject->CreateRectangleObject("switchGFX",gfxObject->width - 40.0f, 0.0f, 40.0f, gfxObject->height, -1.0f, colors[5]);
 	else
-		switchObject = new HD_UI_GraphicsObject("switchGFX", -1, gfxObject->width - 80.0f, 0.0f, 40.0f, gfxObject->height, -1.0f, colors[6], this);
+		switchObject->CreateRectangleObject("switchGFX", gfxObject->width - 80.0f, 0.0f, 40.0f, gfxObject->height, -1.0f, colors[6]);
 
-	onText = new HD_UI_TextObject("onTxt", switchObject->index - 1, gfxObject->width - switchObject->width * 1.5f, 0.0f, "On", captionFont, colors[5], ALLEGRO_ALIGN_CENTER, this);
-	offText = new HD_UI_TextObject("offTxt", switchObject->index - 1, gfxObject->width - switchObject->width / 2.0f, 0.0f, "Off", captionFont, colors[6], ALLEGRO_ALIGN_CENTER, this);
+	addChild(switchObject);
+
+	std::shared_ptr<HD_UI_TextObject> onText = std::make_shared<HD_UI_TextObject>();
+	onText->CreateSinglelineText("onTxt", gfxObject->width - switchObject->width * 1.5f, 0.0f, "On", colors[5], captionFont, ALLEGRO_ALIGN_CENTER);
+
+	std::shared_ptr<HD_UI_TextObject> offText = std::make_shared<HD_UI_TextObject>();
+	offText->CreateSinglelineText("offTxt", gfxObject->width - switchObject->width / 2.0f, 0.0f, "Off", colors[6], captionFont, ALLEGRO_ALIGN_CENTER);
 	onText->y = height / 2 - onText->height / 2;
 	offText->y = height / 2 - offText->height / 2;
+
+	addChildAt(onText, switchObject->index - 1);
+	addChildAt(offText, switchObject->index - 1);
 
 	for (unsigned int ii = 0; ii < 7; ii++)
 		stateColors[ii] = colors[ii];
 
 	onCallback = offCallback = buttonCallback = std::bind(&HD_UI_Button::defaultCallback, this);
 
-	tooltipText = tooltip;
-	tooltipObject = new HD_UI_Tooltip(tooltip, this);
-	tooltipObject->visible = false;
+	sTooltip = tooltip;
+	//setTooltip(tooltip);
 }
 
 void HD_UI_ButtonSwitch::setCallback(std::function<void()>newOnCallback, std::function<void()>newOffCallback)

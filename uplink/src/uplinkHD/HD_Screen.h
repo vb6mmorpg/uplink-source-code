@@ -22,36 +22,8 @@ class HD_Screen
 	struct Keyboard
 	{
 		int uniKey = 0;							//unicode char key; used for typing
-		//bool key[ALLEGRO_KEY_MAX];				//normal AL keycode; used by various objects for input
 		int key = 0;
 		unsigned int modifiers = 0;				//AL bitfields; maybe it's gonna be used
-	};
-
-	//screen anchors
-	struct AnchorPoint
-	{
-		int x;
-		int y;
-	};
-
-	struct HD_ANCHORS
-	{
-		AnchorPoint tl;		//top-left
-		AnchorPoint tc;		//top-center
-		AnchorPoint tr;		//top-right
-		AnchorPoint bl;		//bottom-left
-		AnchorPoint bc;		//bottom-center
-		AnchorPoint br;		//bottom-right
-
-		AnchorPoint lc;		//left-center
-		AnchorPoint c;		//center
-		AnchorPoint rc;		//right-center
-
-		int w13;		//width 1/3
-		int w23;		//width 2/3
-
-		int h13;		//height 1/3
-		int h23;		//height 2/3
 	};
 
 private:
@@ -61,9 +33,6 @@ private:
 
 	//update/render fps
 	int fps;
-
-	//current layout to update
-	HD_UI_Container *currentLayout;		//the current layout to update
 
 	//Allegro Inits. Called on start of game
 	void HD_Init_Allegro();
@@ -81,14 +50,12 @@ public:
 	int  nScreenH;
 	int  refreshRate;
 	bool bFrameless;
-	ALLEGRO_DISPLAY_MODE display_modes;
-
-	HD_ANCHORS anchors;
 
 	//updated members
-	HD_Mouse *mouse;
+	std::shared_ptr<HD_Mouse> mouse;
 	Keyboard keyboard;
 	double deltaTime;
+	unsigned int DebugInfo = 0;
 
 	//construction/destruction
 	HD_Screen();
@@ -102,17 +69,8 @@ public:
 	//screen functions
 	void hd_setResolution(int width, int height);
 	void hd_setFrameless(bool bIsFrameless);
-	void hd_initAnchors();
-
-	//scaling functions
-	float hd_scaleByWidth(float value);		//scales a value by the Width difference
-	float hd_scaleByHeight(float value);	//scales a value by the Height difference
-
-	//layout functions
-	void hd_setNewLayout(HD_UI_Container *newLayout);		//set a layout for the screen
-	HD_UI_Container* hd_getCurrentLayout();
 };
 
-extern HD_Screen *HDScreen;
+extern std::unique_ptr<HD_Screen> HDScreen;
 
 #endif

@@ -30,9 +30,6 @@ private:
 	ALLEGRO_COLOR color1 = al_map_rgba_f(1.0f, 0.0f, 1.0f, 1.0f);	//colors used for primitives
 	ALLEGRO_COLOR color2 = al_map_rgba_f(1.0f, 0.0f, 1.0f, 1.0f);
 
-	//ALLEGRO_VERTEX shavedRectVerts[5];		//vertex array used by shaved rectangles
-	//ALLEGRO_VERTEX gradientRectVerts[12];	//vertex array used by gradient rectangles
-
 protected:
 	//Graphics drawing functions
 	std::function<void()>drawGraphicObject;
@@ -46,52 +43,56 @@ protected:
 	void DrawStrokedFillRectGFX(float fThickness);
 	
 	void DrawShavedRectGfx(bool isFilled, float fCornerWidth, ShavedRectCornerLoc corner);
+
+	void DrawStrokedFillShavedRectGfx(float fCornerWidth, ShavedRectCornerLoc corner);
 	
-	void DrawLineGfx(int nThickness);
-	
-	void DrawFillRectLineHeaderFooterGfx(bool bIsLineHeader, float fLineThickness);
+	void DrawLineGfx(float fThickness);
 	
 	void DrawGradientRectGFX(bool bIsVertical, float fStartGrad);
 
+	void DrawGradientBGRectGFX(bool useStroke);
+
 public:
+	//Construction/Destruction
+	HD_UI_GraphicsObject() {}
+	~HD_UI_GraphicsObject() {}
+
 	// Creation functions
-	//Construction
-	HD_UI_GraphicsObject();
-
 	//Image Object
-	HD_UI_GraphicsObject(const char *objectName, int index, const char *imageName, const char *atlasName,
-		float fX, float fY, HD_UI_Container *newParent);
+	void CreateImageObject(const char *objectName, const char *imageName, const char *atlasName,
+		float fX, float fY);
 
-	//Stroked/Filled Rect object
-	HD_UI_GraphicsObject(const char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
-		float fThickness, ALLEGRO_COLOR color, HD_UI_Container *newParent);
+	//Rectangle Stroked/Filled object
+	void CreateRectangleObject(const char *objectName, float fX, float fY, float fWidth, float fHeight,
+		float fThickness, ALLEGRO_COLOR color);
 
-	//Stroked/Filled Diamond object
-	HD_UI_GraphicsObject(const char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
-		bool isFilled, ALLEGRO_COLOR color, HD_UI_Container *newParent);
+	//Diamond Stroked/Filled object
+	void CreateDiamondObject(const char *objectName, float fX, float fY, float fWidth, float fHeight,
+		bool isFilled, ALLEGRO_COLOR color);
 
-	//Filled & Stroked Rect object
-	HD_UI_GraphicsObject(const char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
-		float fThickness, ALLEGRO_COLOR fillColor, ALLEGRO_COLOR lineColor, HD_UI_Container *newParent);
+	//Rectangle Filled & Stroked object
+	void CreateSFRectangleObject(const char *objectName, float fX, float fY, float fWidth, float fHeight,
+		float fThickness, ALLEGRO_COLOR fillColor, ALLEGRO_COLOR lineColor);
 
-	//Shaved Stroked/Filled Rect object
-	HD_UI_GraphicsObject(const char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
-		bool isFilled, ShavedRectCornerLoc corner, float fCornerWidth, ALLEGRO_COLOR color, HD_UI_Container *newParent);
+	//Shaved Rectangle Stroked/Filled object
+	void CreateShavedRectangleObject(const char *objectName, float fX, float fY, float fWidth, float fHeight,
+		bool isFilled, ShavedRectCornerLoc corner, float fCornerWidth, ALLEGRO_COLOR color);
+
+	//Shaved Rectangle Stroked & Filled object
+	void CreateShavedSFRectangleObject(const char *objectName, float fX, float fY, float fWidth, float fHeight,
+		ShavedRectCornerLoc corner, float fCornerWidth, ALLEGRO_COLOR fillColor, ALLEGRO_COLOR strokeColor);
 	
 	//Line object
-	HD_UI_GraphicsObject(const char *objectName, int index, float fX, float fY, float fX2, float fY2,
-		int nThickness, ALLEGRO_COLOR color, HD_UI_Container *newParent);
-	
-	//Filled Rect with Line Header/Footer object
-	HD_UI_GraphicsObject(const char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
-		ALLEGRO_COLOR rectColor, bool bIsLineHeader, float fLineThickness, ALLEGRO_COLOR lineColor, HD_UI_Container *newParent);
+	void CreateLineObject(const char *objectName, float fX, float fY, float fX2, float fY2,
+		float fThickness, ALLEGRO_COLOR color);
 	
 	//Gradient Rect object
-	HD_UI_GraphicsObject(const char *objectName, int index, float fX, float fY, float fWidth, float fHeight,
-		bool bIsVertical, float fStartGrad, ALLEGRO_COLOR color01, ALLEGRO_COLOR color02, HD_UI_Container *newParent);
+	void CreateGradientRectangleObject(const char *objectName, float fX, float fY, float fWidth, float fHeight,
+		bool bIsVertical, float fStartGrad, ALLEGRO_COLOR color01, ALLEGRO_COLOR color02);
 
-	//Destruction
-	~HD_UI_GraphicsObject() { al_destroy_bitmap(gfxImage); }
+	//Gradient Background Rect object - the colors get updated by the Y position of the object
+	void CreateBGGradientRectangleObject(const char *objectName, float fX, float fY, float fWidth, float fHeight,
+		bool useStroke, ALLEGRO_COLOR strokeColor);
 
 	//Property setters
 	void setGfxImage(ALLEGRO_BITMAP *newImage) { gfxImage = newImage; }

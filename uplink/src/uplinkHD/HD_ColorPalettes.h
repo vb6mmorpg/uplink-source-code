@@ -7,6 +7,7 @@
 #define HD_COLORPALETTES_H
 
 #include <allegro5/allegro.h>
+#include <memory>
 
 class HD_ColorPalettes
 {
@@ -139,6 +140,6 @@ public:
 
 };
 
-extern HD_ColorPalettes *palette;
+extern std::unique_ptr<HD_ColorPalettes> palette;
 
 #endif

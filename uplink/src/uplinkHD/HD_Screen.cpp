@@ -14,7 +14,7 @@
 
 #include "HD_Resources.h"
 #include "HD_Mouse.h"
-#include "UI_Layouts\HD_MainMenu.h"
+#include "UI_Layouts\HD_Root.h"
 
 //=======================================================
 //Private:
@@ -23,7 +23,8 @@
 void HD_Screen:: HD_Init_Allegro()
 {
 	hdDisplay = NULL;
-	al_get_display_mode(al_get_num_display_modes() - 1, &display_modes);
+	ALLEGRO_DISPLAY_MODE displayMode;
+	al_get_display_mode(al_get_num_display_modes() - 1, &displayMode);
 
 	nScreenW = 0;
 	nScreenH = 0;
@@ -34,10 +35,10 @@ void HD_Screen:: HD_Init_Allegro()
 	//if not, get the settings in options
 	if (app->GetOptions()->IsOptionEqualTo("game_firsttime", 1))
 	{
-		nScreenW = display_modes.width;
-		nScreenH = display_modes.height;
+		nScreenW = displayMode.width;
+		nScreenH = displayMode.height;
 		bFrameless = true;
-		refreshRate = display_modes.refresh_rate;
+		refreshRate = displayMode.refresh_rate;
 
 		app->GetOptions()->SetOptionValue("graphics_screenwidth", nScreenW);
 		app->GetOptions()->SetOptionValue("graphics_screenheight", nScreenH);
@@ -53,7 +54,7 @@ void HD_Screen:: HD_Init_Allegro()
 		nScreenH = app->GetOptions()->GetOptionValue("graphics_screenheight");
 		bFrameless = app->GetOptions()->GetOptionValue("graphics_fullscreen");
 		refreshRate = app->GetOptions()->GetOptionValue("graphics_screenrefresh");
-		if (refreshRate == -1) refreshRate = display_modes.refresh_rate;
+		if (refreshRate == -1) refreshRate = displayMode.refresh_rate;
 	}
 
 	//set fullscreen/windowed mode 
@@ -66,11 +67,11 @@ void HD_Screen:: HD_Init_Allegro()
 
 	al_set_new_display_refresh_rate(refreshRate);
 
-	//multisampling
+	//multisampling & other screen options
 	al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
 	al_set_new_display_option(ALLEGRO_SAMPLES, 4, ALLEGRO_SUGGEST);
 	al_set_new_display_option(ALLEGRO_COLOR_SIZE, 32, ALLEGRO_REQUIRE);
-	//al_set_new_bitmap_flags(ALLEGRO_MAG_LINEAR | ALLEGRO_MIN_LINEAR);
+	al_set_new_bitmap_flags(ALLEGRO_MAG_LINEAR | ALLEGRO_MIN_LINEAR);
 	al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_INVERSE_ALPHA);
 
 	//creating the display
@@ -87,9 +88,6 @@ void HD_Screen:: HD_Init_Allegro()
 	al_flip_display();
 
 	fps = 60;
-
-	hd_initAnchors();	//reset anchors
-	currentLayout = NULL;
 }
 
 void HD_Screen:: HD_Init_Allegro_Modules()
@@ -123,11 +121,17 @@ int HD_Screen:: HD_Main_Loop()
 
 	//Last call to arms before loop
 	al_hide_mouse_cursor(hdDisplay);
-	mouse = new HD_Mouse();
+	mouse = std::make_shared<HD_Mouse>();
 
-	//First Screen:
-	HD_MainMenu *mainMenu = new HD_MainMenu();
-	hd_setNewLayout(mainMenu);
+	//Root object and first screen
+	root = std::make_shared<HD_Root>();
+	root->Create();
+
+	//debug FPS
+	bool debugBFPS = false;
+	int debugFPSCount = 0;
+	int debugFPS = 0;
+	double debugFPSTime = 0;
 
 	while (isRunning)
 	{
@@ -145,14 +149,18 @@ int HD_Screen:: HD_Main_Loop()
 		{
 			redraw = true;
 
+			//update the Uplink stuff
+			app->Update();
+			//SgUpdate();
+
 			//update members
 			mouse->Update();
 			deltaTime = al_get_timer_speed(timer);
+			debugFPSTime += deltaTime;
 
 			//update current layout
-			if (currentLayout)
-				currentLayout->Update();
-
+			if (root)
+				root->Update();
 		}
 
 		//Keyboard functionality
@@ -169,15 +177,36 @@ int HD_Screen:: HD_Main_Loop()
 			keyboard.modifiers = 0;
 		}
 
+		//DEBUG INFO DISPLAY
+		if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
+		{
+			if (ev.keyboard.keycode == ALLEGRO_KEY_F1)
+				DebugInfo = DebugInfo == 4 ? 0 : DebugInfo + 1;
+
+			if (ev.keyboard.keycode == ALLEGRO_KEY_F2)
+				debugBFPS = !debugBFPS;
+		}
+
 		//Rendering
 		if (redraw && al_is_event_queue_empty(event_queue))
 		{
 			redraw = false;
 			//redraw current layout
-			if (currentLayout)
-				currentLayout->Draw();
+			if (root)
+				root->Draw();
 
 			mouse->Draw();
+
+			//debug FPS
+			debugFPSCount++;
+			if (debugFPSTime > 1)
+			{
+				debugFPS = debugFPSCount;
+				debugFPSCount = 0;
+				debugFPSTime = 0;
+			}
+			if (debugBFPS)
+				al_draw_textf(HDResources->debugFont, al_map_rgb(255, 255, 0), 10.0f, 10.0f, 0, "FPS: %i", debugFPS);
 
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -200,7 +229,6 @@ HD_Screen::HD_Screen()
 
 HD_Screen::~HD_Screen()
 {
-	HDScreen = NULL;
 	al_destroy_display(hdDisplay);
 }
 
@@ -221,7 +249,8 @@ void HD_Screen::HD_StartMainLoop()
 
 void HD_Screen::HD_Dispose()
 {
-	delete HDResources;
+	root->Clear();
+	HDResources.reset();
 
 	al_shutdown_font_addon();
 	al_shutdown_ttf_addon();
@@ -231,7 +260,7 @@ void HD_Screen::HD_Dispose()
 	al_uninstall_mouse();
 	al_uninstall_keyboard();
 
-	delete this;
+	HDScreen.reset();
 }
 
 //=================
@@ -247,6 +276,8 @@ void HD_Screen:: hd_setResolution(int width, int height)
 	app->GetOptions()->Save(NULL);
 
 	al_resize_display(hdDisplay, nScreenW, nScreenH);
+
+	root->Rescale();
 }
 
 void HD_Screen::hd_setFrameless(bool bIsFrameless)
@@ -259,78 +290,6 @@ void HD_Screen::hd_setFrameless(bool bIsFrameless)
 	al_set_display_flag(hdDisplay, ALLEGRO_FULLSCREEN_WINDOW, bIsFrameless);
 
 	al_set_window_position(hdDisplay, 0, 0);
-
-	hd_initAnchors();	//reset anchors
 }
 
-//scaling functions
-float HD_Screen::hd_scaleByWidth(float value)
-{
-	float origW = 1920; //the base W resolution of the UI
-	value = (value / origW) * nScreenW;
-	return value;
-}
-
-float HD_Screen::hd_scaleByHeight(float value)
-{
-	float origH = 1080; //the base H resolution of the UI
-	value = (value / origH) * nScreenH;
-	return value;
-}
-
-//layout functions
-void HD_Screen::hd_setNewLayout(HD_UI_Container *newLayout)
-{
-	if (currentLayout)
-		currentLayout->Clear();
-
-	currentLayout = newLayout;
-	currentLayout->Create();
-}
-
-HD_UI_Container* HD_Screen::hd_getCurrentLayout()
-{
-	return currentLayout;
-}
-
-
-//=============================================
-// Sets up the screen anchors
-//=============================================
-void HD_Screen::hd_initAnchors()
-{
-	anchors.tl.x = 0;	//x
-	anchors.tl.y = 0;	//y
-
-	anchors.tc.x = nScreenW / 2;
-	anchors.tc.y = 0;
-
-	anchors.tr.x = nScreenW;
-	anchors.tr.y = 0;
-
-	anchors.bl.x = 0;
-	anchors.bl.y = nScreenH;
-
-	anchors.bc.x = nScreenW / 2;
-	anchors.bc.y = nScreenH;
-
-	anchors.br.x = nScreenW;
-	anchors.br.y = nScreenH;
-
-	anchors.lc.x = 0;
-	anchors.lc.y = nScreenH / 2;
-
-	anchors.c.x = nScreenW / 2;
-	anchors.c.y = nScreenH / 2;
-
-	anchors.rc.x = nScreenW;
-	anchors.rc.y = nScreenH / 2;
-
-	anchors.w13 = nScreenW / 3;
-	anchors.w23 = (nScreenW * 2) / 3;
-
-	anchors.h13 = nScreenH / 3;
-	anchors.h23 = (nScreenH * 2) / 3;
-}
-
-HD_Screen *HDScreen;
+std::unique_ptr<HD_Screen> HDScreen = nullptr;

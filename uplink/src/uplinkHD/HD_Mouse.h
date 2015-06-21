@@ -9,8 +9,9 @@
 #define HD_MOUSE_H
 
 #include <allegro5/allegro.h>
+#include <memory>
 
-#include "UI_Objects/HD_UI_Object.h"
+#include "UI_Objects/HD_UI_Container.h"
 #include "HD_Resources.h"
 
 class HD_Mouse
@@ -19,26 +20,28 @@ private:
 	ALLEGRO_BITMAP *gfxImage;
 
 	ALLEGRO_MOUSE_STATE state;
-	HD_UI_Object *target;
+	std::shared_ptr<HD_UI_Container> target = nullptr;
+	bool focusTaken = false;
 
 public:
 	HD_Mouse()
 	{
+		HDResources->hd_loadImage("mousePointer.png");
 		gfxImage = HDResources->hd_getImage("mousePointer.png");
-		target = NULL;
 	}
 	~HD_Mouse()
 	{
-		al_destroy_bitmap(gfxImage);
-		target = NULL;
+		target = nullptr;
 	}
 
 	void Update();
-	void Draw() { al_draw_bitmap(gfxImage, state.x, state.y, 0); }
+	void Draw();
 
-	bool SetTarget(HD_UI_Object *newTarget);
-	HD_UI_Object* GetTarget() { return target; }
+	bool SetTarget(std::shared_ptr<HD_UI_Container> newTarget);
+	std::shared_ptr<HD_UI_Container> GetTarget() { return target; }
 	ALLEGRO_MOUSE_STATE* GetState() { return &state; }
+	void SetFocused(bool focused) { focusTaken = focused; }
+	bool IsFocused() { return focusTaken; }
 };
 
 #endif

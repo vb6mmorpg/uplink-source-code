@@ -3,38 +3,66 @@
 
 #include "HD_UI_Tooltip.h"
 #include "../HD_Resources.h"
+#include "../HD_ColorPalettes.h"
 
-#include <math.h>
+#include "HD_UI_Button.h"
+#include "../HD_Screen.h"
 
-HD_UI_Tooltip::HD_UI_Tooltip(const char *tooltip, HD_UI_Container *newParent)
+//HD_UI_Tooltip::HD_UI_Tooltip(const char *tooltip, HD_UI_Container *newParent)
+void HD_UI_Tooltip::Create(const char *tooltip, float fX, float fY)
 {
-	setObjectProperties("tooltip", 0.0f, 0.0f, 0.0f, 0.0f, newParent, -1);
+	setObjectProperties("tooltip", fX, fY, 0.0f, 0.0f);
 
-	bgObject[0] = new HD_UI_GraphicsObject("bgL", -1, "tooltip_L", "misc_atlas.xml", 0.0f, 0.0f, this);
+	std::shared_ptr<HD_UI_GraphicsObject> bgObjectL = std::make_shared<HD_UI_GraphicsObject>();
+	bgObjectL->CreateImageObject("bgL", "tooltip_L", "misc_atlas.png", 0.0f, 0.0f);
+	addChild(bgObjectL);
 
-	txtObject = new HD_UI_TextObject("txt", -1, bgObject[0]->width, 0.0f, tooltip, HDResources->font24, al_map_rgb_f(1.0f, 1.0f, 1.0f), ALLEGRO_ALIGN_LEFT, this);
-	txtObject->y = bgObject[0]->height / 2.0f - txtObject->height / 2.0f;
+	std::shared_ptr<HD_UI_TextObject> txtObject = std::make_shared<HD_UI_TextObject>();
+	txtObject->CreateSinglelineText("txt", bgObjectL->width, 0.0f, tooltip, al_map_rgb_f(1.0f, 1.0f, 1.0f), HDResources->font24, 0);
+	txtObject->y = bgObjectL->height / 2.0f - txtObject->height / 2.0f;
+	addChild(txtObject);
 
-	bgObject[1] = new HD_UI_GraphicsObject("bgM", 0, "tooltip_M", "misc_atlas.xml", bgObject[0]->width, 0.0f, this);
-	bgObject[1]->width = ceilf(txtObject->getTextWidth());
-	bgObject[2] = new HD_UI_GraphicsObject("bgR", 0, "tooltip_R", "misc_atlas.xml", bgObject[1]->x + bgObject[1]->width, 0.0f, this);
+	std::shared_ptr<HD_UI_GraphicsObject> bgObjectM = std::make_shared<HD_UI_GraphicsObject>();
+	std::shared_ptr<HD_UI_GraphicsObject> bgObjectR = std::make_shared<HD_UI_GraphicsObject>();
+	bgObjectM->CreateRectangleObject("bgM", bgObjectL->width, 0.0f, txtObject->getTextWidth(), bgObjectL->height, -1.0f, palette->bluesSat.cBlue2);
+	bgObjectR->CreateImageObject("bgR", "tooltip_R", "misc_atlas.png", bgObjectM->x + bgObjectM->width, 0.0f);
+	addChildAt(bgObjectM, 0);
+	addChildAt(bgObjectR, 0);
 
-	x = ceilf(parent->width + 6.0f);
-	y = ceilf(parent->height * 0.75f);
-	width = bgObject[0]->width + bgObject[1]->width + bgObject[2]->width;
-	height = bgObject[0]->height;
+	//width = bgObjectL->width + bgObjectM->width + bgObjectR->width;
+	//height = bgObjectL->height;
 }
 
 void HD_UI_Tooltip::ShowTooltip(bool show)
 {
-	visible = show;
-	alpha = 0.0f;
+	//don't do anything if it's already beeing shown
+	if (visible == show) return;
 
 	if (show)
 	{
-		alpha = 0.0f;
+		x = HDScreen->mouse->GetState()->x;
+		y = HDScreen->mouse->GetState()->y;
+
+		//only buttons can show this!
+		HD_UI_Button &btnTarget = *std::static_pointer_cast<HD_UI_Button>(HDScreen->mouse->GetTarget());
+		std::string newTooltip = btnTarget.getTooltip();
+
+		if (newTooltip.empty()) return;
+
+		getTextObjectByName("txt")->setText(newTooltip.c_str());
+		resize();
+
+		alpha = 0.05f;
 		CDBTweener::CTween *tween = new CDBTweener::CTween(&CDBTweener::TWEQ_LINEAR, CDBTweener::TWEA_OUT, 0.5f, &alpha, 1.0f);
 		addAnimation(tween, true);
 	}
-	else alpha = 0.0f;
+	else alpha = 0.05f;
+
+	visible = show;
+}
+
+void HD_UI_Tooltip::resize()
+{
+	getChildByName("bgM")->width = getTextObjectByName("txt")->getTextWidth();
+	getChildByName("bgR")->x = getChildByName("bgM")->x + getChildByName("bgM")->width;
 }

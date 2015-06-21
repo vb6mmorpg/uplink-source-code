@@ -20,8 +20,9 @@ HD_Resources::HD_Resources()
 	al_change_directory(al_path_cstr(appPath, '/'));
 
 	hd_loadFonts();
+	hd_loadAtlasImage("misc_atlas.png");
 
-	palette = new HD_ColorPalettes();
+	palette = std::make_unique<HD_ColorPalettes>();
 }
 
 HD_Resources::~HD_Resources()
@@ -30,8 +31,6 @@ HD_Resources::~HD_Resources()
 	hd_removeAllImages();
 
 	al_destroy_path(appPath);
-
-	HDResources = NULL;
 }
 
 // Image functions
@@ -42,9 +41,9 @@ bool HD_Resources::hd_loadImage(const char *imageName)
 	std::string imagePath = "graphics/";
 	imagePath.append(imageName);
 	ALLEGRO_BITMAP *image = NULL;
-	Bitmap *bitmap = new Bitmap();
+	std::unique_ptr<SingleImage> bitmap = std::make_unique<SingleImage>();
 
-	if (imageFiles.size() < MAX_IMAGES)
+	if (singleImages.size() < 8)
 		image = al_load_bitmap(imagePath.c_str());
 	else
 		al_show_native_message_box(NULL, "Warning!", "", "You reached the maximum images allowed!", NULL, ALLEGRO_MESSAGEBOX_WARN);
@@ -53,7 +52,8 @@ bool HD_Resources::hd_loadImage(const char *imageName)
 	{
 		bitmap->image = image;
 		bitmap->name = imageName;
-		imageFiles.push_back(bitmap);
+		singleImages.push_back(nullptr);
+		singleImages.back() = std::move(bitmap);
 		return true;
 	}
 	else
@@ -63,19 +63,76 @@ bool HD_Resources::hd_loadImage(const char *imageName)
 	}
 }
 
+bool HD_Resources::hd_loadAtlasImage(const char *atlasName)
+{
+	std::string imagePath = "graphics/";
+	imagePath.append(atlasName);
+	ALLEGRO_BITMAP *image = NULL;
+	std::unique_ptr<AtlasImage> atlasImage = std::make_unique<AtlasImage>();
+
+	if (atlasImages.size() < 8)
+		image = al_load_bitmap(imagePath.c_str());
+	else
+		al_show_native_message_box(NULL, "Warning!", "", "You reached the maximum images allowed!", NULL, ALLEGRO_MESSAGEBOX_WARN);
+
+	if (image)
+	{
+		atlasImage->image = image;
+		atlasImage->name = atlasName;
+
+		ALLEGRO_BITMAP *subImage = NULL;
+
+		std::string xmlPath = imagePath.substr(0, imagePath.size() - 3) + "xml";
+		tinyxml2::XMLDocument atlasXML;
+		atlasXML.LoadFile(xmlPath.c_str());
+
+		int ix, iy, iw, ih = 0;
+		std::string sName;
+		
+		tinyxml2::XMLElement *textureElement = atlasXML.FirstChildElement("TextureAtlas")->FirstChildElement("SubTexture");
+
+		do {
+			sName = textureElement->Attribute("name");
+			textureElement->QueryIntAttribute("x", &ix);
+			textureElement->QueryIntAttribute("y", &iy);
+			textureElement->QueryIntAttribute("width", &iw);
+			textureElement->QueryIntAttribute("height", &ih);
+
+			subImage = al_create_sub_bitmap(atlasImage->image, ix, iy, iw, ih);
+
+			atlasImage->AddSubImage(subImage, sName);
+
+			textureElement = textureElement->NextSiblingElement("SubTexture");
+
+		} while (textureElement);
+
+		atlasImages.push_back(nullptr);
+		atlasImages.back() = std::move(atlasImage);
+		return true;
+	}
+	else
+	{
+		al_show_native_message_box(NULL, "Warning!", "", "Couldn't find the image.", NULL, ALLEGRO_MESSAGEBOX_WARN);
+		return false;
+	}
+}
+
+// Get Images
+//===============
+
 ALLEGRO_BITMAP* HD_Resources::hd_getImage(const char *imageName)
 {
 	ALLEGRO_BITMAP *image = NULL;
 
 	//Search only if there are already some images loaded
-	if (!imageFiles.empty())
-		for (unsigned int ii = 0; ii < imageFiles.size(); ii++)
+	if (!singleImages.empty())
+		for (unsigned int ii = 0; ii < singleImages.size(); ii++)
 		{
-			if (imageFiles[ii]->image)
+			if (singleImages[ii]->image)
 			{
-				if (strcmp(imageFiles[ii]->name.c_str(), imageName) == 0)
+				if (strcmp(singleImages[ii]->name.c_str(), imageName) == 0)
 				{
-					image = imageFiles[ii]->image;
+					image = singleImages[ii]->image;
 					break;
 				}
 			}
@@ -93,55 +150,24 @@ ALLEGRO_BITMAP* HD_Resources::hd_getImage(const char *imageName)
 	return image;
 }
 
-// atlasName = atlas xml document
 ALLEGRO_BITMAP* HD_Resources::hd_getSubImage(const char *subImageName, const char *atlasName)
 {
 	ALLEGRO_BITMAP *image = NULL;
-	ALLEGRO_BITMAP *atlas = NULL;
-	std::string xmlPath = "graphics/";
-	xmlPath.append(atlasName);
-
-	tinyxml2::XMLDocument atlasXML;
-	atlasXML.LoadFile(xmlPath.c_str());
-
-	const char *atlasImageName = atlasXML.FirstChildElement("TextureAtlas")->Attribute("imagePath");
-	atlas = hd_getImage(atlasImageName);
-
-	int ix = 0;
-	int iy = 0;
-	int iw = 10;
-	int ih = 10;
-	bool found = false;
-
-	tinyxml2::XMLElement *textureElement = atlasXML.FirstChildElement("TextureAtlas")->FirstChildElement("SubTexture");
-
-	do {
-
-		if (strcmp(textureElement->Attribute("name"), subImageName) == 0)
+	
+	if (!atlasImages.empty())
+		for (unsigned int ii = 0; ii < atlasImages.size(); ii++)
 		{
-			textureElement->QueryIntAttribute("x", &ix);
-			textureElement->QueryIntAttribute("y", &iy);
-			textureElement->QueryIntAttribute("width", &iw);
-			textureElement->QueryIntAttribute("height", &ih);
-
-			found = true;
-		}
-		else
-		{
-			textureElement = textureElement->NextSiblingElement("SubTexture");
-
-			if (!textureElement){
-				break;
+			if (atlasImages[ii]->image)
+			{
+				if (strcmp(atlasImages[ii]->name.c_str(), atlasName) == 0)
+				{
+					image = atlasImages[ii]->GetSubImage(subImageName);
+					break;
+				}
 			}
-
+			else
+				break;
 		}
-
-	} while (!found);
-
-	if (found)
-		image = al_create_sub_bitmap(atlas, ix, iy, iw, ih);
-	else
-		al_show_native_message_box(NULL, "Warning!", "", "Could not find image in atlas!", NULL, ALLEGRO_MESSAGEBOX_WARN);
 
 	return image;
 }
@@ -150,11 +176,21 @@ void HD_Resources::hd_removeImage(const char *imageName)
 {
 	bool bDestroyed = false;
 
-	for (unsigned int ii = 0; ii < imageFiles.size(); ii++)
+	for (unsigned int ii = 0; ii < singleImages.size(); ii++)
 	{
-		if (strcmp(imageFiles[ii]->name.c_str(), imageName))
+		if (strcmp(singleImages[ii]->name.c_str(), imageName) == 0)
 		{
-			imageFiles.erase(imageFiles.begin() + ii);
+			singleImages.erase(singleImages.begin() + ii);
+			bDestroyed = true;
+			break;
+		}
+	}
+
+	for (unsigned int ii = 0; ii < atlasImages.size(); ii++)
+	{
+		if (strcmp(atlasImages[ii]->name.c_str(), imageName) == 0)
+		{
+			atlasImages.erase(atlasImages.begin() + ii);
 			bDestroyed = true;
 			break;
 		}
@@ -166,11 +202,16 @@ void HD_Resources::hd_removeImage(const char *imageName)
 
 void HD_Resources::hd_removeAllImages()
 {
-	for (unsigned int ii = 0; ii < imageFiles.size(); ii++)
-	{
-		if (imageFiles[ii]->image)
-			imageFiles.erase(imageFiles.begin() + ii);
-	}
+	/*for (unsigned int ii = 0; ii < singleImages.size(); ii++)
+		if (singleImages[ii]->image)
+			singleImages.erase(singleImages.end() - ii - 1);
+	
+	for (unsigned int ii = 0; ii < atlasImages.size(); ii++)
+		if (atlasImages[ii]->image)
+			atlasImages.erase(atlasImages.end() - ii - 1);*/
+
+	singleImages.clear();
+	atlasImages.clear();
 }
 
 // Font functions
@@ -180,32 +221,89 @@ void HD_Resources::hd_loadFonts()
 {
 	//loads the text fonts
 	//and resizes them according to the current resolution
-	float size = HDScreen->hd_scaleByWidth(18.0f);
+	float s = 18.0f;
+	float m = 24.0f;
+	float l = 30.0f;
+	float xl = 48.0f;
+
+	float size = (s / 1920) * HDScreen->nScreenW;
 	if (size < 16.0f) size = 16.0f;
-	textFont18 = al_load_font("fonts/AeroMaticsLight.ttf", size, 0);
-	font18 = textFont18;
+	font18 = al_load_font("fonts/AeroMaticsLight.ttf", size, 0);
 
-	size = HDScreen->hd_scaleByWidth(24.0f);
+	size = (m / 1920) * HDScreen->nScreenW;
 	if (size < 20.0f) size = 20.0f;
-	textFont24 = al_load_font("fonts/AeroMaticsLight.ttf", size, 0);
-	font24 = textFont24;
+	font24 = al_load_font("fonts/AeroMaticsLight.ttf", size, 0);
 	
-	size = HDScreen->hd_scaleByWidth(30.0f);
+	size = (l / 1920) * HDScreen->nScreenW;
 	if (size < 24.0f) size = 24.0f;
-	textFont30 = al_load_font("fonts/AeroMaticsLight.ttf", size, 0);
-	font30 = textFont30;
+	font30 = al_load_font("fonts/AeroMaticsLight.ttf", size, 0);
 
-	if (!textFont18 || !textFont24 || !textFont30)
+	size = (xl / 1920) * HDScreen->nScreenW;
+	if (size < 32.0f) size = 32.0f;
+	font48 = al_load_font("fonts/AeroMaticsLight.ttf", size, 0);
+
+	debugFont = al_load_font("fonts/dungeon.ttf", 10, 0);
+
+	if (!font18 || !font24 || !font30 || !font48)
 		al_show_native_message_box(NULL, "Warning!", "", "Could not load fonts!", NULL, ALLEGRO_MESSAGEBOX_WARN);
+
+	//font pre-cache
+	al_draw_text(font18, al_map_rgba(0, 0, 0, 0), 0, 0, 0, " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
+	al_draw_text(font24, al_map_rgba(0, 0, 0, 0), 0, 0, 0, " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
+	al_draw_text(font30, al_map_rgba(0, 0, 0, 0), 0, 0, 0, " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
+	al_draw_text(font48, al_map_rgba(0, 0, 0, 0), 0, 0, 0, " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
+	al_draw_text(debugFont, al_map_rgba(0, 0, 0, 0), 0, 0, 0, " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
 }
 
 void HD_Resources::hd_destroyFonts()
 {
-	font18 = font24 = font30 = NULL;
+	al_destroy_font(font18);
+	al_destroy_font(font24);
+	al_destroy_font(font30);
+	al_destroy_font(font48);
+	al_destroy_font(debugFont);
 
-	al_destroy_font(textFont18);
-	al_destroy_font(textFont24);
-	al_destroy_font(textFont30);
+	font18 = font24 = font30 = font48 = debugFont = NULL;
 }
 
-HD_Resources *HDResources = NULL;
+// Atlas Image struct methods
+//===========================
+
+void HD_Resources::AtlasImage::AddSubImage(ALLEGRO_BITMAP *subImage, std::string name)
+{
+	subImages.push_back(subImage);
+	subImageNames.push_back(name);
+}
+
+ALLEGRO_BITMAP *HD_Resources::AtlasImage::GetSubImage(const char* name)
+{
+	ALLEGRO_BITMAP *image = NULL;
+
+	//Search only if there are already some images loaded
+	if (!subImages.empty())
+		for (unsigned int ii = 0; ii < subImages.size(); ii++)
+		{
+			if (subImages[ii])
+			{
+				if (strcmp(subImageNames[ii].c_str(), name) == 0)
+				{
+					image = subImages[ii];
+					break;
+				}
+			}
+			else
+				break;
+		}
+
+	return image;
+}
+
+void HD_Resources::AtlasImage::RemoveAllSubImages()
+{
+	for (unsigned int ii = 0; ii < subImages.size(); ii++)
+		al_destroy_bitmap(subImages[ii]);
+
+	subImages.clear();
+}
+
+std::unique_ptr<HD_Resources> HDResources = nullptr;
